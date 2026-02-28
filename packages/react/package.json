@@ -1,0 +1,63 @@
+{
+  "name": "@relteco/relui-react",
+  "version": "0.1.0",
+  "description": "RelUI React bindings — styled compound components for React",
+  "license": "SEE LICENSE IN LICENSE",
+  "author": "Relteco <lookmainpoint@gmail.com>",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "clean": "rm -rf dist coverage"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@relteco/relui-core": "workspace:*",
+    "@relteco/relui-icons": "workspace:*",
+    "@relteco/relui-tokens": "workspace:*",
+    "@vanilla-extract/css": "^1.18.0",
+    "@vanilla-extract/recipes": "^0.5.7"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vanilla-extract/esbuild-plugin": "^2.3.21",
+    "@vanilla-extract/vite-plugin": "^5.1.4",
+    "jsdom": "^28.1.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  }
+}
