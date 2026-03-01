@@ -39,6 +39,9 @@ export type {
 // ── IconButton ───────────────────────────────────────
 export type { IconButtonProps } from './icon-button';
 
+// ── CopyButton ──────────────────────────────────────
+export type { CopyButtonProps, CopyButtonSize } from './copy-button';
+
 // ── ButtonGroup ──────────────────────────────────────
 export type {
   ButtonGroupProps,
@@ -302,6 +305,21 @@ export type {
   SegmentedControlAPI,
 } from './segmented-control';
 
+// ── InPlaceEditor ───────────────────────────────────
+export { createInPlaceEditor } from './in-place-editor';
+export type {
+  InPlaceEditorProps,
+  InPlaceEditorState,
+  InPlaceEditorActivation,
+  InPlaceEditorVariant,
+  InPlaceEditorSize,
+  InPlaceEditorMachineContext,
+  InPlaceEditorEvent,
+  InPlaceEditorDisplayDOMProps,
+  InPlaceEditorInputDOMProps,
+  InPlaceEditorAPI,
+} from './in-place-editor';
+
 // ── TagInput ────────────────────────────────────────
 export {
   createTagInput,
@@ -319,3 +337,217 @@ export type {
   TagInputOptionDOMProps,
   TagInputAPI,
 } from './tag-input';
+
+// ── Cascader ────────────────────────────────────────
+export {
+  createCascader,
+  getColumnsFromPath,
+  getLabelsFromPath,
+} from './cascader';
+export type {
+  CascaderVariant,
+  CascaderSize,
+  CascaderValue,
+  CascaderOption,
+  CascaderInteractionState,
+  CascaderExpandTrigger,
+  CascaderProps,
+  CascaderMachineContext,
+  CascaderEvent,
+  CascaderTriggerDOMProps,
+  CascaderColumnDOMProps,
+  CascaderOptionDOMProps,
+  CascaderAPI,
+} from './cascader';
+
+// ── MultiColumnCombobox ────────────────────────────
+export {
+  createMCCombobox,
+  findItemIndexByValue,
+  findItemLabelByValue,
+} from './multi-column-combobox';
+export type {
+  MCComboboxVariant,
+  MCComboboxSize,
+  MCComboboxInteractionState,
+  MCComboboxColumn,
+  MCComboboxItem,
+  MCComboboxFilterFn,
+  MCComboboxProps,
+  MCComboboxMachineContext,
+  MCComboboxEvent,
+  MCComboboxInputDOMProps,
+  MCComboboxGridDOMProps,
+  MCComboboxRowDOMProps,
+  MCComboboxListboxDOMProps,
+  MCComboboxAPI,
+} from './multi-column-combobox';
+
+// ── DropdownTree ───────────────────────────────────
+export {
+  createDropdownTree,
+  collectAllValues,
+  findNodeByValue,
+  findLabelByNodeValue,
+  flattenVisibleNodes,
+  filterTree,
+  getTreeSelectedLabels,
+} from './dropdown-tree';
+export type {
+  DropdownTreeVariant,
+  DropdownTreeSize,
+  DropdownTreeInteractionState,
+  DropdownTreeSelectionMode,
+  TreeNode,
+  FlatTreeNode,
+  DropdownTreeFilterFn,
+  DropdownTreeProps,
+  DropdownTreeMachineContext,
+  DropdownTreeEvent,
+  DropdownTreeTriggerDOMProps,
+  DropdownTreePanelDOMProps,
+  DropdownTreeNodeDOMProps,
+  DropdownTreeAPI,
+} from './dropdown-tree';
+
+// ── ScrollArea ────────────────────────────────────────
+export { createScrollArea } from './scroll-area';
+export type {
+  ScrollAreaProps,
+  ScrollAreaType,
+  ScrollAreaOrientation,
+  ScrollPosition,
+  ScrollDimensions,
+  ThumbInfo,
+  ScrollAreaEvent,
+  ScrollAreaAPI,
+} from './scroll-area';
+
+// ── Sticky ────────────────────────────────────────────
+export { createSticky } from './sticky';
+export type {
+  StickyProps,
+  StickyPosition,
+  StickyState,
+  StickyEvent,
+  StickyAPI,
+} from './sticky';
+
+// ── Resizable ─────────────────────────────────────────
+export { createResizable } from './resizable';
+export type {
+  ResizableProps,
+  ResizeDirection,
+  ResizableState,
+  ResizeSize,
+  ResizableEvent,
+  ResizableAPI,
+} from './resizable';
+
+// ── Masonry ───────────────────────────────────────────
+export { createMasonry } from './masonry';
+export type {
+  MasonryProps,
+  MasonryItemPosition,
+  MasonryEvent,
+  MasonryAPI,
+} from './masonry';
+
+// ── MasterDetail ──────────────────────────────────────
+export { createMasterDetail } from './master-detail';
+export type {
+  MasterDetailProps,
+  MasterPosition,
+  DetailVisibility,
+  MasterDetailEvent,
+  MasterDetailAPI,
+} from './master-detail';
+
+// ── SplitPanel ───────────────────────────────────────
+export { createSplitPanel } from './split-panel';
+export type {
+  SplitPanelProps,
+  SplitOrientation,
+  SplitPanelEvent,
+  SplitPanelAPI,
+} from './split-panel';
+
+// ── FloatingWindow ───────────────────────────────────
+export { createFloatingWindow } from './floating-window';
+export type {
+  FloatingWindowProps,
+  WindowState,
+  WindowPosition,
+  WindowSize,
+  FloatingWindowEvent,
+  FloatingWindowAPI,
+} from './floating-window';
+
+// ── TileLayout ──────────────────────────────────────
+export { createTileLayout } from './tile-layout';
+export type {
+  TileLayoutProps,
+  TileItem,
+  TileLayoutEvent,
+  TileLayoutAPI,
+} from './tile-layout';
+
+// ── BookLayout ──────────────────────────────────────
+export { createBookLayout } from './book-layout';
+export type {
+  BookLayoutProps,
+  PageDirection,
+  BookLayoutEvent,
+  BookLayoutAPI,
+} from './book-layout';
+
+// ── DockLayout ──────────────────────────────────────
+export {
+  createDockLayout,
+  generateDockId,
+  resetDockIdCounter,
+  findNode,
+  findParent,
+  findGroupByPanelId,
+  collectAllGroups,
+  removeNodeFromTree,
+  splitGroup,
+  normalizeSizes,
+  serializeNode,
+  deserializeNode,
+} from './dock-layout';
+export type {
+  DockNode,
+  DockSplitNode,
+  DockGroupNode,
+  DockPanelConfig,
+  DockPanelState,
+  DockFloatingGroup,
+  DockAutoHiddenPanel,
+  DropPosition,
+  DropTarget,
+  DragState,
+  ResizeHandleState,
+  DockWorkspace,
+  DockLayoutSnapshot,
+  SerializedNode,
+  SerializedSplitNode,
+  SerializedGroupNode,
+  SerializedPanelState,
+  SerializedFloatingGroup,
+  DockLayoutProps,
+  DockLayoutEvent,
+  DockLayoutAPI,
+} from './dock-layout';
+
+// ── MDI ─────────────────────────────────────────────
+export { createMDI } from './mdi';
+export type {
+  MDIProps,
+  MDIWindowState,
+  MDIArrangement,
+  MDIWindowConfig,
+  MDIWindowInfo,
+  MDIEvent,
+  MDIAPI,
+} from './mdi';

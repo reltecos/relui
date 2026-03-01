@@ -59,6 +59,15 @@ Bir bileşen bu 7 kriteri karşılamadan bir sonrakine geçilmez:
 5. Tipler — tam TypeScript, JSDoc ile TR/EN açıklama
 6. A11y — WAI-ARIA, klavye navigasyonu, focus management
 7. **Slot API** — `classNames` + `styles` prop'ları ile tüm iç slot'lar customize edilebilir (SlotStyleProps<XSlot> + getSlotProps + test)
+8. **Responsive** — Layout bileşenleri 1. günden responsive (`@vanilla-extract/sprinkles`). "Sonra ekleriz" YASAK.
+
+### Responsive Layout (KESİNLEŞMİŞ MİMARİ KARAR)
+
+- `@vanilla-extract/sprinkles` — build-time responsive atomik CSS
+- Breakpoints: `base` (0), `sm` (640px), `md` (768px), `lg` (1024px), `xl` (1280px), `2xl` (1536px)
+- Layout bileşenleri (Box, Flex, Grid, Stack vb.) responsive prop destekler
+- Mevcut bileşenler (Button, Input, Select vb.) etkilenmez — recipe/slot sistemi aynen kalır
+- Slot API (classNames + styles) ile çakışmaz
 
 ### Dosya Yapısı (Her Bileşen)
 

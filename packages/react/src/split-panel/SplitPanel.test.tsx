@@ -1,0 +1,291 @@
+/**
+ * @license
+ * Copyright (c) 2025-present Relteco LLC. All rights reserved.
+ *
+ * This source code is licensed under the BSL 1.1 license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
+import { SplitPanel } from './SplitPanel';
+
+// ── ResizeObserver mock ──────────────────────────────
+
+let resizeCallback: ResizeObserverCallback | null = null;
+
+class MockResizeObserver implements ResizeObserver {
+  constructor(cb: ResizeObserverCallback) {
+    resizeCallback = cb;
+  }
+  observe() {}
+  unobserve() {}
+  disconnect() {
+    resizeCallback = null;
+  }
+}
+
+beforeEach(() => {
+  resizeCallback = null;
+  vi.stubGlobal('ResizeObserver', MockResizeObserver);
+});
+
+function simulateResize(target: Element, width: number, height: number) {
+  Object.defineProperty(target, 'clientWidth', { value: width, configurable: true });
+  Object.defineProperty(target, 'clientHeight', { value: height, configurable: true });
+  const cb = resizeCallback;
+  if (cb) {
+    act(() => {
+      cb([{ target } as ResizeObserverEntry], {} as ResizeObserver);
+    });
+  }
+}
+
+describe('SplitPanel', () => {
+  it('renders children panels', () => {
+    render(
+      <SplitPanel>
+        <div>Left</div>
+        <div>Right</div>
+      </SplitPanel>,
+    );
+    expect(screen.getByText('Left')).toBeInTheDocument();
+    expect(screen.getByText('Right')).toBeInTheDocument();
+  });
+
+  it('renders panels with data-panel-index', () => {
+    const { container } = render(
+      <SplitPanel>
+        <div>Left</div>
+        <div>Right</div>
+      </SplitPanel>,
+    );
+    expect(container.querySelector('[data-panel-index="0"]')).toBeInTheDocument();
+    expect(container.querySelector('[data-panel-index="1"]')).toBeInTheDocument();
+  });
+
+  it('renders gutter between panels', () => {
+    const { container } = render(
+      <SplitPanel>
+        <div>Left</div>
+        <div>Right</div>
+      </SplitPanel>,
+    );
+    const gutter = container.querySelector('[data-gutter-index="0"]');
+    expect(gutter).toBeInTheDocument();
+    expect(gutter).toHaveAttribute('role', 'separator');
+  });
+
+  it('renders n-1 gutters for n panels', () => {
+    const { container } = render(
+      <SplitPanel>
+        <div>A</div>
+        <div>B</div>
+        <div>C</div>
+      </SplitPanel>,
+    );
+    const gutters = container.querySelectorAll('[role="separator"]');
+    expect(gutters).toHaveLength(2);
+  });
+
+  it('forwards ref', () => {
+    let refValue: HTMLDivElement | null = null;
+    render(
+      <SplitPanel ref={(el) => { refValue = el; }} data-testid="root">
+        <div>Left</div>
+        <div>Right</div>
+      </SplitPanel>,
+    );
+    expect(refValue).toBe(screen.getByTestId('root'));
+  });
+
+  it('passes through HTML attributes', () => {
+    render(
+      <SplitPanel data-testid="root" id="split" aria-label="Split panel">
+        <div>Left</div>
+        <div>Right</div>
+      </SplitPanel>,
+    );
+    const el = screen.getByTestId('root');
+    expect(el).toHaveAttribute('id', 'split');
+    expect(el).toHaveAttribute('aria-label', 'Split panel');
+  });
+
+  // ── Orientation ─────────────────────────────────────────
+
+  describe('orientation', () => {
+    it('defaults to horizontal (flex-direction: row)', () => {
+      render(
+        <SplitPanel data-testid="root">
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const root = screen.getByTestId('root');
+      expect(root).toHaveStyle({ flexDirection: 'row' });
+      expect(root).toHaveAttribute('data-orientation', 'horizontal');
+    });
+
+    it('vertical uses flex-direction: column', () => {
+      render(
+        <SplitPanel data-testid="root" orientation="vertical">
+          <div>Top</div>
+          <div>Bottom</div>
+        </SplitPanel>,
+      );
+      const root = screen.getByTestId('root');
+      expect(root).toHaveStyle({ flexDirection: 'column' });
+      expect(root).toHaveAttribute('data-orientation', 'vertical');
+    });
+
+    it('horizontal gutter has col-resize cursor', () => {
+      const { container } = render(
+        <SplitPanel>
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const gutter = container.querySelector('[data-gutter-index="0"]') as HTMLElement;
+      expect(gutter).toHaveStyle({ cursor: 'col-resize' });
+    });
+
+    it('vertical gutter has row-resize cursor', () => {
+      const { container } = render(
+        <SplitPanel orientation="vertical">
+          <div>Top</div>
+          <div>Bottom</div>
+        </SplitPanel>,
+      );
+      const gutter = container.querySelector('[data-gutter-index="0"]') as HTMLElement;
+      expect(gutter).toHaveStyle({ cursor: 'row-resize' });
+    });
+
+    it('gutter aria-orientation is vertical for horizontal split', () => {
+      const { container } = render(
+        <SplitPanel orientation="horizontal">
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const gutter = container.querySelector('[data-gutter-index="0"]');
+      expect(gutter).toHaveAttribute('aria-orientation', 'vertical');
+    });
+  });
+
+  // ── Gutter size ─────────────────────────────────────────
+
+  describe('gutter size', () => {
+    it('applies custom gutter size', () => {
+      const { container } = render(
+        <SplitPanel gutterSize={12}>
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const gutter = container.querySelector('[data-gutter-index="0"]') as HTMLElement;
+      expect(gutter).toHaveStyle({ width: '12px' });
+    });
+  });
+
+  // ── Drag interaction ─────────────────────────────────────
+
+  describe('drag', () => {
+    it('sets data-dragging during pointer drag', () => {
+      const { container } = render(
+        <SplitPanel data-testid="root">
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const root = screen.getByTestId('root');
+      simulateResize(root, 808, 400);
+
+      const gutter = container.querySelector('[data-gutter-index="0"]') as HTMLElement;
+      fireEvent.pointerDown(gutter, { clientX: 400, clientY: 200 });
+      expect(root).toHaveAttribute('data-dragging');
+    });
+  });
+
+  // ── classNames & styles ────────────────────────────────
+
+  describe('classNames & styles', () => {
+    it('applies classNames.root', () => {
+      render(
+        <SplitPanel data-testid="root" classNames={{ root: 'slot-root' }}>
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      expect(screen.getByTestId('root')).toHaveClass('slot-root');
+    });
+
+    it('applies styles.root', () => {
+      render(
+        <SplitPanel data-testid="root" styles={{ root: { opacity: '0.5' } }}>
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      expect(screen.getByTestId('root')).toHaveStyle({ opacity: '0.5' });
+    });
+
+    it('merges className + classNames.root', () => {
+      render(
+        <SplitPanel data-testid="root" className="outer" classNames={{ root: 'inner' }}>
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const el = screen.getByTestId('root');
+      expect(el).toHaveClass('outer');
+      expect(el).toHaveClass('inner');
+    });
+
+    it('merges style + styles.root', () => {
+      render(
+        <SplitPanel data-testid="root" style={{ margin: 4 }} styles={{ root: { padding: 8 } }}>
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const el = screen.getByTestId('root');
+      expect(el).toHaveStyle({ margin: '4px', padding: '8px' });
+    });
+
+    it('applies classNames.panel to panel elements', () => {
+      const { container } = render(
+        <SplitPanel classNames={{ panel: 'custom-panel' }}>
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const panels = container.querySelectorAll('[data-panel-index]');
+      panels.forEach((p) => {
+        expect(p).toHaveClass('custom-panel');
+      });
+    });
+
+    it('applies classNames.gutter to gutter elements', () => {
+      const { container } = render(
+        <SplitPanel classNames={{ gutter: 'custom-gutter' }}>
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const gutter = container.querySelector('[data-gutter-index="0"]');
+      expect(gutter).toHaveClass('custom-gutter');
+    });
+
+    it('applies styles.gutter to gutter elements', () => {
+      const { container } = render(
+        <SplitPanel styles={{ gutter: { opacity: '0.7' } }}>
+          <div>Left</div>
+          <div>Right</div>
+        </SplitPanel>,
+      );
+      const gutter = container.querySelector('[data-gutter-index="0"]') as HTMLElement;
+      expect(gutter).toHaveStyle({ opacity: '0.7' });
+    });
+  });
+});

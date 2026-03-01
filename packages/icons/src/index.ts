@@ -35,4 +35,5 @@ export {
   ChevronLeftIcon,
   ChevronRightIcon,
   SearchIcon,
+  CopyIcon,
 } from './icons';

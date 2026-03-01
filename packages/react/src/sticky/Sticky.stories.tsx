@@ -1,0 +1,167 @@
+/**
+ * @license
+ * Copyright (c) 2025-present Relteco LLC. All rights reserved.
+ *
+ * This source code is licensed under the BSL 1.1 license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+import type { Meta, StoryObj } from '@storybook/react';
+import { Sticky } from './Sticky';
+import { Stack } from '../stack';
+import { ScrollArea } from '../scroll-area';
+
+const meta: Meta<typeof Sticky> = {
+  title: 'Layout/Sticky',
+  component: Sticky,
+  parameters: { layout: 'padded' },
+  argTypes: {
+    position: {
+      control: 'select',
+      options: ['top', 'bottom'],
+    },
+    offset: { control: 'number' },
+    zIndex: { control: 'number' },
+    enabled: { control: 'boolean' },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof Sticky>;
+
+export const Default: Story = {
+  render: () => (
+    <ScrollArea height={400} style={{ border: '1px solid #e2e8f0', borderRadius: 8 }}>
+      <div style={{ padding: 16 }}>
+        <p style={{ margin: '0 0 16px' }}>Aşağı kaydırın — header yapışacak.</p>
+
+        <Sticky offset={0} style={{ background: '#1e293b', color: 'white', padding: '12px 16px', borderRadius: 8 }}>
+          <strong>Sticky Header</strong>
+        </Sticky>
+
+        <Stack spacing={4} style={{ marginTop: 16 }}>
+          {Array.from({ length: 30 }, (_, i) => (
+            <div
+              key={i}
+              style={{
+                padding: '12px 16px',
+                background: i % 2 === 0 ? '#f8fafc' : '#f1f5f9',
+                borderRadius: 6,
+              }}
+            >
+              İçerik satırı {i + 1}
+            </div>
+          ))}
+        </Stack>
+      </div>
+    </ScrollArea>
+  ),
+};
+
+export const WithOffset: Story = {
+  render: () => (
+    <ScrollArea height={400} style={{ border: '1px solid #e2e8f0', borderRadius: 8 }}>
+      <div style={{ padding: 16 }}>
+        <p style={{ margin: '0 0 16px' }}>16px offset ile sticky header.</p>
+
+        <Sticky offset={16} style={{ background: '#3b82f6', color: 'white', padding: '12px 16px', borderRadius: 8 }}>
+          <strong>Sticky Header (offset: 16px)</strong>
+        </Sticky>
+
+        <Stack spacing={4} style={{ marginTop: 16 }}>
+          {Array.from({ length: 30 }, (_, i) => (
+            <div
+              key={i}
+              style={{
+                padding: '12px 16px',
+                background: '#f1f5f9',
+                borderRadius: 6,
+              }}
+            >
+              Satır {i + 1}
+            </div>
+          ))}
+        </Stack>
+      </div>
+    </ScrollArea>
+  ),
+};
+
+export const BottomSticky: Story = {
+  render: () => (
+    <ScrollArea height={400} style={{ border: '1px solid #e2e8f0', borderRadius: 8 }}>
+      <div style={{ padding: 16 }}>
+        <Stack spacing={4}>
+          {Array.from({ length: 30 }, (_, i) => (
+            <div
+              key={i}
+              style={{
+                padding: '12px 16px',
+                background: '#f1f5f9',
+                borderRadius: 6,
+              }}
+            >
+              Satır {i + 1}
+            </div>
+          ))}
+        </Stack>
+
+        <Sticky position="bottom" style={{ background: '#059669', color: 'white', padding: '12px 16px', borderRadius: 8, marginTop: 16 }}>
+          <strong>Sticky Footer (position: bottom)</strong>
+        </Sticky>
+      </div>
+    </ScrollArea>
+  ),
+};
+
+export const MultipleStickyHeaders: Story = {
+  render: () => (
+    <ScrollArea height={500} style={{ border: '1px solid #e2e8f0', borderRadius: 8 }}>
+      <div style={{ padding: 16 }}>
+        {['A', 'B', 'C', 'D'].map((group) => (
+          <div key={group} style={{ marginBottom: 16 }}>
+            <Sticky offset={0} style={{ background: '#6366f1', color: 'white', padding: '8px 16px', borderRadius: 6 }}>
+              <strong>Grup {group}</strong>
+            </Sticky>
+            <Stack spacing={2} style={{ marginTop: 8 }}>
+              {Array.from({ length: 8 }, (_, i) => (
+                <div
+                  key={i}
+                  style={{
+                    padding: '10px 16px',
+                    background: '#f8fafc',
+                    borderRadius: 4,
+                  }}
+                >
+                  {group} - Öğe {i + 1}
+                </div>
+              ))}
+            </Stack>
+          </div>
+        ))}
+      </div>
+    </ScrollArea>
+  ),
+};
+
+export const CustomSlotStyles: Story = {
+  render: () => (
+    <ScrollArea height={300} style={{ border: '1px solid #e2e8f0', borderRadius: 8 }}>
+      <div style={{ padding: 16 }}>
+        <Sticky
+          classNames={{ root: 'custom-sticky' }}
+          styles={{ root: { background: '#fef3c7', padding: '12px 16px', border: '2px dashed #f59e0b', borderRadius: 8 } }}
+        >
+          Custom slot styled sticky
+        </Sticky>
+        <Stack spacing={4} style={{ marginTop: 16 }}>
+          {Array.from({ length: 20 }, (_, i) => (
+            <div key={i} style={{ padding: '10px', background: '#f1f5f9', borderRadius: 4 }}>
+              Satır {i + 1}
+            </div>
+          ))}
+        </Stack>
+      </div>
+    </ScrollArea>
+  ),
+};

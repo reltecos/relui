@@ -20,6 +20,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   SearchIcon,
+  CopyIcon,
   createIcon,
 } from './index';
 
@@ -37,6 +38,7 @@ const allIcons = [
   { name: 'ChevronLeftIcon', Component: ChevronLeftIcon },
   { name: 'ChevronRightIcon', Component: ChevronRightIcon },
   { name: 'SearchIcon', Component: SearchIcon },
+  { name: 'CopyIcon', Component: CopyIcon },
 ] as const;
 
 describe('Icons', () => {

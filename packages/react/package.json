@@ -47,7 +47,8 @@
     "@relteco/relui-icons": "workspace:*",
     "@relteco/relui-tokens": "workspace:*",
     "@vanilla-extract/css": "^1.18.0",
-    "@vanilla-extract/recipes": "^0.5.7"
+    "@vanilla-extract/recipes": "^0.5.7",
+    "@vanilla-extract/sprinkles": "^1.6.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",

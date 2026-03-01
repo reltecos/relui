@@ -7,3 +7,4 @@
  */
 
 export { getSlotProps, type ClassNames, type Styles, type SlotStyleProps } from './slot-styles';
+export { sprinkles, type Sprinkles } from './sprinkles.css';

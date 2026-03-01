@@ -25,6 +25,12 @@ export {
   type SlotStyleProps,
 } from './utils';
 
+// ── Sprinkles (Responsive Layout) ──────────────────────
+export { sprinkles, type Sprinkles } from './utils';
+
+// ── Box ────────────────────────────────────────────────
+export { Box, type BoxProps, type BoxSlot } from './box';
+
 // ── Button ──────────────────────────────────────────
 export { Button, type ButtonProps, type ButtonSlot } from './button';
 export { useButton, type UseButtonProps, type UseButtonReturn } from './button';
@@ -35,6 +41,10 @@ export { IconButton, type IconButtonComponentProps, type IconButtonSlot } from '
 // ── ButtonGroup ──────────────────────────────────────
 export { ButtonGroup, type ButtonGroupComponentProps, type ButtonGroupSlot } from './button-group';
 export { useButtonGroupContext } from './button-group';
+
+// ── CopyButton ──────────────────────────────────────
+export { CopyButton, type CopyButtonComponentProps, type CopyButtonSlot } from './copy-button';
+export { useCopyButton, type UseCopyButtonProps, type UseCopyButtonReturn } from './copy-button';
 
 // ── Input ────────────────────────────────────────────
 export { Input, type InputComponentProps, type InputSlot } from './input';
@@ -119,6 +129,85 @@ export { useCombobox, type UseComboboxProps, type UseComboboxReturn } from './co
 export { SegmentedControl, type SegmentedControlComponentProps, type SegmentedControlSlot } from './segmented-control';
 export { useSegmentedControl, type UseSegmentedControlProps, type UseSegmentedControlReturn } from './segmented-control';
 
+// ── InPlaceEditor ───────────────────────────────────
+export { InPlaceEditor, type InPlaceEditorComponentProps, type InPlaceEditorSlot } from './in-place-editor';
+export { useInPlaceEditor, type UseInPlaceEditorProps, type UseInPlaceEditorReturn } from './in-place-editor';
+
 // ── TagInput ────────────────────────────────────────
 export { TagInput, type TagInputComponentProps, type TagInputSlot } from './tag-input';
 export { useTagInput, type UseTagInputProps, type UseTagInputReturn } from './tag-input';
+
+// ── Cascader ────────────────────────────────────────
+export { Cascader, type CascaderComponentProps, type CascaderSlot } from './cascader';
+export { useCascader, type UseCascaderProps, type UseCascaderReturn } from './cascader';
+
+// ── MultiColumnCombobox ────────────────────────────
+export { MultiColumnCombobox, type MultiColumnComboboxComponentProps, type MultiColumnComboboxSlot } from './multi-column-combobox';
+export { useMultiColumnCombobox, type UseMultiColumnComboboxProps, type UseMultiColumnComboboxReturn } from './multi-column-combobox';
+
+// ── DropdownTree ───────────────────────────────────
+export { DropdownTree, type DropdownTreeComponentProps, type DropdownTreeSlot } from './dropdown-tree';
+export { useDropdownTree, type UseDropdownTreeProps, type UseDropdownTreeReturn } from './dropdown-tree';
+
+// ── Layout: Flex ──────────────────────────────────
+export { Flex, type FlexProps, type FlexSlot } from './flex';
+
+// ── Layout: Stack ─────────────────────────────────
+export { Stack, type StackProps, type StackSlot } from './stack';
+
+// ── Layout: Grid ──────────────────────────────────
+export { Grid, type GridProps, type GridSlot } from './grid';
+
+// ── Layout: Container ─────────────────────────────
+export { Container, type ContainerProps, type ContainerSlot, type ContainerSize } from './container';
+
+// ── Layout: Divider ───────────────────────────────
+export { Divider, type DividerProps, type DividerSlot } from './divider';
+
+// ── Layout: Spacer ────────────────────────────────
+export { Spacer, type SpacerProps, type SpacerSlot } from './spacer';
+
+// ── Layout: AspectRatio ───────────────────────────
+export { AspectRatio, type AspectRatioProps, type AspectRatioSlot } from './aspect-ratio';
+
+// ── Layout: Section ──────────────────────────────
+export { Section, type SectionProps, type SectionSlot } from './section';
+
+// ── Layout: ScrollArea ─────────────────────────────
+export { ScrollArea, type ScrollAreaComponentProps, type ScrollAreaSlot } from './scroll-area';
+export { useScrollArea, type UseScrollAreaProps, type UseScrollAreaReturn } from './scroll-area';
+
+// ── Layout: Sticky ─────────────────────────────────
+export { Sticky, type StickyComponentProps, type StickySlot } from './sticky';
+export { useSticky, type UseStickyProps, type UseStickyReturn } from './sticky';
+
+// ── Layout: Resizable ──────────────────────────────
+export { Resizable, type ResizableComponentProps, type ResizableSlot } from './resizable';
+export { useResizable, type UseResizableProps, type UseResizableReturn } from './resizable';
+
+// ── Layout: ResponsiveBox ─────────────────────────
+export { ResponsiveBox, type ResponsiveBoxProps, type ResponsiveBoxSlot, type ResponsiveRule } from './responsive-box';
+
+// ── Layout: Masonry ───────────────────────────────
+export { Masonry, type MasonryComponentProps, type MasonrySlot } from './masonry';
+
+// ── Layout: MasterDetailLayout ────────────────────
+export { MasterDetailLayout, type MasterDetailComponentProps, type MasterDetailSlot } from './master-detail';
+
+// ── Window Manager: SplitPanel ────────────────────
+export { SplitPanel, type SplitPanelComponentProps, type SplitPanelSlot } from './split-panel';
+
+// ── Window Manager: FloatingWindow ────────────────
+export { FloatingWindow, type FloatingWindowComponentProps, type FloatingWindowSlot } from './floating-window';
+
+// ── Window Manager: TileLayout ──────────────────
+export { TileLayout, type TileLayoutComponentProps, type TileLayoutSlot } from './tile-layout';
+
+// ── Window Manager: BookLayout ──────────────────
+export { BookLayout, type BookLayoutComponentProps, type BookLayoutSlot } from './book-layout';
+
+// ── Window Manager: DockLayout ──────────────────
+export { DockLayout, type DockLayoutComponentProps, type DockLayoutSlot } from './dock-layout';
+
+// ── Window Manager: MDI ─────────────────────────
+export { MDI, type MDIComponentProps, type MDISlot } from './mdi';
