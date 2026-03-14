@@ -19,6 +19,7 @@ export const defaultLight: ThemeDefinition = {
   colors: {
     // Background
     bgApp: grayLight[1],
+    bgDefault: white,
     bgSubtle: grayLight[2],
     bgComponent: grayLight[3],
     bgComponentHover: grayLight[4],

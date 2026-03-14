@@ -15,7 +15,7 @@ import type { SemanticColors, ThemeVariant } from './types';
  * All required keys from SemanticColors interface.
  */
 const REQUIRED_COLOR_KEYS: (keyof SemanticColors)[] = [
-  'bgApp', 'bgSubtle', 'bgComponent', 'bgComponentHover', 'bgComponentActive', 'bgOverlay',
+  'bgApp', 'bgDefault', 'bgSubtle', 'bgComponent', 'bgComponentHover', 'bgComponentActive', 'bgOverlay',
   'fgDefault', 'fgMuted', 'fgDisabled', 'fgInverse',
   'borderDefault', 'borderHover', 'borderFocus', 'borderSubtle',
   'accentDefault', 'accentHover', 'accentActive', 'accentFg', 'accentSubtle', 'accentSubtleFg',

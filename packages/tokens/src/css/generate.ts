@@ -171,7 +171,7 @@ export function generateCSS(themeMap: Record<ThemeVariant, ThemeDefinition>): st
  */
 export const cssVar = Object.fromEntries(
   [
-    'bgApp', 'bgSubtle', 'bgComponent', 'bgComponentHover', 'bgComponentActive', 'bgOverlay',
+    'bgApp', 'bgDefault', 'bgSubtle', 'bgComponent', 'bgComponentHover', 'bgComponentActive', 'bgOverlay',
     'fgDefault', 'fgMuted', 'fgDisabled', 'fgInverse',
     'borderDefault', 'borderHover', 'borderFocus', 'borderSubtle',
     'accentDefault', 'accentHover', 'accentActive', 'accentFg', 'accentSubtle', 'accentSubtleFg',

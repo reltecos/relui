@@ -19,6 +19,7 @@ export const forestDark: ThemeDefinition = {
   colors: {
     // Background
     bgApp: forestGray[1],
+    bgDefault: forestGray[2],
     bgSubtle: forestGray[2],
     bgComponent: forestGray[3],
     bgComponentHover: forestGray[4],

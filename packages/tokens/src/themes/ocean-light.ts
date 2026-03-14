@@ -19,6 +19,7 @@ export const oceanLight: ThemeDefinition = {
   colors: {
     // Background
     bgApp: oceanGrayLight[1],
+    bgDefault: white,
     bgSubtle: oceanGrayLight[2],
     bgComponent: oceanGrayLight[3],
     bgComponentHover: oceanGrayLight[4],

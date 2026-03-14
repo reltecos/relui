@@ -19,6 +19,7 @@ export const forestLight: ThemeDefinition = {
   colors: {
     // Background
     bgApp: forestGrayLight[1],
+    bgDefault: white,
     bgSubtle: forestGrayLight[2],
     bgComponent: forestGrayLight[3],
     bgComponentHover: forestGrayLight[4],

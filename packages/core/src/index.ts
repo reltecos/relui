@@ -551,3 +551,240 @@ export type {
   MDIEvent,
   MDIAPI,
 } from './mdi';
+
+// ── Navigation: Tabs ────────────────────────────────
+export { createTabs } from './tabs';
+export type {
+  TabsSize,
+  TabsVariant,
+  TabsOrientation,
+  TabsActivationMode,
+  TabItem,
+  TabsInteractionState,
+  TabsProps,
+  TabsMachineContext,
+  TabsEvent,
+  TabsListDOMProps,
+  TabDOMProps,
+  TabPanelDOMProps,
+  TabsAPI,
+} from './tabs';
+
+// ── Navigation: Breadcrumb ─────────────────────────
+export { createBreadcrumb } from './breadcrumb';
+export type {
+  BreadcrumbSize,
+  BreadcrumbItem,
+  BreadcrumbProps,
+  BreadcrumbMachineContext,
+  BreadcrumbEvent,
+  BreadcrumbVisibleItem,
+  BreadcrumbNavDOMProps,
+  BreadcrumbListDOMProps,
+  BreadcrumbItemDOMProps,
+  BreadcrumbAPI,
+} from './breadcrumb';
+
+// ── Navigation: Pagination ─────────────────────────
+export { createPagination } from './pagination';
+export type {
+  PaginationSize,
+  PaginationVariant,
+  PaginationRangeItem,
+  PaginationProps,
+  PaginationMachineContext,
+  PaginationEvent,
+  PaginationNavDOMProps,
+  PaginationPageDOMProps,
+  PaginationControlDOMProps,
+  PaginationAPI,
+} from './pagination';
+
+// ── Navigation: Sidebar ───────────────────────────
+export { createSidebar } from './sidebar';
+export type {
+  SidebarSize,
+  SidebarPosition,
+  SidebarItem,
+  SidebarProps,
+  SidebarMachineContext,
+  SidebarEvent,
+  SidebarNavDOMProps,
+  SidebarItemDOMProps,
+  SidebarGroupDOMProps,
+  SidebarAPI,
+} from './sidebar';
+
+// ── Navigation: Navbar ────────────────────────────
+export { createNavbar } from './navbar';
+export type {
+  NavbarSize,
+  NavbarVariant,
+  NavbarItem,
+  NavbarProps,
+  NavbarMachineContext,
+  NavbarEvent,
+  NavbarNavDOMProps,
+  NavbarItemDOMProps,
+  NavbarMobileToggleDOMProps,
+  NavbarAPI,
+} from './navbar';
+
+// ── Menu ──────────────────────────────────────────────
+export { createMenu } from './menu';
+export type {
+  MenuSize,
+  MenuItem,
+  MenuProps,
+  MenuMachineContext,
+  MenuEvent,
+  MenuBarDOMProps,
+  MenuTriggerDOMProps,
+  MenuItemDOMProps,
+  MenuDropdownDOMProps,
+  MenuAPI,
+} from './menu';
+
+// ── RadialMenu ──────────────────────────────────────────
+export { createRadialMenu } from './radial-menu';
+export type {
+  RadialMenuSize,
+  RadialMenuItem,
+  RadialMenuProps,
+  RadialMenuPosition,
+  SectorInfo,
+  RadialMenuMachineContext,
+  RadialMenuEvent,
+  RadialMenuDOMProps,
+  RadialMenuSectorDOMProps,
+  RadialMenuAPI,
+} from './radial-menu';
+
+// ── CommandPalette ──────────────────────────────────────
+export { createCommandPalette } from './command-palette';
+export type {
+  CommandPaletteSize,
+  CommandPaletteItem,
+  CommandPaletteProps,
+  CommandPaletteMachineContext,
+  CommandPaletteEvent,
+  CommandPaletteDOMProps,
+  CommandPaletteInputDOMProps,
+  CommandPaletteListDOMProps,
+  CommandPaletteItemDOMProps,
+  CommandPaletteAPI,
+} from './command-palette';
+
+// ── Spotlight ──────────────────────────────────────────
+export { createSpotlight } from './spotlight';
+export type {
+  SpotlightSize,
+  SpotlightItem,
+  SpotlightProps,
+  SpotlightMachineContext,
+  SpotlightEvent,
+  SpotlightDOMProps,
+  SpotlightInputDOMProps,
+  SpotlightListDOMProps,
+  SpotlightItemDOMProps,
+  SpotlightAPI,
+} from './spotlight';
+
+// ── TableOfContents ──────────────────────────────────────
+export { createTableOfContents } from './table-of-contents';
+export type {
+  TocItem,
+  TocEvent,
+  TocSetItemsEvent,
+  TocSetActiveEvent,
+  TocScrollToEvent,
+  TocSetOffsetEvent,
+  TocContext,
+  TocConfig,
+  TocAPI,
+} from './table-of-contents';
+
+// ── FAB (FloatingActionButton) ──────────────────────────
+export { createFAB } from './fab';
+export type {
+  FabAction,
+  FabPosition,
+  FabEvent,
+  FabOpenEvent,
+  FabCloseEvent,
+  FabToggleEvent,
+  FabSelectActionEvent,
+  FabSetActionsEvent,
+  FabSetOpenEvent,
+  FabContext,
+  FabConfig,
+  FabAPI,
+} from './fab';
+
+// ── Alert ──────────────────────────────────────────────
+export { createAlert } from './alert';
+export type {
+  AlertSeverity,
+  AlertVariant,
+  AlertSize,
+  AlertEvent,
+  AlertCloseEvent,
+  AlertSetOpenEvent,
+  AlertContext,
+  AlertConfig,
+  AlertAPI,
+} from './alert';
+
+// ── Progress ──────────────────────────────────────────
+export { createProgress } from './progress';
+export type {
+  ProgressSize,
+  ProgressEvent,
+  ProgressContext,
+  ProgressConfig,
+  ProgressAPI,
+} from './progress';
+
+// ── Toast ─────────────────────────────────────────────
+export { createToast } from './toast';
+export type {
+  ToastStatus,
+  ToastPosition,
+  ToastItem,
+  ToastEvent,
+  ToastContext,
+  ToastConfig,
+  ToastAPI,
+} from './toast';
+
+// ── AlertDialog ──────────────────────────────────────────
+export { createAlertDialog } from './alert-dialog';
+export type {
+  AlertDialogSeverity,
+  AlertDialogEvent,
+  AlertDialogContext,
+  AlertDialogConfig,
+  AlertDialogAPI,
+} from './alert-dialog';
+
+// ── NotificationCenter ───────────────────────────────────
+export { createNotificationCenter } from './notification-center';
+export type {
+  NotificationSeverity,
+  NotificationItem,
+  NotificationCenterEvent,
+  NotificationCenterContext,
+  NotificationCenterConfig,
+  NotificationCenterAPI,
+} from './notification-center';
+
+// ── Tour ─────────────────────────────────────────────────
+export { createTour } from './tour';
+export type {
+  TourPlacement,
+  TourStep,
+  TourEvent,
+  TourContext,
+  TourConfig,
+  TourAPI,
+} from './tour';

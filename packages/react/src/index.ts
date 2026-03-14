@@ -211,3 +211,89 @@ export { DockLayout, type DockLayoutComponentProps, type DockLayoutSlot } from '
 
 // ── Window Manager: MDI ─────────────────────────
 export { MDI, type MDIComponentProps, type MDISlot } from './mdi';
+
+// ── Navigation: Tabs ────────────────────────────
+export { Tabs, type TabsComponentProps, type TabsSlot, type TabPanelContent } from './tabs';
+export { useTabs, type UseTabsProps, type UseTabsReturn } from './tabs';
+
+// ── Navigation: Breadcrumb ─────────────────────────
+export { Breadcrumb, type BreadcrumbComponentProps, type BreadcrumbSlot } from './breadcrumb';
+export { useBreadcrumb, type UseBreadcrumbProps, type UseBreadcrumbReturn } from './breadcrumb';
+
+// ── Navigation: Pagination ─────────────────────────
+export { Pagination, type PaginationComponentProps, type PaginationSlot } from './pagination';
+export { usePagination, type UsePaginationProps, type UsePaginationReturn } from './pagination';
+
+// ── Navigation: Sidebar ───────────────────────────
+export { Sidebar, type SidebarComponentProps, type SidebarSlot } from './sidebar';
+export { useSidebar, type UseSidebarProps, type UseSidebarReturn } from './sidebar';
+
+// ── Navigation: Navbar ────────────────────────────
+export { Navbar, type NavbarComponentProps, type NavbarSlot } from './navbar';
+export { useNavbar, type UseNavbarProps, type UseNavbarReturn } from './navbar';
+
+// ── Menu ────────────────────────────────────────────────
+export { Menu, type MenuComponentProps, type MenuSlot } from './menu';
+export { useMenu, type UseMenuProps, type UseMenuReturn } from './menu';
+
+// ── RadialMenu ──────────────────────────────────────────────
+export { RadialMenu, type RadialMenuComponentProps, type RadialMenuSlot } from './radial-menu';
+export { useRadialMenu, type UseRadialMenuProps, type UseRadialMenuReturn } from './radial-menu';
+
+// ── CommandPalette ──────────────────────────────────────────
+export { CommandPalette, type CommandPaletteComponentProps, type CommandPaletteSlot } from './command-palette';
+export { useCommandPalette, type UseCommandPaletteProps, type UseCommandPaletteReturn } from './command-palette';
+
+// ── Spotlight ──────────────────────────────────────────────
+export { Spotlight, type SpotlightComponentProps, type SpotlightSlot } from './spotlight';
+export { useSpotlight, type UseSpotlightProps, type UseSpotlightReturn } from './spotlight';
+
+// ── Link / NavLink ─────────────────────────────────────────
+export { Link, type LinkComponentProps, type LinkSlot, type LinkSize, type LinkVariant, type LinkUnderline } from './link';
+export { NavLink, type NavLinkComponentProps, type NavLinkSlot } from './link';
+
+// ── BackToTop ──────────────────────────────────────────────
+export { BackToTop, type BackToTopComponentProps, type BackToTopSlot, type BackToTopSize, type BackToTopVariant, type BackToTopShape } from './back-to-top';
+
+// ── TableOfContents ──────────────────────────────────────────
+export { TableOfContents, type TableOfContentsComponentProps, type TableOfContentsSlot, type TableOfContentsSize, type TableOfContentsVariant } from './table-of-contents';
+export { useTableOfContents, type UseTableOfContentsProps, type UseTableOfContentsReturn } from './table-of-contents';
+
+// ── FAB (FloatingActionButton) ──────────────────────────────
+export { FAB, type FABComponentProps, type FABSlot, type FABSize, type FABVariant } from './fab';
+export { useFAB, type UseFABProps, type UseFABReturn } from './fab';
+
+// ── Alert ──────────────────────────────────────────────────
+export { Alert, type AlertComponentProps, type AlertSlot } from './alert';
+
+// ── Spinner ────────────────────────────────────────────────
+export { Spinner, type SpinnerComponentProps, type SpinnerSlot, type SpinnerSize } from './spinner';
+
+// ── Progress ──────────────────────────────────────────────
+export { Progress, type ProgressComponentProps, type ProgressSlot, type ProgressType } from './progress';
+
+// ── Skeleton ──────────────────────────────────────────────
+export { Skeleton, type SkeletonComponentProps, type SkeletonSlot, type SkeletonVariant, type SkeletonAnimation } from './skeleton';
+
+// ── EmptyState ────────────────────────────────────────────
+export { EmptyState, type EmptyStateComponentProps, type EmptyStateSlot, type EmptyStateSize } from './empty-state';
+
+// ── Result ────────────────────────────────────────────────
+export { Result, type ResultComponentProps, type ResultSlot, type ResultStatus, type ResultSize } from './result';
+
+// ── LoadPanel ──────────────────────────────────────────────
+export { LoadPanel, type LoadPanelComponentProps, type LoadPanelSlot, type LoadPanelSize, type LoadPanelBackdrop } from './load-panel';
+
+// ── Toast ──────────────────────────────────────────────────
+export { Toast, type ToastComponentProps, type ToastSlot } from './toast';
+export { useToast, type UseToastProps, type UseToastReturn } from './toast';
+
+// ── AlertDialog ────────────────────────────────────────────
+export { AlertDialog, type AlertDialogComponentProps, type AlertDialogSlot } from './alert-dialog';
+
+// ── NotificationCenter ─────────────────────────────────────
+export { NotificationCenter, type NotificationCenterComponentProps, type NotificationCenterSlot } from './notification-center';
+export { useNotificationCenter, type UseNotificationCenterProps, type UseNotificationCenterReturn } from './notification-center';
+
+// ── Tour ─────────────────────────────────────────────────
+export { Tour, type TourComponentProps, type TourSlot } from './tour';

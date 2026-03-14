@@ -21,6 +21,8 @@ export interface SemanticColors {
   // -- Background --
   /** Uygulama arka planı / App background */
   bgApp: string;
+  /** Varsayılan bileşen arka planı / Default component background (panels, menus, navbars) */
+  bgDefault: string;
   /** İkincil arka plan / Subtle background */
   bgSubtle: string;
   /** Bileşen arka planı / Component background */
