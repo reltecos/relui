@@ -284,3 +284,72 @@ describe('Navbar renderIcon', () => {
     expect(icons).toHaveLength(3);
   });
 });
+
+// ── Compound API ──────────────────────────────────────────────
+
+describe('Navbar (Compound)', () => {
+  it('compound: brand render edilir', () => {
+    render(
+      <Navbar>
+        <Navbar.Brand>MyLogo</Navbar.Brand>
+        <Navbar.Items>
+          <Navbar.Item>Home</Navbar.Item>
+        </Navbar.Items>
+      </Navbar>,
+    );
+    expect(screen.getByTestId('navbar-brand')).toHaveTextContent('MyLogo');
+  });
+
+  it('compound: items ve item render edilir', () => {
+    render(
+      <Navbar>
+        <Navbar.Items>
+          <Navbar.Item>Home</Navbar.Item>
+          <Navbar.Item>About</Navbar.Item>
+        </Navbar.Items>
+      </Navbar>,
+    );
+    expect(screen.getByTestId('navbar-items')).toBeInTheDocument();
+    const items = screen.getAllByTestId('navbar-item');
+    expect(items).toHaveLength(2);
+  });
+
+  it('compound: actions render edilir', () => {
+    render(
+      <Navbar>
+        <Navbar.Items>
+          <Navbar.Item>Home</Navbar.Item>
+        </Navbar.Items>
+        <Navbar.Actions><button>Login</button></Navbar.Actions>
+      </Navbar>,
+    );
+    expect(screen.getByTestId('navbar-actions')).toBeInTheDocument();
+    expect(screen.getByText('Login')).toBeInTheDocument();
+  });
+
+  it('compound: active item aria-current alir', () => {
+    render(
+      <Navbar>
+        <Navbar.Items>
+          <Navbar.Item active>Home</Navbar.Item>
+          <Navbar.Item>About</Navbar.Item>
+        </Navbar.Items>
+      </Navbar>,
+    );
+    const items = screen.getAllByTestId('navbar-item');
+    expect(items[0]).toHaveAttribute('aria-current', 'page');
+    expect(items[1]).not.toHaveAttribute('aria-current');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Navbar classNames={{ brand: 'cmp-brand' }}>
+        <Navbar.Brand>Logo</Navbar.Brand>
+        <Navbar.Items>
+          <Navbar.Item>Home</Navbar.Item>
+        </Navbar.Items>
+      </Navbar>,
+    );
+    expect(screen.getByTestId('navbar-brand').className).toContain('cmp-brand');
+  });
+});

@@ -7,25 +7,23 @@
  */
 
 /**
- * Select — styled select bileşeni.
- * Select — styled select component.
+ * Select — styled select bileseni (Dual API).
+ * Select — styled select component (Dual API).
  *
- * Compound component pattern: Select (root), trigger, content, option, group.
- * Core state machine üzerinde React hook + Vanilla Extract stiller.
+ * Props-based: `<Select options={[...]} placeholder="Secin" />`
+ * Compound:    `<Select options={[...]}><Select.Trigger>...</Select.Trigger>...</Select>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, createContext, useContext, useMemo } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type {
   SelectVariant,
   SelectSize,
-  SelectValue,
-  SelectOption as CoreSelectOption,
   SelectOptionOrGroup,
 } from '@relteco/relui-core';
 import { isOptionGroup } from '@relteco/relui-core';
-import { useSelect, type UseSelectProps } from './useSelect';
+import { useSelect, type UseSelectProps, type UseSelectReturn } from './useSelect';
 import {
   selectRootStyle,
   selectTriggerRecipe,
@@ -50,39 +48,221 @@ export type SelectSlot =
   | 'option'
   | 'groupLabel';
 
-// ── Context ─────────────────────────────────────────────────────────
+// ── Context (Compound API) ──────────────────────────────────────────
 
 interface SelectContextValue {
-  triggerProps: ReturnType<typeof useSelect>['triggerProps'];
-  listboxProps: ReturnType<typeof useSelect>['listboxProps'];
-  getOptionProps: ReturnType<typeof useSelect>['getOptionProps'];
-  isOpen: boolean;
-  selectedValue: SelectValue | undefined;
-  selectedLabel: string | undefined;
-  highlightedIndex: number;
-  options: SelectOptionOrGroup[];
-  flatOptions: CoreSelectOption[];
-  placeholder: string;
   variant: SelectVariant;
   size: SelectSize;
-  slotClassNames: ClassNames<SelectSlot> | undefined;
-  slotStyles: Styles<SelectSlot> | undefined;
+  isOpen: boolean;
+  selectedValue: ReturnType<typeof useSelect>['selectedValue'];
+  selectedLabel: ReturnType<typeof useSelect>['selectedLabel'];
+  triggerProps: UseSelectReturn['triggerProps'];
+  listboxProps: UseSelectReturn['listboxProps'];
+  getOptionProps: UseSelectReturn['getOptionProps'];
+  options: SelectOptionOrGroup[];
+  placeholder: string | undefined;
+  classNames: ClassNames<SelectSlot> | undefined;
+  styles: Styles<SelectSlot> | undefined;
+  name: string | undefined;
+  ariaLabel: string | undefined;
+  ariaDescribedBy: string | undefined;
 }
 
 const SelectContext = createContext<SelectContextValue | null>(null);
 
 function useSelectContext(): SelectContextValue {
   const ctx = useContext(SelectContext);
-  if (!ctx) {
-    throw new Error('Select compound components must be used within <Select>');
-  }
+  if (!ctx) throw new Error('Select compound sub-components must be used within <Select>.');
   return ctx;
 }
 
-// ── Select Component Props ──────────────────────────────────────────
+// ── Compound: Select.Trigger ────────────────────────────────────────
+
+/** Select.Trigger props */
+export interface SelectTriggerProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
+  function SelectTrigger(props, ref) {
+    const { children, className } = props;
+    const ctx = useSelectContext();
+    const slot = getSlotProps(
+      'trigger',
+      selectTriggerRecipe({ variant: ctx.variant, size: ctx.size }),
+      ctx.classNames,
+      ctx.styles,
+    );
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <button
+        ref={ref}
+        type="button"
+        className={cls}
+        style={slot.style}
+        aria-label={ctx.ariaLabel}
+        aria-describedby={ctx.ariaDescribedBy}
+        data-testid="select-trigger"
+        {...ctx.triggerProps}
+      >
+        {children}
+      </button>
+    );
+  },
+);
+
+// ── Compound: Select.Value ──────────────────────────────────────────
+
+/** Select.Value props */
+export interface SelectValueProps {
+  /** Icerik veya placeholder / Content or placeholder */
+  children?: ReactNode;
+  /** Placeholder metni / Placeholder text */
+  placeholder?: string;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SelectValue = forwardRef<HTMLSpanElement, SelectValueProps>(
+  function SelectValue(props, ref) {
+    const { children, placeholder, className } = props;
+    const ctx = useSelectContext();
+
+    if (ctx.selectedLabel) {
+      const slot = getSlotProps('value', selectValueStyle, ctx.classNames, ctx.styles);
+      const cls = className ? `${slot.className} ${className}` : slot.className;
+      return (
+        <span ref={ref} className={cls} style={slot.style} data-testid="select-value">
+          {children ?? ctx.selectedLabel}
+        </span>
+      );
+    }
+
+    const slot = getSlotProps('placeholder', selectPlaceholderStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="select-value">
+        {placeholder ?? ctx.placeholder ?? '\u00A0'}
+      </span>
+    );
+  },
+);
+
+// ── Compound: Select.Content ────────────────────────────────────────
+
+/** Select.Content props */
+export interface SelectContentProps {
+  /** Icerik / Content */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
+  function SelectContent(props, ref) {
+    const { children, className } = props;
+    const ctx = useSelectContext();
+
+    if (!ctx.isOpen) return null;
+
+    const slot = getSlotProps('listbox', selectListboxStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <ul
+        ref={ref}
+        {...ctx.listboxProps}
+        className={cls}
+        style={slot.style}
+        onMouseDown={preventBlur}
+        data-testid="select-content"
+      >
+        {children ?? (
+          ctx.options.length === 0 ? (
+            <li className={selectEmptyStyle}>Secenek yok</li>
+          ) : (
+            renderOptions(ctx.options, ctx.getOptionProps, ctx.classNames, ctx.styles)
+          )
+        )}
+      </ul>
+    );
+  },
+);
+
+// ── Compound: Select.Option ─────────────────────────────────────────
+
+/** Select.Option props */
+export interface SelectOptionProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Secenek indeksi / Option index */
+  index: number;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
+  function SelectOption(props, ref) {
+    const { children, index, className } = props;
+    const ctx = useSelectContext();
+    const slot = getSlotProps('option', selectOptionStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <li
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        id={`option-${index}`}
+        data-testid="select-option"
+        {...ctx.getOptionProps(index)}
+      >
+        {children}
+      </li>
+    );
+  },
+);
+
+// ── Compound: Select.Group ──────────────────────────────────────────
+
+/** Select.Group props */
+export interface SelectGroupProps {
+  /** Grup etiketi / Group label */
+  label: string;
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SelectGroup = forwardRef<HTMLLIElement, SelectGroupProps>(
+  function SelectGroup(props, ref) {
+    const { label, children, className } = props;
+    const ctx = useSelectContext();
+    const groupLabelSlot = getSlotProps('groupLabel', selectGroupLabelStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${groupLabelSlot.className} ${className}` : groupLabelSlot.className;
+
+    return (
+      <li ref={ref} role="presentation" data-testid="select-group">
+        <div className={cls} style={groupLabelSlot.style}>
+          {label}
+        </div>
+        <ul role="group" aria-label={label} style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+          {children}
+        </ul>
+      </li>
+    );
+  },
+);
+
+// ── Component Props ─────────────────────────────────────────────────
 
 export interface SelectComponentProps extends UseSelectProps, SlotStyleProps<SelectSlot> {
-  /** Görsel varyant / Visual variant */
+  /** Gorsel varyant / Visual variant */
   variant?: SelectVariant;
 
   /** Boyut / Size */
@@ -90,9 +270,6 @@ export interface SelectComponentProps extends UseSelectProps, SlotStyleProps<Sel
 
   /** Ek className / Additional className */
   className?: string;
-
-  /** Children (compound components) veya otomatik render */
-  children?: React.ReactNode;
 
   /** aria-label */
   'aria-label'?: string;
@@ -105,25 +282,14 @@ export interface SelectComponentProps extends UseSelectProps, SlotStyleProps<Sel
 
   /** id */
   id?: string;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
-/**
- * Select bileşeni — dropdown seçim.
- * Select component — dropdown selection.
- *
- * @example
- * ```tsx
- * <Select
- *   options={[
- *     { value: 'tr', label: 'Türkiye' },
- *     { value: 'us', label: 'ABD' },
- *   ]}
- *   placeholder="Ülke seçin"
- *   onValueChange={(v) => console.log(v)}
- * />
- * ```
- */
-export const Select = forwardRef<HTMLDivElement, SelectComponentProps>(
+// ── Component ───────────────────────────────────────────────────────
+
+const SelectBase = forwardRef<HTMLDivElement, SelectComponentProps>(
   function Select(props, ref) {
     const {
       variant = 'outline',
@@ -131,11 +297,11 @@ export const Select = forwardRef<HTMLDivElement, SelectComponentProps>(
       className,
       classNames,
       styles,
-      children,
       'aria-label': ariaLabel,
       'aria-describedby': ariaDescribedBy,
       name,
       id,
+      children,
       ...selectProps
     } = props;
 
@@ -146,57 +312,39 @@ export const Select = forwardRef<HTMLDivElement, SelectComponentProps>(
       isOpen,
       selectedValue,
       selectedLabel,
-      highlightedIndex,
     } = useSelect(selectProps);
 
-    const ctx = useMemo<SelectContextValue>(
-      () => ({
-        triggerProps,
-        listboxProps,
-        getOptionProps,
-        isOpen,
-        selectedValue,
-        selectedLabel,
-        highlightedIndex,
-        options: selectProps.options,
-        flatOptions: selectProps.options.flatMap((item) =>
-          isOptionGroup(item) ? item.options : [item],
-        ),
-        placeholder: selectProps.placeholder ?? '',
-        variant,
-        size,
-        slotClassNames: classNames,
-        slotStyles: styles,
-      }),
-      [
-        triggerProps,
-        listboxProps,
-        getOptionProps,
-        isOpen,
-        selectedValue,
-        selectedLabel,
-        highlightedIndex,
-        selectProps.options,
-        selectProps.placeholder,
-        variant,
-        size,
-        classNames,
-        styles,
-      ],
-    );
-
-    // Slot prop'ları hesapla
+    // Slot props hesapla
     const rootSlot = getSlotProps('root', selectRootStyle, classNames, styles);
     const rootClassName = className
       ? `${rootSlot.className} ${className}`
       : rootSlot.className;
 
-    // Compound component veya otomatik render
+    // ── Compound API ──
     if (children) {
+      const ctxValue: SelectContextValue = {
+        variant,
+        size,
+        isOpen,
+        selectedValue,
+        selectedLabel,
+        triggerProps,
+        listboxProps,
+        getOptionProps,
+        options: selectProps.options,
+        placeholder: selectProps.placeholder,
+        classNames,
+        styles,
+        name,
+        ariaLabel,
+        ariaDescribedBy,
+      };
+
       return (
-        <SelectContext.Provider value={ctx}>
-          <div ref={ref} className={rootClassName} style={rootSlot.style} id={id}>
+        <SelectContext.Provider value={ctxValue}>
+          <div ref={ref} className={rootClassName} style={rootSlot.style} id={id} data-testid="select-root">
             {children}
+            {/* Hidden input for forms */}
             {name && (
               <input
                 type="hidden"
@@ -209,7 +357,7 @@ export const Select = forwardRef<HTMLDivElement, SelectComponentProps>(
       );
     }
 
-    // Otomatik (basit) render — slot prop'ları
+    // ── Props-based API ──
     const triggerSlot = getSlotProps(
       'trigger',
       selectTriggerRecipe({ variant, size }),
@@ -221,60 +369,88 @@ export const Select = forwardRef<HTMLDivElement, SelectComponentProps>(
     const listboxSlot = getSlotProps('listbox', selectListboxStyle, classNames, styles);
 
     return (
-      <SelectContext.Provider value={ctx}>
-        <div ref={ref} className={rootClassName} style={rootSlot.style} id={id}>
-          {/* Trigger */}
-          <button
-            type="button"
-            className={triggerSlot.className}
-            style={triggerSlot.style}
-            aria-label={ariaLabel}
-            aria-describedby={ariaDescribedBy}
-            {...triggerProps}
+      <div ref={ref} className={rootClassName} style={rootSlot.style} id={id}>
+        {/* Trigger */}
+        <button
+          type="button"
+          className={triggerSlot.className}
+          style={triggerSlot.style}
+          aria-label={ariaLabel}
+          aria-describedby={ariaDescribedBy}
+          {...triggerProps}
+        >
+          {selectedLabel ? (
+            <span className={valueSlot.className} style={valueSlot.style}>
+              {selectedLabel}
+            </span>
+          ) : (
+            <span className={placeholderSlot.className} style={placeholderSlot.style}>
+              {selectProps.placeholder || '\u00A0'}
+            </span>
+          )}
+          <ChevronIndicator classNames={classNames} styles={styles} />
+        </button>
+
+        {/* Listbox */}
+        {isOpen && (
+          <ul
+            {...listboxProps}
+            className={listboxSlot.className}
+            style={listboxSlot.style}
+            onMouseDown={preventBlur}
           >
-            {selectedLabel ? (
-              <span className={valueSlot.className} style={valueSlot.style}>
-                {selectedLabel}
-              </span>
+            {selectProps.options.length === 0 ? (
+              <li className={selectEmptyStyle}>Secenek yok</li>
             ) : (
-              <span className={placeholderSlot.className} style={placeholderSlot.style}>
-                {selectProps.placeholder || '\u00A0'}
-              </span>
+              renderOptions(selectProps.options, getOptionProps, classNames, styles)
             )}
-            <ChevronIndicator classNames={classNames} styles={styles} />
-          </button>
+          </ul>
+        )}
 
-          {/* Listbox */}
-          {isOpen && (
-            <ul
-              {...listboxProps}
-              className={listboxSlot.className}
-              style={listboxSlot.style}
-              onMouseDown={preventBlur}
-            >
-              {selectProps.options.length === 0 ? (
-                <li className={selectEmptyStyle}>Seçenek yok</li>
-              ) : (
-                renderOptions(selectProps.options, ctx)
-              )}
-            </ul>
-          )}
-
-          {/* Hidden input for forms */}
-          {name && (
-            <input
-              type="hidden"
-              name={name}
-              value={selectedValue !== undefined ? String(selectedValue) : ''}
-            />
-          )}
-        </div>
-      </SelectContext.Provider>
+        {/* Hidden input for forms */}
+        {name && (
+          <input
+            type="hidden"
+            name={name}
+            value={selectedValue !== undefined ? String(selectedValue) : ''}
+          />
+        )}
+      </div>
     );
   },
 );
 
-// ── Blur engelleme — listbox'a tıklayınca trigger blur olmasın ──────
+/**
+ * Select bileseni — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Select
+ *   options={[{ value: 'tr', label: 'Turkiye' }]}
+ *   placeholder="Ulke secin"
+ *   onValueChange={(v) => console.log(v)}
+ * />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Select options={[{ value: 'tr', label: 'Turkiye' }]}>
+ *   <Select.Trigger>
+ *     <Select.Value placeholder="Ulke secin" />
+ *   </Select.Trigger>
+ *   <Select.Content />
+ * </Select>
+ * ```
+ */
+export const Select = Object.assign(SelectBase, {
+  Trigger: SelectTrigger,
+  Value: SelectValue,
+  Content: SelectContent,
+  Option: SelectOption,
+  Group: SelectGroup,
+});
+
+// ── Blur engelleme — listbox'a tiklayinca trigger blur olmasin ──────
 
 function preventBlur(event: React.MouseEvent) {
   event.preventDefault();
@@ -310,7 +486,9 @@ function ChevronIndicator(props: {
 
 function renderOptions(
   options: SelectOptionOrGroup[],
-  ctx: SelectContextValue,
+  getOptionProps: UseSelectReturn['getOptionProps'],
+  slotClassNames: ClassNames<SelectSlot> | undefined,
+  slotStyles: Styles<SelectSlot> | undefined,
 ): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
   let flatIndex = 0;
@@ -318,14 +496,14 @@ function renderOptions(
   const optionSlot = getSlotProps(
     'option',
     selectOptionStyle,
-    ctx.slotClassNames,
-    ctx.slotStyles,
+    slotClassNames,
+    slotStyles,
   );
   const groupLabelSlot = getSlotProps(
     'groupLabel',
     selectGroupLabelStyle,
-    ctx.slotClassNames,
-    ctx.slotStyles,
+    slotClassNames,
+    slotStyles,
   );
 
   for (const item of options) {
@@ -344,7 +522,7 @@ function renderOptions(
                   className={optionSlot.className}
                   style={optionSlot.style}
                   id={`option-${idx}`}
-                  {...ctx.getOptionProps(idx)}
+                  {...getOptionProps(idx)}
                 >
                   {opt.label}
                 </li>
@@ -361,7 +539,7 @@ function renderOptions(
           className={optionSlot.className}
           style={optionSlot.style}
           id={`option-${idx}`}
-          {...ctx.getOptionProps(idx)}
+          {...getOptionProps(idx)}
         >
           {item.label}
         </li>,
@@ -370,98 +548,4 @@ function renderOptions(
   }
 
   return nodes;
-}
-
-// ── Compound Components ─────────────────────────────────────────────
-
-/** Select.Trigger — dropdown trigger button */
-export const SelectTrigger = forwardRef<HTMLButtonElement, {
-  className?: string;
-  children?: React.ReactNode;
-  'aria-label'?: string;
-}>(function SelectTrigger(props, ref) {
-  const ctx = useSelectContext();
-  const { className, children, 'aria-label': ariaLabel } = props;
-
-  return (
-    <button
-      ref={ref}
-      type="button"
-      className={`${selectTriggerRecipe({ variant: ctx.variant, size: ctx.size })}${className ? ` ${className}` : ''}`}
-      aria-label={ariaLabel}
-      {...ctx.triggerProps}
-    >
-      {children ?? (
-        <>
-          {ctx.selectedLabel ? (
-            <span className={selectValueStyle}>{ctx.selectedLabel}</span>
-          ) : (
-            <span className={selectPlaceholderStyle}>
-              {ctx.placeholder || '\u00A0'}
-            </span>
-          )}
-          <ChevronIndicator />
-        </>
-      )}
-    </button>
-  );
-});
-
-/** Select.Content — dropdown listbox */
-export const SelectContent = forwardRef<HTMLUListElement, {
-  className?: string;
-  children?: React.ReactNode;
-}>(function SelectContent(props, ref) {
-  const ctx = useSelectContext();
-  const { className, children } = props;
-
-  if (!ctx.isOpen) return null;
-
-  return (
-    <ul
-      ref={ref}
-      className={`${selectListboxStyle}${className ? ` ${className}` : ''}`}
-      onMouseDown={preventBlur}
-      {...ctx.listboxProps}
-    >
-      {children ?? renderOptions(ctx.options, ctx)}
-    </ul>
-  );
-});
-
-/** Select.Option — tek seçenek */
-export const SelectOption = forwardRef<HTMLLIElement, {
-  index: number;
-  className?: string;
-  children?: React.ReactNode;
-}>(function SelectOption(props, ref) {
-  const ctx = useSelectContext();
-  const { index, className, children } = props;
-  const opt = ctx.flatOptions[index];
-
-  return (
-    <li
-      ref={ref}
-      className={`${selectOptionStyle}${className ? ` ${className}` : ''}`}
-      id={`option-${index}`}
-      {...ctx.getOptionProps(index)}
-    >
-      {children ?? opt?.label}
-    </li>
-  );
-});
-
-/** Select.Group — seçenek grubu */
-export function SelectGroup(props: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <li role="presentation">
-      <div className={selectGroupLabelStyle}>{props.label}</div>
-      <ul role="group" aria-label={props.label} style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-        {props.children}
-      </ul>
-    </li>
-  );
 }

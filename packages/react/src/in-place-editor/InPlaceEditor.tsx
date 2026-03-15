@@ -7,15 +7,18 @@
  */
 
 /**
- * InPlaceEditor — styled React in-place editing component.
- * InPlaceEditor — stilize edilmiş React yerinde düzenleme bileşeni.
+ * InPlaceEditor — styled React in-place editing bilesen (Dual API).
+ * InPlaceEditor — styled React in-place editing component (Dual API).
  *
- * Metin görüntüler, tıklayınca input'a dönüşür. Enter kaydeder, Escape iptal eder.
+ * Props-based: `<InPlaceEditor defaultValue="Merhaba" />`
+ * Compound:    `<InPlaceEditor defaultValue="Merhaba"><InPlaceEditor.Display>...</InPlaceEditor.Display>...</InPlaceEditor>`
+ *
+ * Metin goruntular, tiklayinca input a donusur. Enter kaydeder, Escape iptal eder.
  *
  * @packageDocumentation
  */
 
-import { forwardRef, useRef, useEffect, type KeyboardEvent, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, useRef, useEffect, type KeyboardEvent, type ReactNode } from 'react';
 import type { InputVariant, InputSize } from '@relteco/relui-core';
 import { CheckIcon, CloseIcon } from '@relteco/relui-icons';
 import { inputRecipe } from '../input/input.css';
@@ -26,7 +29,7 @@ import {
   inPlaceEditorActionsStyle,
 } from './in-place-editor.css';
 import { useInPlaceEditor, type UseInPlaceEditorProps } from './useInPlaceEditor';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** InPlaceEditor slot isimleri. */
 export type InPlaceEditorSlot =
@@ -37,14 +40,127 @@ export type InPlaceEditorSlot =
   | 'confirmButton'
   | 'cancelButton';
 
+// ── Context (Compound API) ──────────────────────────
+
+interface InPlaceEditorContextValue {
+  classNames: ClassNames<InPlaceEditorSlot> | undefined;
+  styles: Styles<InPlaceEditorSlot> | undefined;
+  state: 'reading' | 'editing';
+  variant: InputVariant;
+  size: InputSize;
+}
+
+const InPlaceEditorContext = createContext<InPlaceEditorContextValue | null>(null);
+
+function useInPlaceEditorContext(): InPlaceEditorContextValue {
+  const ctx = useContext(InPlaceEditorContext);
+  if (!ctx) throw new Error('InPlaceEditor compound sub-components must be used within <InPlaceEditor>.');
+  return ctx;
+}
+
+// ── Compound: InPlaceEditor.Display ─────────────────
+
+/** InPlaceEditor.Display props */
+export interface InPlaceEditorDisplayProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const InPlaceEditorDisplay = forwardRef<HTMLSpanElement, InPlaceEditorDisplayProps>(
+  function InPlaceEditorDisplay(props, ref) {
+    const { children, className } = props;
+    const ctx = useInPlaceEditorContext();
+    const slot = getSlotProps('display', inPlaceEditorDisplayStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        data-testid="in-place-editor-display"
+        data-state={ctx.state}
+      >
+        {children}
+      </span>
+    );
+  },
+);
+
+// ── Compound: InPlaceEditor.Input ───────────────────
+
+/** InPlaceEditor.Input props */
+export interface InPlaceEditorInputProps {
+  /** Icerik / Content (opsiyonel) */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const InPlaceEditorInput = forwardRef<HTMLDivElement, InPlaceEditorInputProps>(
+  function InPlaceEditorInput(props, ref) {
+    const { children, className } = props;
+    const ctx = useInPlaceEditorContext();
+    const recipeClass = inputRecipe({ variant: ctx.variant, size: ctx.size });
+    const slot = getSlotProps('input', recipeClass, ctx.classNames, ctx.styles, {
+      width: '100%',
+    });
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        data-testid="in-place-editor-input"
+        data-state={ctx.state}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: InPlaceEditor.Actions ─────────────────
+
+/** InPlaceEditor.Actions props */
+export interface InPlaceEditorActionsProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const InPlaceEditorActions = forwardRef<HTMLDivElement, InPlaceEditorActionsProps>(
+  function InPlaceEditorActions(props, ref) {
+    const { children, className } = props;
+    const ctx = useInPlaceEditorContext();
+    const slot = getSlotProps('actions', inPlaceEditorActionsStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        data-testid="in-place-editor-actions"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
 /**
- * InPlaceEditor bileşen props'ları.
+ * InPlaceEditor bilesen props lari.
  * InPlaceEditor component props.
  */
 export interface InPlaceEditorComponentProps
   extends UseInPlaceEditorProps,
     SlotStyleProps<InPlaceEditorSlot> {
-  /** Görsel varyant / Visual variant */
+  /** Gorsel varyant / Visual variant */
   variant?: InputVariant;
 
   /** Boyut / Size */
@@ -54,7 +170,7 @@ export interface InPlaceEditorComponentProps
   placeholder?: string;
 
   /**
-   * Aksiyon butonlarını göster / Show action buttons (confirm/cancel).
+   * Aksiyon butonlarini goster / Show action buttons (confirm/cancel).
    *
    * @default true
    */
@@ -63,10 +179,13 @@ export interface InPlaceEditorComponentProps
   /** Onay ikonu / Confirm icon */
   confirmIcon?: ReactNode;
 
-  /** İptal ikonu / Cancel icon */
+  /** Iptal ikonu / Cancel icon */
   cancelIcon?: ReactNode;
 
-  /** Ek CSS sınıfı / Additional CSS class */
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
+
+  /** Ek CSS sinifi / Additional CSS class */
   className?: string;
 
   /** HTML id */
@@ -80,30 +199,26 @@ export interface InPlaceEditorComponentProps
 }
 
 /**
- * InPlaceEditor — RelUI yerinde düzenleme bileşeni.
- * InPlaceEditor — RelUI in-place editing component.
+ * InPlaceEditor — Dual API (props-based + compound).
  *
- * @example
+ * @example Props-based
  * ```tsx
  * <InPlaceEditor defaultValue="Merhaba" />
+ * ```
  *
- * <InPlaceEditor
- *   value={name}
- *   onValueChange={setName}
- *   variant="filled"
- *   size="lg"
- *   placeholder="İsim girin"
- * />
- *
- * <InPlaceEditor
- *   defaultValue="Düzenle"
- *   activationMode="doubleClick"
- *   submitOnBlur={false}
- *   showActions
- * />
+ * @example Compound
+ * ```tsx
+ * <InPlaceEditor defaultValue="Merhaba">
+ *   <InPlaceEditor.Display>Ozel gorunum</InPlaceEditor.Display>
+ *   <InPlaceEditor.Input />
+ *   <InPlaceEditor.Actions>
+ *     <button>Kaydet</button>
+ *     <button>Iptal</button>
+ *   </InPlaceEditor.Actions>
+ * </InPlaceEditor>
  * ```
  */
-export const InPlaceEditor = forwardRef<HTMLInputElement, InPlaceEditorComponentProps>(
+const InPlaceEditorBase = forwardRef<HTMLInputElement, InPlaceEditorComponentProps>(
   function InPlaceEditor(
     {
       variant = 'outline',
@@ -112,6 +227,7 @@ export const InPlaceEditor = forwardRef<HTMLInputElement, InPlaceEditorComponent
       showActions = true,
       confirmIcon,
       cancelIcon,
+      children,
       className,
       id,
       style: inlineStyle,
@@ -139,7 +255,7 @@ export const InPlaceEditor = forwardRef<HTMLInputElement, InPlaceEditorComponent
 
     const inputRef = useRef<HTMLInputElement | null>(null);
 
-    // Edit moduna girince input'a focus ver
+    // Edit moduna girince input a focus ver
     useEffect(() => {
       if (state === 'editing' && inputRef.current) {
         inputRef.current.focus();
@@ -165,6 +281,32 @@ export const InPlaceEditor = forwardRef<HTMLInputElement, InPlaceEditorComponent
       ? `${rootSlot.className} ${className}`
       : rootSlot.className;
 
+    const ctxValue: InPlaceEditorContextValue = {
+      classNames,
+      styles,
+      state,
+      variant,
+      size,
+    };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <InPlaceEditorContext.Provider value={ctxValue}>
+          <div
+            id={id}
+            className={combinedRootClass}
+            style={rootSlot.style}
+            data-state={state}
+            data-testid="in-place-editor-root"
+          >
+            {children}
+          </div>
+        </InPlaceEditorContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const displaySlot = getSlotProps(
       'display',
       inPlaceEditorDisplayStyle,
@@ -305,3 +447,12 @@ export const InPlaceEditor = forwardRef<HTMLInputElement, InPlaceEditorComponent
     );
   },
 );
+
+/**
+ * InPlaceEditor bilesen — Dual API (props-based + compound).
+ */
+export const InPlaceEditor = Object.assign(InPlaceEditorBase, {
+  Display: InPlaceEditorDisplay,
+  Input: InPlaceEditorInput,
+  Actions: InPlaceEditorActions,
+});

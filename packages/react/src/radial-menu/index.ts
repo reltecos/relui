@@ -6,5 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { RadialMenu, type RadialMenuComponentProps, type RadialMenuSlot } from './RadialMenu';
+export {
+  RadialMenu,
+  type RadialMenuComponentProps,
+  type RadialMenuSlot,
+  type RadialMenuItemProps,
+  type RadialMenuCenterProps,
+} from './RadialMenu';
 export { useRadialMenu, type UseRadialMenuProps, type UseRadialMenuReturn } from './useRadialMenu';

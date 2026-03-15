@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { FormField } from './FormField';
@@ -294,5 +294,15 @@ describe('FormField', () => {
     );
 
     expect(screen.getByRole('alert')).toHaveStyle({ fontSize: '12px' });
+  });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(
+      <FormField ref={ref}>
+        <input />
+      </FormField>,
+    );
+    expect(ref).toHaveBeenCalled();
   });
 });

@@ -182,3 +182,214 @@ function GroupedDemo() {
 export const Grouped: Story = {
   render: () => <GroupedDemo />,
 };
+
+// ── Compound ──
+
+function CompoundDemo() {
+  const { notifications, open, unreadCount, add, remove, markRead, toggle } =
+    useNotificationCenter();
+
+  return (
+    <div style={{ padding: 32, fontFamily: 'system-ui, sans-serif' }}>
+      <h3>Compound NotificationCenter</h3>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+        <button
+          onClick={() => add({ severity: 'info', title: 'Bilgi', message: 'Compound bildirim.' })}
+          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+        >
+          Bildirim Ekle
+        </button>
+      </div>
+      <button
+        onClick={toggle}
+        style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid #3b82f6', backgroundColor: '#3b82f6', color: '#fff', cursor: 'pointer' }}
+      >
+        Ac ({unreadCount})
+      </button>
+      <NotificationCenter notifications={notifications} open={open} unreadCount={unreadCount} onClose={toggle}>
+        <NotificationCenter.Header>
+          <span style={{ fontWeight: 600, fontSize: 16 }}>Compound Bildirimler ({unreadCount})</span>
+        </NotificationCenter.Header>
+        {notifications.length === 0 ? (
+          <NotificationCenter.EmptyState />
+        ) : (
+          notifications.map((n) => (
+            <NotificationCenter.Item key={n.id} severity={n.severity} read={n.read} onClick={() => markRead(n.id)}>
+              <div style={{ flex: 1 }}>
+                {n.title && <div style={{ fontWeight: 600, fontSize: 13 }}>{n.title}</div>}
+                <div style={{ fontSize: 13, opacity: 0.9 }}>{n.message}</div>
+              </div>
+              <button type="button" onClick={(e) => { e.stopPropagation(); remove(n.id); }} style={{ border: 'none', background: 'none', cursor: 'pointer', opacity: 0.5 }}>x</button>
+            </NotificationCenter.Item>
+          ))
+        )}
+      </NotificationCenter>
+    </div>
+  );
+}
+
+export const Compound: Story = {
+  render: () => <CompoundDemo />,
+};
+
+// ── EmptyState ──
+
+function EmptyStateDemo() {
+  const { notifications, open, unreadCount, toggle } = useNotificationCenter();
+
+  return (
+    <div style={{ padding: 32, fontFamily: 'system-ui, sans-serif' }}>
+      <h3>Bos Bildirim Merkezi</h3>
+      <button
+        onClick={toggle}
+        style={{
+          padding: '10px 20px',
+          borderRadius: 8,
+          border: '1px solid #3b82f6',
+          backgroundColor: '#3b82f6',
+          color: '#fff',
+          cursor: 'pointer',
+          fontSize: 14,
+        }}
+      >
+        Bildirimleri Ac
+      </button>
+
+      <NotificationCenter
+        notifications={notifications}
+        open={open}
+        unreadCount={unreadCount}
+        onClose={toggle}
+        onRemove={() => {}}
+        onClick={() => {}}
+        onMarkAllRead={() => {}}
+        onClearAll={() => {}}
+      />
+    </div>
+  );
+}
+
+export const EmptyState: Story = {
+  render: () => <EmptyStateDemo />,
+};
+
+// ── AllRead ──
+
+function AllReadDemo() {
+  const { notifications, open, unreadCount, add, remove, markRead, markAllRead, removeAll, toggle } =
+    useNotificationCenter();
+
+  const addReadNotifications = () => {
+    add({ severity: 'info', title: 'Bilgi', message: 'Sistem guncellendi.' });
+    add({ severity: 'success', title: 'Basarili', message: 'Dosya yuklendi.' });
+    add({ severity: 'warning', title: 'Uyari', message: 'Disk alani azaliyor.' });
+    setTimeout(() => markAllRead(), 50);
+  };
+
+  return (
+    <div style={{ padding: 32, fontFamily: 'system-ui, sans-serif' }}>
+      <h3>Tumu Okunmus Bildirimler</h3>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+        <button
+          onClick={addReadNotifications}
+          style={{
+            padding: '8px 16px',
+            borderRadius: 6,
+            border: '1px solid #ddd',
+            cursor: 'pointer',
+          }}
+        >
+          Okunmus Bildirimler Ekle
+        </button>
+      </div>
+      <button
+        onClick={toggle}
+        style={{
+          padding: '10px 20px',
+          borderRadius: 8,
+          border: '1px solid #3b82f6',
+          backgroundColor: '#3b82f6',
+          color: '#fff',
+          cursor: 'pointer',
+          fontSize: 14,
+        }}
+      >
+        Ac ({unreadCount})
+      </button>
+
+      <NotificationCenter
+        notifications={notifications}
+        open={open}
+        unreadCount={unreadCount}
+        onClose={toggle}
+        onRemove={remove}
+        onClick={markRead}
+        onMarkAllRead={markAllRead}
+        onClearAll={removeAll}
+      />
+    </div>
+  );
+}
+
+export const AllRead: Story = {
+  render: () => <AllReadDemo />,
+};
+
+// ── CustomSlotStyles ──
+
+function CustomSlotStylesDemo() {
+  const { notifications, open, unreadCount, add, remove, markRead, markAllRead, removeAll, toggle } =
+    useNotificationCenter();
+
+  return (
+    <div style={{ padding: 32, fontFamily: 'system-ui, sans-serif' }}>
+      <h3>Koyu Tema Bildirim Merkezi</h3>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+        <button
+          onClick={() => add({ severity: 'info', title: 'Bilgi', message: 'Koyu tema bildirimi.' })}
+          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+        >
+          Bildirim Ekle
+        </button>
+      </div>
+      <button
+        onClick={toggle}
+        style={{
+          padding: '10px 20px',
+          borderRadius: 8,
+          border: '1px solid #8b5cf6',
+          backgroundColor: '#8b5cf6',
+          color: '#fff',
+          cursor: 'pointer',
+          fontSize: 14,
+        }}
+      >
+        Ac ({unreadCount})
+      </button>
+
+      <NotificationCenter
+        notifications={notifications}
+        open={open}
+        unreadCount={unreadCount}
+        onClose={toggle}
+        onRemove={remove}
+        onClick={markRead}
+        onMarkAllRead={markAllRead}
+        onClearAll={removeAll}
+        styles={{
+          panel: { backgroundColor: '#1e293b', borderColor: '#334155' },
+          header: { borderBottomColor: '#334155' },
+          headerTitle: { color: '#e2e8f0' },
+          item: { borderBottomColor: '#334155' },
+          itemTitle: { color: '#f1f5f9' },
+          itemMessage: { color: '#94a3b8' },
+          emptyState: { color: '#64748b' },
+        }}
+      />
+    </div>
+  );
+}
+
+export const CustomSlotStyles: Story = {
+  render: () => <CustomSlotStylesDemo />,
+};

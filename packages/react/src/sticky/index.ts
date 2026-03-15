@@ -6,5 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Sticky, type StickyComponentProps, type StickySlot } from './Sticky';
+export {
+  Sticky,
+  useStickyContext,
+  type StickyComponentProps,
+  type StickySlot,
+  type StickyContentProps,
+} from './Sticky';
 export { useSticky, type UseStickyProps, type UseStickyReturn } from './useSticky';

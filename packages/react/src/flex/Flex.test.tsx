@@ -12,12 +12,12 @@ import '@testing-library/jest-dom/vitest';
 import { Flex } from './Flex';
 
 describe('Flex', () => {
+  // ── Root ──
   it('renders as div with flex display', () => {
     render(<Flex data-testid="flex">content</Flex>);
     const el = screen.getByTestId('flex');
     expect(el.tagName).toBe('DIV');
     expect(el).toHaveTextContent('content');
-    // Sprinkles display=flex class uygulanmış olmalı
     expect(el.className).toBeTruthy();
   });
 
@@ -64,6 +64,23 @@ describe('Flex', () => {
     expect(el).toHaveAttribute('role', 'navigation');
   });
 
+  it('renders multiple children', () => {
+    render(
+      <Flex data-testid="flex">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+      </Flex>,
+    );
+    expect(screen.getByTestId('flex').children).toHaveLength(3);
+  });
+
+  it('renders empty without children', () => {
+    render(<Flex data-testid="flex" />);
+    expect(screen.getByTestId('flex')).toBeInTheDocument();
+  });
+
+  // ── classNames & styles ──
   describe('classNames & styles', () => {
     it('applies classNames.root', () => {
       render(<Flex data-testid="flex" classNames={{ root: 'slot-root' }} />);
@@ -95,6 +112,67 @@ describe('Flex', () => {
       const el = screen.getByTestId('flex');
       expect(el).toHaveStyle({ opacity: '0.5' });
       expect(el).toHaveStyle({ fontSize: '14px' });
+    });
+
+    it('applies styles.root with padding', () => {
+      render(
+        <Flex data-testid="flex" styles={{ root: { padding: '20px' } }} />,
+      );
+      expect(screen.getByTestId('flex')).toHaveStyle({ padding: '20px' });
+    });
+  });
+
+  // ── Compound: Flex.Item ──
+  describe('Flex (Compound)', () => {
+    it('compound: Flex.Item render edilir', () => {
+      render(
+        <Flex data-testid="flex">
+          <Flex.Item>Item icerik</Flex.Item>
+        </Flex>,
+      );
+      const item = screen.getByTestId('flex-item');
+      expect(item).toBeInTheDocument();
+      expect(item).toHaveTextContent('Item icerik');
+    });
+
+    it('compound: birden fazla Flex.Item render edilir', () => {
+      render(
+        <Flex>
+          <Flex.Item>1</Flex.Item>
+          <Flex.Item>2</Flex.Item>
+          <Flex.Item>3</Flex.Item>
+        </Flex>,
+      );
+      const items = screen.getAllByTestId('flex-item');
+      expect(items).toHaveLength(3);
+    });
+
+    it('compound: Flex.Item classNames.item context ile aktarilir', () => {
+      render(
+        <Flex classNames={{ item: 'custom-item' }}>
+          <Flex.Item>test</Flex.Item>
+        </Flex>,
+      );
+      expect(screen.getByTestId('flex-item').className).toContain('custom-item');
+    });
+
+    it('compound: Flex.Item styles.item context ile aktarilir', () => {
+      render(
+        <Flex styles={{ item: { padding: '10px' } }}>
+          <Flex.Item>test</Flex.Item>
+        </Flex>,
+      );
+      expect(screen.getByTestId('flex-item')).toHaveStyle({ padding: '10px' });
+    });
+
+    it('compound: Flex.Item ref forward edilir', () => {
+      let refValue: HTMLElement | null = null;
+      render(
+        <Flex>
+          <Flex.Item ref={(el) => { refValue = el; }}>test</Flex.Item>
+        </Flex>,
+      );
+      expect(refValue).toBe(screen.getByTestId('flex-item'));
     });
   });
 });

@@ -14,6 +14,7 @@ import { CopyButton } from './CopyButton';
 const meta: Meta<typeof CopyButton> = {
   title: 'Primitives/CopyButton',
   component: CopyButton,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -151,6 +152,22 @@ export const CustomSlotStyles: Story = {
           icon: { color: 'limegreen' },
         }}
       />
+    </div>
+  ),
+};
+
+/** Compound API */
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <CopyButton value="compound text" aria-label="Kopyala" variant="outline">
+        <CopyButton.Icon />
+        <CopyButton.Label>Kopyala</CopyButton.Label>
+      </CopyButton>
+      <CopyButton value="sadece ikon" aria-label="Ikon" variant="ghost">
+        <CopyButton.Icon />
+      </CopyButton>
     </div>
   ),
 };

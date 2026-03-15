@@ -12,6 +12,7 @@ import { Skeleton } from './Skeleton';
 const meta: Meta<typeof Skeleton> = {
   title: 'Feedback/Skeleton',
   component: Skeleton,
+  tags: ['autodocs'],
   args: {
     variant: 'text',
     animation: 'shimmer',
@@ -121,6 +122,34 @@ export const ListSkeleton: Story = {
           </div>
         </div>
       ))}
+    </div>
+  ),
+};
+
+export const Compound: Story = {
+  render: () => (
+    <div
+      style={{
+        width: 320,
+        padding: 16,
+        border: '1px solid #e2e8f0',
+        borderRadius: 12,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+      }}
+    >
+      <Skeleton compound>
+        <Skeleton.Rect width="100%" height={180} radius={8} />
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 12 }}>
+          <Skeleton.Circle width={40} />
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <Skeleton.Text height={14} width="70%" />
+            <Skeleton.Text height={12} width="40%" />
+          </div>
+        </div>
+        <Skeleton.Text lines={3} height={12} />
+      </Skeleton>
     </div>
   ),
 };

@@ -16,6 +16,7 @@ import { MASK_PRESETS } from '@relteco/relui-core';
 const meta = {
   title: 'Primitives/MaskedInput',
   component: MaskedInput,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -292,4 +293,22 @@ export const CustomSlotStyles: Story = {
       />
     </div>
   ),
+};
+
+/** Compound API */
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => {
+    const [value, setValue] = useState('');
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: 400 }}>
+        <MaskedInput mask="(###) ### ## ##" value={value} onValueChange={setValue}>
+          <MaskedInput.Field />
+        </MaskedInput>
+        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+          Ham deger: {value || '(bos)'}
+        </div>
+      </div>
+    );
+  },
 };

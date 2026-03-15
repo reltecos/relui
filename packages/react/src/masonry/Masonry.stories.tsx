@@ -12,6 +12,7 @@ import { Masonry } from './Masonry';
 const meta: Meta<typeof Masonry> = {
   title: 'Layout/Masonry',
   component: Masonry,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
     columns: { control: { type: 'range', min: 1, max: 6, step: 1 } },
@@ -129,6 +130,21 @@ export const CustomSlotStyles: Story = {
         <div key={i} style={cardStyle(h, colors[i])}>
           Card {i + 1}
         </div>
+      ))}
+    </Masonry>
+  ),
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <Masonry columns={3} gap={16}>
+      {heights.slice(0, 6).map((h, i) => (
+        <Masonry.Item key={i}>
+          <div style={cardStyle(h, colors[i])}>
+            Card {i + 1}
+          </div>
+        </Masonry.Item>
       ))}
     </Masonry>
   ),

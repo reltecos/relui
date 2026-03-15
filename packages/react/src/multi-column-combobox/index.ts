@@ -10,6 +10,9 @@ export {
   MultiColumnCombobox,
   type MultiColumnComboboxComponentProps,
   type MultiColumnComboboxSlot,
+  type MultiColumnComboboxInputProps,
+  type MultiColumnComboboxContentProps,
+  type MultiColumnComboboxColumnProps,
 } from './MultiColumnCombobox';
 export {
   useMultiColumnCombobox,

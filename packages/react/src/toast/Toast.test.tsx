@@ -315,3 +315,77 @@ describe('Toast', () => {
     expect(onPause).toHaveBeenCalledWith('def');
   });
 });
+
+// ── Compound API ──
+
+describe('Toast (Compound)', () => {
+  it('compound: children ile container render eder', () => {
+    render(
+      <Toast>
+        <Toast.Title>Bilgi</Toast.Title>
+        <Toast.Description>Islem basarili.</Toast.Description>
+      </Toast>,
+    );
+    expect(screen.getByTestId('toast-container')).toBeInTheDocument();
+  });
+
+  it('compound: Toast.Title render edilir', () => {
+    render(
+      <Toast>
+        <Toast.Title>Baslik</Toast.Title>
+      </Toast>,
+    );
+    expect(screen.getByTestId('toast-title')).toHaveTextContent('Baslik');
+  });
+
+  it('compound: Toast.Description render edilir', () => {
+    render(
+      <Toast>
+        <Toast.Description>Aciklama metni</Toast.Description>
+      </Toast>,
+    );
+    expect(screen.getByTestId('toast-description')).toHaveTextContent('Aciklama metni');
+  });
+
+  it('compound: Toast.Icon render edilir', () => {
+    render(
+      <Toast>
+        <Toast.Icon><span data-testid="cmp-icon">i</span></Toast.Icon>
+      </Toast>,
+    );
+    expect(screen.getByTestId('cmp-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('toast-icon')).toBeInTheDocument();
+  });
+
+  it('compound: Toast.CloseButton render edilir ve tiklanir', () => {
+    const onClick = vi.fn();
+    render(
+      <Toast>
+        <Toast.CloseButton onClick={onClick} />
+      </Toast>,
+    );
+    const btn = screen.getByTestId('toast-closebutton');
+    expect(btn).toBeInTheDocument();
+    expect(btn).toHaveAttribute('aria-label', 'Close');
+    fireEvent.click(btn);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Toast classNames={{ title: 'cmp-title' }}>
+        <Toast.Title>Test</Toast.Title>
+      </Toast>,
+    );
+    expect(screen.getByTestId('toast-title').className).toContain('cmp-title');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <Toast styles={{ message: { fontSize: '20px' } }}>
+        <Toast.Description>Test</Toast.Description>
+      </Toast>,
+    );
+    expect(screen.getByTestId('toast-description')).toHaveStyle({ fontSize: '20px' });
+  });
+});

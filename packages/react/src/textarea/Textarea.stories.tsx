@@ -14,6 +14,7 @@ import { Textarea } from './Textarea';
 const meta: Meta<typeof Textarea> = {
   title: 'Primitives/Textarea',
   component: Textarea,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -177,6 +178,24 @@ export const FormExample: Story = {
           Bu alan zorunludur.
         </span>
       </div>
+    </div>
+  ),
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '320px' }}>
+      <Textarea placeholder="Aciklama yazin...">
+        <Textarea.Label>Aciklama</Textarea.Label>
+      </Textarea>
+      <Textarea placeholder="Notlar...">
+        <Textarea.Label>Notlar</Textarea.Label>
+        <Textarea.Counter count={42} max={500} />
+      </Textarea>
+      <Textarea placeholder="Sadece counter">
+        <Textarea.Counter count={0} max={200} />
+      </Textarea>
     </div>
   ),
 };

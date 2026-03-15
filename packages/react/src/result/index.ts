@@ -12,4 +12,8 @@ export {
   type ResultSlot,
   type ResultStatus,
   type ResultSize,
+  type ResultIconProps,
+  type ResultTitleProps,
+  type ResultDescriptionProps,
+  type ResultExtraProps,
 } from './Result';

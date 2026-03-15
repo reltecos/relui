@@ -7,83 +7,139 @@
  */
 
 /**
- * Container — ortlanmış, max-width sınırlamalı layout bileşeni.
- * Sayfa içeriğini responsive genişlikte tutar.
+ * Container — ortalanmis, max-width sinirlamali layout bilesen (Dual API).
+ * Sayfa icerigini responsive genislikte tutar.
+ *
+ * Props-based: `<Container size="lg" px={4}>icerik</Container>`
+ * Compound:    `<Container>icerik</Container>` (minimal)
  *
  * @packageDocumentation
  */
 
-import { forwardRef } from 'react';
+import {
+  forwardRef,
+  createContext,
+  useContext,
+  type ReactNode,
+  type CSSProperties,
+} from 'react';
+import { rootStyle, sizeStyles } from './container.css';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 import { Box, type BoxProps } from '../box';
 
-/** Container slot isimleri. */
+// ── Slot ──────────────────────────────────────────────
+
+/** Container slot isimleri / Container slot names. */
 export type ContainerSlot = 'root';
+
+// ── Types ─────────────────────────────────────────────
 
 /** Container boyut presetleri. */
 export type ContainerSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
 
-/** Container boyut → maxWidth eşlemesi (breakpoint değerleri). */
-const sizeMap: Record<ContainerSize, string> = {
-  sm: '640px',
-  md: '768px',
-  lg: '1024px',
-  xl: '1280px',
-  '2xl': '1536px',
-  full: '100%',
-};
+// ── Context (Compound API) ────────────────────────────
+
+interface ContainerContextValue {
+  size: ContainerSize;
+  classNames: ClassNames<ContainerSlot> | undefined;
+  styles: Styles<ContainerSlot> | undefined;
+}
+
+const ContainerContext = createContext<ContainerContextValue | null>(null);
 
 /**
- * Container prop'ları.
- *
- * Box'un tüm prop'larını destekler + `size` ve `centerContent` prop'ları.
+ * Container context hook.
+ * Container compound sub-components must be used within Container.
  */
-export interface ContainerProps extends BoxProps {
+export function useContainerContext(): ContainerContextValue {
+  const ctx = useContext(ContainerContext);
+  if (!ctx) throw new Error('Container compound sub-components must be used within <Container>.');
+  return ctx;
+}
+
+// ── Component Props ───────────────────────────────────
+
+/**
+ * Container prop'lari.
+ *
+ * Box'un tum prop'larini destekler + `size` ve `centerContent` prop'lari.
+ */
+export interface ContainerProps extends Omit<BoxProps, 'classNames' | 'styles'>, SlotStyleProps<ContainerSlot> {
   /**
-   * Maksimum genişlik preseti.
-   * Varsayılan: 'lg' (1024px).
+   * Maksimum genislik preseti.
+   * Varsayilan: 'lg' (1024px).
    */
   size?: ContainerSize;
   /**
-   * İçeriği hem yatay hem dikey ortala.
-   * Varsayılan: false.
+   * Icerigi hem yatay hem dikey ortala.
+   * Varsayilan: false.
    */
   centerContent?: boolean;
+  /** Alt elementler. */
+  children?: ReactNode;
+  /** Inline stil. */
+  style?: CSSProperties;
 }
 
-/**
- * Container — ortlanmış, max-width sınırlamalı layout bileşeni.
- *
- * Sayfa içeriğini responsive genişlikte tutar. `mx="auto"` ile ortalanır.
- *
- * @example
- * ```tsx
- * <Container size="lg" px={4}>
- *   <h1>Sayfa İçeriği</h1>
- *   <p>Maksimum 1024px genişlikte, ortalanmış.</p>
- * </Container>
- *
- * <Container size={{ base: 'sm', lg: 'xl' }} centerContent>
- *   <Box>Ortalanmış içerik</Box>
- * </Container>
- * ```
- */
-export const Container = forwardRef<HTMLElement, ContainerProps>(
-  function Container(props, ref) {
-    const { size = 'lg', centerContent = false, style, ...rest } = props;
+// ── Component ─────────────────────────────────────────
 
-    const maxWidthValue = sizeMap[size];
+const ContainerBase = forwardRef<HTMLElement, ContainerProps>(
+  function Container(props, ref) {
+    const {
+      size = 'lg',
+      centerContent = false,
+      children,
+      className,
+      style: styleProp,
+      classNames,
+      styles,
+      ...rest
+    } = props;
+
+    const baseClass = `${rootStyle} ${sizeStyles[size]}`;
+    const rootSlot = getSlotProps('root', baseClass, classNames, styles);
+    const rootClassName = className
+      ? `${rootSlot.className} ${className}`
+      : rootSlot.className;
+
+    const ctxValue: ContainerContextValue = { size, classNames, styles };
 
     return (
-      <Box
-        ref={ref}
-        width="full"
-        mx="auto"
-        style={{ ...style, maxWidth: maxWidthValue }}
-        {...(centerContent
-          ? { display: 'flex', flexDirection: 'column', alignItems: 'center' }
-          : {})}
-        {...rest}
-      />
+      <ContainerContext.Provider value={ctxValue}>
+        <Box
+          ref={ref}
+          className={rootClassName}
+          style={{ ...rootSlot.style, ...styleProp }}
+          data-testid="container-root"
+          data-size={size}
+          {...(centerContent
+            ? { display: 'flex', flexDirection: 'column', alignItems: 'center' }
+            : {})}
+          {...rest}
+        >
+          {children}
+        </Box>
+      </ContainerContext.Provider>
     );
   },
 );
+
+/**
+ * Container bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Container size="lg" px={4}>
+ *   <h1>Sayfa Icerigi</h1>
+ *   <p>Maksimum 1024px genislikte, ortalanmis.</p>
+ * </Container>
+ * ```
+ *
+ * @example Compound (minimal)
+ * ```tsx
+ * <Container size="md" centerContent>
+ *   <Box>Ortalanmis icerik</Box>
+ * </Container>
+ * ```
+ */
+export const Container = Object.assign(ContainerBase, {});

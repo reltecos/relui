@@ -314,3 +314,59 @@ describe('Input', () => {
     expect(hiddenSpans[1]).toHaveClass('my-right');
   });
 });
+
+// ── Compound API ──
+
+describe('Input (Compound)', () => {
+  it('compound: LeftAddon render edilir', () => {
+    render(
+      <Input aria-label="Test" placeholder="Ara...">
+        <Input.LeftAddon><span data-testid="left-icon">L</span></Input.LeftAddon>
+      </Input>,
+    );
+    expect(screen.getByTestId('input-leftaddon')).toBeInTheDocument();
+    expect(screen.getByTestId('left-icon')).toBeInTheDocument();
+  });
+
+  it('compound: RightAddon render edilir', () => {
+    render(
+      <Input aria-label="Test" placeholder="Ara...">
+        <Input.RightAddon><span data-testid="right-icon">R</span></Input.RightAddon>
+      </Input>,
+    );
+    expect(screen.getByTestId('input-rightaddon')).toBeInTheDocument();
+    expect(screen.getByTestId('right-icon')).toBeInTheDocument();
+  });
+
+  it('compound: LeftAddon ve RightAddon birlikte render edilir', () => {
+    render(
+      <Input aria-label="Test" placeholder="Ara...">
+        <Input.LeftAddon><span>L</span></Input.LeftAddon>
+        <Input.RightAddon><span>R</span></Input.RightAddon>
+      </Input>,
+    );
+    expect(screen.getByTestId('input-leftaddon')).toBeInTheDocument();
+    expect(screen.getByTestId('input-rightaddon')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Input aria-label="Test" classNames={{ leftElement: 'cmp-left' }}>
+        <Input.LeftAddon><span>L</span></Input.LeftAddon>
+      </Input>,
+    );
+    expect(screen.getByTestId('input-leftaddon').className).toContain('cmp-left');
+  });
+
+  it('compound: context disinda kullanim hata firlatir', () => {
+    expect(() => {
+      render(<Input.LeftAddon><span>L</span></Input.LeftAddon>);
+    }).toThrow('Input compound sub-components must be used within <Input>.');
+  });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<Input aria-label="Test" ref={ref} />);
+    expect(ref).toHaveBeenCalled();
+  });
+});

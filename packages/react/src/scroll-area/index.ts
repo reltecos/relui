@@ -6,5 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { ScrollArea, type ScrollAreaComponentProps, type ScrollAreaSlot } from './ScrollArea';
+export {
+  ScrollArea,
+  type ScrollAreaComponentProps,
+  type ScrollAreaSlot,
+  type ScrollAreaViewportProps,
+  type ScrollAreaScrollbarProps,
+} from './ScrollArea';
 export { useScrollArea, type UseScrollAreaProps, type UseScrollAreaReturn } from './useScrollArea';

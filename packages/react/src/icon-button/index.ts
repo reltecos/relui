@@ -6,4 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { IconButton, type IconButtonComponentProps, type IconButtonSlot } from './IconButton';
+export {
+  IconButton,
+  type IconButtonComponentProps,
+  type IconButtonSlot,
+  type IconButtonIconProps,
+} from './IconButton';

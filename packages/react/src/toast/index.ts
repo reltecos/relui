@@ -6,5 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Toast, type ToastComponentProps, type ToastSlot } from './Toast';
+export {
+  Toast,
+  type ToastComponentProps,
+  type ToastSlot,
+  type ToastIconProps,
+  type ToastTitleProps,
+  type ToastDescriptionProps,
+  type ToastCloseButtonProps,
+} from './Toast';
 export { useToast, type UseToastProps, type UseToastReturn } from './useToast';

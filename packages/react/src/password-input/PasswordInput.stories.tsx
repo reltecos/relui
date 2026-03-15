@@ -15,6 +15,7 @@ import { PasswordInput } from './PasswordInput';
 const meta = {
   title: 'Primitives/PasswordInput',
   component: PasswordInput,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -161,6 +162,24 @@ export const CustomIcons: Story = {
       hideIcon={<span style={{ fontSize: '0.875rem' }}>🔒</span>}
       placeholder="Özel ikonlu şifre"
     />
+  ),
+};
+
+/** Compound API */
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: 400 }}>
+      <PasswordInput placeholder="Compound sifre">
+        <PasswordInput.ToggleButton />
+      </PasswordInput>
+      <PasswordInput placeholder="Custom ikon">
+        <PasswordInput.ToggleButton
+          showIcon={<span style={{ fontSize: '0.875rem' }}>&#128065;</span>}
+          hideIcon={<span style={{ fontSize: '0.875rem' }}>&#128274;</span>}
+        />
+      </PasswordInput>
+    </div>
   ),
 };
 

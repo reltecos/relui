@@ -12,6 +12,7 @@ import { Button } from './Button';
 const meta = {
   title: 'Primitives/Button',
   component: Button,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -231,6 +232,30 @@ export const SizeVariantMatrix: Story = {
       </div>
     );
   },
+};
+
+// ── Compound API ─────────────────────────────────────────────────────
+
+/** Compound API ile ikon kullanimi / Icon usage with Compound API */
+export const Compound: Story = {
+  name: 'Compound API',
+  render: (args) => (
+    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+      <Button {...args}>
+        <Button.LeftIcon><PlusIcon /></Button.LeftIcon>
+        Ekle
+      </Button>
+      <Button {...args} variant="outline">
+        Devam
+        <Button.RightIcon><ArrowRightIcon /></Button.RightIcon>
+      </Button>
+      <Button {...args} variant="ghost" color="neutral">
+        <Button.LeftIcon><SearchIcon /></Button.LeftIcon>
+        Ara
+        <Button.RightIcon><ArrowRightIcon /></Button.RightIcon>
+      </Button>
+    </div>
+  ),
 };
 
 // ── Slot Customization ──────────────────────────────────────────────

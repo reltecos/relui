@@ -7,8 +7,11 @@
  */
 
 /**
- * Link — stilize baglanti bilesen.
- * Link — styled anchor component.
+ * Link — stilize baglanti bilesen (Dual API).
+ * Link — styled anchor component (Dual API).
+ *
+ * Props-based: `<Link href="/about">About</Link>`
+ * Compound:    `<Link href="/about"><Link.Icon>...</Link.Icon>About</Link>`
  *
  * Variant, underline, size destegi. Harici linklerde otomatik
  * target="_blank" + rel="noopener noreferrer".
@@ -16,14 +19,14 @@
  * @packageDocumentation
  */
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import { linkRecipe, externalIconStyle } from './link.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /**
  * Link slot isimleri / Link slot names.
  */
-export type LinkSlot = 'root' | 'externalIcon';
+export type LinkSlot = 'root' | 'externalIcon' | 'icon';
 
 /**
  * Link boyutlari / Link sizes.
@@ -39,6 +42,60 @@ export type LinkVariant = 'default' | 'subtle' | 'inherit';
  * Link underline modu / Link underline mode.
  */
 export type LinkUnderline = 'always' | 'hover' | 'never';
+
+// ── Context (Compound API) ──────────────────────────────────
+
+interface LinkContextValue {
+  size: LinkSize;
+  classNames: ClassNames<LinkSlot> | undefined;
+  styles: Styles<LinkSlot> | undefined;
+}
+
+const LinkContext = createContext<LinkContextValue | null>(null);
+
+function useLinkContext(): LinkContextValue {
+  const ctx = useContext(LinkContext);
+  if (!ctx) throw new Error('Link compound sub-components must be used within <Link>.');
+  return ctx;
+}
+
+// ── Compound: Link.Icon ─────────────────────────────────────
+
+/** Link.Icon props */
+export interface LinkIconProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Pozisyon / Position */
+  position?: 'start' | 'end';
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const LinkIcon = forwardRef<HTMLSpanElement, LinkIconProps>(
+  function LinkIcon(props, ref) {
+    const { children, position = 'start', className } = props;
+    const ctx = useLinkContext();
+    const slot = getSlotProps('icon', '', ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span
+        ref={ref}
+        className={cls || undefined}
+        style={{
+          ...slot.style,
+          display: 'inline-flex',
+          alignItems: 'center',
+          ...(position === 'start' ? { marginRight: '0.25em' } : { marginLeft: '0.25em' }),
+        }}
+        aria-hidden="true"
+        data-testid="link-icon"
+      >
+        {children}
+      </span>
+    );
+  },
+);
 
 // ── Component Props ─────────────────────────────────────────
 
@@ -91,18 +148,27 @@ function ExternalLinkIcon() {
   );
 }
 
+// ── Component ───────────────────────────────────────────────
+
 /**
- * Link bilesen — stilize baglanti.
- * Link component — styled anchor.
+ * Link bilesen — stilize baglanti (Dual API).
+ * Link component — styled anchor (Dual API).
  *
- * @example
+ * @example Props-based
  * ```tsx
  * <Link href="/about">About</Link>
  * <Link href="https://example.com" external>Example</Link>
- * <Link variant="subtle" underline="always">Subtle link</Link>
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Link href="/about">
+ *   <Link.Icon><SearchIcon /></Link.Icon>
+ *   About
+ * </Link>
  * ```
  */
-export const Link = forwardRef<HTMLAnchorElement, LinkComponentProps>(
+const LinkBase = forwardRef<HTMLAnchorElement, LinkComponentProps>(
   function Link(props, ref) {
     const {
       variant = 'default',
@@ -134,24 +200,48 @@ export const Link = forwardRef<HTMLAnchorElement, LinkComponentProps>(
       ? { target: '_blank' as const, rel: 'noopener noreferrer' }
       : {};
 
+    const ctxValue: LinkContextValue = { size, classNames, styles };
+
     return (
-      <a
-        ref={ref}
-        className={combinedRootClassName}
-        style={combinedRootStyle}
-        aria-disabled={disabled || undefined}
-        data-disabled={disabled ? '' : undefined}
-        tabIndex={disabled ? -1 : undefined}
-        {...externalProps}
-        {...htmlProps}
-      >
-        {children}
-        {external && showExternalIcon && (
-          <span className={extIconSlot.className} style={extIconSlot.style} aria-hidden="true">
-            <ExternalLinkIcon />
-          </span>
-        )}
-      </a>
+      <LinkContext.Provider value={ctxValue}>
+        <a
+          ref={ref}
+          className={combinedRootClassName}
+          style={combinedRootStyle}
+          aria-disabled={disabled || undefined}
+          data-disabled={disabled ? '' : undefined}
+          tabIndex={disabled ? -1 : undefined}
+          {...externalProps}
+          {...htmlProps}
+        >
+          {children}
+          {external && showExternalIcon && (
+            <span className={extIconSlot.className} style={extIconSlot.style} aria-hidden="true">
+              <ExternalLinkIcon />
+            </span>
+          )}
+        </a>
+      </LinkContext.Provider>
     );
   },
 );
+
+/**
+ * Link bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Link href="/about">About</Link>
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Link href="/about">
+ *   <Link.Icon><SearchIcon /></Link.Icon>
+ *   About
+ * </Link>
+ * ```
+ */
+export const Link = Object.assign(LinkBase, {
+  Icon: LinkIcon,
+});

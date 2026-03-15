@@ -7,22 +7,23 @@
  */
 
 /**
- * LoadPanel — yukleme overlay bilesen.
- * LoadPanel — loading overlay component.
+ * LoadPanel — yukleme overlay bilesen (Dual API).
+ * LoadPanel — loading overlay component (Dual API).
  *
- * Overlay + spinner + mesaj — islem sirasinda alani kaplar.
+ * Props-based: `<LoadPanel visible message="Yukleniyor..." />`
+ * Compound:    `<LoadPanel visible><LoadPanel.Spinner /><LoadPanel.Message>Yukleniyor</LoadPanel.Message></LoadPanel>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import {
   loadPanelOverlayRecipe,
   loadPanelContentStyle,
   loadPanelSpinnerRecipe,
   loadPanelMessageStyle,
 } from './load-panel.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 // ── Slot ──────────────────────────────────────────────
 
@@ -38,6 +39,105 @@ export type LoadPanelSize = 'sm' | 'md' | 'lg';
 
 /** LoadPanel arka plan / LoadPanel backdrop. */
 export type LoadPanelBackdrop = 'light' | 'dark' | 'none';
+
+// ── Context (Compound API) ──────────────────────────
+
+interface LoadPanelContextValue {
+  size: LoadPanelSize;
+  classNames: ClassNames<LoadPanelSlot> | undefined;
+  styles: Styles<LoadPanelSlot> | undefined;
+}
+
+const LoadPanelContext = createContext<LoadPanelContextValue | null>(null);
+
+function useLoadPanelContext(): LoadPanelContextValue {
+  const ctx = useContext(LoadPanelContext);
+  if (!ctx) throw new Error('LoadPanel compound sub-components must be used within <LoadPanel>.');
+  return ctx;
+}
+
+// ── Compound: LoadPanel.Spinner ─────────────────────
+
+/** LoadPanel.Spinner props */
+export interface LoadPanelSpinnerProps {
+  /** Ozel icerik (varsayilan: SVG spinner) / Custom content (default: SVG spinner) */
+  children?: ReactNode;
+  /** Spinner rengi / Spinner color */
+  color?: string;
+  /** Spinner kalinligi / Spinner thickness */
+  thickness?: number;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const LoadPanelSpinner = forwardRef<HTMLDivElement, LoadPanelSpinnerProps>(
+  function LoadPanelSpinner(props, ref) {
+    const { children, color = 'var(--rel-color-primary, #3b82f6)', thickness = 3, className } = props;
+    const ctx = useLoadPanelContext();
+    const slot = getSlotProps('spinner', loadPanelSpinnerRecipe({ size: ctx.size }), ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    if (children) {
+      return (
+        <div ref={ref} className={cls} style={slot.style} data-testid="load-panel-spinner">
+          {children}
+        </div>
+      );
+    }
+
+    return (
+      <svg
+        ref={ref as React.Ref<SVGSVGElement>}
+        className={cls}
+        style={slot.style}
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+        data-testid="load-panel-spinner"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+          stroke={color}
+          strokeWidth={thickness}
+          opacity={0.2}
+        />
+        <path
+          d="M12 2a10 10 0 0 1 10 10"
+          stroke={color}
+          strokeWidth={thickness}
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  },
+);
+
+// ── Compound: LoadPanel.Message ──────────────────────
+
+/** LoadPanel.Message props */
+export interface LoadPanelMessageProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const LoadPanelMessage = forwardRef<HTMLDivElement, LoadPanelMessageProps>(
+  function LoadPanelMessage(props, ref) {
+    const { children, className } = props;
+    const ctx = useLoadPanelContext();
+    const slot = getSlotProps('message', loadPanelMessageStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="load-panel-message">
+        {children}
+      </div>
+    );
+  },
+);
 
 // ── Component Props ───────────────────────────────────
 
@@ -58,6 +158,8 @@ export interface LoadPanelComponentProps extends SlotStyleProps<LoadPanelSlot> {
   spinnerThickness?: number;
   /** Ozel spinner / Custom spinner (varsayilani override eder) */
   indicator?: ReactNode;
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
   /** Ek className / Additional className */
   className?: string;
   /** Inline style / Inline style */
@@ -69,18 +171,23 @@ export interface LoadPanelComponentProps extends SlotStyleProps<LoadPanelSlot> {
 // ── Component ─────────────────────────────────────────
 
 /**
- * LoadPanel bilesen — yukleme overlay.
- * LoadPanel component — loading overlay.
+ * LoadPanel bilesen — Dual API (props-based + compound).
+ * LoadPanel component — Dual API (props-based + compound).
  *
- * @example
+ * @example Props-based
  * ```tsx
- * <div style={{ position: 'relative', height: 300 }}>
- *   <LoadPanel visible message="Yukleniyor..." />
- *   <Content />
- * </div>
+ * <LoadPanel visible message="Yukleniyor..." />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <LoadPanel visible>
+ *   <LoadPanel.Spinner />
+ *   <LoadPanel.Message>Yukleniyor...</LoadPanel.Message>
+ * </LoadPanel>
  * ```
  */
-export const LoadPanel = forwardRef<HTMLDivElement, LoadPanelComponentProps>(
+const LoadPanelBase = forwardRef<HTMLDivElement, LoadPanelComponentProps>(
   function LoadPanel(props, ref) {
     const {
       visible = true,
@@ -91,6 +198,7 @@ export const LoadPanel = forwardRef<HTMLDivElement, LoadPanelComponentProps>(
       spinnerColor = 'var(--rel-color-primary, #3b82f6)',
       spinnerThickness = 3,
       indicator,
+      children,
       className,
       style: styleProp,
       classNames,
@@ -111,6 +219,32 @@ export const LoadPanel = forwardRef<HTMLDivElement, LoadPanelComponentProps>(
       : rootSlot.style;
 
     const contentSlot = getSlotProps('content', loadPanelContentStyle, classNames, styles);
+
+    const ctxValue: LoadPanelContextValue = { size, classNames, styles };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <LoadPanelContext.Provider value={ctxValue}>
+          <div
+            ref={ref}
+            className={combinedRootClassName}
+            style={combinedRootStyle}
+            id={id}
+            data-testid="load-panel"
+            role="status"
+            aria-busy="true"
+            aria-label="Yukleniyor"
+          >
+            <div className={contentSlot.className} style={contentSlot.style}>
+              {children}
+            </div>
+          </div>
+        </LoadPanelContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const spinnerSlot = getSlotProps('spinner', loadPanelSpinnerRecipe({ size }), classNames, styles);
     const messageSlot = getSlotProps('message', loadPanelMessageStyle, classNames, styles);
 
@@ -165,3 +299,24 @@ export const LoadPanel = forwardRef<HTMLDivElement, LoadPanelComponentProps>(
     );
   },
 );
+
+/**
+ * LoadPanel bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <LoadPanel visible message="Yukleniyor..." />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <LoadPanel visible>
+ *   <LoadPanel.Spinner />
+ *   <LoadPanel.Message>Yukleniyor...</LoadPanel.Message>
+ * </LoadPanel>
+ * ```
+ */
+export const LoadPanel = Object.assign(LoadPanelBase, {
+  Spinner: LoadPanelSpinner,
+  Message: LoadPanelMessage,
+});

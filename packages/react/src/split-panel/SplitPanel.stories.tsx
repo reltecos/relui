@@ -12,6 +12,7 @@ import { SplitPanel } from './SplitPanel';
 const meta: Meta<typeof SplitPanel> = {
   title: 'Window Manager/SplitPanel',
   component: SplitPanel,
+  tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
     orientation: {
@@ -142,6 +143,22 @@ export const CustomSlotStyles: Story = {
       >
         <div>Sol Panel</div>
         <div>Sağ Panel</div>
+      </SplitPanel>
+    </div>
+  ),
+};
+
+export const Compound: Story = {
+  render: () => (
+    <div style={{ height: 400, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}>
+      <SplitPanel>
+        <SplitPanel.Pane>
+          <div style={panelStyle('#eff6ff')}>Sol Pane (Compound API)</div>
+        </SplitPanel.Pane>
+        <SplitPanel.Handle />
+        <SplitPanel.Pane>
+          <div style={panelStyle('#fff')}>Sag Pane (Compound API)</div>
+        </SplitPanel.Pane>
       </SplitPanel>
     </div>
   ),

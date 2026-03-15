@@ -322,6 +322,37 @@ export const CustomSlotStyles: Story = {
   ),
 };
 
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <RadialMenuDemo items={iconItems} renderIcon={renderIcon}>
+      <RadialMenu.Center>
+        <span style={{ fontSize: 16, fontWeight: 700, color: '#3b82f6' }}>R</span>
+      </RadialMenu.Center>
+    </RadialMenuDemo>
+  ),
+};
+
+export const CompoundCustomSlotStyles: Story = {
+  name: 'Compound + Custom Slot Styles',
+  render: () => (
+    <RadialMenuDemo
+      items={iconItems}
+      renderIcon={renderIcon}
+      styles={{
+        center: {
+          backgroundColor: '#1a1a2e',
+          borderColor: '#3b82f6',
+        },
+      }}
+    >
+      <RadialMenu.Center>
+        <span style={{ fontSize: 14, fontWeight: 700, color: '#60a5fa' }}>+</span>
+      </RadialMenu.Center>
+    </RadialMenuDemo>
+  ),
+};
+
 export const Playground: Story = {
   args: {
     items: iconItems,

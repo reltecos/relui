@@ -6,4 +6,4 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Badge, type BadgeComponentProps, type BadgeSlot } from './Badge';
+export { Badge, type BadgeComponentProps, type BadgeSlot, type BadgeIconProps } from './Badge';

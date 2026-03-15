@@ -6,5 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Menu, type MenuComponentProps, type MenuSlot } from './Menu';
+export {
+  Menu,
+  type MenuComponentProps,
+  type MenuSlot,
+  type MenuItemComponentProps,
+  type MenuGroupProps,
+  type MenuSeparatorProps,
+  type MenuLabelProps,
+} from './Menu';
 export { useMenu, type UseMenuProps, type UseMenuReturn } from './useMenu';

@@ -7,16 +7,20 @@
  */
 
 /**
- * ScrollArea — özel scrollbar'lı scroll bölgesi bileşeni.
+ * ScrollArea — ozel scrollbar li scroll bolgesi bilesen (Dual API).
+ * ScrollArea — custom scrollbar scroll area component (Dual API).
  *
- * Native scrollbar'ları gizleyip özel thumb/track render eder.
- * Hover, scroll, always, auto görünürlük modları destekler.
+ * Props-based: `<ScrollArea height={300}>...</ScrollArea>`
+ * Compound:    `<ScrollArea height={300}><ScrollArea.Viewport>...</ScrollArea.Viewport></ScrollArea>`
+ *
+ * Native scrollbar lari gizleyip ozel thumb/track render eder.
+ * Hover, scroll, always, auto gorunurluk modlari destekler.
  *
  * @packageDocumentation
  */
 
-import React, { forwardRef, type CSSProperties } from 'react';
-import { getSlotProps, type SlotStyleProps } from '../utils';
+import React, { forwardRef, createContext, useContext, type CSSProperties, type ReactNode } from 'react';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils';
 import { useScrollArea, type UseScrollAreaProps } from './useScrollArea';
 import {
   rootStyle,
@@ -36,7 +40,87 @@ export type ScrollAreaSlot =
   | 'thumbX'
   | 'corner';
 
-/** ScrollArea bileşen prop'ları. */
+// ── Context (Compound API) ──────────────────────────
+
+interface ScrollAreaContextValue {
+  classNames: ClassNames<ScrollAreaSlot> | undefined;
+  styles: Styles<ScrollAreaSlot> | undefined;
+}
+
+const ScrollAreaContext = createContext<ScrollAreaContextValue | null>(null);
+
+function useScrollAreaContext(): ScrollAreaContextValue {
+  const ctx = useContext(ScrollAreaContext);
+  if (!ctx) throw new Error('ScrollArea compound sub-components must be used within <ScrollArea>.');
+  return ctx;
+}
+
+// ── Compound: ScrollArea.Viewport ────────────────────
+
+/** ScrollArea.Viewport props */
+export interface ScrollAreaViewportProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Inline style / Inline style */
+  style?: CSSProperties;
+}
+
+const ScrollAreaViewport = forwardRef<HTMLDivElement, ScrollAreaViewportProps>(
+  function ScrollAreaViewport(props, ref) {
+    const { children, className, style: styleProp } = props;
+    const ctx = useScrollAreaContext();
+    const slot = getSlotProps('viewport', viewportStyle, ctx.classNames, ctx.styles, styleProp);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-testid="scroll-area-viewport"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: ScrollArea.Scrollbar ───────────────────
+
+/** ScrollArea.Scrollbar props */
+export interface ScrollAreaScrollbarProps {
+  /** Ek className / Additional className */
+  className?: string;
+  /** Inline style / Inline style */
+  style?: CSSProperties;
+  /** Scrollbar yonu / Scrollbar orientation */
+  orientation?: 'vertical' | 'horizontal';
+}
+
+const ScrollAreaScrollbar = forwardRef<HTMLDivElement, ScrollAreaScrollbarProps>(
+  function ScrollAreaScrollbar(props, ref) {
+    const { className, style: styleProp, orientation = 'vertical' } = props;
+    const ctx = useScrollAreaContext();
+    const slotName = orientation === 'vertical' ? 'scrollbarY' as const : 'scrollbarX' as const;
+    const slot = getSlotProps(slotName, undefined, ctx.classNames, ctx.styles, styleProp);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-testid={`scroll-area-scrollbar-${orientation}`}
+        data-orientation={orientation}
+        aria-hidden="true"
+      />
+    );
+  },
+);
+
+/** ScrollArea bilesen prop lari. */
 export interface ScrollAreaComponentProps
   extends UseScrollAreaProps,
     SlotStyleProps<ScrollAreaSlot>,
@@ -63,7 +147,7 @@ export interface ScrollAreaComponentProps
  * </ScrollArea>
  * ```
  */
-export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaComponentProps>(
+const ScrollAreaBase = forwardRef<HTMLDivElement, ScrollAreaComponentProps>(
   function ScrollArea(props, ref) {
     const {
       children,
@@ -177,73 +261,85 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaComponentProps>(
 
     const finalRootClass = [rootSlot.className, className].filter(Boolean).join(' ');
 
+    const ctxValue: ScrollAreaContextValue = { classNames, styles };
+
     return (
-      <div
-        ref={mergedRef}
-        {...rest}
-        className={finalRootClass || undefined}
-        style={rootSlot.style}
-        data-orientation={orientation}
-        data-type={type}
-        onPointerEnter={rootProps.onPointerEnter}
-        onPointerLeave={rootProps.onPointerLeave}
-      >
-        {/* Viewport */}
+      <ScrollAreaContext.Provider value={ctxValue}>
         <div
-          ref={viewportRef}
-          className={viewportSlot.className || undefined}
-          style={{ ...viewportSlot.style, ...viewportOverflow }}
-          onScroll={viewportProps.onScroll}
-          tabIndex={0}
-          role="region"
-          aria-label="Scrollable content"
+          ref={mergedRef}
+          {...rest}
+          className={finalRootClass || undefined}
+          style={rootSlot.style}
+          data-orientation={orientation}
+          data-type={type}
+          onPointerEnter={rootProps.onPointerEnter}
+          onPointerLeave={rootProps.onPointerLeave}
         >
-          {children}
+          {/* Viewport */}
+          <div
+            ref={viewportRef}
+            className={viewportSlot.className || undefined}
+            style={{ ...viewportSlot.style, ...viewportOverflow }}
+            onScroll={viewportProps.onScroll}
+            tabIndex={0}
+            role="region"
+            aria-label="Scrollable content"
+          >
+            {children}
+          </div>
+
+          {/* Vertical scrollbar */}
+          {showVertical && (
+            <div
+              className={scrollbarYSlot.className || undefined}
+              style={scrollbarYSlot.style}
+              data-orientation="vertical"
+              aria-hidden="true"
+              {...getScrollbarProps('y')}
+            >
+              <div
+                className={thumbYSlot.className || undefined}
+                style={thumbYSlot.style}
+                {...getThumbProps('y')}
+              />
+            </div>
+          )}
+
+          {/* Horizontal scrollbar */}
+          {showHorizontal && (
+            <div
+              className={scrollbarXSlot.className || undefined}
+              style={scrollbarXSlot.style}
+              data-orientation="horizontal"
+              aria-hidden="true"
+              {...getScrollbarProps('x')}
+            >
+              <div
+                className={thumbXSlot.className || undefined}
+                style={thumbXSlot.style}
+                {...getThumbProps('x')}
+              />
+            </div>
+          )}
+
+          {/* Corner — her iki scrollbar da gorunurken */}
+          {showVertical && showHorizontal && (
+            <div
+              className={cornerSlot.className || undefined}
+              style={cornerSlot.style}
+              aria-hidden="true"
+            />
+          )}
         </div>
-
-        {/* Vertical scrollbar */}
-        {showVertical && (
-          <div
-            className={scrollbarYSlot.className || undefined}
-            style={scrollbarYSlot.style}
-            data-orientation="vertical"
-            aria-hidden="true"
-            {...getScrollbarProps('y')}
-          >
-            <div
-              className={thumbYSlot.className || undefined}
-              style={thumbYSlot.style}
-              {...getThumbProps('y')}
-            />
-          </div>
-        )}
-
-        {/* Horizontal scrollbar */}
-        {showHorizontal && (
-          <div
-            className={scrollbarXSlot.className || undefined}
-            style={scrollbarXSlot.style}
-            data-orientation="horizontal"
-            aria-hidden="true"
-            {...getScrollbarProps('x')}
-          >
-            <div
-              className={thumbXSlot.className || undefined}
-              style={thumbXSlot.style}
-              {...getThumbProps('x')}
-            />
-          </div>
-        )}
-
-        {/* Corner — her iki scrollbar da görünürken */}
-        {showVertical && showHorizontal && (
-          <div
-            className={cornerSlot.className || undefined}
-            style={cornerSlot.style}
-            aria-hidden="true"
-          />
-        )}
-      </div>
+      </ScrollAreaContext.Provider>
     );
   },
 );
+
+/**
+ * ScrollArea bilesen — Dual API (props-based + compound).
+ */
+export const ScrollArea = Object.assign(ScrollAreaBase, {
+  Viewport: ScrollAreaViewport,
+  Scrollbar: ScrollAreaScrollbar,
+});

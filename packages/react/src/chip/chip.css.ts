@@ -177,6 +177,15 @@ export type ChipRecipeVariants = RecipeVariants<typeof chipRecipe>;
 
 // ── Remove button ───────────────────────────────────────────────────
 
+export const chipIconStyle = style({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+  fontSize: '1em',
+  lineHeight: 1,
+});
+
 export const chipRemoveButtonStyle = style({
   display: 'inline-flex',
   alignItems: 'center',

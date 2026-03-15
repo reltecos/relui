@@ -12,6 +12,7 @@ import { Result } from './Result';
 const meta: Meta<typeof Result> = {
   title: 'Feedback/Result',
   component: Result,
+  tags: ['autodocs'],
   args: {
     status: 'success',
     title: 'Islem basarili!',
@@ -169,6 +170,25 @@ export const WithExtra: Story = {
       </button>
     ),
   },
+};
+
+export const Compound: Story = {
+  render: () => (
+    <Result status="success">
+      <Result.Icon>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width="100%" height="100%">
+          <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </Result.Icon>
+      <Result.Title>Siparis Onaylandi</Result.Title>
+      <Result.Description>Siparisiniiz basariyla olusturuldu ve kargoya verilecektir.</Result.Description>
+      <Result.Extra>
+        <div style={{ padding: 16, backgroundColor: '#f8fafc', borderRadius: 8, fontSize: 13, color: '#64748b', maxWidth: 360 }}>
+          <strong>Siparis No:</strong> #12345678
+        </div>
+      </Result.Extra>
+    </Result>
+  ),
 };
 
 export const Sizes: Story = {

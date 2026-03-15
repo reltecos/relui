@@ -64,7 +64,7 @@ export const fabButtonRecipe = recipe({
     fontWeight: 600,
     transition: 'background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease',
     boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1)',
-    color: '#fff',
+    color: 'var(--rel-color-text-inverse, #fff)',
     ':hover': {
       transform: 'scale(1.05)',
       boxShadow: '0 6px 20px rgba(0,0,0,0.2), 0 2px 6px rgba(0,0,0,0.12)',

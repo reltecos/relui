@@ -16,6 +16,7 @@ import { Input } from '../input';
 const meta: Meta<typeof FormField> = {
   title: 'Form/FormField',
   component: FormField,
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',

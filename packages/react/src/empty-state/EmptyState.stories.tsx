@@ -12,6 +12,7 @@ import { EmptyState } from './EmptyState';
 const meta: Meta<typeof EmptyState> = {
   title: 'Feedback/EmptyState',
   component: EmptyState,
+  tags: ['autodocs'],
   args: {
     title: 'Veri bulunamadi',
     description: 'Henuz kayit eklenmemis. Yeni bir kayit ekleyerek baslayabilirsiniz.',
@@ -84,6 +85,39 @@ export const Sizes: Story = {
       <div style={{ border: '1px dashed #e2e8f0', borderRadius: 8 }}>
         <EmptyState size="lg" title="Buyuk" description="LG boyut ornegi." />
       </div>
+    </div>
+  ),
+};
+
+export const Compound: Story = {
+  render: () => (
+    <div style={{ border: '1px dashed #e2e8f0', borderRadius: 8 }}>
+      <EmptyState>
+        <EmptyState.Icon>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} width="100%" height="100%">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </EmptyState.Icon>
+        <EmptyState.Title>Sonuc bulunamadi</EmptyState.Title>
+        <EmptyState.Description>Farkli anahtar kelimeler ile tekrar deneyin.</EmptyState.Description>
+        <EmptyState.Action>
+          <button
+            style={{
+              padding: '8px 16px',
+              borderRadius: 6,
+              border: 'none',
+              backgroundColor: '#3b82f6',
+              color: '#fff',
+              fontWeight: 600,
+              fontSize: 13,
+              cursor: 'pointer',
+            }}
+          >
+            Yeniden Ara
+          </button>
+        </EmptyState.Action>
+      </EmptyState>
     </div>
   ),
 };

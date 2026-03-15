@@ -60,7 +60,7 @@ export const switchTrackRecipe = recipe({
       [swBgHover]: cssVar.accentHover,
       [swBgUnchecked]: cssVar.bgComponentHover,
       [swBgUncheckedHover]: cssVar.borderDefault,
-      [swKnobColor]: '#ffffff',
+      [swKnobColor]: 'var(--rel-color-text-inverse, #ffffff)',
     },
 
     // Transition

@@ -7,25 +7,24 @@
  */
 
 /**
- * MultiSelect — styled çoklu seçim bileşeni.
- * MultiSelect — styled multi-select component.
+ * MultiSelect — styled coklu secim bileseni (Dual API).
+ * MultiSelect — styled multi-select component (Dual API).
  *
- * Compound component pattern: MultiSelect (root), trigger, content, option, group.
- * Core state machine üzerinde React hook + Vanilla Extract stiller.
+ * Props-based: `<MultiSelect options={[...]} placeholder="Secin" />`
+ * Compound:    `<MultiSelect options={[...]}><MultiSelect.Trigger>...</MultiSelect.Trigger>...</MultiSelect>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, createContext, useContext, useMemo } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type {
   MultiSelectVariant,
   MultiSelectSize,
   SelectValue,
-  SelectOption as CoreSelectOption,
   SelectOptionOrGroup,
 } from '@relteco/relui-core';
 import { isOptionGroup } from '@relteco/relui-core';
-import { useMultiSelect, type UseMultiSelectProps } from './useMultiSelect';
+import { useMultiSelect, type UseMultiSelectProps, type UseMultiSelectReturn } from './useMultiSelect';
 import {
   multiSelectTagsStyle,
   multiSelectTagStyle,
@@ -58,43 +57,216 @@ export type MultiSelectSlot =
   | 'checkboxIndicator'
   | 'groupLabel';
 
-// ── Context ─────────────────────────────────────────────────────────
+// ── Context (Compound API) ──────────────────────────────────────────
 
 interface MultiSelectContextValue {
-  triggerProps: ReturnType<typeof useMultiSelect>['triggerProps'];
-  listboxProps: ReturnType<typeof useMultiSelect>['listboxProps'];
-  getOptionProps: ReturnType<typeof useMultiSelect>['getOptionProps'];
+  variant: MultiSelectVariant;
+  size: MultiSelectSize;
   isOpen: boolean;
   selectedValues: SelectValue[];
   selectedLabels: string[];
   selectionCount: number;
-  isAllSelected: boolean;
+  triggerProps: UseMultiSelectReturn['triggerProps'];
+  listboxProps: UseMultiSelectReturn['listboxProps'];
+  getOptionProps: UseMultiSelectReturn['getOptionProps'];
+  removeValue: UseMultiSelectReturn['removeValue'];
   options: SelectOptionOrGroup[];
-  flatOptions: CoreSelectOption[];
-  placeholder: string;
-  variant: MultiSelectVariant;
-  size: MultiSelectSize;
-  removeValue: (value: SelectValue) => void;
-  selectAll: () => void;
-  clearAll: () => void;
+  placeholder: string | undefined;
   classNames: ClassNames<MultiSelectSlot> | undefined;
   styles: Styles<MultiSelectSlot> | undefined;
+  name: string | undefined;
+  ariaLabel: string | undefined;
+  ariaDescribedBy: string | undefined;
 }
 
 const MultiSelectContext = createContext<MultiSelectContextValue | null>(null);
 
 function useMultiSelectContext(): MultiSelectContextValue {
   const ctx = useContext(MultiSelectContext);
-  if (!ctx) {
-    throw new Error('MultiSelect compound components must be used within <MultiSelect>');
-  }
+  if (!ctx) throw new Error('MultiSelect compound sub-components must be used within <MultiSelect>.');
   return ctx;
 }
 
-// ── MultiSelect Component Props ────────────────────────────────────
+// ── Compound: MultiSelect.Trigger ───────────────────────────────────
+
+/** MultiSelect.Trigger props */
+export interface MultiSelectTriggerProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MultiSelectTrigger = forwardRef<HTMLDivElement, MultiSelectTriggerProps>(
+  function MultiSelectTrigger(props, ref) {
+    const { children, className } = props;
+    const ctx = useMultiSelectContext();
+    const slot = getSlotProps(
+      'trigger',
+      selectTriggerRecipe({ variant: ctx.variant, size: ctx.size }),
+      ctx.classNames,
+      ctx.styles,
+      { height: 'auto', minHeight: triggerMinHeight(ctx.size) },
+    );
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        aria-label={ctx.ariaLabel}
+        aria-describedby={ctx.ariaDescribedBy}
+        data-testid="multiselect-trigger"
+        {...ctx.triggerProps}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: MultiSelect.Value ─────────────────────────────────────
+
+/** MultiSelect.Value props */
+export interface MultiSelectValueProps {
+  /** Placeholder metni / Placeholder text */
+  placeholder?: string;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MultiSelectValue = forwardRef<HTMLSpanElement, MultiSelectValueProps>(
+  function MultiSelectValue(props, ref) {
+    const { placeholder, className } = props;
+    const ctx = useMultiSelectContext();
+
+    if (ctx.selectionCount > 0) {
+      const tagsSlot = getSlotProps('tagsContainer', multiSelectTagsStyle, ctx.classNames, ctx.styles);
+      const tagSlot = getSlotProps('tag', multiSelectTagStyle, ctx.classNames, ctx.styles);
+      const tagRemoveSlot = getSlotProps('tagRemoveButton', multiSelectTagRemoveStyle, ctx.classNames, ctx.styles);
+      const cls = className ? `${tagsSlot.className} ${className}` : tagsSlot.className;
+
+      return (
+        <span ref={ref} className={cls} style={tagsSlot.style} data-testid="multiselect-value">
+          {ctx.selectedLabels.map((label, i) => {
+            const value = ctx.selectedValues[i];
+            return (
+              <span key={String(value)} className={tagSlot.className} style={tagSlot.style}>
+                <span>{label}</span>
+                <button
+                  type="button"
+                  className={tagRemoveSlot.className}
+                  style={tagRemoveSlot.style}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (value !== undefined) ctx.removeValue(value);
+                  }}
+                  aria-label={`${label} kaldir`}
+                  tabIndex={-1}
+                >
+                  ✕
+                </button>
+              </span>
+            );
+          })}
+        </span>
+      );
+    }
+
+    const slot = getSlotProps('placeholder', selectPlaceholderStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="multiselect-value">
+        {placeholder ?? ctx.placeholder ?? '\u00A0'}
+      </span>
+    );
+  },
+);
+
+// ── Compound: MultiSelect.Content ───────────────────────────────────
+
+/** MultiSelect.Content props */
+export interface MultiSelectContentProps {
+  /** Icerik / Content */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MultiSelectContent = forwardRef<HTMLUListElement, MultiSelectContentProps>(
+  function MultiSelectContent(props, ref) {
+    const { children, className } = props;
+    const ctx = useMultiSelectContext();
+
+    if (!ctx.isOpen) return null;
+
+    const slot = getSlotProps('listbox', selectListboxStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+    const optionSlot = getSlotProps('option', selectOptionStyle, ctx.classNames, ctx.styles);
+    const checkboxSlot = getSlotProps('checkboxIndicator', multiSelectCheckboxStyle, ctx.classNames, ctx.styles);
+    const groupLabelSlot = getSlotProps('groupLabel', selectGroupLabelStyle, ctx.classNames, ctx.styles);
+
+    return (
+      <ul
+        ref={ref}
+        {...ctx.listboxProps}
+        className={cls}
+        style={slot.style}
+        onMouseDown={preventBlur}
+        data-testid="multiselect-content"
+      >
+        {children ?? (
+          ctx.options.length === 0 ? (
+            <li className={selectEmptyStyle}>Secenek yok</li>
+          ) : (
+            renderOptionsWithSlots(ctx.options, ctx.selectedValues, ctx.getOptionProps, optionSlot, checkboxSlot, groupLabelSlot)
+          )
+        )}
+      </ul>
+    );
+  },
+);
+
+// ── Compound: MultiSelect.Option ────────────────────────────────────
+
+/** MultiSelect.Option props */
+export interface MultiSelectOptionProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Secenek indeksi / Option index */
+  index: number;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MultiSelectOption = forwardRef<HTMLLIElement, MultiSelectOptionProps>(
+  function MultiSelectOption(props, ref) {
+    const { children, index, className } = props;
+    const ctx = useMultiSelectContext();
+    const slot = getSlotProps('option', selectOptionStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <li
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        id={`ms-option-${index}`}
+        data-testid="multiselect-option"
+        {...ctx.getOptionProps(index)}
+      >
+        {children}
+      </li>
+    );
+  },
+);
+
+// ── Component Props ─────────────────────────────────────────────────
 
 export interface MultiSelectComponentProps extends UseMultiSelectProps, SlotStyleProps<MultiSelectSlot> {
-  /** Görsel varyant / Visual variant */
+  /** Gorsel varyant / Visual variant */
   variant?: MultiSelectVariant;
 
   /** Boyut / Size */
@@ -102,9 +274,6 @@ export interface MultiSelectComponentProps extends UseMultiSelectProps, SlotStyl
 
   /** Ek className / Additional className */
   className?: string;
-
-  /** Children (compound components) veya otomatik render */
-  children?: React.ReactNode;
 
   /** aria-label */
   'aria-label'?: string;
@@ -117,26 +286,14 @@ export interface MultiSelectComponentProps extends UseMultiSelectProps, SlotStyl
 
   /** id */
   id?: string;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
-/**
- * MultiSelect bileşeni — çoklu seçim dropdown.
- * MultiSelect component — multi-select dropdown.
- *
- * @example
- * ```tsx
- * <MultiSelect
- *   options={[
- *     { value: 'tr', label: 'Türkiye' },
- *     { value: 'us', label: 'ABD' },
- *     { value: 'de', label: 'Almanya' },
- *   ]}
- *   placeholder="Ülke seçin"
- *   onValueChange={(values) => console.log(values)}
- * />
- * ```
- */
-export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectComponentProps>(
+// ── Component ───────────────────────────────────────────────────────
+
+const MultiSelectBase = forwardRef<HTMLDivElement, MultiSelectComponentProps>(
   function MultiSelect(props, ref) {
     const {
       variant = 'outline',
@@ -144,11 +301,11 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectComponentProps>
       className,
       classNames,
       styles,
-      children,
       'aria-label': ariaLabel,
       'aria-describedby': ariaDescribedBy,
       name,
       id,
+      children,
       ...selectProps
     } = props;
 
@@ -160,55 +317,8 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectComponentProps>
       selectedValues,
       selectedLabels,
       selectionCount,
-      isAllSelected,
       removeValue,
-      selectAll,
-      clearAll,
     } = useMultiSelect(selectProps);
-
-    const ctx = useMemo<MultiSelectContextValue>(
-      () => ({
-        triggerProps,
-        listboxProps,
-        getOptionProps,
-        isOpen,
-        selectedValues,
-        selectedLabels,
-        selectionCount,
-        isAllSelected,
-        options: selectProps.options,
-        flatOptions: selectProps.options.flatMap((item) =>
-          isOptionGroup(item) ? item.options : [item],
-        ),
-        placeholder: selectProps.placeholder ?? '',
-        variant,
-        size,
-        removeValue,
-        selectAll,
-        clearAll,
-        classNames,
-        styles,
-      }),
-      [
-        triggerProps,
-        listboxProps,
-        getOptionProps,
-        isOpen,
-        selectedValues,
-        selectedLabels,
-        selectionCount,
-        isAllSelected,
-        selectProps.options,
-        selectProps.placeholder,
-        variant,
-        size,
-        removeValue,
-        selectAll,
-        clearAll,
-        classNames,
-        styles,
-      ],
-    );
 
     // Hidden inputs for form submission
     const hiddenInputs = name
@@ -228,11 +338,31 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectComponentProps>
       ? `${rootSlot.className} ${className}`
       : rootSlot.className;
 
-    // Compound component
+    // ── Compound API ──
     if (children) {
+      const ctxValue: MultiSelectContextValue = {
+        variant,
+        size,
+        isOpen,
+        selectedValues,
+        selectedLabels,
+        selectionCount,
+        triggerProps,
+        listboxProps,
+        getOptionProps,
+        removeValue,
+        options: selectProps.options,
+        placeholder: selectProps.placeholder,
+        classNames,
+        styles,
+        name,
+        ariaLabel,
+        ariaDescribedBy,
+      };
+
       return (
-        <MultiSelectContext.Provider value={ctx}>
-          <div ref={ref} className={rootClassName} style={rootSlot.style} id={id}>
+        <MultiSelectContext.Provider value={ctxValue}>
+          <div ref={ref} className={rootClassName} style={rootSlot.style} id={id} data-testid="multiselect-root">
             {children}
             {hiddenInputs}
           </div>
@@ -240,6 +370,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectComponentProps>
       );
     }
 
+    // ── Props-based API ──
     const triggerSlot = getSlotProps('trigger', selectTriggerRecipe({ variant, size }), classNames, styles, { height: 'auto', minHeight: triggerMinHeight(size) });
     const tagsContainerSlot = getSlotProps('tagsContainer', multiSelectTagsStyle, classNames, styles);
     const tagSlot = getSlotProps('tag', multiSelectTagStyle, classNames, styles);
@@ -251,75 +382,101 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectComponentProps>
     const optionSlot = getSlotProps('option', selectOptionStyle, classNames, styles);
     const checkboxSlot = getSlotProps('checkboxIndicator', multiSelectCheckboxStyle, classNames, styles);
 
-    // Otomatik (basit) render
     return (
-      <MultiSelectContext.Provider value={ctx}>
-        <div ref={ref} className={rootClassName} style={rootSlot.style} id={id}>
-          {/* Trigger — div kullanılır çünkü içinde tag remove button'ları var */}
-          <div
-            className={triggerSlot.className}
-            style={triggerSlot.style}
-            aria-label={ariaLabel}
-            aria-describedby={ariaDescribedBy}
-            {...triggerProps}
-          >
-            {selectionCount > 0 ? (
-              <span className={tagsContainerSlot.className} style={tagsContainerSlot.style}>
-                {selectedLabels.map((label, i) => {
-                  const value = selectedValues[i];
-                  return (
-                    <span key={String(value)} className={tagSlot.className} style={tagSlot.style}>
-                      <span>{label}</span>
-                      <button
-                        type="button"
-                        className={tagRemoveSlot.className}
-                        style={tagRemoveSlot.style}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (value !== undefined) removeValue(value);
-                        }}
-                        aria-label={`${label} kaldır`}
-                        tabIndex={-1}
-                      >
-                        ✕
-                      </button>
-                    </span>
-                  );
-                })}
-              </span>
-            ) : (
-              <span className={placeholderSlot.className} style={placeholderSlot.style}>
-                {selectProps.placeholder || '\u00A0'}
-              </span>
-            )}
-            <ChevronIndicator className={indicatorSlot.className} style={indicatorSlot.style} />
-          </div>
-
-          {/* Listbox */}
-          {isOpen && (
-            <ul
-              {...listboxProps}
-              className={listboxSlot.className}
-              style={listboxSlot.style}
-              onMouseDown={preventBlur}
-            >
-              {selectProps.options.length === 0 ? (
-                <li className={selectEmptyStyle}>Seçenek yok</li>
-              ) : (
-                renderOptionsWithSlots(selectProps.options, ctx, optionSlot, checkboxSlot, groupLabelSlot)
-              )}
-            </ul>
+      <div ref={ref} className={rootClassName} style={rootSlot.style} id={id}>
+        {/* Trigger — div kullanilir cunku icinde tag remove button'lari var */}
+        <div
+          className={triggerSlot.className}
+          style={triggerSlot.style}
+          aria-label={ariaLabel}
+          aria-describedby={ariaDescribedBy}
+          {...triggerProps}
+        >
+          {selectionCount > 0 ? (
+            <span className={tagsContainerSlot.className} style={tagsContainerSlot.style}>
+              {selectedLabels.map((label, i) => {
+                const value = selectedValues[i];
+                return (
+                  <span key={String(value)} className={tagSlot.className} style={tagSlot.style}>
+                    <span>{label}</span>
+                    <button
+                      type="button"
+                      className={tagRemoveSlot.className}
+                      style={tagRemoveSlot.style}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (value !== undefined) removeValue(value);
+                      }}
+                      aria-label={`${label} kaldir`}
+                      tabIndex={-1}
+                    >
+                      ✕
+                    </button>
+                  </span>
+                );
+              })}
+            </span>
+          ) : (
+            <span className={placeholderSlot.className} style={placeholderSlot.style}>
+              {selectProps.placeholder || '\u00A0'}
+            </span>
           )}
-
-          {/* Hidden inputs for forms */}
-          {hiddenInputs}
+          <ChevronIndicator className={indicatorSlot.className} style={indicatorSlot.style} />
         </div>
-      </MultiSelectContext.Provider>
+
+        {/* Listbox */}
+        {isOpen && (
+          <ul
+            {...listboxProps}
+            className={listboxSlot.className}
+            style={listboxSlot.style}
+            onMouseDown={preventBlur}
+          >
+            {selectProps.options.length === 0 ? (
+              <li className={selectEmptyStyle}>Secenek yok</li>
+            ) : (
+              renderOptionsWithSlots(selectProps.options, selectedValues, getOptionProps, optionSlot, checkboxSlot, groupLabelSlot)
+            )}
+          </ul>
+        )}
+
+        {/* Hidden inputs for forms */}
+        {hiddenInputs}
+      </div>
     );
   },
 );
 
-// ── Blur engelleme — listbox'a tıklayınca trigger blur olmasın ──────
+/**
+ * MultiSelect bileseni — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <MultiSelect
+ *   options={[{ value: 'tr', label: 'Turkiye' }]}
+ *   placeholder="Ulke secin"
+ *   onValueChange={(values) => console.log(values)}
+ * />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <MultiSelect options={[{ value: 'tr', label: 'Turkiye' }]}>
+ *   <MultiSelect.Trigger>
+ *     <MultiSelect.Value placeholder="Ulke secin" />
+ *   </MultiSelect.Trigger>
+ *   <MultiSelect.Content />
+ * </MultiSelect>
+ * ```
+ */
+export const MultiSelect = Object.assign(MultiSelectBase, {
+  Trigger: MultiSelectTrigger,
+  Value: MultiSelectValue,
+  Content: MultiSelectContent,
+  Option: MultiSelectOption,
+});
+
+// ── Blur engelleme — listbox'a tiklayinca trigger blur olmasin ──────
 
 function preventBlur(event: React.MouseEvent) {
   event.preventDefault();
@@ -347,7 +504,7 @@ function ChevronIndicator(props: { className?: string; style?: React.CSSProperti
   );
 }
 
-// ── Trigger min-height — size'a göre ────────────────────────────────
+// ── Trigger min-height — size'a gore ────────────────────────────────
 
 function triggerMinHeight(size: MultiSelectSize): string {
   switch (size) {
@@ -391,71 +548,19 @@ function CheckboxIndicator(props: {
   );
 }
 
-// ── Slot prop result tipi ─────────────────────────────────────────────
+// ── Slot prop result tipi ───────────────────────────────────────────
 
 interface SlotResult {
   className: string;
   style: React.CSSProperties | undefined;
 }
 
-// ── Option renderer (compound component icin, slot'suz) ──────────────
-
-function renderOptions(
-  options: SelectOptionOrGroup[],
-  ctx: MultiSelectContextValue,
-): React.ReactNode[] {
-  const nodes: React.ReactNode[] = [];
-  let flatIndex = 0;
-
-  for (const item of options) {
-    if (isOptionGroup(item)) {
-      nodes.push(
-        <li key={`group-${item.label}`} role="presentation">
-          <div className={selectGroupLabelStyle}>{item.label}</div>
-          <ul role="group" aria-label={item.label} style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-            {item.options.map((opt) => {
-              const idx = flatIndex++;
-              const isSelected = ctx.selectedValues.indexOf(opt.value) >= 0;
-              return (
-                <li
-                  key={`opt-${String(opt.value)}`}
-                  className={selectOptionStyle}
-                  id={`ms-option-${idx}`}
-                  {...ctx.getOptionProps(idx)}
-                >
-                  <CheckboxIndicator checked={isSelected} />
-                  {opt.label}
-                </li>
-              );
-            })}
-          </ul>
-        </li>,
-      );
-    } else {
-      const idx = flatIndex++;
-      const isSelected = ctx.selectedValues.indexOf(item.value) >= 0;
-      nodes.push(
-        <li
-          key={`opt-${String(item.value)}`}
-          className={selectOptionStyle}
-          id={`ms-option-${idx}`}
-          {...ctx.getOptionProps(idx)}
-        >
-          <CheckboxIndicator checked={isSelected} />
-          {item.label}
-        </li>,
-      );
-    }
-  }
-
-  return nodes;
-}
-
-// ── Option renderer (otomatik render icin, slot destekli) ────────────
+// ── Option renderer (slot destekli) ─────────────────────────────────
 
 function renderOptionsWithSlots(
   options: SelectOptionOrGroup[],
-  ctx: MultiSelectContextValue,
+  selectedValues: SelectValue[],
+  getOptionProps: UseMultiSelectReturn['getOptionProps'],
   optionSlot: SlotResult,
   checkboxSlot: SlotResult,
   groupLabelSlot: SlotResult,
@@ -471,14 +576,14 @@ function renderOptionsWithSlots(
           <ul role="group" aria-label={item.label} style={{ listStyle: 'none', margin: 0, padding: 0 }}>
             {item.options.map((opt) => {
               const idx = flatIndex++;
-              const isSelected = ctx.selectedValues.indexOf(opt.value) >= 0;
+              const isSelected = selectedValues.indexOf(opt.value) >= 0;
               return (
                 <li
                   key={`opt-${String(opt.value)}`}
                   className={optionSlot.className}
                   style={optionSlot.style}
                   id={`ms-option-${idx}`}
-                  {...ctx.getOptionProps(idx)}
+                  {...getOptionProps(idx)}
                 >
                   <CheckboxIndicator
                     checked={isSelected}
@@ -494,14 +599,14 @@ function renderOptionsWithSlots(
       );
     } else {
       const idx = flatIndex++;
-      const isSelected = ctx.selectedValues.indexOf(item.value) >= 0;
+      const isSelected = selectedValues.indexOf(item.value) >= 0;
       nodes.push(
         <li
           key={`opt-${String(item.value)}`}
           className={optionSlot.className}
           style={optionSlot.style}
           id={`ms-option-${idx}`}
-          {...ctx.getOptionProps(idx)}
+          {...getOptionProps(idx)}
         >
           <CheckboxIndicator
             checked={isSelected}
@@ -515,121 +620,4 @@ function renderOptionsWithSlots(
   }
 
   return nodes;
-}
-
-// ── Compound Components ─────────────────────────────────────────────
-
-/** MultiSelect.Trigger — dropdown trigger div (button yerine div: nested button uyumluluğu) */
-export const MultiSelectTrigger = forwardRef<HTMLDivElement, {
-  className?: string;
-  children?: React.ReactNode;
-  'aria-label'?: string;
-}>(function MultiSelectTrigger(props, ref) {
-  const ctx = useMultiSelectContext();
-  const { className, children, 'aria-label': ariaLabel } = props;
-
-  return (
-    <div
-      ref={ref}
-      className={`${selectTriggerRecipe({ variant: ctx.variant, size: ctx.size })}${className ? ` ${className}` : ''}`}
-      aria-label={ariaLabel}
-      {...ctx.triggerProps}
-      style={{ height: 'auto', minHeight: triggerMinHeight(ctx.size) }}
-    >
-      {children ?? (
-        <>
-          {ctx.selectionCount > 0 ? (
-            <span className={multiSelectTagsStyle}>
-              {ctx.selectedLabels.map((label, i) => {
-                const value = ctx.selectedValues[i];
-                return (
-                  <span key={String(value)} className={multiSelectTagStyle}>
-                    <span>{label}</span>
-                    <button
-                      type="button"
-                      className={multiSelectTagRemoveStyle}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (value !== undefined) ctx.removeValue(value);
-                      }}
-                      aria-label={`${label} kaldır`}
-                      tabIndex={-1}
-                    >
-                      ✕
-                    </button>
-                  </span>
-                );
-              })}
-            </span>
-          ) : (
-            <span className={selectPlaceholderStyle}>
-              {ctx.placeholder || '\u00A0'}
-            </span>
-          )}
-          <ChevronIndicator />
-        </>
-      )}
-    </div>
-  );
-});
-
-/** MultiSelect.Content — dropdown listbox */
-export const MultiSelectContent = forwardRef<HTMLUListElement, {
-  className?: string;
-  children?: React.ReactNode;
-}>(function MultiSelectContent(props, ref) {
-  const ctx = useMultiSelectContext();
-  const { className, children } = props;
-
-  if (!ctx.isOpen) return null;
-
-  return (
-    <ul
-      ref={ref}
-      className={`${selectListboxStyle}${className ? ` ${className}` : ''}`}
-      onMouseDown={preventBlur}
-      {...ctx.listboxProps}
-    >
-      {children ?? renderOptions(ctx.options, ctx)}
-    </ul>
-  );
-});
-
-/** MultiSelect.Option — tek seçenek */
-export const MultiSelectOption = forwardRef<HTMLLIElement, {
-  index: number;
-  className?: string;
-  children?: React.ReactNode;
-}>(function MultiSelectOption(props, ref) {
-  const ctx = useMultiSelectContext();
-  const { index, className, children } = props;
-  const opt = ctx.flatOptions[index];
-  const isSelected = opt ? ctx.selectedValues.indexOf(opt.value) >= 0 : false;
-
-  return (
-    <li
-      ref={ref}
-      className={`${selectOptionStyle}${className ? ` ${className}` : ''}`}
-      id={`ms-option-${index}`}
-      {...ctx.getOptionProps(index)}
-    >
-      <CheckboxIndicator checked={isSelected} />
-      {children ?? opt?.label}
-    </li>
-  );
-});
-
-/** MultiSelect.Group — seçenek grubu */
-export function MultiSelectGroup(props: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <li role="presentation">
-      <div className={selectGroupLabelStyle}>{props.label}</div>
-      <ul role="group" aria-label={props.label} style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-        {props.children}
-      </ul>
-    </li>
-  );
 }

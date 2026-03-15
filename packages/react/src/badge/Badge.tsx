@@ -7,37 +7,88 @@
  */
 
 /**
- * Badge — styled React badge component.
- * Badge — stilize edilmiş React badge bileşeni.
+ * Badge — styled React badge component (Dual API).
+ * Badge — stilize edilmis React badge bileseni (Dual API).
  *
- * Küçük durum göstergesi — pill shape, solid/soft/outline.
+ * Props-based: `<Badge icon={<CheckIcon />}>Aktif</Badge>`
+ * Compound:    `<Badge><Badge.Icon><CheckIcon /></Badge.Icon>Aktif</Badge>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type { BadgeSize, BadgeColor, BadgeVariant } from '@relteco/relui-core';
-import { badgeRecipe } from './badge.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { badgeRecipe, badgeIconStyle } from './badge.css';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
-/** Badge slot isimleri. */
-export type BadgeSlot = 'root';
+// ── Slot ──────────────────────────────────────────────
+
+/** Badge slot isimleri / Badge slot names. */
+export type BadgeSlot = 'root' | 'icon';
+
+// ── Context (Compound API) ──────────────────────────
+
+interface BadgeContextValue {
+  size: BadgeSize;
+  color: BadgeColor;
+  variant: BadgeVariant;
+  classNames: ClassNames<BadgeSlot> | undefined;
+  styles: Styles<BadgeSlot> | undefined;
+}
+
+const BadgeContext = createContext<BadgeContextValue | null>(null);
+
+function useBadgeContext(): BadgeContextValue {
+  const ctx = useContext(BadgeContext);
+  if (!ctx) throw new Error('Badge compound sub-components must be used within <Badge>.');
+  return ctx;
+}
+
+// ── Compound: Badge.Icon ────────────────────────────
+
+/** Badge.Icon props */
+export interface BadgeIconProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const BadgeIcon = forwardRef<HTMLSpanElement, BadgeIconProps>(
+  function BadgeIcon(props, ref) {
+    const { children, className } = props;
+    const ctx = useBadgeContext();
+    const slot = getSlotProps('icon', badgeIconStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="badge-icon">
+        {children}
+      </span>
+    );
+  },
+);
+
+// ── Component Props ───────────────────────────────────
 
 /**
- * Badge bileşen props'ları.
+ * Badge bilesen props'lari.
  * Badge component props.
  */
 export interface BadgeComponentProps extends SlotStyleProps<BadgeSlot> {
   /** Boyut / Size */
   size?: BadgeSize;
 
-  /** Renk şeması / Color scheme */
+  /** Renk semasi / Color scheme */
   color?: BadgeColor;
 
-  /** Görünüm varyantı / Visual variant */
+  /** Gorunum varyanti / Visual variant */
   variant?: BadgeVariant;
 
-  /** Ek CSS sınıfı / Additional CSS class */
+  /** Props-based: ikon / Icon */
+  icon?: ReactNode;
+
+  /** Ek CSS sinifi / Additional CSS class */
   className?: string;
 
   /** HTML id */
@@ -46,26 +97,18 @@ export interface BadgeComponentProps extends SlotStyleProps<BadgeSlot> {
   /** Inline stil / Inline style */
   style?: React.CSSProperties;
 
-  /** İçerik / Content */
-  children?: React.ReactNode;
+  /** Icerik / Content */
+  children?: ReactNode;
 }
 
-/**
- * Badge — RelUI badge bileşeni.
- * Badge — RelUI badge component.
- *
- * @example
- * ```tsx
- * <Badge color="success">Aktif</Badge>
- * <Badge variant="outline" color="destructive">Hata</Badge>
- * <Badge variant="soft" color="warning" size="sm">Beklemede</Badge>
- * ```
- */
-export const Badge = forwardRef<HTMLSpanElement, BadgeComponentProps>(function Badge(
+// ── Component ─────────────────────────────────────────
+
+const BadgeBase = forwardRef<HTMLSpanElement, BadgeComponentProps>(function Badge(
   {
     size = 'md',
     color = 'accent',
     variant = 'solid',
+    icon,
     className,
     id,
     style: inlineStyle,
@@ -81,14 +124,55 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeComponentProps>(function B
     ? `${rootSlot.className} ${className}`
     : rootSlot.className;
 
+  const ctxValue: BadgeContextValue = { size, color, variant, classNames, styles };
+
+  // ── Compound API (children icerir sub-component) ──
+  // Not: Badge'de children her zaman var, compound mu degil mi anlamak icin
+  // icon prop'unun yokluguna VE children'in ReactElement olmasina bakariz.
+  // Basitlik icin: icon prop varsa props-based, yoksa compound context saglariz.
+  // Context her zaman saglanir, boylece Badge.Icon hem iceride hem disarida kullanilabilir.
+
   return (
-    <span
-      ref={forwardedRef}
-      id={id}
-      className={combinedClassName}
-      style={rootSlot.style}
-    >
-      {children}
-    </span>
+    <BadgeContext.Provider value={ctxValue}>
+      <span
+        ref={forwardedRef}
+        id={id}
+        className={combinedClassName}
+        style={rootSlot.style}
+        data-testid="badge-root"
+      >
+        {icon !== undefined && (
+          <span
+            className={getSlotProps('icon', badgeIconStyle, classNames, styles).className}
+            style={getSlotProps('icon', badgeIconStyle, classNames, styles).style}
+            data-testid="badge-icon"
+          >
+            {icon}
+          </span>
+        )}
+        {children}
+      </span>
+    </BadgeContext.Provider>
   );
+});
+
+/**
+ * Badge bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Badge color="success">Aktif</Badge>
+ * <Badge icon={<CheckIcon />} color="success">Aktif</Badge>
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Badge color="success">
+ *   <Badge.Icon><CheckIcon /></Badge.Icon>
+ *   Aktif
+ * </Badge>
+ * ```
+ */
+export const Badge = Object.assign(BadgeBase, {
+  Icon: BadgeIcon,
 });

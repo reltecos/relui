@@ -254,3 +254,69 @@ describe('Slider', () => {
     expect(fill).toHaveStyle({ opacity: '0.5' });
   });
 });
+
+// ── Compound API ──
+
+describe('Slider (Compound)', () => {
+  it('compound: track render edilir', () => {
+    render(
+      <Slider aria-label="Test" value={50}>
+        <Slider.Track />
+        <Slider.Thumb aria-label="Test" />
+      </Slider>,
+    );
+    expect(screen.getByTestId('slider-track')).toBeInTheDocument();
+    expect(screen.getByTestId('slider-fill')).toBeInTheDocument();
+  });
+
+  it('compound: thumb render edilir', () => {
+    render(
+      <Slider aria-label="Test" value={50}>
+        <Slider.Track />
+        <Slider.Thumb aria-label="Test" />
+      </Slider>,
+    );
+    expect(screen.getByTestId('slider-thumb')).toBeInTheDocument();
+  });
+
+  it('compound: label render edilir', () => {
+    render(
+      <Slider aria-label="Test" value={50}>
+        <Slider.Track />
+        <Slider.Thumb aria-label="Test" />
+        <Slider.Label>50</Slider.Label>
+      </Slider>,
+    );
+    expect(screen.getByTestId('slider-label')).toHaveTextContent('50');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Slider aria-label="Test" value={50} classNames={{ track: 'cmp-track' }}>
+        <Slider.Track />
+        <Slider.Thumb aria-label="Test" />
+      </Slider>,
+    );
+    expect(screen.getByTestId('slider-track').className).toContain('cmp-track');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <Slider aria-label="Test" value={50} styles={{ thumb: { boxShadow: '0 0 5px blue' } }}>
+        <Slider.Track />
+        <Slider.Thumb aria-label="Test" />
+      </Slider>,
+    );
+    expect(screen.getByTestId('slider-thumb')).toHaveStyle({ boxShadow: '0 0 5px blue' });
+  });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<Slider aria-label="Test" ref={ref} />);
+    expect(ref).toHaveBeenCalled();
+  });
+
+  it('Slider.Track context disinda hata firlatir', () => {
+    expect(() => render(<Slider.Track />)).toThrow();
+  });
+});

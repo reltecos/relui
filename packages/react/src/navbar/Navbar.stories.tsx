@@ -14,6 +14,7 @@ import type { NavbarItem } from '@relteco/relui-core';
 const meta: Meta<typeof Navbar> = {
   title: 'Navigation/Navbar',
   component: Navbar,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -241,6 +242,27 @@ export const Controlled: Story = {
       </div>
     );
   },
+};
+
+export const Compound: Story = {
+  render: () => (
+    <Navbar variant="solid" size="md">
+      <Navbar.Brand>
+        <span style={{ fontSize: 18, fontWeight: 700 }}>RelUI</span>
+      </Navbar.Brand>
+      <Navbar.Items>
+        <Navbar.Item active href="/">Ana Sayfa</Navbar.Item>
+        <Navbar.Item href="/products">Urunler</Navbar.Item>
+        <Navbar.Item href="/pricing">Fiyatlar</Navbar.Item>
+        <Navbar.Item href="/about">Hakkinda</Navbar.Item>
+      </Navbar.Items>
+      <Navbar.Actions>
+        <button type="button" style={{ padding: '6px 16px', borderRadius: 6, border: '1px solid #d1d5db', background: 'transparent', cursor: 'pointer', fontSize: 13 }}>
+          Giris Yap
+        </button>
+      </Navbar.Actions>
+    </Navbar>
+  ),
 };
 
 export const CustomSlotStyles: Story = {

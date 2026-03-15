@@ -6,5 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { NumberInput, type NumberInputComponentProps, type NumberInputSlot } from './NumberInput';
+export {
+  NumberInput,
+  useNumberInputContext,
+  type NumberInputComponentProps,
+  type NumberInputSlot,
+  type NumberInputFieldProps,
+  type NumberInputIncrementButtonProps,
+  type NumberInputDecrementButtonProps,
+} from './NumberInput';
 export { useNumberInput, type UseNumberInputProps, type UseNumberInputReturn } from './useNumberInput';

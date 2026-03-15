@@ -301,4 +301,61 @@ describe('Checkbox', () => {
 
     expect(screen.getByText('Metin')).toHaveClass('my-label');
   });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<Checkbox ref={ref} aria-label="Test" />);
+    expect(ref).toHaveBeenCalled();
+  });
+});
+
+// ── Compound API ──
+
+describe('Checkbox (Compound)', () => {
+  it('compound: Indicator render edilir', () => {
+    render(
+      <Checkbox>
+        <Checkbox.Indicator />
+        <Checkbox.Label>Kabul ediyorum</Checkbox.Label>
+      </Checkbox>,
+    );
+    expect(screen.getByTestId('checkbox-indicator')).toBeInTheDocument();
+    expect(screen.getByRole('checkbox')).toBeInTheDocument();
+  });
+
+  it('compound: Label render edilir', () => {
+    render(
+      <Checkbox>
+        <Checkbox.Indicator />
+        <Checkbox.Label>Kabul ediyorum</Checkbox.Label>
+      </Checkbox>,
+    );
+    expect(screen.getByTestId('checkbox-label')).toHaveTextContent('Kabul ediyorum');
+  });
+
+  it('compound: checked state context ile aktarilir', () => {
+    render(
+      <Checkbox checked>
+        <Checkbox.Indicator />
+        <Checkbox.Label>Secili</Checkbox.Label>
+      </Checkbox>,
+    );
+    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-checked', 'true');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Checkbox classNames={{ label: 'cmp-label-cls' }}>
+        <Checkbox.Indicator />
+        <Checkbox.Label>Test</Checkbox.Label>
+      </Checkbox>,
+    );
+    expect(screen.getByTestId('checkbox-label').className).toContain('cmp-label-cls');
+  });
+
+  it('compound: context disinda kullanilirsa hata firlatir', () => {
+    expect(() => {
+      render(<Checkbox.Indicator />);
+    }).toThrow('Checkbox compound sub-components must be used within <Checkbox>.');
+  });
 });

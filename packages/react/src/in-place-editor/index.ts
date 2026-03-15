@@ -10,6 +10,9 @@ export {
   InPlaceEditor,
   type InPlaceEditorComponentProps,
   type InPlaceEditorSlot,
+  type InPlaceEditorDisplayProps,
+  type InPlaceEditorInputProps,
+  type InPlaceEditorActionsProps,
 } from './InPlaceEditor';
 export {
   useInPlaceEditor,

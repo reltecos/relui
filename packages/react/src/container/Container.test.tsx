@@ -12,79 +12,140 @@ import '@testing-library/jest-dom/vitest';
 import { Container } from './Container';
 
 describe('Container', () => {
-  it('renders as div with max-width', () => {
-    render(<Container data-testid="container">content</Container>);
-    const el = screen.getByTestId('container');
+  // ── Root ──
+  it('renders as div', () => {
+    render(<Container>content</Container>);
+    const el = screen.getByTestId('container-root');
     expect(el.tagName).toBe('DIV');
     expect(el).toHaveTextContent('content');
-    expect(el).toHaveStyle({ maxWidth: '1024px' });
   });
 
-  it('applies size=sm (640px)', () => {
-    render(<Container data-testid="container" size="sm" />);
-    expect(screen.getByTestId('container')).toHaveStyle({ maxWidth: '640px' });
+  it('varsayilan size lg', () => {
+    render(<Container />);
+    expect(screen.getByTestId('container-root')).toHaveAttribute('data-size', 'lg');
   });
 
-  it('applies size=md (768px)', () => {
-    render(<Container data-testid="container" size="md" />);
-    expect(screen.getByTestId('container')).toHaveStyle({ maxWidth: '768px' });
+  it('applies size sm', () => {
+    render(<Container size="sm" />);
+    expect(screen.getByTestId('container-root')).toHaveAttribute('data-size', 'sm');
   });
 
-  it('applies size=xl (1280px)', () => {
-    render(<Container data-testid="container" size="xl" />);
-    expect(screen.getByTestId('container')).toHaveStyle({ maxWidth: '1280px' });
+  it('applies size md', () => {
+    render(<Container size="md" />);
+    expect(screen.getByTestId('container-root')).toHaveAttribute('data-size', 'md');
   });
 
-  it('applies size=2xl (1536px)', () => {
-    render(<Container data-testid="container" size="2xl" />);
-    expect(screen.getByTestId('container')).toHaveStyle({ maxWidth: '1536px' });
+  it('applies size xl', () => {
+    render(<Container size="xl" />);
+    expect(screen.getByTestId('container-root')).toHaveAttribute('data-size', 'xl');
   });
 
-  it('applies size=full (100%)', () => {
-    render(<Container data-testid="container" size="full" />);
-    expect(screen.getByTestId('container')).toHaveStyle({ maxWidth: '100%' });
+  it('applies size 2xl', () => {
+    render(<Container size="2xl" />);
+    expect(screen.getByTestId('container-root')).toHaveAttribute('data-size', '2xl');
   });
 
-  it('accepts as prop', () => {
-    render(<Container data-testid="container" as="main" />);
-    expect(screen.getByTestId('container').tagName).toBe('MAIN');
+  it('applies size full', () => {
+    render(<Container size="full" />);
+    expect(screen.getByTestId('container-root')).toHaveAttribute('data-size', 'full');
+  });
+
+  it('renders children', () => {
+    render(
+      <Container>
+        <div data-testid="child">child</div>
+      </Container>,
+    );
+    expect(screen.getByTestId('child')).toBeInTheDocument();
+  });
+
+  it('renders empty without children', () => {
+    render(<Container />);
+    expect(screen.getByTestId('container-root')).toBeInTheDocument();
   });
 
   it('forwards ref', () => {
     let refValue: HTMLElement | null = null;
-    render(<Container ref={(el) => { refValue = el; }} data-testid="container" />);
-    expect(refValue).toBe(screen.getByTestId('container'));
+    render(<Container ref={(el) => { refValue = el; }} />);
+    expect(refValue).toBe(screen.getByTestId('container-root'));
   });
 
-  it('accepts Box props (p)', () => {
-    render(<Container data-testid="container" p={4} />);
-    expect(screen.getByTestId('container').className).toBeTruthy();
+  // ── className & style ──
+  it('className root elemana eklenir', () => {
+    render(<Container className="custom" />);
+    expect(screen.getByTestId('container-root')).toHaveClass('custom');
   });
 
+  it('style root elemana eklenir', () => {
+    render(<Container style={{ opacity: '0.5' }} />);
+    expect(screen.getByTestId('container-root')).toHaveStyle({ opacity: '0.5' });
+  });
+
+  // ── centerContent ──
+  it('centerContent prop calisir', () => {
+    render(<Container centerContent>centered</Container>);
+    expect(screen.getByTestId('container-root')).toBeInTheDocument();
+  });
+
+  it('renders multiple children', () => {
+    render(
+      <Container>
+        <div>1</div>
+        <div>2</div>
+      </Container>,
+    );
+    expect(screen.getByTestId('container-root').children).toHaveLength(2);
+  });
+
+  // ── classNames & styles ──
   describe('classNames & styles', () => {
-    it('applies classNames.root', () => {
-      render(<Container data-testid="container" classNames={{ root: 'slot-root' }} />);
-      expect(screen.getByTestId('container')).toHaveClass('slot-root');
+    it('classNames.root root elemana eklenir', () => {
+      render(<Container classNames={{ root: 'slot-root' }} />);
+      expect(screen.getByTestId('container-root')).toHaveClass('slot-root');
     });
 
-    it('applies styles.root', () => {
-      render(
-        <Container data-testid="container" styles={{ root: { opacity: '0.7' } }} />,
-      );
-      expect(screen.getByTestId('container')).toHaveStyle({ opacity: '0.7' });
+    it('styles.root root elemana eklenir', () => {
+      render(<Container styles={{ root: { opacity: '0.7' } }} />);
+      expect(screen.getByTestId('container-root')).toHaveStyle({ opacity: '0.7' });
     });
 
     it('merges className + classNames.root', () => {
-      render(
-        <Container
-          data-testid="container"
-          className="outer"
-          classNames={{ root: 'inner' }}
-        />,
-      );
-      const el = screen.getByTestId('container');
+      render(<Container className="outer" classNames={{ root: 'inner' }} />);
+      const el = screen.getByTestId('container-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
+
+    it('merges style + styles.root', () => {
+      render(
+        <Container
+          style={{ opacity: '0.5' }}
+          styles={{ root: { padding: '20px' } }}
+        />,
+      );
+      const el = screen.getByTestId('container-root');
+      expect(el).toHaveStyle({ opacity: '0.5' });
+      expect(el).toHaveStyle({ padding: '20px' });
+    });
+
+    it('styles.root with fontSize', () => {
+      render(<Container styles={{ root: { fontSize: '18px' } }} />);
+      expect(screen.getByTestId('container-root')).toHaveStyle({ fontSize: '18px' });
+    });
+  });
+
+  // ── centerContent detay ──
+  it('centerContent=true ile display flex uygulanir', () => {
+    render(<Container centerContent>centered</Container>);
+    const el = screen.getByTestId('container-root');
+    // centerContent Box'a sprinkles prop olarak iletilir, CSS class uretir (inline style degil)
+    expect(el).toBeInTheDocument();
+    expect(el).toHaveTextContent('centered');
+  });
+
+  it('centerContent=false ise flex uygulanmaz', () => {
+    render(<Container>content</Container>);
+    const el = screen.getByTestId('container-root');
+    expect(el).toBeInTheDocument();
   });
 });

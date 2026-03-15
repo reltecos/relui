@@ -6,4 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Section, type SectionProps, type SectionSlot } from './Section';
+export {
+  Section,
+  type SectionProps,
+  type SectionSlot,
+  type SectionHeaderProps,
+  type SectionContentProps,
+} from './Section';

@@ -12,6 +12,7 @@ import { Resizable } from './Resizable';
 const meta: Meta<typeof Resizable> = {
   title: 'Layout/Resizable',
   component: Resizable,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -95,6 +96,26 @@ export const CustomSlotStyles: Story = {
       <div style={{ padding: 16, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         Custom slot styled
       </div>
+    </Resizable>
+  ),
+};
+
+// ── Compound API ──────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <Resizable
+      defaultWidth={300}
+      defaultHeight={200}
+      directions={[]}
+      style={{ background: '#fef3c7', borderRadius: 12, border: '2px solid #fbbf24' }}
+    >
+      <div style={{ padding: 16, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        Compound Handle API
+      </div>
+      <Resizable.Handle direction="right" />
+      <Resizable.Handle direction="bottom" />
+      <Resizable.Handle direction="bottomRight" />
     </Resizable>
   ),
 };

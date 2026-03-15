@@ -7,13 +7,16 @@
  */
 
 /**
- * Tour — adim adim rehber overlay bilesen.
- * Tour — step-by-step guide overlay component.
+ * Tour — adim adim rehber overlay bilesen (Dual API).
+ * Tour — step-by-step guide overlay component (Dual API).
+ *
+ * Props-based: `<Tour steps={steps} active={true} onComplete={handler} />`
+ * Compound:    `<Tour active={true}><Tour.Step target="#el">...</Tour.Step></Tour>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, useRef, useEffect, useReducer, useState, useCallback } from 'react';
+import { forwardRef, createContext, useContext, useRef, useEffect, useReducer, useState, useCallback, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import {
   tourOverlayStyle,
@@ -28,7 +31,7 @@ import {
   tourPrevButtonStyle,
   tourNextButtonStyle,
 } from './tour.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 import { createTour, type TourAPI, type TourStep, type TourPlacement } from '@relteco/relui-core';
 
 // ── Slot ──────────────────────────────────────────────
@@ -49,13 +52,131 @@ export type TourSlot =
   | 'prevButton'
   | 'nextButton';
 
+// ── Context (Compound API) ──────────────────────────
+
+interface TourContextValue {
+  classNames: ClassNames<TourSlot> | undefined;
+  styles: Styles<TourSlot> | undefined;
+}
+
+const TourContext = createContext<TourContextValue | null>(null);
+
+function useTourContext(): TourContextValue {
+  const ctx = useContext(TourContext);
+  if (!ctx) throw new Error('Tour compound sub-components must be used within <Tour>.');
+  return ctx;
+}
+
+// ── Compound: Tour.Step ─────────────────────────────
+
+/** Tour.Step props */
+export interface TourStepProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const TourStepComponent = forwardRef<HTMLDivElement, TourStepProps>(
+  function TourStep(props, ref) {
+    const { children, className } = props;
+    const ctx = useTourContext();
+    const popoverClass = tourPopoverRecipe({ placement: 'bottom' });
+    const slot = getSlotProps('popover', popoverClass, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="tour-step">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Tour.StepTitle ────────────────────────
+
+/** Tour.StepTitle props */
+export interface TourStepTitleProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const TourStepTitle = forwardRef<HTMLDivElement, TourStepTitleProps>(
+  function TourStepTitle(props, ref) {
+    const { children, className } = props;
+    const ctx = useTourContext();
+    const slot = getSlotProps('title', tourTitleStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="tour-steptitle">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Tour.StepContent ──────────────────────
+
+/** Tour.StepContent props */
+export interface TourStepContentProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const TourStepContent = forwardRef<HTMLDivElement, TourStepContentProps>(
+  function TourStepContent(props, ref) {
+    const { children, className } = props;
+    const ctx = useTourContext();
+    const slot = getSlotProps('description', tourDescriptionStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="tour-stepcontent">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Tour.Navigation ───────────────────────
+
+/** Tour.Navigation props */
+export interface TourNavigationProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const TourNavigation = forwardRef<HTMLDivElement, TourNavigationProps>(
+  function TourNavigation(props, ref) {
+    const { children, className } = props;
+    const ctx = useTourContext();
+    const slot = getSlotProps('footer', tourFooterStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="tour-navigation">
+        {children}
+      </div>
+    );
+  },
+);
+
 // ── Component Props ─────────────────────────────────
 
 export interface TourComponentProps extends SlotStyleProps<TourSlot> {
   /** Adimlar / Steps */
-  steps: TourStep[];
+  steps?: TourStep[];
   /** Aktif mi / Is active */
   active: boolean;
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
   /** Tur bitince callback / On complete callback */
   onComplete?: () => void;
   /** Adim degisince callback / On step change callback */
@@ -134,11 +255,12 @@ function getPopoverPosition(
  * />
  * ```
  */
-export const Tour = forwardRef<HTMLDivElement, TourComponentProps>(
+const TourBase = forwardRef<HTMLDivElement, TourComponentProps>(
   function Tour(props, ref) {
     const {
       steps,
       active,
+      children,
       onComplete,
       onStepChange,
       onStop,
@@ -154,27 +276,28 @@ export const Tour = forwardRef<HTMLDivElement, TourComponentProps>(
       styles,
     } = props;
 
+    // ── Hooks (daima cagrilmali — React kurali) ──
+    const stepList = steps ?? [];
+
     const [, forceRender] = useReducer((c: number) => c + 1, 0);
 
-    // ── Core API ──
     const onCompleteRef = useRef(onComplete);
     onCompleteRef.current = onComplete;
     const onStepChangeRef = useRef(onStepChange);
     onStepChangeRef.current = onStepChange;
 
     const apiRef = useRef<TourAPI | null>(null);
-    if (!apiRef.current) {
+    if (!apiRef.current && !children) {
       apiRef.current = createTour({
-        steps,
+        steps: stepList,
         onComplete: () => onCompleteRef.current?.(),
         onStepChange: (idx) => onStepChangeRef.current?.(idx),
       });
     }
     const api = apiRef.current;
 
-    // ── Prop sync ──
     const prevActiveRef = useRef<boolean | undefined>(undefined);
-    if (active !== prevActiveRef.current) {
+    if (!children && api && active !== prevActiveRef.current) {
       if (active) {
         api.send({ type: 'START' });
       } else {
@@ -183,19 +306,18 @@ export const Tour = forwardRef<HTMLDivElement, TourComponentProps>(
       prevActiveRef.current = active;
     }
 
-    // ── Subscribe ──
     useEffect(() => {
+      if (!api) return;
       return api.subscribe(() => forceRender());
     }, [api]);
 
-    // ── Target rect ──
     const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
-    const ctx = api.getContext();
-    const currentStep = api.getStep();
+    const ctx = api ? api.getContext() : { active: false, currentStep: 0, totalSteps: 0 };
+    const currentStep = api ? api.getStep() : undefined;
 
     useEffect(() => {
-      if (!ctx.active || !currentStep) {
+      if (!api || !ctx.active || !currentStep) {
         setTargetRect(null);
         return;
       }
@@ -206,11 +328,10 @@ export const Tour = forwardRef<HTMLDivElement, TourComponentProps>(
       } else {
         setTargetRect(null);
       }
-    }, [ctx.active, ctx.currentStep, currentStep]);
+    }, [api, ctx.active, ctx.currentStep, currentStep]);
 
-    // ── Escape key ──
     useEffect(() => {
-      if (!ctx.active) return;
+      if (!api || !ctx.active) return;
       const handleEsc = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           api.send({ type: 'STOP' });
@@ -219,13 +340,13 @@ export const Tour = forwardRef<HTMLDivElement, TourComponentProps>(
       };
       document.addEventListener('keydown', handleEsc);
       return () => document.removeEventListener('keydown', handleEsc);
-    }, [ctx.active, api, onStop]);
+    }, [api, ctx.active, onStop]);
 
-    // ── Portal target ──
     const anchorRef = useRef<HTMLSpanElement>(null);
     const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
 
     useEffect(() => {
+      if (children) return;
       if (portalContainer) {
         setPortalTarget(portalContainer);
         return;
@@ -234,17 +355,33 @@ export const Tour = forwardRef<HTMLDivElement, TourComponentProps>(
       if (!anchor) return;
       const themeContainer = anchor.closest('[data-theme]') as HTMLElement | null;
       setPortalTarget(themeContainer ?? document.body);
-    }, [portalContainer]);
+    }, [children, portalContainer]);
 
-    // ── Handlers ──
-    const handleNext = useCallback(() => api.send({ type: 'NEXT' }), [api]);
-    const handlePrev = useCallback(() => api.send({ type: 'PREV' }), [api]);
+    const handleNext = useCallback(() => api?.send({ type: 'NEXT' }), [api]);
+    const handlePrev = useCallback(() => api?.send({ type: 'PREV' }), [api]);
     const handleSkip = useCallback(() => {
-      api.send({ type: 'STOP' });
+      api?.send({ type: 'STOP' });
       onStop?.();
     }, [api, onStop]);
 
-    // ── Render ──
+    // ── Compound API ──
+    if (children) {
+      const ctxValue: TourContextValue = { classNames, styles };
+      return (
+        <TourContext.Provider value={ctxValue}>
+          <div
+            ref={ref}
+            className={className}
+            style={styleProp}
+            data-testid="tour-compound-root"
+          >
+            {children}
+          </div>
+        </TourContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const anchor = <span ref={anchorRef} style={{ display: 'none' }} data-testid="tour-anchor" />;
 
     if (!ctx.active || !currentStep || !portalTarget) return anchor;
@@ -363,3 +500,29 @@ export const Tour = forwardRef<HTMLDivElement, TourComponentProps>(
     );
   },
 );
+
+/**
+ * Tour bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Tour steps={steps} active={true} onComplete={handler} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Tour active={true}>
+ *   <Tour.Step>
+ *     <Tour.StepTitle>Merhaba</Tour.StepTitle>
+ *     <Tour.StepContent>Bu butona tikla</Tour.StepContent>
+ *   </Tour.Step>
+ *   <Tour.Navigation>...</Tour.Navigation>
+ * </Tour>
+ * ```
+ */
+export const Tour = Object.assign(TourBase, {
+  Step: TourStepComponent,
+  StepTitle: TourStepTitle,
+  StepContent: TourStepContent,
+  Navigation: TourNavigation,
+});

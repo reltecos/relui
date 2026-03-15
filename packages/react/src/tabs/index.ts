@@ -7,7 +7,14 @@
  */
 
 export { Tabs } from './Tabs';
-export type { TabsComponentProps, TabsSlot, TabPanelContent } from './Tabs';
+export type {
+  TabsComponentProps,
+  TabsSlot,
+  TabPanelContent,
+  TabsListProps,
+  TabsTabProps,
+  TabsPanelProps,
+} from './Tabs';
 export { useTabs } from './useTabs';
 export type { UseTabsProps, UseTabsReturn } from './useTabs';
 export {

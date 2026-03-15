@@ -6,5 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Radio, type RadioComponentProps, type RadioSlot } from './Radio';
+export {
+  Radio,
+  type RadioComponentProps,
+  type RadioSlot,
+  type RadioIndicatorProps,
+  type RadioLabelProps,
+} from './Radio';
 export { useRadio, type UseRadioProps, type UseRadioReturn } from './useRadio';

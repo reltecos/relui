@@ -15,6 +15,7 @@ import { Stack } from '../stack';
 const meta: Meta<typeof Divider> = {
   title: 'Layout/Divider',
   component: Divider,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -99,6 +100,33 @@ export const CustomSlotStyles: Story = {
         styles={{ root: { opacity: 0.3 } }}
       />
       <Box p={4}>Alt</Box>
+    </Stack>
+  ),
+};
+
+// ── Label (props-based) ──
+
+export const WithLabel: Story = {
+  name: 'Etiketli / With Label',
+  render: () => (
+    <Stack spacing={4}>
+      <Box p={4}>Yukarisi</Box>
+      <Divider label="veya" />
+      <Box p={4}>Asagisi</Box>
+    </Stack>
+  ),
+};
+
+// ── Compound ──
+
+export const Compound: Story = {
+  render: () => (
+    <Stack spacing={4}>
+      <Box p={4}>Yukarisi</Box>
+      <Divider>
+        <Divider.Label>VEYA</Divider.Label>
+      </Divider>
+      <Box p={4}>Asagisi</Box>
     </Stack>
   ),
 };

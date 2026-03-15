@@ -7,15 +7,18 @@
  */
 
 /**
- * Progress — ilerleme gostergesi bilesen.
- * Progress — progress indicator component.
+ * Progress — ilerleme gostergesi bilesen (Dual API).
+ * Progress — progress indicator component (Dual API).
+ *
+ * Props-based: `<Progress value={60} label="Yukleniyor" showValue />`
+ * Compound:    `<Progress value={60}><Progress.Label>Yukleniyor</Progress.Label><Progress.Track><Progress.Fill /></Progress.Track><Progress.Value /></Progress>`
  *
  * 3 tur (bar/circular/chunk), 5 boyut, indeterminate, striped.
  *
  * @packageDocumentation
  */
 
-import { forwardRef, useRef, useReducer, useEffect, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, useRef, useReducer, useEffect, type ReactNode } from 'react';
 import {
   progressRootRecipe,
   progressTrackRecipe,
@@ -33,7 +36,7 @@ import {
   progressLabelStyle,
   progressValueStyle,
 } from './progress.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 import { createProgress, type ProgressSize, type ProgressAPI } from '@relteco/relui-core';
 
 // ── Slot ──────────────────────────────────────────────
@@ -48,10 +51,149 @@ export type ProgressSlot = 'root' | 'track' | 'fill' | 'label' | 'value' | 'circ
 /** Progress gorsel turu / Progress visual type. */
 export type ProgressType = 'bar' | 'circular' | 'chunk';
 
+// ── Context (Compound API) ──────────────────────────
+
+interface ProgressContextValue {
+  percent: number;
+  value: number;
+  size: ProgressSize;
+  indeterminate: boolean;
+  color: string | undefined;
+  striped: boolean;
+  animated: boolean;
+  formatValue: ((value: number, percent: number) => string) | undefined;
+  classNames: ClassNames<ProgressSlot> | undefined;
+  styles: Styles<ProgressSlot> | undefined;
+}
+
+const ProgressContext = createContext<ProgressContextValue | null>(null);
+
+function useProgressContext(): ProgressContextValue {
+  const ctx = useContext(ProgressContext);
+  if (!ctx) throw new Error('Progress compound sub-components must be used within <Progress>.');
+  return ctx;
+}
+
+// ── Compound: Progress.Track ──────────────────────
+
+/** Progress.Track props */
+export interface ProgressTrackProps {
+  /** Icerik / Content */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ProgressTrack = forwardRef<HTMLDivElement, ProgressTrackProps>(
+  function ProgressTrack(props, ref) {
+    const { children, className } = props;
+    const ctx = useProgressContext();
+    const slot = getSlotProps('track', progressTrackRecipe({ size: ctx.size }), ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="progress-track">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Progress.Fill ──────────────────────
+
+/** Progress.Fill props */
+export interface ProgressFillProps {
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ProgressFill = forwardRef<HTMLDivElement, ProgressFillProps>(
+  function ProgressFill(props, ref) {
+    const { className } = props;
+    const ctx = useProgressContext();
+    const slot = getSlotProps('fill', progressFillStyle, ctx.classNames, ctx.styles);
+
+    const fillClassNames = [slot.className];
+    if (ctx.striped) fillClassNames.push(progressStripedStyle);
+    if (ctx.striped && ctx.animated) fillClassNames.push(progressStripedAnimatedStyle);
+
+    const baseCls = fillClassNames.join(' ');
+    const cls = className ? `${baseCls} ${className}` : baseCls;
+    const colorStyle = ctx.color ? { backgroundColor: ctx.color } : undefined;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={{
+          ...slot.style,
+          ...colorStyle,
+          width: `${ctx.percent}%`,
+        }}
+        data-testid="progress-fill"
+      />
+    );
+  },
+);
+
+// ── Compound: Progress.Label ─────────────────────
+
+/** Progress.Label props */
+export interface ProgressLabelProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ProgressLabel = forwardRef<HTMLSpanElement, ProgressLabelProps>(
+  function ProgressLabel(props, ref) {
+    const { children, className } = props;
+    const ctx = useProgressContext();
+    const slot = getSlotProps('label', progressLabelStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="progress-label">
+        {children}
+      </span>
+    );
+  },
+);
+
+// ── Compound: Progress.Value ─────────────────────
+
+/** Progress.Value props */
+export interface ProgressValueProps {
+  /** Icerik (opsiyonel, yoksa otomatik formatlanir) / Content (optional, auto-formatted if omitted) */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ProgressValue = forwardRef<HTMLSpanElement, ProgressValueProps>(
+  function ProgressValue(props, ref) {
+    const { children, className } = props;
+    const ctx = useProgressContext();
+    const slot = getSlotProps('value', progressValueStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    const formattedValue = ctx.formatValue
+      ? ctx.formatValue(ctx.value, ctx.percent)
+      : `${Math.round(ctx.percent)}%`;
+
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="progress-value">
+        {children !== undefined ? children : formattedValue}
+      </span>
+    );
+  },
+);
+
 // ── Component Props ───────────────────────────────────
 
 export interface ProgressComponentProps extends SlotStyleProps<ProgressSlot> {
-  /** Deger / Value (0–max arasi) */
+  /** Deger / Value (0-max arasi) */
   value?: number;
   /** Minimum deger / Minimum value */
   min?: number;
@@ -87,23 +229,13 @@ export interface ProgressComponentProps extends SlotStyleProps<ProgressSlot> {
   style?: React.CSSProperties;
   /** id */
   id?: string;
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
 // ── Component ─────────────────────────────────────────
 
-/**
- * Progress bilesen — ilerleme gostergesi.
- * Progress component — progress indicator.
- *
- * @example
- * ```tsx
- * <Progress value={60} />
- * <Progress type="circular" value={75} showValue />
- * <Progress type="chunk" value={40} chunks={5} />
- * <Progress indeterminate />
- * ```
- */
-export const Progress = forwardRef<HTMLDivElement, ProgressComponentProps>(
+const ProgressBase = forwardRef<HTMLDivElement, ProgressComponentProps>(
   function Progress(props, ref) {
     const {
       value = 0,
@@ -126,6 +258,7 @@ export const Progress = forwardRef<HTMLDivElement, ProgressComponentProps>(
       classNames,
       styles,
       id,
+      children,
     } = props;
 
     const [, forceRender] = useReducer((c: number) => c + 1, 0);
@@ -167,6 +300,39 @@ export const Progress = forwardRef<HTMLDivElement, ProgressComponentProps>(
       ? { ...rootSlot.style, ...styleProp }
       : rootSlot.style;
 
+    const ctxValue: ProgressContextValue = {
+      percent,
+      value: api.getContext().value,
+      size,
+      indeterminate,
+      color,
+      striped,
+      animated,
+      formatValue,
+      classNames,
+      styles,
+    };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <ProgressContext.Provider value={ctxValue}>
+          <div
+            ref={ref}
+            className={combinedRootClassName}
+            style={combinedRootStyle}
+            id={id}
+            data-testid="progress"
+            {...rootProps}
+            aria-label={ariaLabel || 'Progress'}
+          >
+            {children}
+          </div>
+        </ProgressContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const trackSlot = getSlotProps('track', progressTrackRecipe({ size }), classNames, styles);
     const fillSlot = getSlotProps('fill', progressFillStyle, classNames, styles);
     const labelSlot = getSlotProps('label', progressLabelStyle, classNames, styles);
@@ -329,3 +495,29 @@ export const Progress = forwardRef<HTMLDivElement, ProgressComponentProps>(
     );
   },
 );
+
+/**
+ * Progress bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Progress value={60} label="Yukleniyor" showValue />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Progress value={60}>
+ *   <Progress.Label>Yukleniyor</Progress.Label>
+ *   <Progress.Track>
+ *     <Progress.Fill />
+ *   </Progress.Track>
+ *   <Progress.Value />
+ * </Progress>
+ * ```
+ */
+export const Progress = Object.assign(ProgressBase, {
+  Track: ProgressTrack,
+  Fill: ProgressFill,
+  Label: ProgressLabel,
+  Value: ProgressValue,
+});

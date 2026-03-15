@@ -121,6 +121,7 @@ const simpleItems: MenuItem[] = [
 const meta: Meta<typeof Menu> = {
   title: 'Navigation/Menu',
   component: Menu,
+  tags: ['autodocs'],
   parameters: {
     layout: 'padded',
   },
@@ -313,6 +314,36 @@ export const Minimal: Story = {
     ],
     renderIcon: undefined,
   },
+};
+
+// ── Compound ──
+
+export const Compound: Story = {
+  render: () => (
+    <Menu size="md">
+      <Menu.Group label="File">
+        <Menu.Item shortcut="Ctrl+N">New</Menu.Item>
+        <Menu.Item shortcut="Ctrl+O">Open</Menu.Item>
+        <Menu.Separator />
+        <Menu.Item shortcut="Ctrl+S">Save</Menu.Item>
+      </Menu.Group>
+      <Menu.Group label="Edit">
+        <Menu.Item shortcut="Ctrl+Z">Undo</Menu.Item>
+        <Menu.Item shortcut="Ctrl+Y">Redo</Menu.Item>
+        <Menu.Separator />
+        <Menu.Label>Clipboard</Menu.Label>
+        <Menu.Item shortcut="Ctrl+C">Copy</Menu.Item>
+        <Menu.Item shortcut="Ctrl+V">Paste</Menu.Item>
+      </Menu.Group>
+    </Menu>
+  ),
+  decorators: [
+    (Story) => (
+      <div style={{ minHeight: '300px' }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 // ── Custom Slot Styles (Dark Theme) ──

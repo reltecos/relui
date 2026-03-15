@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { Label } from './Label';
@@ -142,5 +142,86 @@ describe('Label', () => {
     );
 
     expect(container.querySelector('span')).toHaveStyle({ fontSize: '10px' });
+  });
+});
+
+// ── Compound API ──
+
+describe('Label (Compound)', () => {
+  it('compound: Label.Text render edilir', () => {
+    render(
+      <Label>
+        <Label.Text>E-posta</Label.Text>
+      </Label>,
+    );
+    expect(screen.getByTestId('label-text')).toHaveTextContent('E-posta');
+  });
+
+  it('compound: Label.RequiredIndicator render edilir', () => {
+    render(
+      <Label>
+        <Label.Text>E-posta</Label.Text>
+        <Label.RequiredIndicator />
+      </Label>,
+    );
+    expect(screen.getByTestId('label-required')).toBeInTheDocument();
+    expect(screen.getByTestId('label-required')).toHaveTextContent('*');
+  });
+
+  it('compound: Label.RequiredIndicator ozel karakter', () => {
+    render(
+      <Label>
+        <Label.Text>E-posta</Label.Text>
+        <Label.RequiredIndicator>(zorunlu)</Label.RequiredIndicator>
+      </Label>,
+    );
+    expect(screen.getByTestId('label-required')).toHaveTextContent('(zorunlu)');
+  });
+
+  it('compound: classNames context ile Label.Text a aktarilir', () => {
+    render(
+      <Label classNames={{ text: 'cmp-text-cls' }}>
+        <Label.Text>E-posta</Label.Text>
+      </Label>,
+    );
+    expect(screen.getByTestId('label-text').className).toContain('cmp-text-cls');
+  });
+
+  it('compound: styles context ile Label.RequiredIndicator a aktarilir', () => {
+    render(
+      <Label styles={{ requiredIndicator: { letterSpacing: '3px' } }}>
+        <Label.Text>E-posta</Label.Text>
+        <Label.RequiredIndicator />
+      </Label>,
+    );
+    expect(screen.getByTestId('label-required')).toHaveStyle({ letterSpacing: '3px' });
+  });
+
+  it('compound: Label.RequiredIndicator aria-hidden', () => {
+    render(
+      <Label>
+        <Label.Text>E-posta</Label.Text>
+        <Label.RequiredIndicator />
+      </Label>,
+    );
+    expect(screen.getByTestId('label-required')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('compound: Label.Text context disinda hata firlat', () => {
+    expect(() => {
+      render(<Label.Text>test</Label.Text>);
+    }).toThrow('Label compound sub-components must be used within <Label>.');
+  });
+
+  it('compound: Label.RequiredIndicator context disinda hata firlat', () => {
+    expect(() => {
+      render(<Label.RequiredIndicator />);
+    }).toThrow('Label compound sub-components must be used within <Label>.');
+  });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<Label ref={ref}>E-posta</Label>);
+    expect(ref).toHaveBeenCalled();
   });
 });

@@ -207,3 +207,27 @@ function CustomStyledDemo() {
 export const CustomSlotStyles: Story = {
   render: () => <CustomStyledDemo />,
 };
+
+// ── Compound ──
+
+function CompoundDemo() {
+  return (
+    <div style={{ padding: 32, fontFamily: 'system-ui, sans-serif' }}>
+      <h3>Toast Compound API</h3>
+      <Toast position="top-right">
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '12px 16px', backgroundColor: '#eff6ff', borderLeft: '4px solid #3b82f6', borderRadius: 8, maxWidth: 380, minWidth: 280 }}>
+          <Toast.Icon><span style={{ fontSize: 18 }}>&#x2139;</span></Toast.Icon>
+          <div style={{ flex: 1 }}>
+            <Toast.Title>Bilgi</Toast.Title>
+            <Toast.Description>Bu bir compound toast ornegi.</Toast.Description>
+          </div>
+          <Toast.CloseButton onClick={() => {}} />
+        </div>
+      </Toast>
+    </div>
+  );
+}
+
+export const Compound: Story = {
+  render: () => <CompoundDemo />,
+};

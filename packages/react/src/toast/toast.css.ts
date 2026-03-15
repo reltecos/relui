@@ -97,24 +97,24 @@ export const toastItemRecipe = recipe({
   variants: {
     status: {
       info: {
-        backgroundColor: '#eff6ff',
+        backgroundColor: 'var(--rel-color-info-subtle, #eff6ff)',
         borderLeft: '4px solid var(--rel-color-info, #3b82f6)',
-        color: '#1e40af',
+        color: 'var(--rel-color-info, #1e40af)',
       },
       success: {
-        backgroundColor: '#f0fdf4',
+        backgroundColor: 'var(--rel-color-success-subtle, #f0fdf4)',
         borderLeft: '4px solid var(--rel-color-success, #16a34a)',
-        color: '#166534',
+        color: 'var(--rel-color-success, #166534)',
       },
       warning: {
-        backgroundColor: '#fffbeb',
+        backgroundColor: 'var(--rel-color-warning-subtle, #fffbeb)',
         borderLeft: '4px solid var(--rel-color-warning, #f59e0b)',
-        color: '#92400e',
+        color: 'var(--rel-color-warning, #92400e)',
       },
       error: {
-        backgroundColor: '#fef2f2',
+        backgroundColor: 'var(--rel-color-error-subtle, #fef2f2)',
         borderLeft: '4px solid var(--rel-color-error, #dc2626)',
-        color: '#991b1b',
+        color: 'var(--rel-color-error, #991b1b)',
       },
     },
     animation: {

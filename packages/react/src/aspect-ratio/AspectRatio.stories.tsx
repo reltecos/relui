@@ -14,6 +14,7 @@ import { Grid } from '../grid';
 const meta: Meta<typeof AspectRatio> = {
   title: 'Layout/AspectRatio',
   component: AspectRatio,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -28,7 +29,7 @@ export const Default: Story = {
           width="full"
           height="full"
           style={{
-            background: 'linear-gradient(135deg, #6366f1, #ec4899)',
+            background: 'linear-gradient(135deg, var(--rel-color-primary, #6366f1), var(--rel-color-error, #ec4899))',
             borderRadius: '12px',
             display: 'flex',
             alignItems: 'center',
@@ -52,7 +53,7 @@ export const Widescreen: Story = {
           width="full"
           height="full"
           style={{
-            background: 'linear-gradient(135deg, #059669, #0ea5e9)',
+            background: 'linear-gradient(135deg, var(--rel-color-success, #059669), var(--rel-color-primary, #0ea5e9))',
             borderRadius: '12px',
             display: 'flex',
             alignItems: 'center',
@@ -76,7 +77,7 @@ export const Portrait: Story = {
           width="full"
           height="full"
           style={{
-            background: 'linear-gradient(135deg, #f59e0b, #ef4444)',
+            background: 'linear-gradient(135deg, var(--rel-color-warning, #f59e0b), var(--rel-color-error, #ef4444))',
             borderRadius: '12px',
             display: 'flex',
             alignItems: 'center',
@@ -100,7 +101,7 @@ export const MultipleRatios: Story = {
             width="full"
             height="full"
             style={{
-              background: '#ede9fe',
+              background: 'var(--rel-color-bg-subtle, #ede9fe)',
               borderRadius: '8px',
               display: 'flex',
               alignItems: 'center',
@@ -115,19 +116,42 @@ export const MultipleRatios: Story = {
   ),
 };
 
+/** String ratio — 4/3 formatinda. */
+export const StringRatio: Story = {
+  render: () => (
+    <Box width={48}>
+      <AspectRatio ratio="4/3">
+        <Box
+          width="full"
+          height="full"
+          style={{
+            background: 'var(--rel-color-bg-subtle, #fef3c7)',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          4/3 (string)
+        </Box>
+      </AspectRatio>
+    </Box>
+  ),
+};
+
 export const CustomSlotStyles: Story = {
   render: () => (
     <Box width={48}>
       <AspectRatio
         ratio={16 / 9}
         classNames={{ root: 'custom-ar' }}
-        styles={{ root: { border: '2px dashed #8b5cf6', borderRadius: '12px' } }}
+        styles={{ root: { border: '2px dashed var(--rel-color-primary, #8b5cf6)', borderRadius: '12px' } }}
       >
         <Box
           width="full"
           height="full"
           style={{
-            background: '#f5f3ff',
+            background: 'var(--rel-color-bg-subtle, #f5f3ff)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

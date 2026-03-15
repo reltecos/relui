@@ -470,3 +470,73 @@ describe('DropdownTree — classNames & styles', () => {
     expect(treeitems[0]).toHaveStyle({ letterSpacing: '2px' });
   });
 });
+
+// ── Compound API ──
+
+describe('DropdownTree (Compound)', () => {
+  it('compound: root render edilir', () => {
+    render(
+      <DropdownTree nodes={sampleNodes}>
+        <DropdownTree.Trigger>
+          <span>Secin</span>
+        </DropdownTree.Trigger>
+        <DropdownTree.Content />
+      </DropdownTree>,
+    );
+    expect(screen.getByTestId('dropdowntree-root')).toBeInTheDocument();
+  });
+
+  it('compound: trigger render edilir', () => {
+    render(
+      <DropdownTree nodes={sampleNodes}>
+        <DropdownTree.Trigger>
+          <span>Secin</span>
+        </DropdownTree.Trigger>
+        <DropdownTree.Content />
+      </DropdownTree>,
+    );
+    expect(screen.getByTestId('dropdowntree-trigger')).toBeInTheDocument();
+  });
+
+  it('compound: content acilir', () => {
+    render(
+      <DropdownTree nodes={sampleNodes}>
+        <DropdownTree.Trigger>
+          <span>Secin</span>
+        </DropdownTree.Trigger>
+        <DropdownTree.Content />
+      </DropdownTree>,
+    );
+    fireEvent.click(screen.getByTestId('dropdowntree-trigger'));
+    expect(screen.getByTestId('dropdowntree-content')).toBeInTheDocument();
+  });
+
+  it('compound: leaf node secer', () => {
+    const handleChange = vi.fn();
+    render(
+      <DropdownTree nodes={sampleNodes} onValueChange={handleChange}>
+        <DropdownTree.Trigger>
+          <span>Secin</span>
+        </DropdownTree.Trigger>
+        <DropdownTree.Content />
+      </DropdownTree>,
+    );
+    fireEvent.click(screen.getByTestId('dropdowntree-trigger'));
+    fireEvent.click(screen.getByText('Ekmek'));
+    expect(handleChange).toHaveBeenCalledWith('bread');
+  });
+
+  it('compound: parent expand eder', () => {
+    render(
+      <DropdownTree nodes={sampleNodes}>
+        <DropdownTree.Trigger>
+          <span>Secin</span>
+        </DropdownTree.Trigger>
+        <DropdownTree.Content />
+      </DropdownTree>,
+    );
+    fireEvent.click(screen.getByTestId('dropdowntree-trigger'));
+    fireEvent.click(screen.getByText('Meyveler'));
+    expect(screen.getByText('Elma')).toBeInTheDocument();
+  });
+});

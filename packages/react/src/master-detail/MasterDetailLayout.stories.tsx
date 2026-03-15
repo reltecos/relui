@@ -13,6 +13,7 @@ import { MasterDetailLayout } from './MasterDetailLayout';
 const meta: Meta<typeof MasterDetailLayout> = {
   title: 'Layout/MasterDetailLayout',
   component: MasterDetailLayout,
+  tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
     masterPosition: {
@@ -246,4 +247,31 @@ export const CustomSlotStyles: Story = {
       detail={<div>Detail panel</div>}
     />
   ),
+};
+
+export const CompoundAPI: Story = {
+  name: 'Compound API',
+  render: () => {
+    const Comp = () => {
+      const [selectedId, setSelectedId] = useState<string | null>(null);
+      return (
+        <MasterDetailLayout
+          masterSize={280}
+          selectedId={selectedId}
+          style={{ height: 400, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}
+          styles={{
+            master: { borderRight: '1px solid #e2e8f0', background: '#fafafa' },
+          }}
+        >
+          <MasterDetailLayout.Master>
+            <MasterPanel selectedId={selectedId} onSelect={setSelectedId} />
+          </MasterDetailLayout.Master>
+          <MasterDetailLayout.Detail>
+            <DetailPanel selectedId={selectedId} />
+          </MasterDetailLayout.Detail>
+        </MasterDetailLayout>
+      );
+    };
+    return <Comp />;
+  },
 };

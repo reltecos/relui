@@ -15,6 +15,7 @@ import type { DockSplitNode, DockPanelConfig } from '@relteco/relui-core';
 const meta: Meta<typeof DockLayout> = {
   title: 'Window Manager/DockLayout',
   component: DockLayout,
+  tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
 };
 

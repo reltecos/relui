@@ -16,6 +16,7 @@ import { RadioGroup } from '../radio-group/RadioGroup';
 const meta: Meta<typeof Radio> = {
   title: 'Primitives/Radio',
   component: Radio,
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
@@ -209,6 +210,30 @@ export const FormExample: Story = {
           </RadioGroup>
         </fieldset>
       </div>
+    );
+  },
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => {
+    const [value, setValue] = useState('a');
+
+    return (
+      <RadioGroup value={value} onValueChange={setValue} name="compound">
+        <Radio value="a">
+          <Radio.Indicator />
+          <Radio.Label>Compound Secenek A</Radio.Label>
+        </Radio>
+        <Radio value="b">
+          <Radio.Indicator />
+          <Radio.Label>Compound Secenek B</Radio.Label>
+        </Radio>
+        <Radio value="c">
+          <Radio.Indicator />
+          <Radio.Label>Compound Secenek C</Radio.Label>
+        </Radio>
+      </RadioGroup>
     );
   },
 };

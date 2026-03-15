@@ -7,15 +7,18 @@
  */
 
 /**
- * FloatingWindow — taşınabilir/boyutlandırılabilir pencere bileşeni.
+ * FloatingWindow — tasinabilir/boyutlandirilabilir pencere bilesen (Dual API).
  *
- * Title bar sürükleme, minimize/maximize/restore ve resize destekler.
+ * Props-based: `<FloatingWindow title="My Window"><p>Content</p></FloatingWindow>`
+ * Compound:    `<FloatingWindow><FloatingWindow.Header title="My Window" /><FloatingWindow.Body>...</FloatingWindow.Body></FloatingWindow>`
  *
  * @packageDocumentation
  */
 
 import React, {
   forwardRef,
+  createContext,
+  useContext,
   useRef,
   useEffect,
   useReducer,
@@ -25,60 +28,258 @@ import React, {
 } from 'react';
 import { createFloatingWindow } from '@relteco/relui-core';
 import type { FloatingWindowAPI, WindowPosition, WindowSize } from '@relteco/relui-core';
-import { getSlotProps, type SlotStyleProps } from '../utils';
+import {
+  rootStyle,
+  rootMaximizedStyle,
+  titleBarStyle,
+  titleStyle,
+  controlsStyle,
+  controlButtonStyle,
+  contentStyle,
+} from './floating-window.css';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** FloatingWindow slot isimleri. */
 export type FloatingWindowSlot = 'root' | 'titleBar' | 'title' | 'controls' | 'content';
 
-/** FloatingWindow bileşen prop'ları. */
+// ── Context (Compound API) ──────────────────────────
+
+interface FloatingWindowContextValue {
+  api: FloatingWindowAPI;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  forceRender: () => void;
+  draggable: boolean;
+  onClose?: () => void;
+  onPositionChange?: (position: WindowPosition) => void;
+  onSizeChange?: (size: WindowSize) => void;
+  showMinimize: boolean;
+  showMaximize: boolean;
+  showClose: boolean;
+  classNames: ClassNames<FloatingWindowSlot> | undefined;
+  styles: Styles<FloatingWindowSlot> | undefined;
+}
+
+const FloatingWindowContext = createContext<FloatingWindowContextValue | null>(null);
+
+function useFloatingWindowContext(): FloatingWindowContextValue {
+  const ctx = useContext(FloatingWindowContext);
+  if (!ctx) throw new Error('FloatingWindow compound sub-components must be used within <FloatingWindow>.');
+  return ctx;
+}
+
+// ── Compound: FloatingWindow.Header ─────────────────
+
+/** FloatingWindow.Header props */
+export interface FloatingWindowHeaderProps {
+  /** Pencere basligi / Window title */
+  title?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Children (ozel icerik) / Custom content */
+  children?: ReactNode;
+}
+
+const FloatingWindowHeader = forwardRef<HTMLDivElement, FloatingWindowHeaderProps>(
+  function FloatingWindowHeader(props, ref) {
+    const { title, className, children } = props;
+    const ctx = useFloatingWindowContext();
+    const api = ctx.api;
+    const windowState = api.getState();
+
+    const handleTitleBarPointerDown = useCallback((e: React.PointerEvent) => {
+      if ((e.target as HTMLElement).closest('[data-window-control]')) return;
+      e.preventDefault();
+      api.send({ type: 'DRAG_START', startX: e.clientX, startY: e.clientY });
+      ctx.forceRender();
+    }, [api, ctx]);
+
+    const handleMinimize = () => {
+      api.send({ type: 'MINIMIZE' });
+      ctx.forceRender();
+    };
+
+    const handleMaximize = () => {
+      const state = api.getState();
+      if (state === 'maximized') {
+        api.send({ type: 'RESTORE' });
+      } else {
+        const parent = ctx.containerRef.current?.parentElement;
+        const w = parent?.clientWidth ?? window.innerWidth;
+        const h = parent?.clientHeight ?? window.innerHeight;
+        api.send({ type: 'MAXIMIZE', containerWidth: w, containerHeight: h });
+      }
+      ctx.forceRender();
+      ctx.onPositionChange?.(api.getPosition());
+      ctx.onSizeChange?.(api.getSize());
+    };
+
+    const slot = getSlotProps('titleBar', titleBarStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+    const titleSlot = getSlotProps('title', titleStyle, ctx.classNames, ctx.styles);
+    const ctrlSlot = getSlotProps('controls', controlsStyle, ctx.classNames, ctx.styles);
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={{ ...slot.style, cursor: ctx.draggable ? 'grab' : 'default' }}
+        onPointerDown={handleTitleBarPointerDown}
+        data-title-bar
+        data-testid="floating-window-titleBar"
+      >
+        {children ?? (
+          <>
+            <div className={titleSlot.className || undefined} style={titleSlot.style}>
+              {title}
+            </div>
+            <div className={ctrlSlot.className || undefined} style={ctrlSlot.style}>
+              {ctx.showMinimize && (
+                <button
+                  type="button"
+                  onClick={handleMinimize}
+                  className={controlButtonStyle}
+                  aria-label="Minimize"
+                  data-window-control="minimize"
+                >
+                  &#x2014;
+                </button>
+              )}
+              {ctx.showMaximize && (
+                <button
+                  type="button"
+                  onClick={handleMaximize}
+                  className={controlButtonStyle}
+                  aria-label={windowState === 'maximized' ? 'Restore' : 'Maximize'}
+                  data-window-control="maximize"
+                >
+                  {windowState === 'maximized' ? '\u29C9' : '\u25A1'}
+                </button>
+              )}
+              {ctx.showClose && (
+                <button
+                  type="button"
+                  onClick={ctx.onClose}
+                  className={controlButtonStyle}
+                  aria-label="Close"
+                  data-window-control="close"
+                >
+                  &#x2715;
+                </button>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  },
+);
+
+// ── Compound: FloatingWindow.Body ───────────────────
+
+/** FloatingWindow.Body props */
+export interface FloatingWindowBodyProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const FloatingWindowBody = forwardRef<HTMLDivElement, FloatingWindowBodyProps>(
+  function FloatingWindowBody(props, ref) {
+    const { children, className } = props;
+    const ctx = useFloatingWindowContext();
+    const slot = getSlotProps('content', contentStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        data-window-content
+        data-testid="floating-window-content"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: FloatingWindow.CloseButton ────────────
+
+/** FloatingWindow.CloseButton props */
+export interface FloatingWindowCloseButtonProps {
+  /** Ek className / Additional className */
+  className?: string;
+  /** Children (ozel icerik) / Custom content */
+  children?: ReactNode;
+}
+
+const FloatingWindowCloseButton = forwardRef<HTMLButtonElement, FloatingWindowCloseButtonProps>(
+  function FloatingWindowCloseButton(props, ref) {
+    const { className, children } = props;
+    const ctx = useFloatingWindowContext();
+    const cls = className ? `${controlButtonStyle} ${className}` : controlButtonStyle;
+
+    return (
+      <button
+        ref={ref}
+        type="button"
+        onClick={ctx.onClose}
+        className={cls}
+        aria-label="Close"
+        data-window-control="close"
+        data-testid="floating-window-closeButton"
+      >
+        {children ?? '\u2715'}
+      </button>
+    );
+  },
+);
+
+// ── Component Props ───────────────────────────────────
+
+/** FloatingWindow bilesen prop'lari. */
 export interface FloatingWindowComponentProps
   extends SlotStyleProps<FloatingWindowSlot>,
     Omit<React.HTMLAttributes<HTMLDivElement>, 'style' | 'title'> {
   /** Root element inline style. */
   style?: CSSProperties;
-  /** Pencere başlığı. */
+  /** Pencere basligi. */
   title?: ReactNode;
-  /** Başlangıç pozisyonu. */
+  /** Baslangic pozisyonu. */
   defaultPosition?: WindowPosition;
-  /** Başlangıç boyutu. */
+  /** Baslangic boyutu. */
   defaultSize?: WindowSize;
   /** Minimum boyut. */
   minSize?: WindowSize;
   /** Maksimum boyut. */
   maxSize?: WindowSize;
-  /** Taşınabilir mi. Varsayılan: true. */
+  /** Tasinabilir mi. Varsayilan: true. */
   draggable?: boolean;
-  /** Boyutlandırılabilir mi. Varsayılan: true. */
+  /** Boyutlandirilabilir mi. Varsayilan: true. */
   resizable?: boolean;
-  /** Minimize butonu göster. Varsayılan: true. */
+  /** Minimize butonu goster. Varsayilan: true. */
   showMinimize?: boolean;
-  /** Maximize butonu göster. Varsayılan: true. */
+  /** Maximize butonu goster. Varsayilan: true. */
   showMaximize?: boolean;
-  /** Close butonu göster. Varsayılan: true. */
+  /** Close butonu goster. Varsayilan: true. */
   showClose?: boolean;
   /** z-index. */
   zIndex?: number;
-  /** Kapatıldığında çağrılır. */
+  /** Kapatildiginda cagrilir. */
   onClose?: () => void;
-  /** Focus aldığında çağrılır. */
+  /** Focus aldiginda cagrilir. */
   onFocus?: () => void;
-  /** Pozisyon değiştiğinde çağrılır. */
+  /** Pozisyon degistiginde cagrilir. */
   onPositionChange?: (position: WindowPosition) => void;
-  /** Boyut değiştiğinde çağrılır. */
+  /** Boyut degistiginde cagrilir. */
   onSizeChange?: (size: WindowSize) => void;
 }
 
-/**
- * FloatingWindow — taşınabilir/boyutlandırılabilir pencere.
- *
- * @example
- * ```tsx
- * <FloatingWindow title="My Window" defaultPosition={{ x: 100, y: 100 }}>
- *   <p>Window content</p>
- * </FloatingWindow>
- * ```
- */
-export const FloatingWindow = forwardRef<HTMLDivElement, FloatingWindowComponentProps>(
+// ── Component ─────────────────────────────────────────
+
+const FloatingWindowBase = forwardRef<HTMLDivElement, FloatingWindowComponentProps>(
   function FloatingWindow(props, ref) {
     const {
       children,
@@ -122,7 +323,6 @@ export const FloatingWindow = forwardRef<HTMLDivElement, FloatingWindowComponent
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     // ── Ref merge ────────────────────────────────────────
-
     const mergedRef = (node: HTMLDivElement | null) => {
       containerRef.current = node;
       if (typeof ref === 'function') ref(node);
@@ -130,7 +330,6 @@ export const FloatingWindow = forwardRef<HTMLDivElement, FloatingWindowComponent
     };
 
     // ── Drag handlers ────────────────────────────────────
-
     const handleTitleBarPointerDown = useCallback((e: React.PointerEvent) => {
       if ((e.target as HTMLElement).closest('[data-window-control]')) return;
       e.preventDefault();
@@ -162,7 +361,6 @@ export const FloatingWindow = forwardRef<HTMLDivElement, FloatingWindowComponent
     }, [api, onPositionChange]);
 
     // ── Window controls ──────────────────────────────────
-
     const handleMinimize = () => {
       api.send({ type: 'MINIMIZE' });
       forceRender();
@@ -184,86 +382,74 @@ export const FloatingWindow = forwardRef<HTMLDivElement, FloatingWindowComponent
     };
 
     // ── State ────────────────────────────────────────────
-
     const position = api.getPosition();
     const size = api.getSize();
     const windowState = api.getState();
     const currentZIndex = api.getZIndex();
 
     // ── Slot props ───────────────────────────────────────
-
-    const rootSlot = getSlotProps(
-      'root',
-      undefined,
-      classNames,
-      slotStyles,
-      {
-        position: 'absolute',
-        left: position.x,
-        top: position.y,
-        width: size.width,
-        height: size.height,
-        zIndex: currentZIndex,
-        display: windowState === 'minimized' ? 'none' : 'flex',
-        flexDirection: 'column' as const,
-        boxShadow: '0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1)',
-        borderRadius: windowState === 'maximized' ? 0 : 8,
-        overflow: 'hidden',
-        background: 'var(--rel-color-bg, #fff)',
-        ...style,
-      },
-    );
-
-    const titleBarSlot = getSlotProps('titleBar', undefined, classNames, slotStyles, {
-      display: 'flex',
-      alignItems: 'center',
-      padding: '8px 12px',
-      background: 'var(--rel-color-bg-subtle, #f8fafc)',
-      borderBottom: '1px solid var(--rel-color-border, #e2e8f0)',
-      cursor: draggable ? 'grab' : 'default',
-      userSelect: 'none',
-      flexShrink: 0,
-    });
-
-    const titleSlot = getSlotProps('title', undefined, classNames, slotStyles, {
-      flex: 1,
-      fontSize: 13,
-      fontWeight: 600,
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap' as const,
-    });
-
-    const controlsSlot = getSlotProps('controls', undefined, classNames, slotStyles, {
-      display: 'flex',
-      gap: 4,
-      marginLeft: 8,
-    });
-
-    const contentSlot = getSlotProps('content', undefined, classNames, slotStyles, {
-      flex: 1,
-      overflow: 'auto',
+    const rootCls = windowState === 'maximized'
+      ? `${rootStyle} ${rootMaximizedStyle}`
+      : rootStyle;
+    const rootSlot = getSlotProps('root', rootCls, classNames, slotStyles, {
+      left: position.x,
+      top: position.y,
+      width: size.width,
+      height: size.height,
+      zIndex: currentZIndex,
+      display: windowState === 'minimized' ? 'none' : undefined,
+      ...style,
     });
 
     const finalClass = [rootSlot.className, className].filter(Boolean).join(' ') || undefined;
 
-    // ── Control button style ─────────────────────────────
+    // ── Check for compound usage ─────────────────────────
+    const hasCompoundChildren = React.Children.toArray(children).some(
+      (child) =>
+        React.isValidElement(child) &&
+        (child.type === FloatingWindowHeader ||
+         child.type === FloatingWindowBody ||
+         child.type === FloatingWindowCloseButton),
+    );
 
-    const controlBtnStyle: CSSProperties = {
-      width: 24,
-      height: 24,
-      border: 'none',
-      borderRadius: 4,
-      background: 'transparent',
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: 14,
-      lineHeight: 1,
-      color: 'var(--rel-color-text-muted, #64748b)',
-      padding: 0,
+    const ctxValue: FloatingWindowContextValue = {
+      api,
+      containerRef: containerRef as React.RefObject<HTMLDivElement | null>,
+      forceRender,
+      draggable,
+      onClose,
+      onPositionChange,
+      onSizeChange,
+      showMinimize,
+      showMaximize,
+      showClose,
+      classNames,
+      styles: slotStyles,
     };
+
+    // ── Compound API ──
+    if (hasCompoundChildren) {
+      return (
+        <FloatingWindowContext.Provider value={ctxValue}>
+          <div
+            ref={mergedRef}
+            {...rest}
+            className={finalClass}
+            style={rootSlot.style}
+            data-window-state={windowState}
+            data-dragging={api.isDragging() || undefined}
+          >
+            {children}
+          </div>
+        </FloatingWindowContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
+    const titleBarSlot = getSlotProps('titleBar', titleBarStyle, classNames, slotStyles);
+    const titleSlotResult = getSlotProps('title', titleStyle, classNames, slotStyles);
+    const ctrlSlot = getSlotProps('controls', controlsStyle, classNames, slotStyles);
+    const contentSlot = getSlotProps('content', contentStyle, classNames, slotStyles);
 
     return (
       <div
@@ -276,25 +462,25 @@ export const FloatingWindow = forwardRef<HTMLDivElement, FloatingWindowComponent
       >
         <div
           className={titleBarSlot.className || undefined}
-          style={titleBarSlot.style}
+          style={{ ...titleBarSlot.style, cursor: draggable ? 'grab' : 'default' }}
           onPointerDown={handleTitleBarPointerDown}
           data-title-bar
         >
           <div
-            className={titleSlot.className || undefined}
-            style={titleSlot.style}
+            className={titleSlotResult.className || undefined}
+            style={titleSlotResult.style}
           >
             {title}
           </div>
           <div
-            className={controlsSlot.className || undefined}
-            style={controlsSlot.style}
+            className={ctrlSlot.className || undefined}
+            style={ctrlSlot.style}
           >
             {showMinimize && (
               <button
                 type="button"
                 onClick={handleMinimize}
-                style={controlBtnStyle}
+                className={controlButtonStyle}
                 aria-label="Minimize"
                 data-window-control="minimize"
               >
@@ -305,7 +491,7 @@ export const FloatingWindow = forwardRef<HTMLDivElement, FloatingWindowComponent
               <button
                 type="button"
                 onClick={handleMaximize}
-                style={controlBtnStyle}
+                className={controlButtonStyle}
                 aria-label={windowState === 'maximized' ? 'Restore' : 'Maximize'}
                 data-window-control="maximize"
               >
@@ -316,7 +502,7 @@ export const FloatingWindow = forwardRef<HTMLDivElement, FloatingWindowComponent
               <button
                 type="button"
                 onClick={onClose}
-                style={controlBtnStyle}
+                className={controlButtonStyle}
                 aria-label="Close"
                 data-window-control="close"
               >
@@ -336,3 +522,27 @@ export const FloatingWindow = forwardRef<HTMLDivElement, FloatingWindowComponent
     );
   },
 );
+
+/**
+ * FloatingWindow bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <FloatingWindow title="My Window" defaultPosition={{ x: 100, y: 100 }}>
+ *   <p>Window content</p>
+ * </FloatingWindow>
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <FloatingWindow>
+ *   <FloatingWindow.Header title="My Window" />
+ *   <FloatingWindow.Body><p>Window content</p></FloatingWindow.Body>
+ * </FloatingWindow>
+ * ```
+ */
+export const FloatingWindow = Object.assign(FloatingWindowBase, {
+  Header: FloatingWindowHeader,
+  Body: FloatingWindowBody,
+  CloseButton: FloatingWindowCloseButton,
+});

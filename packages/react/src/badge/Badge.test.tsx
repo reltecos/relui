@@ -114,4 +114,80 @@ describe('Badge', () => {
     expect(el).toHaveStyle({ margin: '4px' });
     expect(el).toHaveStyle({ padding: '10px' });
   });
+
+  // ── Icon (props-based) ──
+
+  it('icon prop ile ikon render edilir', () => {
+    render(<Badge icon={<span data-testid="my-icon">I</span>}>Test</Badge>);
+
+    expect(screen.getByTestId('my-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('badge-icon')).toBeInTheDocument();
+  });
+
+  it('icon prop olmadan ikon render edilmez', () => {
+    render(<Badge>Test</Badge>);
+
+    expect(screen.queryByTestId('badge-icon')).not.toBeInTheDocument();
+  });
+});
+
+// ── Compound API ──
+
+describe('Badge (Compound)', () => {
+  it('compound: Badge.Icon render edilir', () => {
+    render(
+      <Badge>
+        <Badge.Icon><span data-testid="cmp-icon">I</span></Badge.Icon>
+        Test
+      </Badge>,
+    );
+    expect(screen.getByTestId('cmp-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('badge-icon')).toBeInTheDocument();
+  });
+
+  it('compound: metin icerik dogru render edilir', () => {
+    render(
+      <Badge>
+        <Badge.Icon><span>I</span></Badge.Icon>
+        Aktif
+      </Badge>,
+    );
+    expect(screen.getByText('Aktif')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile Badge.Icon a aktarilir', () => {
+    render(
+      <Badge classNames={{ icon: 'cmp-icon-cls' }}>
+        <Badge.Icon><span>I</span></Badge.Icon>
+        Test
+      </Badge>,
+    );
+    expect(screen.getByTestId('badge-icon').className).toContain('cmp-icon-cls');
+  });
+
+  it('compound: styles context ile Badge.Icon a aktarilir', () => {
+    render(
+      <Badge styles={{ icon: { fontSize: '20px' } }}>
+        <Badge.Icon><span>I</span></Badge.Icon>
+        Test
+      </Badge>,
+    );
+    expect(screen.getByTestId('badge-icon')).toHaveStyle({ fontSize: '20px' });
+  });
+
+  it('compound: root data-testid mevcut', () => {
+    render(
+      <Badge>
+        <Badge.Icon><span>I</span></Badge.Icon>
+        Test
+      </Badge>,
+    );
+    expect(screen.getByTestId('badge-root')).toBeInTheDocument();
+  });
+
+  it('compound: Badge.Icon context disinda hata firlat', () => {
+    expect(() => {
+      render(<Badge.Icon><span>I</span></Badge.Icon>);
+    }).toThrow('Badge compound sub-components must be used within <Badge>.');
+  });
 });

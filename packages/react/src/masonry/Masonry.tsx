@@ -7,57 +7,103 @@
  */
 
 /**
- * Masonry — Pinterest tarzı grid layout bileşeni.
+ * Masonry — Pinterest tarzi grid layout bilesen (Dual API).
  *
- * Item'ları en kısa kolona yerleştirerek masonry layout oluşturur.
- * ResizeObserver ile container genişliğini, MutationObserver ile
- * item yüksekliklerini otomatik takip eder.
+ * Props-based: `<Masonry columns={3}><div>Card 1</div></Masonry>`
+ * Compound:    `<Masonry columns={3}><Masonry.Item>Card 1</Masonry.Item></Masonry>`
+ *
+ * Item lari en kisa kolona yerlestirerek masonry layout olusturur.
+ * ResizeObserver ile container genisligini otomatik takip eder.
  *
  * @packageDocumentation
  */
 
 import React, {
   forwardRef,
+  createContext,
+  useContext,
   useRef,
   useEffect,
   useReducer,
   Children,
   type CSSProperties,
+  type ReactNode,
 } from 'react';
 import { createMasonry } from '@relteco/relui-core';
 import type { MasonryAPI } from '@relteco/relui-core';
-import { getSlotProps, type SlotStyleProps } from '../utils';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils';
 
 /** Masonry slot isimleri. */
 export type MasonrySlot = 'root' | 'item';
 
-/** Masonry bileşen prop'ları. */
+// ── Context (Compound API) ──────────────────────────
+
+interface MasonryContextValue {
+  classNames: ClassNames<MasonrySlot> | undefined;
+  styles: Styles<MasonrySlot> | undefined;
+}
+
+const MasonryContext = createContext<MasonryContextValue | null>(null);
+
+function useMasonryContext(): MasonryContextValue {
+  const ctx = useContext(MasonryContext);
+  if (!ctx) throw new Error('Masonry compound sub-components must be used within <Masonry>.');
+  return ctx;
+}
+
+// ── Compound: Masonry.Item ──────────────────────────
+
+/** Masonry.Item props */
+export interface MasonryItemProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Inline style / Inline style */
+  style?: CSSProperties;
+}
+
+const MasonryItem = forwardRef<HTMLDivElement, MasonryItemProps>(
+  function MasonryItem(props, ref) {
+    const { children, className, style: styleProp } = props;
+    const ctx = useMasonryContext();
+    const slot = getSlotProps('item', undefined, ctx.classNames, ctx.styles);
+    const cls = className
+      ? [slot.className, className].filter(Boolean).join(' ')
+      : slot.className || undefined;
+
+    return (
+      <div
+        ref={ref}
+        className={cls || undefined}
+        style={{ ...slot.style, ...styleProp }}
+        data-testid="masonry-item"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Component Props ──────────────────────────────────
+
+/** Masonry bilesen props. */
 export interface MasonryComponentProps
   extends SlotStyleProps<MasonrySlot>,
     Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   /** Root element inline style. */
   style?: CSSProperties;
-  /** Kolon sayısı. Varsayılan: 3. */
+  /** Kolon sayisi. Varsayilan: 3. */
   columns?: number;
-  /** Kolon arası boşluk (px). Varsayılan: 16. */
+  /** Kolon arasi bosluk (px). Varsayilan: 16. */
   gap?: number;
-  /** Satır arası boşluk (px). Belirlenmezse gap kullanılır. */
+  /** Satir arasi bosluk (px). Belirlenmezse gap kullanilir. */
   rowGap?: number;
 }
 
-/**
- * Masonry — Pinterest tarzı grid layout.
- *
- * @example
- * ```tsx
- * <Masonry columns={3} gap={16}>
- *   <div>Card 1</div>
- *   <div>Card 2</div>
- *   <div>Card 3</div>
- * </Masonry>
- * ```
- */
-export const Masonry = forwardRef<HTMLDivElement, MasonryComponentProps>(
+// ── Component ─────────────────────────────────────────
+
+const MasonryBase = forwardRef<HTMLDivElement, MasonryComponentProps>(
   function Masonry(props, ref) {
     const {
       children,
@@ -111,7 +157,7 @@ export const Masonry = forwardRef<HTMLDivElement, MasonryComponentProps>(
         const containerWidth = container.clientWidth;
         api.send({ type: 'SET_CONTAINER_WIDTH', value: containerWidth });
 
-        // Item yüksekliklerini oku
+        // Item yuksekliklerini oku
         const heights = itemRefs.current
           .filter((el): el is HTMLDivElement => el !== null)
           .map((el) => el.offsetHeight);
@@ -128,7 +174,7 @@ export const Masonry = forwardRef<HTMLDivElement, MasonryComponentProps>(
       return () => ro.disconnect();
     }, [api, Children.count(children)]);
 
-    // ── Pozisyonları hesapla ─────────────────────────────
+    // ── Pozisyonlari hesapla ─────────────────────────────
 
     const positions = api.getPositions();
     const totalHeight = api.getTotalHeight();
@@ -147,39 +193,66 @@ export const Masonry = forwardRef<HTMLDivElement, MasonryComponentProps>(
 
     const childArray = Children.toArray(children);
 
+    const ctxValue: MasonryContextValue = { classNames, styles };
+
     return (
-      <div
-        ref={mergedRef}
-        {...rest}
-        className={finalClass}
-        style={{ ...rootSlot.style, height: totalHeight > 0 ? totalHeight : undefined }}
-      >
-        {childArray.map((child, i) => {
-          const pos = positions[i];
-          const itemSlot = getSlotProps('item', undefined, classNames, styles);
+      <MasonryContext.Provider value={ctxValue}>
+        <div
+          ref={mergedRef}
+          {...rest}
+          className={finalClass}
+          style={{ ...rootSlot.style, height: totalHeight > 0 ? totalHeight : undefined }}
+        >
+          {childArray.map((child, i) => {
+            const pos = positions[i];
+            const itemSlot = getSlotProps('item', undefined, classNames, styles);
 
-          const itemStyle: CSSProperties = pos
-            ? {
-                position: 'absolute',
-                top: pos.top,
-                left: pos.left,
-                width: pos.width,
-              }
-            : { visibility: 'hidden' as const };
+            const itemStyle: CSSProperties = pos
+              ? {
+                  position: 'absolute',
+                  top: pos.top,
+                  left: pos.left,
+                  width: pos.width,
+                }
+              : { visibility: 'hidden' as const };
 
-          return (
-            <div
-              key={i}
-              ref={(el) => { itemRefs.current[i] = el; }}
-              className={itemSlot.className || undefined}
-              style={{ ...itemSlot.style, ...itemStyle }}
-              data-masonry-column={pos?.column}
-            >
-              {child}
-            </div>
-          );
-        })}
-      </div>
+            return (
+              <div
+                key={i}
+                ref={(el) => { itemRefs.current[i] = el; }}
+                className={itemSlot.className || undefined}
+                style={{ ...itemSlot.style, ...itemStyle }}
+                data-masonry-column={pos?.column}
+              >
+                {child}
+              </div>
+            );
+          })}
+        </div>
+      </MasonryContext.Provider>
     );
   },
 );
+
+/**
+ * Masonry bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Masonry columns={3} gap={16}>
+ *   <div>Card 1</div>
+ *   <div>Card 2</div>
+ * </Masonry>
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Masonry columns={3} gap={16}>
+ *   <Masonry.Item>Card 1</Masonry.Item>
+ *   <Masonry.Item>Card 2</Masonry.Item>
+ * </Masonry>
+ * ```
+ */
+export const Masonry = Object.assign(MasonryBase, {
+  Item: MasonryItem,
+});

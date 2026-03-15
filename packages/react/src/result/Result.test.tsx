@@ -232,3 +232,105 @@ describe('Result', () => {
     expect(screen.getByTestId('jsx-title')).toBeInTheDocument();
   });
 });
+
+// ── Compound API ──
+
+describe('Result (Compound)', () => {
+  it('compound: icon render edilir', () => {
+    render(
+      <Result status="success">
+        <Result.Icon><span data-testid="cmp-icon">OK</span></Result.Icon>
+        <Result.Title>Basarili</Result.Title>
+      </Result>,
+    );
+    expect(screen.getByTestId('result-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('cmp-icon')).toBeInTheDocument();
+  });
+
+  it('compound: title render edilir', () => {
+    render(
+      <Result>
+        <Result.Title>Islem tamamlandi</Result.Title>
+      </Result>,
+    );
+    expect(screen.getByTestId('result-title')).toHaveTextContent('Islem tamamlandi');
+  });
+
+  it('compound: title h2 elementi olarak render eder', () => {
+    render(
+      <Result>
+        <Result.Title>Basarili</Result.Title>
+      </Result>,
+    );
+    expect(screen.getByTestId('result-title').tagName).toBe('H2');
+  });
+
+  it('compound: description render edilir', () => {
+    render(
+      <Result>
+        <Result.Title>Basarili</Result.Title>
+        <Result.Description>Siparisiniz onaylandi.</Result.Description>
+      </Result>,
+    );
+    expect(screen.getByTestId('result-subtitle')).toHaveTextContent('Siparisiniz onaylandi.');
+  });
+
+  it('compound: extra render edilir', () => {
+    render(
+      <Result>
+        <Result.Title>Basarili</Result.Title>
+        <Result.Extra><span data-testid="cmp-extra">Detay</span></Result.Extra>
+      </Result>,
+    );
+    expect(screen.getByTestId('result-extra')).toBeInTheDocument();
+    expect(screen.getByTestId('cmp-extra')).toBeInTheDocument();
+  });
+
+  it('compound: tum sub-component lar birlikte render edilir', () => {
+    render(
+      <Result status="error">
+        <Result.Icon><span>X</span></Result.Icon>
+        <Result.Title>Hata</Result.Title>
+        <Result.Description>Aciklama</Result.Description>
+        <Result.Extra><span>Ek bilgi</span></Result.Extra>
+      </Result>,
+    );
+    expect(screen.getByTestId('result-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('result-title')).toBeInTheDocument();
+    expect(screen.getByTestId('result-subtitle')).toBeInTheDocument();
+    expect(screen.getByTestId('result-extra')).toBeInTheDocument();
+  });
+
+  it('compound: status context ile aktarilir', () => {
+    render(
+      <Result status="error">
+        <Result.Title>Hata</Result.Title>
+      </Result>,
+    );
+    expect(screen.getByTestId('result')).toHaveAttribute('data-status', 'error');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Result classNames={{ title: 'cmp-title' }}>
+        <Result.Title>Basarili</Result.Title>
+      </Result>,
+    );
+    expect(screen.getByTestId('result-title').className).toContain('cmp-title');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <Result styles={{ title: { fontSize: '32px' } }}>
+        <Result.Title>Basarili</Result.Title>
+      </Result>,
+    );
+    expect(screen.getByTestId('result-title')).toHaveStyle({ fontSize: '32px' });
+  });
+
+  it('compound: context disinda kullanim hata firlat', () => {
+    expect(() => render(<Result.Title>Baslik</Result.Title>)).toThrow(
+      'Result compound sub-components must be used within <Result>.',
+    );
+  });
+});

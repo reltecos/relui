@@ -246,6 +246,22 @@ export const CustomSlotStyles: Story = {
   ),
 };
 
+// ── Compound ───────────────────────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <Pagination totalItems={50} pageSize={10}>
+      <Pagination.PrevButton>Geri</Pagination.PrevButton>
+      <Pagination.PageButton page={1} />
+      <Pagination.PageButton page={2} />
+      <Pagination.PageButton page={3} />
+      <Pagination.PageButton page={4} />
+      <Pagination.PageButton page={5} />
+      <Pagination.NextButton>Ileri</Pagination.NextButton>
+    </Pagination>
+  ),
+};
+
 // ── Playground ──────────────────────────────────────────────────────
 
 export const Playground: Story = {

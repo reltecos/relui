@@ -10,6 +10,9 @@ export {
   Cascader,
   type CascaderComponentProps,
   type CascaderSlot,
+  type CascaderTriggerProps,
+  type CascaderPanelProps,
+  type CascaderColumnProps,
 } from './Cascader';
 export {
   useCascader,

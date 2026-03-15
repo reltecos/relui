@@ -6,5 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { TagInput, type TagInputComponentProps, type TagInputSlot } from './TagInput';
+export {
+  TagInput,
+  type TagInputComponentProps,
+  type TagInputSlot,
+  type TagInputTagProps,
+  type TagInputInputProps,
+} from './TagInput';
 export { useTagInput, type UseTagInputProps, type UseTagInputReturn } from './useTagInput';

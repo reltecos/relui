@@ -80,3 +80,18 @@ export const Playground: Story = {
     thickness: 3,
   },
 };
+
+// ── Compound ──
+
+export const Compound: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+      <Spinner size="md">
+        <Spinner.Label>Yukleniyor...</Spinner.Label>
+      </Spinner>
+      <Spinner size="lg" color="#22c55e">
+        <Spinner.Label>Kaydediliyor...</Spinner.Label>
+      </Spinner>
+    </div>
+  ),
+};

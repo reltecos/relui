@@ -336,3 +336,48 @@ describe('RadialMenu slot API', () => {
     expect(overlay.style.opacity).toBe('0.8');
   });
 });
+
+// ── Compound API ──────────────────────────────────────────────
+
+describe('RadialMenu (Compound)', () => {
+  it('compound: Center sub-component render edilir', () => {
+    render(
+      <OpenRadialMenu items={basicItems}>
+        <RadialMenu.Center>
+          <span data-testid="custom-center">X</span>
+        </RadialMenu.Center>
+      </OpenRadialMenu>,
+    );
+    expect(screen.getByTestId('radial-center')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-center')).toBeInTheDocument();
+  });
+
+  it('compound: Center children olmadan varsayilan render edilir', () => {
+    render(<OpenRadialMenu items={basicItems} />);
+    expect(screen.getByTestId('radial-center')).toBeInTheDocument();
+  });
+
+  it('compound: Item sub-component render edilir', () => {
+    render(<OpenRadialMenu items={basicItems} />);
+    expect(screen.getByText('Kes')).toBeInTheDocument();
+    expect(screen.getByText('Kopyala')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile Center a aktarilir', () => {
+    render(
+      <OpenRadialMenu items={basicItems} classNames={{ center: 'cmp-center' }}>
+        <RadialMenu.Center />
+      </OpenRadialMenu>,
+    );
+    expect(screen.getByTestId('radial-center').className).toContain('cmp-center');
+  });
+
+  it('compound: styles context ile Center a aktarilir', () => {
+    render(
+      <OpenRadialMenu items={basicItems} styles={{ center: { letterSpacing: '3px' } }}>
+        <RadialMenu.Center />
+      </OpenRadialMenu>,
+    );
+    expect(screen.getByTestId('radial-center')).toHaveStyle({ letterSpacing: '3px' });
+  });
+});

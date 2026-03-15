@@ -6,4 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Masonry, type MasonryComponentProps, type MasonrySlot } from './Masonry';
+export {
+  Masonry,
+  type MasonryComponentProps,
+  type MasonrySlot,
+  type MasonryItemProps,
+} from './Masonry';

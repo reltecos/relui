@@ -13,6 +13,7 @@ import { BookLayout } from './BookLayout';
 const meta: Meta<typeof BookLayout> = {
   title: 'Window Manager/BookLayout',
   component: BookLayout,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -147,5 +148,18 @@ export const CustomSlotStyles: Story = {
         </div>
       )}
     />
+  ),
+};
+
+export const Compound: Story = {
+  render: () => (
+    <BookLayout totalPages={5}>
+      <BookLayout.Page>
+        <div style={pageStyle(pageColors[0] ?? '#f1f5f9')}>
+          Compound API ile Sayfa 1
+        </div>
+      </BookLayout.Page>
+      <BookLayout.Navigation />
+    </BookLayout>
   ),
 };

@@ -14,6 +14,7 @@ import { Label } from './Label';
 const meta: Meta<typeof Label> = {
   title: 'Form/Label',
   component: Label,
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
@@ -69,6 +70,48 @@ export const WithHtmlFor: Story = {
         Kullanıcı adı
       </Label>
       <input id="demo-input" type="text" placeholder="Adınızı girin" />
+    </div>
+  ),
+};
+
+// ── Compound ──
+
+export const Compound: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <Label htmlFor="email-compound">
+        <Label.Text>E-posta adresi</Label.Text>
+        <Label.RequiredIndicator />
+      </Label>
+      <input id="email-compound" type="email" placeholder="ornek@mail.com" />
+    </div>
+  ),
+};
+
+export const CompoundCustomIndicator: Story = {
+  name: 'Compound - Ozel Gosterge',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <Label htmlFor="name-compound">
+        <Label.Text>Ad Soyad</Label.Text>
+        <Label.RequiredIndicator> (zorunlu)</Label.RequiredIndicator>
+      </Label>
+      <input id="name-compound" type="text" placeholder="Adinizi girin" />
+    </div>
+  ),
+};
+
+export const CustomSlotStyles: Story = {
+  name: 'Slot Customization',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <Label
+        required
+        classNames={{ root: 'my-label' }}
+        styles={{ requiredIndicator: { color: 'orange', fontSize: '1.2em' } }}
+      >
+        Ozel stil
+      </Label>
     </div>
   ),
 };

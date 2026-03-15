@@ -171,3 +171,61 @@ describe('Resizable', () => {
     });
   });
 });
+
+// ── Compound API ──────────────────────────────────────
+
+describe('Resizable (Compound)', () => {
+  it('compound: Handle sub-component render edilir', () => {
+    render(
+      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]}>
+        <div>Content</div>
+        <Resizable.Handle direction="right" />
+      </Resizable>,
+    );
+    expect(screen.getByTestId('resizable-handle-right')).toBeInTheDocument();
+  });
+
+  it('compound: Handle data-direction attribute set edilir', () => {
+    render(
+      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]}>
+        <div>Content</div>
+        <Resizable.Handle direction="bottom" />
+      </Resizable>,
+    );
+    expect(screen.getByTestId('resizable-handle-bottom')).toHaveAttribute('data-direction', 'bottom');
+  });
+
+  it('compound: Handle aria-hidden="true" tasir', () => {
+    render(
+      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]}>
+        <div>Content</div>
+        <Resizable.Handle direction="right" />
+      </Resizable>,
+    );
+    expect(screen.getByTestId('resizable-handle-right')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('compound: classNames context ile Handle a aktarilir', () => {
+    render(
+      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]} classNames={{ handle: 'cmp-handle' }}>
+        <div>Content</div>
+        <Resizable.Handle direction="right" />
+      </Resizable>,
+    );
+    expect(screen.getByTestId('resizable-handle-right').className).toContain('cmp-handle');
+  });
+
+  it('compound: birden fazla Handle render edilir', () => {
+    render(
+      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]}>
+        <div>Content</div>
+        <Resizable.Handle direction="right" />
+        <Resizable.Handle direction="bottom" />
+        <Resizable.Handle direction="bottomRight" />
+      </Resizable>,
+    );
+    expect(screen.getByTestId('resizable-handle-right')).toBeInTheDocument();
+    expect(screen.getByTestId('resizable-handle-bottom')).toBeInTheDocument();
+    expect(screen.getByTestId('resizable-handle-bottomRight')).toBeInTheDocument();
+  });
+});

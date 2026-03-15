@@ -6,5 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Switch, type SwitchComponentProps, type SwitchSlot } from './Switch';
+export {
+  Switch,
+  type SwitchComponentProps,
+  type SwitchSlot,
+  type SwitchTrackProps,
+  type SwitchThumbProps,
+  type SwitchLabelProps,
+} from './Switch';
 export { useSwitch, type UseSwitchProps, type UseSwitchReturn } from './useSwitch';

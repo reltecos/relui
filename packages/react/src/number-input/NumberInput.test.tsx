@@ -333,3 +333,51 @@ describe('NumberInput', () => {
     });
   });
 });
+
+// ── Compound API ──
+
+describe('NumberInput (Compound)', () => {
+  it('compound: Field render edilir', () => {
+    render(
+      <NumberInput aria-label="Sayi" value={42}>
+        <NumberInput.Field placeholder="Sayi girin" />
+      </NumberInput>,
+    );
+    expect(screen.getByTestId('numberinput-field')).toBeInTheDocument();
+  });
+
+  it('compound: IncrementButton render edilir', () => {
+    render(
+      <NumberInput aria-label="Sayi">
+        <NumberInput.Field />
+        <NumberInput.IncrementButton />
+      </NumberInput>,
+    );
+    expect(screen.getByTestId('numberinput-increment')).toBeInTheDocument();
+  });
+
+  it('compound: DecrementButton render edilir', () => {
+    render(
+      <NumberInput aria-label="Sayi">
+        <NumberInput.Field />
+        <NumberInput.DecrementButton />
+      </NumberInput>,
+    );
+    expect(screen.getByTestId('numberinput-decrement')).toBeInTheDocument();
+  });
+
+  it('compound: root data-testid eklenir', () => {
+    render(
+      <NumberInput aria-label="Sayi">
+        <NumberInput.Field />
+      </NumberInput>,
+    );
+    expect(screen.getByTestId('numberinput-root')).toBeInTheDocument();
+  });
+
+  it('compound: context disinda kullanim hata firlatir', () => {
+    expect(() => {
+      render(<NumberInput.Field />);
+    }).toThrow('NumberInput compound sub-components must be used within <NumberInput>.');
+  });
+});

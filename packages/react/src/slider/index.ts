@@ -6,5 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Slider, type SliderComponentProps, type SliderSlot } from './Slider';
+export {
+  Slider,
+  type SliderComponentProps,
+  type SliderSlot,
+  type SliderTrackProps,
+  type SliderThumbProps,
+  type SliderLabelProps,
+} from './Slider';
 export { useSlider, type UseSliderProps, type UseSliderReturn } from './useSlider';

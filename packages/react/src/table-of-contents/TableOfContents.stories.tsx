@@ -155,6 +155,56 @@ export const CustomSlotStyles: Story = {
   },
 };
 
+// ── Compound ──────────────────────────────────────────
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <TableOfContents items={demoItems} activeId="usage">
+      <TableOfContents.Item>
+        <TableOfContents.Link href="intro" depth={0}>Introduction</TableOfContents.Link>
+      </TableOfContents.Item>
+      <TableOfContents.Item>
+        <TableOfContents.Link href="getting-started" depth={0}>Getting Started</TableOfContents.Link>
+      </TableOfContents.Item>
+      <TableOfContents.Item>
+        <TableOfContents.Link href="installation" depth={1}>Installation</TableOfContents.Link>
+      </TableOfContents.Item>
+      <TableOfContents.Item>
+        <TableOfContents.Link href="usage" depth={0}>Usage</TableOfContents.Link>
+      </TableOfContents.Item>
+      <TableOfContents.Item>
+        <TableOfContents.Link href="api" depth={0}>API Reference</TableOfContents.Link>
+      </TableOfContents.Item>
+    </TableOfContents>
+  ),
+};
+
+export const CompoundCustomSlotStyles: Story = {
+  name: 'Compound + Custom Slot Styles',
+  render: () => (
+    <TableOfContents
+      items={demoItems}
+      activeId="api"
+      styles={{
+        root: {
+          backgroundColor: '#1a1a2e',
+          padding: '12px',
+          borderRadius: '8px',
+          borderLeft: '2px solid #334155',
+        },
+      }}
+    >
+      <TableOfContents.Item>
+        <TableOfContents.Link href="intro" depth={0}>Introduction</TableOfContents.Link>
+      </TableOfContents.Item>
+      <TableOfContents.Item>
+        <TableOfContents.Link href="api" depth={0}>API Reference</TableOfContents.Link>
+      </TableOfContents.Item>
+    </TableOfContents>
+  ),
+};
+
 // ── Playground ──────────────────────────────────────────
 
 export const Playground: Story = {

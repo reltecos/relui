@@ -451,3 +451,74 @@ describe('Tabs', () => {
     expect(root?.className).toContain('extra-class');
   });
 });
+
+// ── Compound API ──
+
+describe('Tabs (Compound)', () => {
+  it('compound: list render edilir', () => {
+    render(
+      <Tabs items={defaultItems} defaultValue="home">
+        <Tabs.List aria-label="Nav">
+          <Tabs.Tab value="home">Ana Sayfa</Tabs.Tab>
+          <Tabs.Tab value="profile">Profil</Tabs.Tab>
+          <Tabs.Tab value="settings">Ayarlar</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="home">Home content</Tabs.Panel>
+        <Tabs.Panel value="profile">Profile content</Tabs.Panel>
+        <Tabs.Panel value="settings">Settings content</Tabs.Panel>
+      </Tabs>,
+    );
+    expect(screen.getByTestId('tabs-list')).toBeInTheDocument();
+    expect(screen.getAllByTestId('tabs-tab')).toHaveLength(3);
+  });
+
+  it('compound: tab tiklaninca secilir', () => {
+    const onValueChange = vi.fn();
+    render(
+      <Tabs items={defaultItems} defaultValue="home" onValueChange={onValueChange}>
+        <Tabs.List aria-label="Nav">
+          <Tabs.Tab value="home">Ana Sayfa</Tabs.Tab>
+          <Tabs.Tab value="profile">Profil</Tabs.Tab>
+        </Tabs.List>
+      </Tabs>,
+    );
+    fireEvent.click(screen.getByText('Profil'));
+    expect(onValueChange).toHaveBeenCalledWith('profile');
+  });
+
+  it('compound: panel render edilir', () => {
+    render(
+      <Tabs items={defaultItems} defaultValue="home">
+        <Tabs.List aria-label="Nav">
+          <Tabs.Tab value="home">Ana Sayfa</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="home">Home icerik</Tabs.Panel>
+        <Tabs.Panel value="profile">Profile icerik</Tabs.Panel>
+      </Tabs>,
+    );
+    expect(screen.getByText('Home icerik')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Tabs items={defaultItems} defaultValue="home" classNames={{ tab: 'cmp-tab' }}>
+        <Tabs.List aria-label="Nav">
+          <Tabs.Tab value="home">Ana Sayfa</Tabs.Tab>
+        </Tabs.List>
+      </Tabs>,
+    );
+    expect(screen.getByTestId('tabs-tab').className).toContain('cmp-tab');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <Tabs items={defaultItems} defaultValue="home" styles={{ panel: { padding: '50px' } }}>
+        <Tabs.List aria-label="Nav">
+          <Tabs.Tab value="home">Ana Sayfa</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="home">Icerik</Tabs.Panel>
+      </Tabs>,
+    );
+    expect(screen.getByTestId('tabs-panel')).toHaveStyle({ padding: '50px' });
+  });
+});

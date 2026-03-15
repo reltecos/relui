@@ -13,6 +13,7 @@ import { SegmentedControl } from './SegmentedControl';
 const meta: Meta<typeof SegmentedControl> = {
   title: 'Components/SegmentedControl',
   component: SegmentedControl,
+  tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
     size: {
@@ -154,6 +155,35 @@ export const ManyOptions: Story = {
     defaultValue: 'mon',
     'aria-label': 'Gün',
   },
+};
+
+// ── Compound API ────────────────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <SegmentedControl options={viewOptions} defaultValue="list" aria-label="Gorunum">
+      <SegmentedControl.Option value="list">Liste</SegmentedControl.Option>
+      <SegmentedControl.Option value="grid">Izgara</SegmentedControl.Option>
+      <SegmentedControl.Option value="kanban">Kanban</SegmentedControl.Option>
+    </SegmentedControl>
+  ),
+};
+
+// ── Compound + CustomSlotStyles ─────────────────────────────────
+
+export const CompoundCustomSlotStyles: Story = {
+  render: () => (
+    <SegmentedControl
+      options={viewOptions}
+      defaultValue="list"
+      aria-label="Gorunum"
+      styles={{ item: { fontWeight: 'bold', letterSpacing: '0.5px' } }}
+    >
+      <SegmentedControl.Option value="list">Liste</SegmentedControl.Option>
+      <SegmentedControl.Option value="grid">Izgara</SegmentedControl.Option>
+      <SegmentedControl.Option value="kanban">Kanban</SegmentedControl.Option>
+    </SegmentedControl>
+  ),
 };
 
 // ── Playground ────────────────────────────────────────────────────

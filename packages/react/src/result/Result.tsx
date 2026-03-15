@@ -7,15 +7,18 @@
  */
 
 /**
- * Result — sonuc sayfasi bilesen.
- * Result — result page component.
+ * Result — sonuc sayfasi bilesen (Dual API).
+ * Result — result page component (Dual API).
+ *
+ * Props-based: `<Result status="success" title="Odeme basarili!" />`
+ * Compound:    `<Result><Result.Icon>...</Result.Icon><Result.Title>...</Result.Title></Result>`
  *
  * Basari, hata, uyari, bilgi, 404 durumlari icin.
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import {
   resultRootRecipe,
   resultIconRecipe,
@@ -24,7 +27,7 @@ import {
   resultExtraStyle,
   resultActionStyle,
 } from './result.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 import {
   CheckCircleIcon,
   XCircleIcon,
@@ -48,13 +51,130 @@ export type ResultStatus = 'success' | 'error' | 'warning' | 'info' | '404';
 /** Result boyutu / Result size. */
 export type ResultSize = 'sm' | 'md' | 'lg';
 
+// ── Context (Compound API) ──────────────────────────
+
+interface ResultContextValue {
+  status: ResultStatus;
+  size: ResultSize;
+  classNames: ClassNames<ResultSlot> | undefined;
+  styles: Styles<ResultSlot> | undefined;
+}
+
+const ResultContext = createContext<ResultContextValue | null>(null);
+
+function useResultContext(): ResultContextValue {
+  const ctx = useContext(ResultContext);
+  if (!ctx) throw new Error('Result compound sub-components must be used within <Result>.');
+  return ctx;
+}
+
+// ── Compound: Result.Icon ────────────────────────────
+
+/** Result.Icon props */
+export interface ResultIconProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ResultIcon = forwardRef<HTMLDivElement, ResultIconProps>(
+  function ResultIcon(props, ref) {
+    const { children, className } = props;
+    const ctx = useResultContext();
+    const slot = getSlotProps('icon', resultIconRecipe({ size: ctx.size, status: ctx.status }), ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="result-icon">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Result.Title ───────────────────────────
+
+/** Result.Title props */
+export interface ResultTitleProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ResultTitle = forwardRef<HTMLHeadingElement, ResultTitleProps>(
+  function ResultTitle(props, ref) {
+    const { children, className } = props;
+    const ctx = useResultContext();
+    const slot = getSlotProps('title', resultTitleRecipe({ size: ctx.size }), ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <h2 ref={ref} className={cls} style={slot.style} data-testid="result-title">
+        {children}
+      </h2>
+    );
+  },
+);
+
+// ── Compound: Result.Description ─────────────────────
+
+/** Result.Description props */
+export interface ResultDescriptionProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ResultDescription = forwardRef<HTMLParagraphElement, ResultDescriptionProps>(
+  function ResultDescription(props, ref) {
+    const { children, className } = props;
+    const ctx = useResultContext();
+    const slot = getSlotProps('subtitle', resultSubtitleRecipe({ size: ctx.size }), ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <p ref={ref} className={cls} style={slot.style} data-testid="result-subtitle">
+        {children}
+      </p>
+    );
+  },
+);
+
+// ── Compound: Result.Extra ───────────────────────────
+
+/** Result.Extra props */
+export interface ResultExtraProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ResultExtra = forwardRef<HTMLDivElement, ResultExtraProps>(
+  function ResultExtra(props, ref) {
+    const { children, className } = props;
+    const ctx = useResultContext();
+    const slot = getSlotProps('extra', resultExtraStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="result-extra">
+        {children}
+      </div>
+    );
+  },
+);
+
 // ── Component Props ───────────────────────────────────
 
 export interface ResultComponentProps extends SlotStyleProps<ResultSlot> {
   /** Durum / Status */
   status?: ResultStatus;
   /** Baslik / Title */
-  title: ReactNode;
+  title?: ReactNode;
   /** Alt baslik / Subtitle */
   subtitle?: ReactNode;
   /** Ozel ikon / Custom icon */
@@ -65,6 +185,8 @@ export interface ResultComponentProps extends SlotStyleProps<ResultSlot> {
   action?: ReactNode;
   /** Boyut / Size */
   size?: ResultSize;
+  /** Compound API children */
+  children?: ReactNode;
   /** Ek className / Additional className */
   className?: string;
   /** Inline style / Inline style */
@@ -85,17 +207,7 @@ const defaultIcons: Record<ResultStatus, typeof InfoCircleIcon> = {
 
 // ── Component ─────────────────────────────────────────
 
-/**
- * Result bilesen — sonuc sayfasi.
- * Result component — result page.
- *
- * @example
- * ```tsx
- * <Result status="success" title="Odeme basarili!" subtitle="Siparisiniz onaylandi." />
- * <Result status="404" title="Sayfa bulunamadi" action={<Button>Ana Sayfaya Don</Button>} />
- * ```
- */
-export const Result = forwardRef<HTMLDivElement, ResultComponentProps>(
+const ResultBase = forwardRef<HTMLDivElement, ResultComponentProps>(
   function Result(props, ref) {
     const {
       status = 'info',
@@ -105,6 +217,7 @@ export const Result = forwardRef<HTMLDivElement, ResultComponentProps>(
       extra,
       action,
       size = 'md',
+      children,
       className,
       style: styleProp,
       classNames,
@@ -122,6 +235,27 @@ export const Result = forwardRef<HTMLDivElement, ResultComponentProps>(
       ? { ...rootSlot.style, ...styleProp }
       : rootSlot.style;
 
+    const ctxValue: ResultContextValue = { status, size, classNames, styles };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <ResultContext.Provider value={ctxValue}>
+          <div
+            ref={ref}
+            className={combinedRootClassName}
+            style={combinedRootStyle}
+            id={id}
+            data-testid="result"
+            data-status={status}
+          >
+            {children}
+          </div>
+        </ResultContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const iconSlot = getSlotProps('icon', resultIconRecipe({ size, status }), classNames, styles);
     const titleSlot = getSlotProps('title', resultTitleRecipe({ size }), classNames, styles);
     const subtitleSlot = getSlotProps('subtitle', resultSubtitleRecipe({ size }), classNames, styles);
@@ -147,9 +281,11 @@ export const Result = forwardRef<HTMLDivElement, ResultComponentProps>(
           </div>
         )}
 
-        <h2 className={titleSlot.className} style={titleSlot.style} data-testid="result-title">
-          {title}
-        </h2>
+        {title && (
+          <h2 className={titleSlot.className} style={titleSlot.style} data-testid="result-title">
+            {title}
+          </h2>
+        )}
 
         {subtitle && (
           <p className={subtitleSlot.className} style={subtitleSlot.style} data-testid="result-subtitle">
@@ -172,3 +308,28 @@ export const Result = forwardRef<HTMLDivElement, ResultComponentProps>(
     );
   },
 );
+
+/**
+ * Result bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Result status="success" title="Odeme basarili!" subtitle="Siparisiniz onaylandi." />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Result status="error">
+ *   <Result.Icon><XCircleIcon /></Result.Icon>
+ *   <Result.Title>Islem basarisiz</Result.Title>
+ *   <Result.Description>Bir sorun olustu.</Result.Description>
+ *   <Result.Extra>Detaylar...</Result.Extra>
+ * </Result>
+ * ```
+ */
+export const Result = Object.assign(ResultBase, {
+  Icon: ResultIcon,
+  Title: ResultTitle,
+  Description: ResultDescription,
+  Extra: ResultExtra,
+});

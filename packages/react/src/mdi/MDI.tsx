@@ -7,15 +7,18 @@
  */
 
 /**
- * MDI (Multiple Document Interface) — iç içe pencere yönetimi bileşeni.
+ * MDI (Multiple Document Interface) — ic ice pencere yonetimi bilesen (Dual API).
  *
- * Çoklu pencere, cascade/tile düzenleme, z-ordering, minimize/maximize.
+ * Props-based: `<MDI windows={[...]} renderWindow={...} />`
+ * Compound:    `<MDI><MDI.Window id="doc1" title="Doc 1">...</MDI.Window><MDI.Toolbar /></MDI>`
  *
  * @packageDocumentation
  */
 
 import React, {
   forwardRef,
+  createContext,
+  useContext,
   useRef,
   useReducer,
   useEffect,
@@ -25,47 +28,139 @@ import React, {
 } from 'react';
 import { createMDI } from '@relteco/relui-core';
 import type { MDIAPI, MDIWindowConfig } from '@relteco/relui-core';
-import { getSlotProps, type SlotStyleProps } from '../utils';
+import {
+  rootStyle,
+  windowStyle,
+  windowMaximizedStyle,
+  titleBarStyle,
+  titleBarActiveStyle,
+  titleBarInactiveStyle,
+  titleStyle,
+  controlsStyle,
+  controlButtonStyle,
+  contentStyle,
+  taskbarStyle,
+  taskbarItemStyle,
+} from './mdi.css';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** MDI slot isimleri. */
 export type MDISlot = 'root' | 'window' | 'titleBar' | 'title' | 'controls' | 'content' | 'taskbar' | 'taskbarItem';
 
-/** MDI bileşen prop'ları. */
+// ── Context (Compound API) ──────────────────────────
+
+interface MDIContextValue {
+  classNames: ClassNames<MDISlot> | undefined;
+  styles: Styles<MDISlot> | undefined;
+}
+
+const MDIContext = createContext<MDIContextValue | null>(null);
+
+function useMDIContext(): MDIContextValue {
+  const ctx = useContext(MDIContext);
+  if (!ctx) throw new Error('MDI compound sub-components must be used within <MDI>.');
+  return ctx;
+}
+
+// ── Compound: MDI.Window ────────────────────────────
+
+/** MDI.Window props */
+export interface MDIWindowProps {
+  /** Pencere ID */
+  id: string;
+  /** Pencere basligi / Window title */
+  title: string;
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MDIWindow = forwardRef<HTMLDivElement, MDIWindowProps>(
+  function MDIWindow(props, ref) {
+    const { id, title, children, className } = props;
+    const ctx = useMDIContext();
+    const slot = getSlotProps('window', windowStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-mdi-window={id}
+        data-testid="mdi-window"
+      >
+        <div className={`${titleBarStyle} ${titleBarInactiveStyle}`} data-mdi-title-bar>
+          <div className={titleStyle}>{title}</div>
+        </div>
+        <div className={contentStyle} data-mdi-content>
+          {children}
+        </div>
+      </div>
+    );
+  },
+);
+
+// ── Compound: MDI.Toolbar ───────────────────────────
+
+/** MDI.Toolbar props */
+export interface MDIToolbarProps {
+  /** Icerik / Content */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MDIToolbar = forwardRef<HTMLDivElement, MDIToolbarProps>(
+  function MDIToolbar(props, ref) {
+    const { children, className } = props;
+    const ctx = useMDIContext();
+    const slot = getSlotProps('taskbar', taskbarStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-mdi-taskbar
+        data-testid="mdi-toolbar"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Component Props ───────────────────────────────────
+
+/** MDI bilesen prop'lari. */
 export interface MDIComponentProps
   extends SlotStyleProps<MDISlot>,
     Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   /** Root element inline style. */
   style?: CSSProperties;
-  /** Başlangıç pencereleri. */
+  /** Baslangic pencereleri. */
   windows?: MDIWindowConfig[];
-  /** Pencere içeriği render fonksiyonu. */
-  renderWindow: (windowId: string, title: string) => ReactNode;
-  /** Taskbar göster. Varsayılan: true. */
+  /** Pencere icerigi render fonksiyonu. */
+  renderWindow?: (windowId: string, title: string) => ReactNode;
+  /** Taskbar goster. Varsayilan: true. */
   showTaskbar?: boolean;
-  /** Pencere kapatıldığında çağrılır. */
+  /** Pencere kapatildiginda cagrilir. */
   onWindowClose?: (id: string) => void;
-  /** Aktif pencere değiştiğinde çağrılır. */
+  /** Aktif pencere degistiginde cagrilir. */
   onActiveWindowChange?: (id: string | null) => void;
+  /** Compound API icin children */
+  children?: ReactNode;
 }
 
-/**
- * MDI — Multiple Document Interface.
- *
- * @example
- * ```tsx
- * <MDI
- *   windows={[
- *     { id: 'doc1', title: 'Document 1' },
- *     { id: 'doc2', title: 'Document 2' },
- *   ]}
- *   renderWindow={(id) => <div>Content for {id}</div>}
- * />
- * ```
- */
-export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
+// ── Component ─────────────────────────────────────────
+
+const MDIBase = forwardRef<HTMLDivElement, MDIComponentProps>(
   function MDI(props, ref) {
     const {
-      children: _children,
+      children,
       className,
       style,
       classNames,
@@ -88,7 +183,6 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     // ── Ref merge ─────────────────────────────────────
-
     const mergedRef = (node: HTMLDivElement | null) => {
       containerRef.current = node;
       if (typeof ref === 'function') ref(node);
@@ -96,7 +190,6 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
     };
 
     // ── ResizeObserver ────────────────────────────────
-
     useEffect(() => {
       const node = containerRef.current;
       if (!node) return;
@@ -116,7 +209,6 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
     }, [api, showTaskbar]);
 
     // ── Drag state ────────────────────────────────────
-
     const dragRef = useRef<{
       windowId: string;
       startX: number;
@@ -166,7 +258,6 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
     }, [api]);
 
     // ── Window control handlers ───────────────────────
-
     const handleMinimize = (id: string) => {
       api.send({ type: 'MINIMIZE_WINDOW', id });
       forceRender();
@@ -202,40 +293,41 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
     };
 
     // ── State ─────────────────────────────────────────
-
     const allWindows = api.getWindows();
 
     // ── Slot props ────────────────────────────────────
-
-    const rootSlot = getSlotProps('root', undefined, classNames, slotStyles, {
-      position: 'relative',
-      width: '100%',
-      height: '100%',
-      overflow: 'hidden',
-      background: 'var(--rel-color-bg-muted, #f1f5f9)',
-      ...style,
-    });
-
+    const rootSlot = getSlotProps('root', rootStyle, classNames, slotStyles, style);
     const finalClass = [rootSlot.className, className].filter(Boolean).join(' ') || undefined;
 
-    // ── Control button style ──────────────────────────
-
-    const controlBtnStyle: CSSProperties = {
-      width: 20,
-      height: 20,
-      border: 'none',
-      borderRadius: 3,
-      background: 'transparent',
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: 12,
-      lineHeight: 1,
-      color: 'var(--rel-color-text-muted, #64748b)',
-      padding: 0,
+    const ctxValue: MDIContextValue = {
+      classNames,
+      styles: slotStyles,
     };
 
+    // ── Compound API check ──
+    const hasCompoundChildren = React.Children.toArray(children).some(
+      (child) =>
+        React.isValidElement(child) &&
+        (child.type === MDIWindow || child.type === MDIToolbar),
+    );
+
+    if (hasCompoundChildren) {
+      return (
+        <MDIContext.Provider value={ctxValue}>
+          <div
+            ref={mergedRef}
+            {...rest}
+            className={finalClass}
+            style={rootSlot.style}
+            data-mdi
+          >
+            {children}
+          </div>
+        </MDIContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     return (
       <div
         ref={mergedRef}
@@ -248,56 +340,31 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
         {allWindows.map((win) => {
           if (win.state === 'minimized') return null;
 
-          const windowSlot = getSlotProps('window', undefined, classNames, slotStyles, {
-            position: 'absolute',
+          const winCls = win.state === 'maximized'
+            ? `${windowStyle} ${windowMaximizedStyle}`
+            : windowStyle;
+          const windowSlot = getSlotProps('window', winCls, classNames, slotStyles, {
             left: win.x,
             top: win.y,
             width: win.width,
             height: win.height,
             zIndex: win.zIndex,
-            display: 'flex',
-            flexDirection: 'column',
             boxShadow: win.active
               ? '0 8px 32px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1)'
               : '0 4px 16px rgba(0,0,0,0.1)',
-            borderRadius: win.state === 'maximized' ? 0 : 6,
-            overflow: 'hidden',
-            background: 'var(--rel-color-bg, #fff)',
           });
 
-          const titleBarSlot = getSlotProps('titleBar', undefined, classNames, slotStyles, {
-            display: 'flex',
-            alignItems: 'center',
-            padding: '6px 10px',
-            background: win.active
-              ? 'var(--rel-color-primary, #3b82f6)'
-              : 'var(--rel-color-bg-subtle, #f8fafc)',
-            borderBottom: '1px solid var(--rel-color-border, #e2e8f0)',
-            cursor: 'grab',
-            userSelect: 'none',
-            flexShrink: 0,
+          const tbCls = win.active
+            ? `${titleBarStyle} ${titleBarActiveStyle}`
+            : `${titleBarStyle} ${titleBarInactiveStyle}`;
+          const titleBarSlot = getSlotProps('titleBar', tbCls, classNames, slotStyles);
+
+          const titleSlot = getSlotProps('title', titleStyle, classNames, slotStyles, {
+            color: win.active ? 'var(--rel-color-text-inverse, #fff)' : 'var(--rel-color-text, #1e293b)',
           });
 
-          const titleSlot = getSlotProps('title', undefined, classNames, slotStyles, {
-            flex: 1,
-            fontSize: 12,
-            fontWeight: 600,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap' as const,
-            color: win.active ? '#fff' : 'var(--rel-color-text, #1e293b)',
-          });
-
-          const controlsSlot = getSlotProps('controls', undefined, classNames, slotStyles, {
-            display: 'flex',
-            gap: 2,
-            marginLeft: 6,
-          });
-
-          const contentSlot = getSlotProps('content', undefined, classNames, slotStyles, {
-            flex: 1,
-            overflow: 'auto',
-          });
+          const controlsSlot = getSlotProps('controls', controlsStyle, classNames, slotStyles);
+          const contentSlot = getSlotProps('content', contentStyle, classNames, slotStyles);
 
           return (
             <div
@@ -328,7 +395,8 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); handleMinimize(win.id); }}
-                    style={{ ...controlBtnStyle, color: win.active ? 'rgba(255,255,255,0.8)' : controlBtnStyle.color }}
+                    className={controlButtonStyle}
+                    style={win.active ? { color: 'var(--rel-color-text-inverse-muted, rgba(255,255,255,0.8))' } : undefined}
                     aria-label="Minimize"
                     data-mdi-control="minimize"
                   >
@@ -337,7 +405,8 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); handleMaximize(win.id); }}
-                    style={{ ...controlBtnStyle, color: win.active ? 'rgba(255,255,255,0.8)' : controlBtnStyle.color }}
+                    className={controlButtonStyle}
+                    style={win.active ? { color: 'var(--rel-color-text-inverse-muted, rgba(255,255,255,0.8))' } : undefined}
                     aria-label={win.state === 'maximized' ? 'Restore' : 'Maximize'}
                     data-mdi-control="maximize"
                   >
@@ -346,7 +415,8 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); handleClose(win.id); }}
-                    style={{ ...controlBtnStyle, color: win.active ? 'rgba(255,255,255,0.8)' : controlBtnStyle.color }}
+                    className={controlButtonStyle}
+                    style={win.active ? { color: 'var(--rel-color-text-inverse-muted, rgba(255,255,255,0.8))' } : undefined}
                     aria-label="Close"
                     data-mdi-control="close"
                   >
@@ -359,7 +429,7 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
                 style={contentSlot.style}
                 data-mdi-content
               >
-                {renderWindow(win.id, win.title)}
+                {renderWindow ? renderWindow(win.id, win.title) : null}
               </div>
             </div>
           );
@@ -368,50 +438,15 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
         {/* Taskbar */}
         {showTaskbar && allWindows.length > 0 && (
           <div
-            className={getSlotProps('taskbar', undefined, classNames, slotStyles, {
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 36,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              padding: '0 4px',
-              background: 'var(--rel-color-bg-subtle, #f8fafc)',
-              borderTop: '1px solid var(--rel-color-border, #e2e8f0)',
-              zIndex: 1000,
-            }).className || undefined}
-            style={getSlotProps('taskbar', undefined, classNames, slotStyles, {
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 36,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              padding: '0 4px',
-              background: 'var(--rel-color-bg-subtle, #f8fafc)',
-              borderTop: '1px solid var(--rel-color-border, #e2e8f0)',
-              zIndex: 1000,
-            }).style}
+            className={getSlotProps('taskbar', taskbarStyle, classNames, slotStyles).className || undefined}
+            style={getSlotProps('taskbar', taskbarStyle, classNames, slotStyles).style}
             data-mdi-taskbar
           >
             {allWindows.map((win) => {
-              const itemSlot = getSlotProps('taskbarItem', undefined, classNames, slotStyles, {
-                padding: '4px 10px',
-                fontSize: 11,
-                cursor: 'pointer',
-                border: '1px solid var(--rel-color-border, #e2e8f0)',
-                borderRadius: 3,
+              const itemSlot = getSlotProps('taskbarItem', taskbarItemStyle, classNames, slotStyles, {
                 background: win.active ? 'var(--rel-color-primary, #3b82f6)' : 'var(--rel-color-bg, #fff)',
-                color: win.active ? '#fff' : 'var(--rel-color-text, #1e293b)',
+                color: win.active ? 'var(--rel-color-text-inverse, #fff)' : 'var(--rel-color-text, #1e293b)',
                 fontWeight: win.active ? 600 : 400,
-                whiteSpace: 'nowrap' as const,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                maxWidth: 150,
               });
 
               return (
@@ -434,3 +469,27 @@ export const MDI = forwardRef<HTMLDivElement, MDIComponentProps>(
     );
   },
 );
+
+/**
+ * MDI bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <MDI
+ *   windows={[{ id: 'doc1', title: 'Document 1' }]}
+ *   renderWindow={(id) => <div>Content for {id}</div>}
+ * />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <MDI>
+ *   <MDI.Window id="doc1" title="Document 1"><div>Content</div></MDI.Window>
+ *   <MDI.Toolbar>Custom toolbar</MDI.Toolbar>
+ * </MDI>
+ * ```
+ */
+export const MDI = Object.assign(MDIBase, {
+  Window: MDIWindow,
+  Toolbar: MDIToolbar,
+});

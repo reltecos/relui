@@ -12,4 +12,7 @@ export {
   type SkeletonSlot,
   type SkeletonVariant,
   type SkeletonAnimation,
+  type SkeletonCircleProps,
+  type SkeletonRectProps,
+  type SkeletonTextProps,
 } from './Skeleton';

@@ -135,3 +135,59 @@ describe('Spinner slot API', () => {
     expect(screen.getByTestId('spinner').style.fontSize).toBe('20px');
   });
 });
+
+// ── Compound API ──
+
+describe('Spinner (Compound)', () => {
+  it('compound: Spinner.Label render edilir', () => {
+    render(
+      <Spinner>
+        <Spinner.Label>Yukleniyor...</Spinner.Label>
+      </Spinner>,
+    );
+    expect(screen.getByTestId('spinner-label')).toHaveTextContent('Yukleniyor...');
+  });
+
+  it('compound: svg hala render edilir', () => {
+    render(
+      <Spinner>
+        <Spinner.Label>Bekleyin</Spinner.Label>
+      </Spinner>,
+    );
+    const spinner = screen.getByTestId('spinner');
+    expect(spinner.querySelector('svg')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile Spinner.Label a aktarilir', () => {
+    render(
+      <Spinner classNames={{ label: 'cmp-label-cls' }}>
+        <Spinner.Label>Yukleniyor</Spinner.Label>
+      </Spinner>,
+    );
+    expect(screen.getByTestId('spinner-label').className).toContain('cmp-label-cls');
+  });
+
+  it('compound: styles context ile Spinner.Label a aktarilir', () => {
+    render(
+      <Spinner styles={{ label: { fontSize: '16px' } }}>
+        <Spinner.Label>Yukleniyor</Spinner.Label>
+      </Spinner>,
+    );
+    expect(screen.getByTestId('spinner-label')).toHaveStyle({ fontSize: '16px' });
+  });
+
+  it('compound: role=status ayarlanir', () => {
+    render(
+      <Spinner>
+        <Spinner.Label>Test</Spinner.Label>
+      </Spinner>,
+    );
+    expect(screen.getByRole('status')).toBeInTheDocument();
+  });
+
+  it('compound: Spinner.Label context disinda hata firlat', () => {
+    expect(() => {
+      render(<Spinner.Label>test</Spinner.Label>);
+    }).toThrow('Spinner compound sub-components must be used within <Spinner>.');
+  });
+});

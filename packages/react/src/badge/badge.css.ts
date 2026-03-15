@@ -16,7 +16,7 @@
  * @packageDocumentation
  */
 
-import { createVar } from '@vanilla-extract/css';
+import { createVar, style } from '@vanilla-extract/css';
 import { recipe, type RecipeVariants } from '@vanilla-extract/recipes';
 import { cssVar } from '@relteco/relui-tokens';
 
@@ -42,7 +42,7 @@ export const badgeRecipe = recipe({
 
     vars: {
       [bdBg]: cssVar.accentDefault,
-      [bdFg]: '#ffffff',
+      [bdFg]: 'var(--rel-color-text-inverse, #fff)',
       [bdBorder]: 'transparent',
     },
 
@@ -59,7 +59,7 @@ export const badgeRecipe = recipe({
       accent: {
         vars: {
           [bdBg]: cssVar.accentDefault,
-          [bdFg]: '#ffffff',
+          [bdFg]: 'var(--rel-color-text-inverse, #fff)',
           [bdBorder]: cssVar.accentDefault,
         },
       },
@@ -75,7 +75,7 @@ export const badgeRecipe = recipe({
       destructive: {
         vars: {
           [bdBg]: cssVar.destructiveDefault,
-          [bdFg]: '#ffffff',
+          [bdFg]: 'var(--rel-color-text-inverse, #fff)',
           [bdBorder]: cssVar.destructiveDefault,
         },
       },
@@ -83,7 +83,7 @@ export const badgeRecipe = recipe({
       success: {
         vars: {
           [bdBg]: cssVar.successDefault,
-          [bdFg]: '#ffffff',
+          [bdFg]: 'var(--rel-color-text-inverse, #fff)',
           [bdBorder]: cssVar.successDefault,
         },
       },
@@ -91,7 +91,7 @@ export const badgeRecipe = recipe({
       warning: {
         vars: {
           [bdBg]: cssVar.warningDefault,
-          [bdFg]: '#ffffff',
+          [bdFg]: 'var(--rel-color-text-inverse, #fff)',
           [bdBorder]: cssVar.warningDefault,
         },
       },
@@ -167,3 +167,15 @@ export const badgeRecipe = recipe({
 
 /** Badge recipe varyant tipleri */
 export type BadgeRecipeVariants = RecipeVariants<typeof badgeRecipe>;
+
+// ── Badge icon style ────────────────────────────────────────────────
+
+export const badgeIconStyle = style({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+  marginRight: '0.25rem',
+  fontSize: '1em',
+  lineHeight: 1,
+});

@@ -13,6 +13,7 @@ import { Tag } from './Tag';
 const meta: Meta<typeof Tag> = {
   title: 'Data Display/Tag',
   component: Tag,
+  tags: ['autodocs'],
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     color: { control: 'select', options: ['accent', 'neutral', 'destructive', 'success', 'warning'] },
@@ -78,6 +79,46 @@ export const Disabled: Story = {
     <div style={{ display: 'flex', gap: '0.5rem' }}>
       <Tag disabled>Pasif</Tag>
       <Tag disabled removable>Pasif + Kaldırılabilir</Tag>
+    </div>
+  ),
+};
+
+// ── Compound ──
+
+export const Compound: Story = {
+  render: () => {
+    const [tags, setTags] = useState(['React', 'TypeScript', 'Node.js']);
+
+    return (
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        {tags.map((tag) => (
+          <Tag key={tag} color="accent" onRemove={() => setTags((prev) => prev.filter((t) => t !== tag))}>
+            <Tag.Icon><span style={{ fontSize: '0.75em' }}>#</span></Tag.Icon>
+            {tag}
+            <Tag.RemoveButton />
+          </Tag>
+        ))}
+      </div>
+    );
+  },
+};
+
+export const CustomSlotStyles: Story = {
+  name: 'Slot Customization',
+  render: () => (
+    <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <Tag
+        classNames={{ root: 'my-tag' }}
+        styles={{ root: { letterSpacing: '0.05em' } }}
+      >
+        Custom
+      </Tag>
+      <Tag
+        removable
+        styles={{ removeButton: { opacity: 0.3 } }}
+      >
+        Styled Remove
+      </Tag>
     </div>
   ),
 };

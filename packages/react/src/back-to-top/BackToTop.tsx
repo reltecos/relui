@@ -7,8 +7,11 @@
  */
 
 /**
- * BackToTop — yukari kaydir butonu.
- * BackToTop — scroll to top button.
+ * BackToTop — yukari kaydir butonu (Dual API).
+ * BackToTop — scroll to top button (Dual API).
+ *
+ * Props-based: `<BackToTop icon={<MyIcon />} />`
+ * Compound:    `<BackToTop><BackToTop.Icon><MyIcon /></BackToTop.Icon></BackToTop>`
  *
  * Sayfa belli bir miktar kaydirildiktan sonra gorunur olur,
  * tiklaninca sayfa basina kaydirir.
@@ -18,13 +21,15 @@
 
 import {
   forwardRef,
+  createContext,
+  useContext,
   useState,
   useEffect,
   useCallback,
   type ReactNode,
 } from 'react';
 import { bttRootRecipe, bttIconStyle } from './back-to-top.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /**
  * BackToTop slot isimleri / BackToTop slot names.
@@ -45,6 +50,47 @@ export type BackToTopVariant = 'filled' | 'outline' | 'subtle';
  * BackToTop sekilleri / BackToTop shapes.
  */
 export type BackToTopShape = 'rounded' | 'circle';
+
+// ── Context (Compound API) ──────────────────────────────────
+
+interface BackToTopContextValue {
+  size: BackToTopSize;
+  classNames: ClassNames<BackToTopSlot> | undefined;
+  styles: Styles<BackToTopSlot> | undefined;
+}
+
+const BackToTopContext = createContext<BackToTopContextValue | null>(null);
+
+function useBackToTopContext(): BackToTopContextValue {
+  const ctx = useContext(BackToTopContext);
+  if (!ctx) throw new Error('BackToTop compound sub-components must be used within <BackToTop>.');
+  return ctx;
+}
+
+// ── Compound: BackToTop.Icon ────────────────────────────────
+
+/** BackToTop.Icon props */
+export interface BackToTopIconProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const BackToTopIcon = forwardRef<HTMLSpanElement, BackToTopIconProps>(
+  function BackToTopIcon(props, ref) {
+    const { children, className } = props;
+    const ctx = useBackToTopContext();
+    const slot = getSlotProps('icon', bttIconStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="back-to-top-icon">
+        {children}
+      </span>
+    );
+  },
+);
 
 // ── Component Props ─────────────────────────────────────────
 
@@ -68,8 +114,11 @@ export interface BackToTopComponentProps
   /** Hedef element / Scroll target element */
   scrollTarget?: HTMLElement | Window;
 
-  /** Ozel ikon / Custom icon */
+  /** Props-based: ozel ikon / Custom icon */
   icon?: ReactNode;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 
   /** Ek className / Additional className */
   className?: string;
@@ -105,17 +154,26 @@ function DefaultArrowUpIcon() {
   );
 }
 
+// ── Component ───────────────────────────────────────────────
+
 /**
- * BackToTop bilesen — yukari kaydir butonu.
- * BackToTop component — scroll to top button.
+ * BackToTop bilesen — yukari kaydir butonu (Dual API).
+ * BackToTop component — scroll to top button (Dual API).
  *
- * @example
+ * @example Props-based
  * ```tsx
  * <BackToTop />
- * <BackToTop variant="outline" size="lg" visibilityThreshold={500} />
+ * <BackToTop variant="outline" size="lg" icon={<ChevronUpIcon />} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <BackToTop>
+ *   <BackToTop.Icon><ChevronUpIcon /></BackToTop.Icon>
+ * </BackToTop>
  * ```
  */
-export const BackToTop = forwardRef<HTMLButtonElement, BackToTopComponentProps>(
+const BackToTopBase = forwardRef<HTMLButtonElement, BackToTopComponentProps>(
   function BackToTop(props, ref) {
     const {
       variant = 'filled',
@@ -125,6 +183,7 @@ export const BackToTop = forwardRef<HTMLButtonElement, BackToTopComponentProps>(
       scrollBehavior = 'smooth',
       scrollTarget,
       icon,
+      children,
       className,
       style: styleProp,
       classNames,
@@ -148,7 +207,7 @@ export const BackToTop = forwardRef<HTMLButtonElement, BackToTopComponentProps>(
       };
 
       target.addEventListener('scroll', handleScroll, { passive: true });
-      handleScroll(); // İlk kontrol
+      handleScroll();
 
       return () => {
         target.removeEventListener('scroll', handleScroll);
@@ -176,9 +235,32 @@ export const BackToTop = forwardRef<HTMLButtonElement, BackToTopComponentProps>(
       ? { ...rootSlot.style, ...styleProp }
       : rootSlot.style;
 
-    const iconSlot = getSlotProps('icon', bttIconStyle, classNames, styles);
+    const ctxValue: BackToTopContextValue = { size, classNames, styles };
 
     if (!visible) return null;
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <BackToTopContext.Provider value={ctxValue}>
+          <button
+            ref={ref}
+            className={combinedRootClassName}
+            style={combinedRootStyle}
+            onClick={handleClick}
+            type="button"
+            id={id}
+            aria-label={ariaLabel}
+            data-testid="back-to-top"
+          >
+            {children}
+          </button>
+        </BackToTopContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
+    const iconSlot = getSlotProps('icon', bttIconStyle, classNames, styles);
 
     return (
       <button
@@ -198,3 +280,22 @@ export const BackToTop = forwardRef<HTMLButtonElement, BackToTopComponentProps>(
     );
   },
 );
+
+/**
+ * BackToTop bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <BackToTop icon={<ChevronUpIcon />} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <BackToTop>
+ *   <BackToTop.Icon><ChevronUpIcon /></BackToTop.Icon>
+ * </BackToTop>
+ * ```
+ */
+export const BackToTop = Object.assign(BackToTopBase, {
+  Icon: BackToTopIcon,
+});

@@ -283,3 +283,55 @@ describe('Switch — classNames & styles', () => {
     expect(labelSpan).toHaveClass('my-label');
   });
 });
+
+// ── Compound API ──
+
+describe('Switch (Compound)', () => {
+  it('compound: Track + Thumb render edilir', () => {
+    render(
+      <Switch>
+        <Switch.Track><Switch.Thumb /></Switch.Track>
+        <Switch.Label>Karanlik mod</Switch.Label>
+      </Switch>,
+    );
+    expect(screen.getByTestId('switch-track')).toBeInTheDocument();
+    expect(screen.getByTestId('switch-thumb')).toBeInTheDocument();
+    expect(screen.getByRole('switch')).toBeInTheDocument();
+  });
+
+  it('compound: Label render edilir', () => {
+    render(
+      <Switch>
+        <Switch.Track><Switch.Thumb /></Switch.Track>
+        <Switch.Label>Bildirimler</Switch.Label>
+      </Switch>,
+    );
+    expect(screen.getByTestId('switch-label')).toHaveTextContent('Bildirimler');
+  });
+
+  it('compound: checked state context ile aktarilir', () => {
+    render(
+      <Switch checked>
+        <Switch.Track><Switch.Thumb /></Switch.Track>
+        <Switch.Label>Acik</Switch.Label>
+      </Switch>,
+    );
+    expect(screen.getByRole('switch')).toHaveAttribute('aria-checked', 'true');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Switch classNames={{ label: 'cmp-label-cls' }}>
+        <Switch.Track><Switch.Thumb /></Switch.Track>
+        <Switch.Label>Test</Switch.Label>
+      </Switch>,
+    );
+    expect(screen.getByTestId('switch-label').className).toContain('cmp-label-cls');
+  });
+
+  it('compound: context disinda kullanilirsa hata firlatir', () => {
+    expect(() => {
+      render(<Switch.Track><Switch.Thumb /></Switch.Track>);
+    }).toThrow('Switch compound sub-components must be used within <Switch>.');
+  });
+});

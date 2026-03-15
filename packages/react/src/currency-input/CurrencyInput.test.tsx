@@ -317,3 +317,50 @@ describe('CurrencyInput', () => {
     });
   });
 });
+
+// ── Compound API ──
+
+describe('CurrencyInput (Compound)', () => {
+  it('compound: Symbol render edilir', () => {
+    render(
+      <CurrencyInput aria-label="Fiyat" value={100} locale="en-US" currency="USD">
+        <CurrencyInput.Symbol />
+      </CurrencyInput>,
+    );
+    expect(screen.getByTestId('currencyinput-symbol')).toBeInTheDocument();
+    expect(screen.getByTestId('currencyinput-symbol')).toHaveTextContent('$');
+  });
+
+  it('compound: Symbol custom children ile render edilir', () => {
+    render(
+      <CurrencyInput aria-label="Fiyat" value={100}>
+        <CurrencyInput.Symbol>TL</CurrencyInput.Symbol>
+      </CurrencyInput>,
+    );
+    expect(screen.getByTestId('currencyinput-symbol')).toHaveTextContent('TL');
+  });
+
+  it('compound: root data-testid eklenir', () => {
+    render(
+      <CurrencyInput aria-label="Fiyat" value={100}>
+        <CurrencyInput.Symbol />
+      </CurrencyInput>,
+    );
+    expect(screen.getByTestId('currencyinput-root')).toBeInTheDocument();
+  });
+
+  it('compound: Field render edilir', () => {
+    render(
+      <CurrencyInput aria-label="Fiyat" value={100}>
+        <CurrencyInput.Field placeholder="0,00" />
+      </CurrencyInput>,
+    );
+    expect(screen.getByTestId('currencyinput-field')).toBeInTheDocument();
+  });
+
+  it('compound: context disinda kullanim hata firlatir', () => {
+    expect(() => {
+      render(<CurrencyInput.Symbol />);
+    }).toThrow('CurrencyInput compound sub-components must be used within <CurrencyInput>.');
+  });
+});

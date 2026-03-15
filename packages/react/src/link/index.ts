@@ -6,5 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Link, type LinkComponentProps, type LinkSlot, type LinkSize, type LinkVariant, type LinkUnderline } from './Link';
+export {
+  Link,
+  type LinkComponentProps,
+  type LinkSlot,
+  type LinkSize,
+  type LinkVariant,
+  type LinkUnderline,
+  type LinkIconProps,
+} from './Link';
 export { NavLink, type NavLinkComponentProps, type NavLinkSlot } from './NavLink';

@@ -305,3 +305,58 @@ describe('MultiColumnCombobox', () => {
     });
   });
 });
+
+// ── Compound API ──────────────────────────────────────
+
+describe('MultiColumnCombobox (Compound)', () => {
+  it('compound: Input sub-component render edilir', () => {
+    render(
+      <MultiColumnCombobox columns={columns} items={items}>
+        <MultiColumnCombobox.Input>
+          <span data-testid="custom-input">Custom</span>
+        </MultiColumnCombobox.Input>
+      </MultiColumnCombobox>,
+    );
+    expect(screen.getByTestId('multi-column-combobox-input')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-input')).toBeInTheDocument();
+  });
+
+  it('compound: Content sub-component render edilir', () => {
+    render(
+      <MultiColumnCombobox columns={columns} items={items}>
+        <MultiColumnCombobox.Content>
+          <div data-testid="custom-content">Icerik</div>
+        </MultiColumnCombobox.Content>
+      </MultiColumnCombobox>,
+    );
+    expect(screen.getByTestId('multi-column-combobox-content')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-content')).toBeInTheDocument();
+  });
+
+  it('compound: Column sub-component render edilir', () => {
+    render(
+      <MultiColumnCombobox columns={columns} items={items}>
+        <MultiColumnCombobox.Column>Baslik</MultiColumnCombobox.Column>
+      </MultiColumnCombobox>,
+    );
+    expect(screen.getByTestId('multi-column-combobox-column')).toHaveTextContent('Baslik');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <MultiColumnCombobox columns={columns} items={items} classNames={{ headerCell: 'cmp-hdr' }}>
+        <MultiColumnCombobox.Column>Test</MultiColumnCombobox.Column>
+      </MultiColumnCombobox>,
+    );
+    expect(screen.getByTestId('multi-column-combobox-column').className).toContain('cmp-hdr');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <MultiColumnCombobox columns={columns} items={items} styles={{ input: { fontSize: '18px' } }}>
+        <MultiColumnCombobox.Input />
+      </MultiColumnCombobox>,
+    );
+    expect(screen.getByTestId('multi-column-combobox-input')).toHaveStyle({ fontSize: '18px' });
+  });
+});

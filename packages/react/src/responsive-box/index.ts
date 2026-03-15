@@ -8,7 +8,9 @@
 
 export {
   ResponsiveBox,
+  useResponsiveBoxContext,
   type ResponsiveBoxProps,
   type ResponsiveBoxSlot,
+  type ResponsiveBoxItemProps,
   type ResponsiveRule,
 } from './ResponsiveBox';

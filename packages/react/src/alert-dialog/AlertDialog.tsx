@@ -7,8 +7,11 @@
  */
 
 /**
- * AlertDialog — onay diyalogu bilesen.
- * AlertDialog — confirmation dialog component.
+ * AlertDialog — onay diyalogu bilesen (Dual API).
+ * AlertDialog — confirmation dialog component (Dual API).
+ *
+ * Props-based: `<AlertDialog open={open} title="Emin misiniz?" onConfirm={fn} />`
+ * Compound:    `<AlertDialog open={open}><AlertDialog.Title>...</AlertDialog.Title>...</AlertDialog>`
  *
  * Tehlikeli islemler icin kullanicidan onay alma.
  * Confirm dangerous actions from the user.
@@ -16,7 +19,7 @@
  * @packageDocumentation
  */
 
-import { forwardRef, useRef, useEffect, useReducer, useCallback, useState } from 'react';
+import { forwardRef, createContext, useContext, useRef, useEffect, useReducer, useCallback, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import {
   alertDialogOverlayStyle,
@@ -29,7 +32,7 @@ import {
   alertDialogCancelButtonStyle,
   alertDialogConfirmButtonRecipe,
 } from './alert-dialog.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 import { createAlertDialog, type AlertDialogAPI, type AlertDialogSeverity } from '@relteco/relui-core';
 import {
   AlertTriangleIcon,
@@ -61,6 +64,190 @@ const defaultIcons: Record<AlertDialogSeverity, typeof AlertTriangleIcon> = {
   info: InfoCircleIcon,
 };
 
+// ── Context (Compound API) ──────────────────────────
+
+interface AlertDialogContextValue {
+  severity: AlertDialogSeverity;
+  classNames: ClassNames<AlertDialogSlot> | undefined;
+  styles: Styles<AlertDialogSlot> | undefined;
+  id: string | undefined;
+}
+
+const AlertDialogContext = createContext<AlertDialogContextValue | null>(null);
+
+function useAlertDialogContext(): AlertDialogContextValue {
+  const ctx = useContext(AlertDialogContext);
+  if (!ctx) throw new Error('AlertDialog compound sub-components must be used within <AlertDialog>.');
+  return ctx;
+}
+
+// ── Compound: AlertDialog.Title ──────────────────────
+
+/** AlertDialog.Title props */
+export interface AlertDialogTitleProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const AlertDialogTitle = forwardRef<HTMLHeadingElement, AlertDialogTitleProps>(
+  function AlertDialogTitle(props, ref) {
+    const { children, className } = props;
+    const ctx = useAlertDialogContext();
+    const slot = getSlotProps('title', alertDialogTitleStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <h2
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        id={ctx.id ? `${ctx.id}-title` : undefined}
+        data-testid="alert-dialog-title"
+      >
+        {children}
+      </h2>
+    );
+  },
+);
+
+// ── Compound: AlertDialog.Description ────────────────
+
+/** AlertDialog.Description props */
+export interface AlertDialogDescriptionProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const AlertDialogDescription = forwardRef<HTMLParagraphElement, AlertDialogDescriptionProps>(
+  function AlertDialogDescription(props, ref) {
+    const { children, className } = props;
+    const ctx = useAlertDialogContext();
+    const slot = getSlotProps('description', alertDialogDescriptionStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <p
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        id={ctx.id ? `${ctx.id}-desc` : undefined}
+        data-testid="alert-dialog-description"
+      >
+        {children}
+      </p>
+    );
+  },
+);
+
+// ── Compound: AlertDialog.Actions ────────────────────
+
+/** AlertDialog.Actions props */
+export interface AlertDialogActionsProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const AlertDialogActions = forwardRef<HTMLDivElement, AlertDialogActionsProps>(
+  function AlertDialogActions(props, ref) {
+    const { children, className } = props;
+    const ctx = useAlertDialogContext();
+    const slot = getSlotProps('footer', alertDialogFooterStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        data-testid="alert-dialog-footer"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: AlertDialog.CancelButton ───────────────
+
+/** AlertDialog.CancelButton props */
+export interface AlertDialogCancelButtonProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Tiklaninca / On click */
+  onClick?: () => void;
+  /** Devre disi / Disabled */
+  disabled?: boolean;
+}
+
+const AlertDialogCancelButton = forwardRef<HTMLButtonElement, AlertDialogCancelButtonProps>(
+  function AlertDialogCancelButton(props, ref) {
+    const { children, className, onClick, disabled } = props;
+    const ctx = useAlertDialogContext();
+    const slot = getSlotProps('cancelButton', alertDialogCancelButtonStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <button
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        onClick={onClick}
+        type="button"
+        disabled={disabled}
+        data-testid="alert-dialog-cancel"
+      >
+        {children}
+      </button>
+    );
+  },
+);
+
+// ── Compound: AlertDialog.ConfirmButton ──────────────
+
+/** AlertDialog.ConfirmButton props */
+export interface AlertDialogConfirmButtonProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Tiklaninca / On click */
+  onClick?: () => void;
+  /** Devre disi / Disabled */
+  disabled?: boolean;
+}
+
+const AlertDialogConfirmButton = forwardRef<HTMLButtonElement, AlertDialogConfirmButtonProps>(
+  function AlertDialogConfirmButton(props, ref) {
+    const { children, className, onClick, disabled } = props;
+    const ctx = useAlertDialogContext();
+    const confirmBtnClass = alertDialogConfirmButtonRecipe({ severity: ctx.severity });
+    const slot = getSlotProps('confirmButton', confirmBtnClass, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <button
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        onClick={onClick}
+        type="button"
+        disabled={disabled}
+        data-testid="alert-dialog-confirm"
+      >
+        {children}
+      </button>
+    );
+  },
+);
+
 // ── Component Props ─────────────────────────────────
 
 export interface AlertDialogComponentProps extends SlotStyleProps<AlertDialogSlot> {
@@ -70,13 +257,13 @@ export interface AlertDialogComponentProps extends SlotStyleProps<AlertDialogSlo
   onOpenChange?: (open: boolean) => void;
   /** Ciddiyet seviyesi / Severity */
   severity?: AlertDialogSeverity;
-  /** Baslik / Title */
-  title: string;
-  /** Aciklama / Description */
+  /** Props-based: Baslik / Title */
+  title?: string;
+  /** Props-based: Aciklama / Description */
   description?: string;
-  /** Onay butonu metni / Confirm button label */
+  /** Props-based: Onay butonu metni / Confirm button label */
   confirmLabel?: string;
-  /** Iptal butonu metni / Cancel button label */
+  /** Props-based: Iptal butonu metni / Cancel button label */
   cancelLabel?: string;
   /** Onay callback / Confirm callback */
   onConfirm?: () => void | Promise<void>;
@@ -90,6 +277,8 @@ export interface AlertDialogComponentProps extends SlotStyleProps<AlertDialogSlo
   loading?: boolean;
   /** Portal hedefi / Portal container */
   portalContainer?: HTMLElement;
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
   /** Ek className / Additional className */
   className?: string;
   /** Inline style / Inline style */
@@ -101,13 +290,11 @@ export interface AlertDialogComponentProps extends SlotStyleProps<AlertDialogSlo
 // ── Component ─────────────────────────────────────────
 
 /**
- * AlertDialog bilesen — onay diyalogu.
- * AlertDialog component — confirmation dialog.
+ * AlertDialog bilesen — Dual API (props-based + compound).
+ * AlertDialog component — Dual API (props-based + compound).
  *
- * @example
+ * @example Props-based
  * ```tsx
- * const [open, setOpen] = useState(false);
- *
  * <AlertDialog
  *   open={open}
  *   onOpenChange={setOpen}
@@ -120,8 +307,20 @@ export interface AlertDialogComponentProps extends SlotStyleProps<AlertDialogSlo
  *   onCancel={() => setOpen(false)}
  * />
  * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <AlertDialog open={open} onOpenChange={setOpen} severity="danger">
+ *   <AlertDialog.Title>Emin misiniz?</AlertDialog.Title>
+ *   <AlertDialog.Description>Bu islem geri alinamaz.</AlertDialog.Description>
+ *   <AlertDialog.Actions>
+ *     <AlertDialog.CancelButton onClick={() => setOpen(false)}>Vazgec</AlertDialog.CancelButton>
+ *     <AlertDialog.ConfirmButton onClick={handleDelete}>Sil</AlertDialog.ConfirmButton>
+ *   </AlertDialog.Actions>
+ * </AlertDialog>
+ * ```
  */
-export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogComponentProps>(
+const AlertDialogBase = forwardRef<HTMLDivElement, AlertDialogComponentProps>(
   function AlertDialog(props, ref) {
     const {
       open,
@@ -137,6 +336,7 @@ export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogComponentProps>
       closeOnEscape = true,
       loading: loadingProp,
       portalContainer,
+      children,
       className,
       style: styleProp,
       classNames,
@@ -278,6 +478,49 @@ export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogComponentProps>
     const combinedContentStyle = styleProp
       ? { ...contentSlot.style, ...styleProp }
       : contentSlot.style;
+
+    const ctxValue: AlertDialogContextValue = { severity, classNames, styles, id };
+
+    // ── Compound API ──
+    if (children) {
+      const dialog = (
+        <AlertDialogContext.Provider value={ctxValue}>
+          {/* Overlay */}
+          <div
+            className={overlaySlot.className}
+            style={overlaySlot.style}
+            onClick={handleOverlayClick}
+            data-testid="alert-dialog-overlay"
+            aria-hidden="true"
+          />
+          {/* Content */}
+          <div
+            ref={ref}
+            className={combinedContentClassName}
+            style={combinedContentStyle}
+            id={id}
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby={id ? `${id}-title` : undefined}
+            data-testid="alert-dialog-content"
+            data-severity={severity}
+            onKeyDown={handleKeyDown}
+            tabIndex={-1}
+          >
+            {children}
+          </div>
+        </AlertDialogContext.Provider>
+      );
+
+      return (
+        <>
+          {anchor}
+          {createPortal(dialog, portalTarget)}
+        </>
+      );
+    }
+
+    // ── Props-based API ──
     const iconClass = alertDialogIconRecipe({ severity });
     const iconSlot = getSlotProps('icon', iconClass, classNames, styles);
     const titleSlot = getSlotProps('title', alertDialogTitleStyle, classNames, styles);
@@ -377,3 +620,14 @@ export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogComponentProps>
     );
   },
 );
+
+/**
+ * AlertDialog bilesen — Dual API (props-based + compound).
+ */
+export const AlertDialog = Object.assign(AlertDialogBase, {
+  Title: AlertDialogTitle,
+  Description: AlertDialogDescription,
+  Actions: AlertDialogActions,
+  CancelButton: AlertDialogCancelButton,
+  ConfirmButton: AlertDialogConfirmButton,
+});

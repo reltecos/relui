@@ -118,6 +118,7 @@ const categoryOptions: CascaderOption[] = [
 const meta: Meta<typeof Cascader> = {
   title: 'Selects/Cascader',
   component: Cascader,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -243,6 +244,20 @@ export const Controlled: Story = {
       </div>
     );
   },
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ maxWidth: '400px' }}>
+      <Cascader options={locationOptions} placeholder="Konum secin">
+        <Cascader.Trigger>
+          <span>Konum secin (Compound)</span>
+        </Cascader.Trigger>
+        <Cascader.Panel />
+      </Cascader>
+    </div>
+  ),
 };
 
 export const CustomSlotStyles: Story = {

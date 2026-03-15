@@ -13,6 +13,7 @@ import { Box } from '../box';
 const meta: Meta<typeof Flex> = {
   title: 'Layout/Flex',
   component: Flex,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -20,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof Flex>;
 
 const Item = ({ children }: { children: React.ReactNode }) => (
-  <Box p={4} style={{ background: '#e0e7ff', borderRadius: '8px', textAlign: 'center' }}>
+  <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #e0e7ff)', borderRadius: '8px', textAlign: 'center' }}>
     {children}
   </Box>
 );
@@ -48,7 +49,7 @@ export const Column: Story = {
 export const Centered: Story = {
   render: () => (
     <Flex align="center" justify="center" gap={4} height={32}>
-      <Item>Ortalanmış</Item>
+      <Item>Ortalanmis</Item>
     </Flex>
   ),
 };
@@ -73,27 +74,38 @@ export const Responsive: Story = {
       gap={{ base: 2, md: 4 }}
       wrap="wrap"
     >
-      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: '#fef3c7', borderRadius: '8px' }}>
+      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: 'var(--rel-color-bg-subtle, #fef3c7)', borderRadius: '8px' }}>
         1/3
       </Box>
-      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: '#fed7aa', borderRadius: '8px' }}>
+      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: 'var(--rel-color-bg-subtle, #fed7aa)', borderRadius: '8px' }}>
         1/3
       </Box>
-      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: '#fecaca', borderRadius: '8px' }}>
+      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: 'var(--rel-color-bg-subtle, #fecaca)', borderRadius: '8px' }}>
         1/3
       </Box>
     </Flex>
   ),
 };
 
-export const Wrapped: Story = {
+/** Compound API — Flex.Item ile kullanim. */
+export const Compound: Story = {
   render: () => (
-    <Flex wrap="wrap" gap={2}>
-      {Array.from({ length: 12 }, (_, i) => (
-        <Box key={i} p={3} width={20} style={{ background: '#dbeafe', borderRadius: '6px', textAlign: 'center' }}>
-          {i + 1}
+    <Flex gap={4}>
+      <Flex.Item>
+        <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #e0e7ff)', borderRadius: '8px' }}>
+          Flex.Item 1
         </Box>
-      ))}
+      </Flex.Item>
+      <Flex.Item>
+        <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #dbeafe)', borderRadius: '8px' }}>
+          Flex.Item 2
+        </Box>
+      </Flex.Item>
+      <Flex.Item>
+        <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #e0f2fe)', borderRadius: '8px' }}>
+          Flex.Item 3
+        </Box>
+      </Flex.Item>
     </Flex>
   ),
 };
@@ -103,7 +115,7 @@ export const CustomSlotStyles: Story = {
     <Flex
       gap={4}
       classNames={{ root: 'custom-flex' }}
-      styles={{ root: { border: '2px dashed #6366f1', padding: '16px', borderRadius: '12px' } }}
+      styles={{ root: { border: '2px dashed var(--rel-color-primary, #6366f1)', padding: '16px', borderRadius: '12px' } }}
     >
       <Item>Slot styled</Item>
       <Item>Flex</Item>

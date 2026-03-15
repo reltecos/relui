@@ -12,6 +12,7 @@ import '@testing-library/jest-dom/vitest';
 import { Box } from './Box';
 
 describe('Box', () => {
+  // ── Root ──
   it('renders as div by default', () => {
     render(<Box data-testid="box">content</Box>);
     const el = screen.getByTestId('box');
@@ -27,6 +28,16 @@ describe('Box', () => {
   it('renders as nav element', () => {
     render(<Box as="nav" data-testid="box">nav</Box>);
     expect(screen.getByTestId('box').tagName).toBe('NAV');
+  });
+
+  it('renders as article element', () => {
+    render(<Box as="article" data-testid="box">article</Box>);
+    expect(screen.getByTestId('box').tagName).toBe('ARTICLE');
+  });
+
+  it('renders as main element', () => {
+    render(<Box as="main" data-testid="box">main</Box>);
+    expect(screen.getByTestId('box').tagName).toBe('MAIN');
   });
 
   it('passes through HTML attributes', () => {
@@ -58,16 +69,21 @@ describe('Box', () => {
     expect(el.children).toHaveLength(2);
   });
 
+  it('renders empty without children', () => {
+    render(<Box data-testid="box" />);
+    expect(screen.getByTestId('box')).toBeInTheDocument();
+  });
+
   it('forwards ref', () => {
     let refValue: HTMLElement | null = null;
     render(<Box ref={(el) => { refValue = el; }} data-testid="box" />);
     expect(refValue).toBe(screen.getByTestId('box'));
   });
 
+  // ── Sprinkles ──
   it('applies sprinkles display prop as className', () => {
     render(<Box data-testid="box" display="flex" />);
     const el = screen.getByTestId('box');
-    // Sprinkles atomic class uygulanmış olmalı
     expect(el.className).toBeTruthy();
   });
 
@@ -80,10 +96,20 @@ describe('Box', () => {
   it('does not pass sprinkles props to DOM element', () => {
     render(<Box data-testid="box" display="flex" gap={4} />);
     const el = screen.getByTestId('box');
-    // Sprinkles prop'ları DOM attribute olarak geçmemeli
     expect(el).not.toHaveAttribute('gap');
   });
 
+  it('applies sprinkles padding shorthand', () => {
+    render(<Box data-testid="box" p={4} />);
+    expect(screen.getByTestId('box').className).toBeTruthy();
+  });
+
+  it('applies sprinkles width prop', () => {
+    render(<Box data-testid="box" width="full" />);
+    expect(screen.getByTestId('box').className).toBeTruthy();
+  });
+
+  // ── classNames & styles ──
   describe('classNames & styles', () => {
     it('applies classNames.root', () => {
       render(<Box data-testid="box" classNames={{ root: 'slot-root' }} />);
@@ -129,8 +155,21 @@ describe('Box', () => {
       const el = screen.getByTestId('box');
       expect(el).toHaveClass('extra');
       expect(el).toHaveClass('slot');
-      // Sprinkles class da dahil
       expect(el.className.split(' ').length).toBeGreaterThanOrEqual(3);
+    });
+
+    it('applies styles.root with padding', () => {
+      render(
+        <Box data-testid="box" styles={{ root: { padding: '20px' } }} />,
+      );
+      expect(screen.getByTestId('box')).toHaveStyle({ padding: '20px' });
+    });
+
+    it('applies styles.root with fontSize', () => {
+      render(
+        <Box data-testid="box" styles={{ root: { fontSize: '16px' } }} />,
+      );
+      expect(screen.getByTestId('box')).toHaveStyle({ fontSize: '16px' });
     });
   });
 });

@@ -10,4 +10,7 @@ export {
   FloatingWindow,
   type FloatingWindowComponentProps,
   type FloatingWindowSlot,
+  type FloatingWindowHeaderProps,
+  type FloatingWindowBodyProps,
+  type FloatingWindowCloseButtonProps,
 } from './FloatingWindow';

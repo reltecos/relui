@@ -7,16 +7,16 @@
  */
 
 /**
- * NotificationCenter — bildirim merkezi paneli.
- * NotificationCenter — notification center panel.
+ * NotificationCenter — bildirim merkezi paneli (Dual API).
+ * NotificationCenter — notification center panel (Dual API).
  *
- * macOS/Windows tarzi sagdan slide-in bildirim paneli.
- * macOS/Windows style slide-in notification panel from the right.
+ * Props-based: `<NotificationCenter notifications={list} open={true} unreadCount={3} />`
+ * Compound:    `<NotificationCenter open={true}><NotificationCenter.Header>...</NotificationCenter.Header>...</NotificationCenter>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import {
   ncOverlayStyle,
   ncPanelStyle,
@@ -36,7 +36,7 @@ import {
   ncItemCloseButtonStyle,
   ncEmptyStateStyle,
 } from './notification-center.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 import type { NotificationItem, NotificationSeverity } from '@relteco/relui-core';
 import {
   InfoCircleIcon,
@@ -93,6 +93,111 @@ function formatTimestamp(ts: number): string {
   return `${days} gun once`;
 }
 
+// ── Context (Compound API) ──────────────────────────
+
+interface NotificationCenterContextValue {
+  classNames: ClassNames<NotificationCenterSlot> | undefined;
+  styles: Styles<NotificationCenterSlot> | undefined;
+}
+
+const NotificationCenterContext = createContext<NotificationCenterContextValue | null>(null);
+
+function useNotificationCenterContext(): NotificationCenterContextValue {
+  const ctx = useContext(NotificationCenterContext);
+  if (!ctx) throw new Error('NotificationCenter compound sub-components must be used within <NotificationCenter>.');
+  return ctx;
+}
+
+// ── Compound: NotificationCenter.Header ─────────────
+
+/** NotificationCenter.Header props */
+export interface NotificationCenterHeaderProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const NotificationCenterHeader = forwardRef<HTMLDivElement, NotificationCenterHeaderProps>(
+  function NotificationCenterHeader(props, ref) {
+    const { children, className } = props;
+    const ctx = useNotificationCenterContext();
+    const slot = getSlotProps('header', ncHeaderStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="nc-header">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: NotificationCenter.Item ───────────────
+
+/** NotificationCenter.Item props */
+export interface NotificationCenterItemProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Okundu mu / Read */
+  read?: boolean;
+  /** Severity / Severity */
+  severity?: NotificationSeverity;
+  /** Tiklaninca callback / On click callback */
+  onClick?: () => void;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const NotificationCenterItem = forwardRef<HTMLDivElement, NotificationCenterItemProps>(
+  function NotificationCenterItem(props, ref) {
+    const { children, read = false, severity = 'info', onClick, className } = props;
+    const ctx = useNotificationCenterContext();
+    const itemClass = ncItemRecipe({ read });
+    const slot = getSlotProps('item', itemClass, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        data-testid="nc-item"
+        data-severity={severity}
+        data-read={read}
+        onClick={onClick}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: NotificationCenter.EmptyState ─────────
+
+/** NotificationCenter.EmptyState props */
+export interface NotificationCenterEmptyStateProps {
+  /** Icerik (varsayilan: "Bildirim yok") / Content (default: "Bildirim yok") */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const NotificationCenterEmptyState = forwardRef<HTMLDivElement, NotificationCenterEmptyStateProps>(
+  function NotificationCenterEmptyState(props, ref) {
+    const { children, className } = props;
+    const ctx = useNotificationCenterContext();
+    const slot = getSlotProps('emptyState', ncEmptyStateStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="nc-empty">
+        {children ?? 'Bildirim yok'}
+      </div>
+    );
+  },
+);
+
 // ── Component Props ─────────────────────────────────
 
 export interface NotificationCenterComponentProps extends SlotStyleProps<NotificationCenterSlot> {
@@ -118,6 +223,8 @@ export interface NotificationCenterComponentProps extends SlotStyleProps<Notific
   closeOnOverlay?: boolean;
   /** Zaman formatci / Timestamp formatter */
   formatTime?: (timestamp: number) => string;
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
   /** Ek className / Additional className */
   className?: string;
   /** Inline style / Inline style */
@@ -128,31 +235,7 @@ export interface NotificationCenterComponentProps extends SlotStyleProps<Notific
 
 // ── Component ─────────────────────────────────────────
 
-/**
- * NotificationCenter bilesen — bildirim merkezi paneli.
- * NotificationCenter component — notification center panel.
- *
- * @example
- * ```tsx
- * const { notifications, open, unreadCount, add, remove, markRead, markAllRead, removeAll, toggle } = useNotificationCenter();
- *
- * <button onClick={toggle}>
- *   Bildirimler ({unreadCount})
- * </button>
- *
- * <NotificationCenter
- *   notifications={notifications}
- *   open={open}
- *   unreadCount={unreadCount}
- *   onClose={toggle}
- *   onRemove={remove}
- *   onClick={markRead}
- *   onMarkAllRead={markAllRead}
- *   onClearAll={removeAll}
- * />
- * ```
- */
-export const NotificationCenter = forwardRef<HTMLDivElement, NotificationCenterComponentProps>(
+const NotificationCenterBase = forwardRef<HTMLDivElement, NotificationCenterComponentProps>(
   function NotificationCenter(props, ref) {
     const {
       notifications,
@@ -166,6 +249,7 @@ export const NotificationCenter = forwardRef<HTMLDivElement, NotificationCenterC
       onClearAll,
       closeOnOverlay = true,
       formatTime = formatTimestamp,
+      children,
       className,
       style: styleProp,
       classNames,
@@ -184,6 +268,38 @@ export const NotificationCenter = forwardRef<HTMLDivElement, NotificationCenterC
     const combinedPanelStyle = styleProp
       ? { ...panelSlot.style, ...styleProp }
       : panelSlot.style;
+
+    const ctxValue: NotificationCenterContextValue = { classNames, styles };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <NotificationCenterContext.Provider value={ctxValue}>
+          {/* Overlay */}
+          <div
+            className={overlaySlot.className}
+            style={overlaySlot.style}
+            onClick={closeOnOverlay ? onClose : undefined}
+            data-testid="nc-overlay"
+            aria-hidden="true"
+          />
+          {/* Panel */}
+          <div
+            ref={ref}
+            className={combinedPanelClassName}
+            style={combinedPanelStyle}
+            id={id}
+            role="region"
+            aria-label={title}
+            data-testid="nc-panel"
+          >
+            {children}
+          </div>
+        </NotificationCenterContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const headerSlot = getSlotProps('header', ncHeaderStyle, classNames, styles);
     const headerTitleSlot = getSlotProps('headerTitle', ncHeaderTitleStyle, classNames, styles);
     const badgeSlot = getSlotProps('badge', ncBadgeStyle, classNames, styles);
@@ -356,3 +472,26 @@ export const NotificationCenter = forwardRef<HTMLDivElement, NotificationCenterC
     );
   },
 );
+
+/**
+ * NotificationCenter bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <NotificationCenter notifications={list} open={true} unreadCount={3} onClose={toggle} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <NotificationCenter notifications={list} open={true} unreadCount={3}>
+ *   <NotificationCenter.Header>Bildirimler</NotificationCenter.Header>
+ *   <NotificationCenter.Item severity="info">Yeni mesaj</NotificationCenter.Item>
+ *   <NotificationCenter.EmptyState>Bildirim yok</NotificationCenter.EmptyState>
+ * </NotificationCenter>
+ * ```
+ */
+export const NotificationCenter = Object.assign(NotificationCenterBase, {
+  Header: NotificationCenterHeader,
+  Item: NotificationCenterItem,
+  EmptyState: NotificationCenterEmptyState,
+});

@@ -288,4 +288,66 @@ describe('SplitPanel', () => {
       expect(gutter).toHaveStyle({ opacity: '0.7' });
     });
   });
+
+  // ── Compound API ──────────────────────────────────────
+
+  describe('compound API', () => {
+    it('renders SplitPanel.Pane with content', () => {
+      render(
+        <SplitPanel>
+          <SplitPanel.Pane>Pane Content</SplitPanel.Pane>
+          <SplitPanel.Pane>Other Pane</SplitPanel.Pane>
+        </SplitPanel>,
+      );
+      expect(screen.getByText('Pane Content')).toBeInTheDocument();
+      expect(screen.getByText('Other Pane')).toBeInTheDocument();
+    });
+
+    it('renders SplitPanel.Pane with data-testid', () => {
+      render(
+        <SplitPanel>
+          <SplitPanel.Pane>Left</SplitPanel.Pane>
+          <SplitPanel.Pane>Right</SplitPanel.Pane>
+        </SplitPanel>,
+      );
+      const panes = screen.getAllByTestId('split-panel-pane');
+      expect(panes.length).toBe(2);
+    });
+
+    it('renders SplitPanel.Handle with role separator', () => {
+      render(
+        <SplitPanel>
+          <SplitPanel.Pane>Left</SplitPanel.Pane>
+          <SplitPanel.Handle />
+          <SplitPanel.Pane>Right</SplitPanel.Pane>
+        </SplitPanel>,
+      );
+      expect(screen.getByTestId('split-panel-handle')).toHaveAttribute('role', 'separator');
+    });
+
+    it('SplitPanel.Pane accepts custom className', () => {
+      render(
+        <SplitPanel>
+          <SplitPanel.Pane className="my-pane">Content</SplitPanel.Pane>
+          <SplitPanel.Pane>Other</SplitPanel.Pane>
+        </SplitPanel>,
+      );
+      const panes = screen.getAllByTestId('split-panel-pane');
+      expect(panes[0]).toHaveClass('my-pane');
+    });
+
+    it('compound root has data-orientation', () => {
+      render(
+        <SplitPanel data-testid="root" orientation="vertical">
+          <SplitPanel.Pane>Top</SplitPanel.Pane>
+          <SplitPanel.Pane>Bottom</SplitPanel.Pane>
+        </SplitPanel>,
+      );
+      expect(screen.getByTestId('root')).toHaveAttribute('data-orientation', 'vertical');
+    });
+
+    it('SplitPanel.Pane context disinda hata firlatir', () => {
+      expect(() => render(<SplitPanel.Pane>Test</SplitPanel.Pane>)).toThrow();
+    });
+  });
 });

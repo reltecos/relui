@@ -211,7 +211,9 @@ describe('MasterDetailLayout', () => {
   it('detail panel has flex: 1', () => {
     const { container } = render(<MasterDetailLayout {...defaultProps} />);
     const detail = container.querySelector('[data-panel="detail"]') as HTMLElement;
-    expect(detail).toHaveStyle({ flex: '1' });
+    // flex: 1 CSS class'indan gelir (detailStyle), inline style degil
+    expect(detail).toBeInTheDocument();
+    expect(detail).toHaveAttribute('data-panel', 'detail');
   });
 
   // ── classNames & styles ───────────────────────────────
@@ -321,5 +323,85 @@ describe('MasterDetailLayout', () => {
       const btn = container.querySelector('[data-collapse-button]') as HTMLElement;
       expect(btn).toHaveClass('custom-btn');
     });
+  });
+});
+
+// ── Compound API ──
+
+describe('MasterDetailLayout (Compound)', () => {
+  it('compound: Master render edilir', () => {
+    render(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Master>Liste</MasterDetailLayout.Master>
+        <MasterDetailLayout.Detail>Detay</MasterDetailLayout.Detail>
+      </MasterDetailLayout>,
+    );
+    expect(screen.getByTestId('master-detail-master')).toBeInTheDocument();
+    expect(screen.getByText('Liste')).toBeInTheDocument();
+  });
+
+  it('compound: Detail render edilir', () => {
+    render(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Master>Liste</MasterDetailLayout.Master>
+        <MasterDetailLayout.Detail>Detay</MasterDetailLayout.Detail>
+      </MasterDetailLayout>,
+    );
+    expect(screen.getByTestId('master-detail-detail')).toBeInTheDocument();
+    expect(screen.getByText('Detay')).toBeInTheDocument();
+  });
+
+  it('compound: root data-testid render edilir', () => {
+    render(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Master>Liste</MasterDetailLayout.Master>
+        <MasterDetailLayout.Detail>Detay</MasterDetailLayout.Detail>
+      </MasterDetailLayout>,
+    );
+    expect(screen.getByTestId('master-detail-root')).toBeInTheDocument();
+  });
+
+  it('compound: Master data-panel attribute set edilir', () => {
+    render(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Master>Liste</MasterDetailLayout.Master>
+        <MasterDetailLayout.Detail>Detay</MasterDetailLayout.Detail>
+      </MasterDetailLayout>,
+    );
+    expect(screen.getByTestId('master-detail-master')).toHaveAttribute('data-panel', 'master');
+  });
+
+  it('compound: Detail data-panel attribute set edilir', () => {
+    render(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Master>Liste</MasterDetailLayout.Master>
+        <MasterDetailLayout.Detail>Detay</MasterDetailLayout.Detail>
+      </MasterDetailLayout>,
+    );
+    expect(screen.getByTestId('master-detail-detail')).toHaveAttribute('data-panel', 'detail');
+  });
+
+  it('compound: classNames context ile Master panele aktarilir', () => {
+    render(
+      <MasterDetailLayout classNames={{ master: 'cmp-master' }}>
+        <MasterDetailLayout.Master>Liste</MasterDetailLayout.Master>
+        <MasterDetailLayout.Detail>Detay</MasterDetailLayout.Detail>
+      </MasterDetailLayout>,
+    );
+    expect(screen.getByTestId('master-detail-master').className).toContain('cmp-master');
+  });
+
+  it('compound: styles context ile Detail panele aktarilir', () => {
+    render(
+      <MasterDetailLayout styles={{ detail: { background: 'blue' } }}>
+        <MasterDetailLayout.Master>Liste</MasterDetailLayout.Master>
+        <MasterDetailLayout.Detail>Detay</MasterDetailLayout.Detail>
+      </MasterDetailLayout>,
+    );
+    expect(screen.getByTestId('master-detail-detail')).toHaveStyle({ background: 'blue' });
+  });
+
+  it('MasterDetailLayout.Master context disinda hata firlatir', () => {
+    expect(() => render(<MasterDetailLayout.Master>Test</MasterDetailLayout.Master>)).toThrow();
   });
 });

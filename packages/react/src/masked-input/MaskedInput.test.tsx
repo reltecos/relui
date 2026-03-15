@@ -8,7 +8,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import { MaskedInput } from './MaskedInput';
 import { MASK_PRESETS } from '@relteco/relui-core';
 
@@ -245,5 +245,40 @@ describe('MaskedInput', () => {
 
     expect(el).toHaveStyle({ margin: '4px' });
     expect(el).toHaveStyle({ padding: '10px' });
+  });
+});
+
+// ── Compound API ──
+
+describe('MaskedInput (Compound)', () => {
+  it('compound: MaskedInput.Field render edilir', () => {
+    render(
+      <MaskedInput mask="(###) ### ## ##" aria-label="Tel">
+        <MaskedInput.Field />
+      </MaskedInput>,
+    );
+    expect(screen.getByTestId('masked-input-field')).toBeInTheDocument();
+  });
+
+  it('compound: Field maskeli deger gosterir', () => {
+    render(
+      <MaskedInput mask="(###) ### ## ##" value="5321234567" aria-label="Tel">
+        <MaskedInput.Field />
+      </MaskedInput>,
+    );
+    expect(screen.getByTestId('masked-input-field')).toHaveValue('(532) 123 45 67');
+  });
+
+  it('compound: Field placeholder gosterir', () => {
+    render(
+      <MaskedInput mask="(###) ### ## ##" aria-label="Tel">
+        <MaskedInput.Field />
+      </MaskedInput>,
+    );
+    expect(screen.getByTestId('masked-input-field')).toHaveAttribute('placeholder', '(___) ___ __ __');
+  });
+
+  it('MaskedInput.Field context disinda hata firlatir', () => {
+    expect(() => render(<MaskedInput.Field />)).toThrow();
   });
 });

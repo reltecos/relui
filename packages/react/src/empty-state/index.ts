@@ -11,4 +11,8 @@ export {
   type EmptyStateComponentProps,
   type EmptyStateSlot,
   type EmptyStateSize,
+  type EmptyStateIconProps,
+  type EmptyStateTitleProps,
+  type EmptyStateDescriptionProps,
+  type EmptyStateActionProps,
 } from './EmptyState';

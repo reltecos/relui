@@ -6,5 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Checkbox, type CheckboxComponentProps, type CheckboxSlot } from './Checkbox';
+export {
+  Checkbox,
+  type CheckboxComponentProps,
+  type CheckboxSlot,
+  type CheckboxIndicatorProps,
+  type CheckboxLabelProps,
+} from './Checkbox';
 export { useCheckbox, type UseCheckboxProps, type UseCheckboxReturn } from './useCheckbox';

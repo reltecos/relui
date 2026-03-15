@@ -7,15 +7,18 @@
  */
 
 /**
- * BookLayout — sayfa çevirme navigasyonlu konteyner.
+ * BookLayout — sayfa cevirme navigasyonlu konteyner (Dual API).
  *
- * İleri/geri, direkt sayfa atlama ve döngüsel navigasyon.
+ * Props-based: `<BookLayout totalPages={5} renderPage={(i) => ...} />`
+ * Compound:    `<BookLayout><BookLayout.Page>...</BookLayout.Page><BookLayout.Navigation /></BookLayout>`
  *
  * @packageDocumentation
  */
 
 import {
   forwardRef,
+  createContext,
+  useContext,
   useRef,
   useReducer,
   type CSSProperties,
@@ -23,52 +26,204 @@ import {
 } from 'react';
 import { createBookLayout } from '@relteco/relui-core';
 import type { BookLayoutAPI } from '@relteco/relui-core';
-import { getSlotProps, type SlotStyleProps } from '../utils';
+import {
+  rootStyle,
+  pageStyle,
+  controlsStyle,
+  navButtonStyle,
+  navButtonDisabledStyle,
+  pageIndicatorStyle,
+} from './book-layout.css';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** BookLayout slot isimleri. */
 export type BookLayoutSlot = 'root' | 'page' | 'controls' | 'prevButton' | 'nextButton' | 'pageIndicator';
 
-/** BookLayout bileşen prop'ları. */
+// ── Context (Compound API) ──────────────────────────
+
+interface BookLayoutContextValue {
+  api: BookLayoutAPI;
+  forceRender: () => void;
+  onPageChange?: (page: number) => void;
+  classNames: ClassNames<BookLayoutSlot> | undefined;
+  styles: Styles<BookLayoutSlot> | undefined;
+  prevLabel: ReactNode;
+  nextLabel: ReactNode;
+  showPageIndicator: boolean;
+}
+
+const BookLayoutContext = createContext<BookLayoutContextValue | null>(null);
+
+function useBookLayoutContext(): BookLayoutContextValue {
+  const ctx = useContext(BookLayoutContext);
+  if (!ctx) throw new Error('BookLayout compound sub-components must be used within <BookLayout>.');
+  return ctx;
+}
+
+// ── Compound: BookLayout.Page ───────────────────────
+
+/** BookLayout.Page props */
+export interface BookLayoutPageProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const BookLayoutPage = forwardRef<HTMLDivElement, BookLayoutPageProps>(
+  function BookLayoutPage(props, ref) {
+    const { children, className } = props;
+    const ctx = useBookLayoutContext();
+    const slot = getSlotProps('page', pageStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        data-testid="book-layout-page"
+        data-book-page
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: BookLayout.Navigation ─────────────────
+
+/** BookLayout.Navigation props */
+export interface BookLayoutNavigationProps {
+  /** Onceki buton metni / Previous button label */
+  prevLabel?: ReactNode;
+  /** Sonraki buton metni / Next button label */
+  nextLabel?: ReactNode;
+  /** Sayfa gostergesini goster / Show page indicator */
+  showPageIndicator?: boolean;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const BookLayoutNavigation = forwardRef<HTMLDivElement, BookLayoutNavigationProps>(
+  function BookLayoutNavigation(props, ref) {
+    const ctx = useBookLayoutContext();
+    const {
+      prevLabel = ctx.prevLabel,
+      nextLabel = ctx.nextLabel,
+      showPageIndicator = ctx.showPageIndicator,
+      className,
+    } = props;
+
+    const api = ctx.api;
+    const page = api.getCurrentPage();
+    const total = api.getTotalPages();
+    const canPrev = api.canGoPrev();
+    const canNext = api.canGoNext();
+
+    const handlePrev = () => {
+      api.send({ type: 'PREV_PAGE' });
+      ctx.forceRender();
+      ctx.onPageChange?.(api.getCurrentPage());
+    };
+
+    const handleNext = () => {
+      api.send({ type: 'NEXT_PAGE' });
+      ctx.forceRender();
+      ctx.onPageChange?.(api.getCurrentPage());
+    };
+
+    const slot = getSlotProps('controls', controlsStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    const prevBtnSlot = getSlotProps('prevButton', canPrev ? navButtonStyle : navButtonDisabledStyle, ctx.classNames, ctx.styles);
+    const nextBtnSlot = getSlotProps('nextButton', canNext ? navButtonStyle : navButtonDisabledStyle, ctx.classNames, ctx.styles);
+    const indicatorSlot = getSlotProps('pageIndicator', pageIndicatorStyle, ctx.classNames, ctx.styles);
+
+    if (total <= 0) return null;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        data-testid="book-layout-controls"
+        data-book-controls
+      >
+        <button
+          type="button"
+          onClick={handlePrev}
+          disabled={!canPrev}
+          aria-label="Previous page"
+          className={prevBtnSlot.className || undefined}
+          style={prevBtnSlot.style}
+          data-book-prev
+        >
+          {prevLabel}
+        </button>
+
+        {showPageIndicator && (
+          <span
+            className={indicatorSlot.className || undefined}
+            style={indicatorSlot.style}
+            data-book-indicator
+          >
+            {page + 1} / {total}
+          </span>
+        )}
+
+        <button
+          type="button"
+          onClick={handleNext}
+          disabled={!canNext}
+          aria-label="Next page"
+          className={nextBtnSlot.className || undefined}
+          style={nextBtnSlot.style}
+          data-book-next
+        >
+          {nextLabel}
+        </button>
+      </div>
+    );
+  },
+);
+
+// ── Component Props ───────────────────────────────────
+
+/** BookLayout bilesen prop'lari. */
 export interface BookLayoutComponentProps
   extends SlotStyleProps<BookLayoutSlot>,
     Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   /** Root element inline style. */
   style?: CSSProperties;
-  /** Toplam sayfa sayısı. Varsayılan: 0. */
+  /** Toplam sayfa sayisi. Varsayilan: 0. */
   totalPages?: number;
-  /** Başlangıç sayfası (0-based). Varsayılan: 0. */
+  /** Baslangic sayfasi (0-based). Varsayilan: 0. */
   currentPage?: number;
-  /** Döngüsel navigasyon. Varsayılan: false. */
+  /** Dongusal navigasyon. Varsayilan: false. */
   loop?: boolean;
   /** Sayfa render fonksiyonu. pageIndex 0-based. */
-  renderPage: (pageIndex: number) => ReactNode;
-  /** Navigasyon kontrollerini göster. Varsayılan: true. */
+  renderPage?: (pageIndex: number) => ReactNode;
+  /** Navigasyon kontrollerini goster. Varsayilan: true. */
   showControls?: boolean;
-  /** Sayfa göstergesini göster. Varsayılan: true. */
+  /** Sayfa gostergesini goster. Varsayilan: true. */
   showPageIndicator?: boolean;
-  /** Önceki buton metni. Varsayılan: '‹'. */
+  /** Onceki buton metni. Varsayilan: '\u2039'. */
   prevLabel?: ReactNode;
-  /** Sonraki buton metni. Varsayılan: '›'. */
+  /** Sonraki buton metni. Varsayilan: '\u203A'. */
   nextLabel?: ReactNode;
-  /** Sayfa değiştiğinde çağrılır. */
+  /** Sayfa degistiginde cagrilir. */
   onPageChange?: (page: number) => void;
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
-/**
- * BookLayout — sayfa çevirme navigasyonlu konteyner.
- *
- * @example
- * ```tsx
- * <BookLayout
- *   totalPages={5}
- *   renderPage={(i) => <div>Page {i + 1}</div>}
- * />
- * ```
- */
-export const BookLayout = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
+// ── Component ─────────────────────────────────────────
+
+const BookLayoutBase = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
   function BookLayout(props, ref) {
     const {
-      children: _children,
+      children,
       className,
       style,
       classNames,
@@ -93,7 +248,49 @@ export const BookLayout = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
 
     const [, forceRender] = useReducer((c: number) => c + 1, 0);
 
-    // ── Navigation handlers ───────────────────────────
+    // ── State ─────────────────────────────────────────
+    const page = api.getCurrentPage();
+    const total = api.getTotalPages();
+    const canPrev = api.canGoPrev();
+    const canNext = api.canGoNext();
+
+    // ── Slot props ────────────────────────────────────
+    const rootSlot = getSlotProps('root', rootStyle, classNames, slotStyles);
+    const finalClass = [rootSlot.className, className].filter(Boolean).join(' ') || undefined;
+
+    const ctxValue: BookLayoutContextValue = {
+      api,
+      forceRender,
+      onPageChange,
+      classNames,
+      styles: slotStyles,
+      prevLabel,
+      nextLabel,
+      showPageIndicator,
+    };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <BookLayoutContext.Provider value={ctxValue}>
+          <div
+            ref={ref}
+            {...rest}
+            className={finalClass}
+            style={{ ...rootSlot.style, ...style }}
+            data-book-layout
+            data-current-page={page}
+            data-total-pages={total}
+            data-testid="book-layout-root"
+          >
+            {children}
+          </div>
+        </BookLayoutContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
+    // Navigation handlers
     const handlePrev = () => {
       api.send({ type: 'PREV_PAGE' });
       forceRender();
@@ -106,72 +303,18 @@ export const BookLayout = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
       onPageChange?.(api.getCurrentPage());
     };
 
-    // ── State ─────────────────────────────────────────
-    const page = api.getCurrentPage();
-    const total = api.getTotalPages();
-    const canPrev = api.canGoPrev();
-    const canNext = api.canGoNext();
-
-    // ── Slot props ────────────────────────────────────
-    const rootSlot = getSlotProps(
-      'root',
-      undefined,
-      classNames,
-      slotStyles,
-      {
-        display: 'flex',
-        flexDirection: 'column' as const,
-        ...style,
-      },
-    );
-
-    const pageSlot = getSlotProps('page', undefined, classNames, slotStyles, {
-      flex: 1,
-      overflow: 'hidden',
-    });
-
-    const controlsSlot = getSlotProps('controls', undefined, classNames, slotStyles, {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 8,
-      padding: '8px 0',
-    });
-
-    const prevBtnSlot = getSlotProps('prevButton', undefined, classNames, slotStyles);
-    const nextBtnSlot = getSlotProps('nextButton', undefined, classNames, slotStyles);
-
-    const indicatorSlot = getSlotProps('pageIndicator', undefined, classNames, slotStyles, {
-      fontSize: 13,
-      color: 'var(--rel-color-text-muted, #64748b)',
-    });
-
-    const finalClass = [rootSlot.className, className].filter(Boolean).join(' ') || undefined;
-
-    // ── Button style ──────────────────────────────────
-    const navBtnBase: CSSProperties = {
-      border: '1px solid var(--rel-color-border, #e2e8f0)',
-      borderRadius: 4,
-      background: 'var(--rel-color-bg, #fff)',
-      cursor: 'pointer',
-      padding: '4px 12px',
-      fontSize: 18,
-      lineHeight: 1,
-      color: 'var(--rel-color-text, #1e293b)',
-    };
-
-    const disabledBtnStyle: CSSProperties = {
-      ...navBtnBase,
-      opacity: 0.4,
-      cursor: 'not-allowed',
-    };
+    const pageSlot = getSlotProps('page', pageStyle, classNames, slotStyles);
+    const controlsSlotResult = getSlotProps('controls', controlsStyle, classNames, slotStyles);
+    const prevBtnSlot = getSlotProps('prevButton', canPrev ? navButtonStyle : navButtonDisabledStyle, classNames, slotStyles);
+    const nextBtnSlot = getSlotProps('nextButton', canNext ? navButtonStyle : navButtonDisabledStyle, classNames, slotStyles);
+    const indicatorSlot = getSlotProps('pageIndicator', pageIndicatorStyle, classNames, slotStyles);
 
     return (
       <div
         ref={ref}
         {...rest}
         className={finalClass}
-        style={rootSlot.style}
+        style={{ ...rootSlot.style, ...style }}
         data-book-layout
         data-current-page={page}
         data-total-pages={total}
@@ -181,13 +324,13 @@ export const BookLayout = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
           style={pageSlot.style}
           data-book-page
         >
-          {total > 0 ? renderPage(page) : null}
+          {total > 0 && renderPage ? renderPage(page) : null}
         </div>
 
         {showControls && total > 0 && (
           <div
-            className={controlsSlot.className || undefined}
-            style={controlsSlot.style}
+            className={controlsSlotResult.className || undefined}
+            style={controlsSlotResult.style}
             data-book-controls
           >
             <button
@@ -196,7 +339,7 @@ export const BookLayout = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
               disabled={!canPrev}
               aria-label="Previous page"
               className={prevBtnSlot.className || undefined}
-              style={{ ...(canPrev ? navBtnBase : disabledBtnStyle), ...prevBtnSlot.style }}
+              style={prevBtnSlot.style}
               data-book-prev
             >
               {prevLabel}
@@ -218,7 +361,7 @@ export const BookLayout = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
               disabled={!canNext}
               aria-label="Next page"
               className={nextBtnSlot.className || undefined}
-              style={{ ...(canNext ? navBtnBase : disabledBtnStyle), ...nextBtnSlot.style }}
+              style={nextBtnSlot.style}
               data-book-next
             >
               {nextLabel}
@@ -229,3 +372,24 @@ export const BookLayout = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
     );
   },
 );
+
+/**
+ * BookLayout bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <BookLayout totalPages={5} renderPage={(i) => <div>Page {i + 1}</div>} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <BookLayout totalPages={5}>
+ *   <BookLayout.Page>{renderPage(currentPage)}</BookLayout.Page>
+ *   <BookLayout.Navigation />
+ * </BookLayout>
+ * ```
+ */
+export const BookLayout = Object.assign(BookLayoutBase, {
+  Page: BookLayoutPage,
+  Navigation: BookLayoutNavigation,
+});

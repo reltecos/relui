@@ -470,3 +470,75 @@ describe('Spotlight loading', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 });
+
+// ── Compound API ──────────────────────────────────────────────
+
+describe('Spotlight (Compound)', () => {
+  it('compound: dialog render edilir', () => {
+    render(
+      <OpenSpotlight items={[]}>
+        <Spotlight.Input placeholder="Search..." />
+        <Spotlight.List>
+          <Spotlight.Item>README.md</Spotlight.Item>
+        </Spotlight.List>
+      </OpenSpotlight>,
+    );
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  it('compound: input render edilir', () => {
+    render(
+      <OpenSpotlight items={[]}>
+        <Spotlight.Input placeholder="Type here..." />
+        <Spotlight.List>
+          <Spotlight.Item>Doc</Spotlight.Item>
+        </Spotlight.List>
+      </OpenSpotlight>,
+    );
+    expect(screen.getByTestId('spot-input')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Type here...')).toBeInTheDocument();
+  });
+
+  it('compound: list ve item render edilir', () => {
+    render(
+      <OpenSpotlight items={[]}>
+        <Spotlight.Input />
+        <Spotlight.List>
+          <Spotlight.Item>README.md</Spotlight.Item>
+          <Spotlight.Item>package.json</Spotlight.Item>
+        </Spotlight.List>
+      </OpenSpotlight>,
+    );
+    expect(screen.getByTestId('spot-list')).toBeInTheDocument();
+    const items = screen.getAllByTestId('spot-item');
+    expect(items).toHaveLength(2);
+  });
+
+  it('compound: item description render edilir', () => {
+    render(
+      <OpenSpotlight items={[]}>
+        <Spotlight.Input />
+        <Spotlight.List>
+          <Spotlight.Item description="Project docs">README.md</Spotlight.Item>
+        </Spotlight.List>
+      </OpenSpotlight>,
+    );
+    expect(screen.getByText('Project docs')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <OpenSpotlight items={[]} classNames={{ item: 'cmp-item' }}>
+        <Spotlight.Input />
+        <Spotlight.List>
+          <Spotlight.Item>Doc</Spotlight.Item>
+        </Spotlight.List>
+      </OpenSpotlight>,
+    );
+    expect(screen.getByTestId('spot-item').className).toContain('cmp-item');
+  });
+
+  it('Spotlight.Input context disinda hata firlatir', () => {
+    expect(() => render(<Spotlight.Input />)).toThrow();
+  });
+});

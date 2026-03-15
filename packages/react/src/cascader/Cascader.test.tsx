@@ -384,3 +384,75 @@ describe('Cascader — classNames & styles', () => {
     expect(options[0]).toHaveClass('my-option');
   });
 });
+
+// ── Compound API ──
+
+describe('Cascader (Compound)', () => {
+  it('compound: root render edilir', () => {
+    render(
+      <Cascader options={sampleOptions}>
+        <Cascader.Trigger>
+          <span>Konum secin</span>
+        </Cascader.Trigger>
+        <Cascader.Panel />
+      </Cascader>,
+    );
+    expect(screen.getByTestId('cascader-root')).toBeInTheDocument();
+  });
+
+  it('compound: trigger render edilir', () => {
+    render(
+      <Cascader options={sampleOptions}>
+        <Cascader.Trigger>
+          <span>Konum secin</span>
+        </Cascader.Trigger>
+        <Cascader.Panel />
+      </Cascader>,
+    );
+    expect(screen.getByTestId('cascader-trigger')).toBeInTheDocument();
+  });
+
+  it('compound: panel acilir', () => {
+    render(
+      <Cascader options={sampleOptions}>
+        <Cascader.Trigger>
+          <span>Konum secin</span>
+        </Cascader.Trigger>
+        <Cascader.Panel />
+      </Cascader>,
+    );
+    fireEvent.click(screen.getByTestId('cascader-trigger'));
+    expect(screen.getByTestId('cascader-panel')).toBeInTheDocument();
+  });
+
+  it('compound: secim yapilir', () => {
+    const handleChange = vi.fn();
+    render(
+      <Cascader options={sampleOptions} onValueChange={handleChange}>
+        <Cascader.Trigger>
+          <span>Konum secin</span>
+        </Cascader.Trigger>
+        <Cascader.Panel />
+      </Cascader>,
+    );
+    fireEvent.click(screen.getByTestId('cascader-trigger'));
+    fireEvent.click(screen.getByText('Almanya'));
+    expect(handleChange).toHaveBeenCalledWith(['de']);
+  });
+
+  it('compound: derin secim yapar', () => {
+    const handleChange = vi.fn();
+    render(
+      <Cascader options={sampleOptions} onValueChange={handleChange}>
+        <Cascader.Trigger>
+          <span>Konum secin</span>
+        </Cascader.Trigger>
+        <Cascader.Panel />
+      </Cascader>,
+    );
+    fireEvent.click(screen.getByTestId('cascader-trigger'));
+    fireEvent.click(screen.getByText('Türkiye'));
+    fireEvent.click(screen.getByText('Ankara'));
+    expect(handleChange).toHaveBeenCalledWith(['tr', 'ank']);
+  });
+});

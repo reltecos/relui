@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { FormGroup } from './FormGroup';
@@ -214,5 +214,71 @@ describe('FormGroup', () => {
     );
 
     expect(container.querySelector('legend')).toHaveStyle({ fontSize: '16px' });
+  });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(
+      <FormGroup ref={ref}>
+        <div>Icerik</div>
+      </FormGroup>,
+    );
+    expect(ref).toHaveBeenCalled();
+  });
+});
+
+// ── Compound API ──────────────────────────────────────
+
+describe('FormGroup (Compound)', () => {
+  it('compound: Legend sub-component render edilir', () => {
+    render(
+      <FormGroup>
+        <FormGroup.Legend>Kisisel Bilgiler</FormGroup.Legend>
+        <div>Icerik</div>
+      </FormGroup>,
+    );
+    expect(screen.getByTestId('form-group-legend')).toHaveTextContent('Kisisel Bilgiler');
+  });
+
+  it('compound: Content sub-component render edilir', () => {
+    render(
+      <FormGroup>
+        <FormGroup.Legend>Baslik</FormGroup.Legend>
+        <FormGroup.Content>
+          <div data-testid="inner-field">Alan</div>
+        </FormGroup.Content>
+      </FormGroup>,
+    );
+    expect(screen.getByTestId('form-group-content')).toBeInTheDocument();
+    expect(screen.getByTestId('inner-field')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <FormGroup classNames={{ legend: 'cmp-legend' }}>
+        <FormGroup.Legend>Test</FormGroup.Legend>
+      </FormGroup>,
+    );
+    expect(screen.getByTestId('form-group-legend').className).toContain('cmp-legend');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <FormGroup styles={{ legend: { letterSpacing: '3px' } }}>
+        <FormGroup.Legend>Test</FormGroup.Legend>
+      </FormGroup>,
+    );
+    expect(screen.getByTestId('form-group-legend')).toHaveStyle({ letterSpacing: '3px' });
+  });
+
+  it('compound: Content styles context ile aktarilir', () => {
+    render(
+      <FormGroup styles={{ content: { padding: '12px' } }}>
+        <FormGroup.Content>
+          <div>Icerik</div>
+        </FormGroup.Content>
+      </FormGroup>,
+    );
+    expect(screen.getByTestId('form-group-content')).toHaveStyle({ padding: '12px' });
   });
 });

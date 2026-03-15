@@ -118,7 +118,7 @@ describe('Combobox', () => {
   it('eslesme yoksa sonuc bulunamadi gosterir / no match shows no results', () => {
     renderCombobox();
     fireEvent.change(getInput(), { target: { value: 'xyz' } });
-    expect(screen.getByText('Sonuç bulunamadı')).toBeInTheDocument();
+    expect(screen.getByText('Sonuc bulunamadi')).toBeInTheDocument();
   });
 
   it('onSearchChange cagrilir / onSearchChange is called', () => {
@@ -340,5 +340,67 @@ describe('Combobox', () => {
     fireEvent.focus(getInput());
 
     expect(screen.getByRole('listbox')).toHaveStyle({ maxHeight: '200px' });
+  });
+});
+
+// ── Compound API ──
+
+describe('Combobox (Compound)', () => {
+  it('compound: root render edilir', () => {
+    render(
+      <Combobox options={basicOptions}>
+        <Combobox.Input />
+        <Combobox.Content />
+      </Combobox>,
+    );
+    expect(screen.getByTestId('combobox-root')).toBeInTheDocument();
+  });
+
+  it('compound: input render edilir', () => {
+    render(
+      <Combobox options={basicOptions}>
+        <Combobox.Input />
+        <Combobox.Content />
+      </Combobox>,
+    );
+    expect(screen.getByTestId('combobox-input')).toBeInTheDocument();
+  });
+
+  it('compound: content focus ile acilir', () => {
+    render(
+      <Combobox options={basicOptions}>
+        <Combobox.Input />
+        <Combobox.Content />
+      </Combobox>,
+    );
+    const input = screen.getByTestId('combobox-input');
+    fireEvent.focus(input);
+    expect(screen.getByTestId('combobox-content')).toBeInTheDocument();
+  });
+
+  it('compound: secim yapilir', () => {
+    const onValueChange = vi.fn();
+    render(
+      <Combobox options={basicOptions} onValueChange={onValueChange}>
+        <Combobox.Input />
+        <Combobox.Content />
+      </Combobox>,
+    );
+    const input = screen.getByTestId('combobox-input');
+    fireEvent.focus(input);
+    fireEvent.click(screen.getByText('ABD'));
+    expect(onValueChange).toHaveBeenCalledWith('us');
+  });
+
+  it('compound: empty sonuc gosterir', () => {
+    render(
+      <Combobox options={basicOptions}>
+        <Combobox.Input />
+        <Combobox.Content />
+      </Combobox>,
+    );
+    const input = screen.getByTestId('combobox-input');
+    fireEvent.change(input, { target: { value: 'xyz' } });
+    expect(screen.getByTestId('combobox-empty')).toBeInTheDocument();
   });
 });

@@ -342,3 +342,56 @@ describe('TagInput', () => {
     });
   });
 });
+
+// ── Compound API ──────────────────────────────────────
+
+describe('TagInput (Compound)', () => {
+  it('compound: Tag sub-component render edilir', () => {
+    render(
+      <TagInput options={basicOptions} aria-label="Teknolojiler">
+        <TagInput.Tag>Custom Tag</TagInput.Tag>
+      </TagInput>,
+    );
+    expect(screen.getByTestId('tag-input-tag')).toHaveTextContent('Custom Tag');
+  });
+
+  it('compound: Input sub-component render edilir', () => {
+    render(
+      <TagInput options={basicOptions} aria-label="Teknolojiler">
+        <TagInput.Input>
+          <span data-testid="custom-input">Custom</span>
+        </TagInput.Input>
+      </TagInput>,
+    );
+    expect(screen.getByTestId('tag-input-input')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-input')).toBeInTheDocument();
+  });
+
+  it('compound: root render edilir', () => {
+    render(
+      <TagInput options={basicOptions} aria-label="Teknolojiler">
+        <TagInput.Tag>A</TagInput.Tag>
+        <TagInput.Input />
+      </TagInput>,
+    );
+    expect(screen.getByTestId('tag-input-root')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <TagInput options={basicOptions} aria-label="Teknolojiler" classNames={{ tag: 'cmp-tag' }}>
+        <TagInput.Tag>Test</TagInput.Tag>
+      </TagInput>,
+    );
+    expect(screen.getByTestId('tag-input-tag').className).toContain('cmp-tag');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <TagInput options={basicOptions} aria-label="Teknolojiler" styles={{ input: { padding: '10px' } }}>
+        <TagInput.Input />
+      </TagInput>,
+    );
+    expect(screen.getByTestId('tag-input-input')).toHaveStyle({ padding: '10px' });
+  });
+});

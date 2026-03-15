@@ -12,6 +12,7 @@ import { TileLayout } from './TileLayout';
 const meta: Meta<typeof TileLayout> = {
   title: 'Window Manager/TileLayout',
   component: TileLayout,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -154,5 +155,24 @@ export const CustomSlotStyles: Story = {
       }}
       renderTile={(tile) => <div style={{ fontWeight: 600 }}>{tile.id.toUpperCase()}</div>}
     />
+  ),
+};
+
+export const Compound: Story = {
+  render: () => (
+    <TileLayout columns={3} gap={8} rowHeight={150}>
+      <TileLayout.Tile row={0} col={0} id="header" colSpan={3}>
+        <div style={tileStyle}>Header (Compound API)</div>
+      </TileLayout.Tile>
+      <TileLayout.Tile row={1} col={0} id="sidebar" rowSpan={2}>
+        <div style={tileStyle}>Sidebar</div>
+      </TileLayout.Tile>
+      <TileLayout.Tile row={1} col={1} id="main" colSpan={2}>
+        <div style={tileStyle}>Main Content</div>
+      </TileLayout.Tile>
+      <TileLayout.Tile row={2} col={1} id="footer" colSpan={2}>
+        <div style={tileStyle}>Footer</div>
+      </TileLayout.Tile>
+    </TileLayout>
   ),
 };

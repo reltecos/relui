@@ -7,61 +7,104 @@
  */
 
 /**
- * ResponsiveBox — breakpoint kurallarıyla otomatik layout değişimi.
+ * ResponsiveBox — breakpoint kurallariyla otomatik layout degisimi (Dual API).
  *
- * Container Query veya matchMedia ile mevcut genişliğe göre
- * farklı layout kuralları uygular. Her kural bir breakpoint aralığı
- * ve uygulanacak CSS props içerir.
+ * Props-based: `<ResponsiveBox display="flex"><Box>A</Box></ResponsiveBox>`
+ * Compound:    `<ResponsiveBox display="flex"><ResponsiveBox.Item>A</ResponsiveBox.Item></ResponsiveBox>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef } from 'react';
+import { forwardRef, createContext, useContext } from 'react';
 import { getSlotProps, type SlotStyleProps } from '../utils';
+import type { ClassNames, Styles } from '../utils/slot-styles';
 import { Box, type BoxProps } from '../box';
+import { responsiveBoxItemStyle } from './responsive-box.css';
 
 /** ResponsiveBox slot isimleri. */
-export type ResponsiveBoxSlot = 'root';
+export type ResponsiveBoxSlot = 'root' | 'item';
 
-/** Breakpoint kuralı. */
+/** Breakpoint kurali. */
 export interface ResponsiveRule {
-  /** Minimum genişlik (px). */
+  /** Minimum genislik (px). */
   minWidth?: number;
-  /** Maksimum genişlik (px). */
+  /** Maksimum genislik (px). */
   maxWidth?: number;
-  /** Bu aralıkta uygulanacak Box props. */
+  /** Bu aralikta uygulanacak Box props. */
   props: Omit<BoxProps, 'children' | 'ref' | 'classNames' | 'styles'>;
 }
 
-/** ResponsiveBox bileşen prop'ları. */
+// ── Context (Compound API) ──────────────────────────
+
+interface ResponsiveBoxContextValue {
+  classNames: ClassNames<ResponsiveBoxSlot> | undefined;
+  styles: Styles<ResponsiveBoxSlot> | undefined;
+}
+
+const ResponsiveBoxContext = createContext<ResponsiveBoxContextValue | null>(null);
+
+/** ResponsiveBox compound context hook. */
+export function useResponsiveBoxContext(): ResponsiveBoxContextValue {
+  const ctx = useContext(ResponsiveBoxContext);
+  if (!ctx) throw new Error('ResponsiveBox compound sub-components must be used within <ResponsiveBox>.');
+  return ctx;
+}
+
+// ── Compound: ResponsiveBox.Item ────────────────────
+
+/** ResponsiveBox.Item props */
+export interface ResponsiveBoxItemProps extends Omit<BoxProps, 'classNames' | 'styles'> {
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ResponsiveBoxItem = forwardRef<HTMLElement, ResponsiveBoxItemProps>(
+  function ResponsiveBoxItem(props, ref) {
+    const { className, style, ...boxProps } = props;
+    const ctx = useResponsiveBoxContext();
+
+    const itemSlot = getSlotProps('item', responsiveBoxItemStyle, ctx.classNames, ctx.styles, style);
+    const cls = [itemSlot.className, className].filter(Boolean).join(' ') || undefined;
+
+    return (
+      <Box
+        ref={ref}
+        {...boxProps}
+        className={cls}
+        style={itemSlot.style}
+        data-testid="responsive-box-item"
+      />
+    );
+  },
+);
+
+/** ResponsiveBox bilesen prop'lari. */
 export interface ResponsiveBoxProps
   extends SlotStyleProps<ResponsiveBoxSlot>,
     Omit<BoxProps, 'classNames' | 'styles'> {
-  /** Breakpoint kuralları. */
+  /** Breakpoint kurallari. */
   rules?: ResponsiveRule[];
 }
 
 /**
- * ResponsiveBox — breakpoint kurallarıyla otomatik layout değişimi.
+ * ResponsiveBox — breakpoint kurallariyla otomatik layout degisimi (Dual API).
  *
- * Box bileşenini extend eder. Sprinkles responsive props'ları direkt
- * kullanılabilir (`display={{ base: 'block', md: 'flex' }}`), ama
- * `rules` prop'u ile daha karmaşık kurallar tanımlanabilir.
- *
- * @example
+ * @example Props-based
  * ```tsx
- * <ResponsiveBox
- *   display={{ base: 'block', md: 'flex' }}
- *   flexDirection={{ base: 'column', lg: 'row' }}
- *   gap={{ base: 4, md: 6 }}
- *   p={{ base: 4, md: 8 }}
- * >
+ * <ResponsiveBox display={{ base: 'block', md: 'flex' }} gap={{ base: 4, md: 6 }}>
  *   <Box width={{ base: 'full', md: '1/2' }}>Sol</Box>
- *   <Box width={{ base: 'full', md: '1/2' }}>Sağ</Box>
+ * </ResponsiveBox>
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <ResponsiveBox display="flex" gap={4}>
+ *   <ResponsiveBox.Item>Oge 1</ResponsiveBox.Item>
+ *   <ResponsiveBox.Item>Oge 2</ResponsiveBox.Item>
  * </ResponsiveBox>
  * ```
  */
-export const ResponsiveBox = forwardRef<HTMLElement, ResponsiveBoxProps>(
+const ResponsiveBoxBase = forwardRef<HTMLElement, ResponsiveBoxProps>(
   function ResponsiveBox(props, ref) {
     const {
       classNames,
@@ -74,13 +117,24 @@ export const ResponsiveBox = forwardRef<HTMLElement, ResponsiveBoxProps>(
     const rootSlot = getSlotProps('root', undefined, classNames, styles, style);
     const finalClass = [rootSlot.className, className].filter(Boolean).join(' ') || undefined;
 
+    const ctxValue: ResponsiveBoxContextValue = { classNames, styles };
+
     return (
-      <Box
-        ref={ref}
-        {...boxProps}
-        className={finalClass}
-        style={rootSlot.style}
-      />
+      <ResponsiveBoxContext.Provider value={ctxValue}>
+        <Box
+          ref={ref}
+          {...boxProps}
+          className={finalClass}
+          style={rootSlot.style}
+        />
+      </ResponsiveBoxContext.Provider>
     );
   },
 );
+
+/**
+ * ResponsiveBox — Dual API (props-based + compound).
+ */
+export const ResponsiveBox = Object.assign(ResponsiveBoxBase, {
+  Item: ResponsiveBoxItem,
+});

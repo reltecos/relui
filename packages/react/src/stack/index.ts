@@ -6,4 +6,4 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Stack, type StackProps, type StackSlot } from './Stack';
+export { Stack, type StackProps, type StackSlot, type StackItemProps } from './Stack';

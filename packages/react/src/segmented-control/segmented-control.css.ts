@@ -43,7 +43,7 @@ export const segmentedControlRootRecipe = recipe({
 
     vars: {
       [scBg]: cssVar.bgSubtle,
-      [scActiveBg]: '#ffffff',
+      [scActiveBg]: 'var(--rel-color-bg, #ffffff)',
       [scFg]: cssVar.fgMuted,
       [scActiveFg]: cssVar.fgDefault,
       [scBorderRadius]: '8px',

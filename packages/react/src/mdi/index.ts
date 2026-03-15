@@ -10,4 +10,6 @@ export {
   MDI,
   type MDIComponentProps,
   type MDISlot,
+  type MDIWindowProps,
+  type MDIToolbarProps,
 } from './MDI';

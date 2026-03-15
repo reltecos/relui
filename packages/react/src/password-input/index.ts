@@ -6,7 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { PasswordInput, type PasswordInputComponentProps, type PasswordInputSlot } from './PasswordInput';
+export {
+  PasswordInput,
+  usePasswordInputContext,
+  type PasswordInputComponentProps,
+  type PasswordInputSlot,
+  type PasswordInputToggleButtonProps,
+} from './PasswordInput';
 export {
   usePasswordInput,
   type UsePasswordInputProps,

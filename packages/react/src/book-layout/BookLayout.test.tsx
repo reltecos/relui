@@ -310,4 +310,66 @@ describe('BookLayout', () => {
       expect(indicator).toHaveStyle({ fontSize: '18px' });
     });
   });
+
+  // ── Compound API ──────────────────────────────────────
+
+  describe('compound API', () => {
+    it('renders BookLayout.Page with data-testid', () => {
+      render(
+        <BookLayout totalPages={3}>
+          <BookLayout.Page>Custom Page Content</BookLayout.Page>
+        </BookLayout>,
+      );
+      expect(screen.getByTestId('book-layout-page')).toBeInTheDocument();
+      expect(screen.getByText('Custom Page Content')).toBeInTheDocument();
+    });
+
+    it('renders BookLayout.Navigation with controls', () => {
+      const { container } = render(
+        <BookLayout totalPages={3}>
+          <BookLayout.Page>Page Content</BookLayout.Page>
+          <BookLayout.Navigation />
+        </BookLayout>,
+      );
+      expect(container.querySelector('[data-book-controls]')).toBeInTheDocument();
+      expect(container.querySelector('[data-book-prev]')).toBeInTheDocument();
+      expect(container.querySelector('[data-book-next]')).toBeInTheDocument();
+    });
+
+    it('BookLayout.Navigation renders page indicator', () => {
+      const { container } = render(
+        <BookLayout totalPages={5}>
+          <BookLayout.Page>Content</BookLayout.Page>
+          <BookLayout.Navigation />
+        </BookLayout>,
+      );
+      const indicator = container.querySelector('[data-book-indicator]');
+      expect(indicator).toHaveTextContent('1 / 5');
+    });
+
+    it('BookLayout.Navigation respects custom labels', () => {
+      const { container } = render(
+        <BookLayout totalPages={3}>
+          <BookLayout.Page>Content</BookLayout.Page>
+          <BookLayout.Navigation prevLabel="Back" nextLabel="Forward" />
+        </BookLayout>,
+      );
+      const prevBtn = container.querySelector('[data-book-prev]') as HTMLElement;
+      const nextBtn = container.querySelector('[data-book-next]') as HTMLElement;
+      expect(prevBtn).toHaveTextContent('Back');
+      expect(nextBtn).toHaveTextContent('Forward');
+    });
+
+    it('compound root has data-book-layout and data attributes', () => {
+      render(
+        <BookLayout totalPages={5}>
+          <BookLayout.Page>Content</BookLayout.Page>
+        </BookLayout>,
+      );
+      const root = screen.getByTestId('book-layout-root');
+      expect(root).toHaveAttribute('data-book-layout');
+      expect(root).toHaveAttribute('data-current-page', '0');
+      expect(root).toHaveAttribute('data-total-pages', '5');
+    });
+  });
 });

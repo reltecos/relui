@@ -81,4 +81,84 @@ describe('Divider', () => {
       expect(el).toHaveClass('inner');
     });
   });
+
+  // ── Label (props-based) ──
+
+  it('label prop ile etiket render edilir', () => {
+    render(<Divider label="veya" />);
+    expect(screen.getByTestId('divider-label')).toHaveTextContent('veya');
+  });
+
+  it('label prop ile separator role atanir', () => {
+    render(<Divider label="veya" />);
+    expect(screen.getByTestId('divider')).toHaveAttribute('role', 'separator');
+  });
+});
+
+// ── Compound API ──
+
+describe('Divider (Compound)', () => {
+  it('compound: Divider.Label render edilir', () => {
+    render(
+      <Divider>
+        <Divider.Label>veya</Divider.Label>
+      </Divider>,
+    );
+    expect(screen.getByTestId('divider-label')).toHaveTextContent('veya');
+  });
+
+  it('compound: classNames context ile Divider.Label a aktarilir', () => {
+    render(
+      <Divider classNames={{ label: 'cmp-label-cls' }}>
+        <Divider.Label>veya</Divider.Label>
+      </Divider>,
+    );
+    expect(screen.getByTestId('divider-label').className).toContain('cmp-label-cls');
+  });
+
+  it('compound: styles context ile Divider.Label a aktarilir', () => {
+    render(
+      <Divider styles={{ label: { fontSize: '16px' } }}>
+        <Divider.Label>veya</Divider.Label>
+      </Divider>,
+    );
+    expect(screen.getByTestId('divider-label')).toHaveStyle({ fontSize: '16px' });
+  });
+
+  it('compound: separator role atanir', () => {
+    render(
+      <Divider>
+        <Divider.Label>veya</Divider.Label>
+      </Divider>,
+    );
+    expect(screen.getByTestId('divider')).toHaveAttribute('role', 'separator');
+  });
+
+  it('compound: Divider.Label context disinda hata firlat', () => {
+    expect(() => {
+      render(<Divider.Label>test</Divider.Label>);
+    }).toThrow('Divider compound sub-components must be used within <Divider>.');
+  });
+
+  it('compound: label icerigi dogru render edilir', () => {
+    render(
+      <Divider>
+        <Divider.Label>VEYA</Divider.Label>
+      </Divider>,
+    );
+    expect(screen.getByText('VEYA')).toBeInTheDocument();
+  });
+
+  it('label ReactNode icerik destekler', () => {
+    render(
+      <Divider label={<strong data-testid="bold-label">VEYA</strong>} />,
+    );
+    expect(screen.getByTestId('bold-label')).toBeInTheDocument();
+  });
+
+  it('dashed variant + label birlikte calisir', () => {
+    render(<Divider variant="dashed" label="veya" />);
+    expect(screen.getByTestId('divider')).toHaveAttribute('role', 'separator');
+    expect(screen.getByTestId('divider-label')).toHaveTextContent('veya');
+  });
 });

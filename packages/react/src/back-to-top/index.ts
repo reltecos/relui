@@ -13,4 +13,5 @@ export {
   type BackToTopSize,
   type BackToTopVariant,
   type BackToTopShape,
+  type BackToTopIconProps,
 } from './BackToTop';

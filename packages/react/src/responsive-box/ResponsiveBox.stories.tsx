@@ -13,6 +13,7 @@ import { Box } from '../box';
 const meta: Meta<typeof ResponsiveBox> = {
   title: 'Layout/ResponsiveBox',
   component: ResponsiveBox,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -100,6 +101,37 @@ export const CustomSlotStyles: Story = {
     >
       <Box p={4} style={{ background: '#e0e7ff', borderRadius: 8, flex: 1 }}>Sol</Box>
       <Box p={4} style={{ background: '#e0e7ff', borderRadius: 8, flex: 1 }}>Sag</Box>
+    </ResponsiveBox>
+  ),
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <ResponsiveBox display="flex" gap={4} p={4} style={{ background: '#f0fdf4', borderRadius: 12 }}>
+      <ResponsiveBox.Item p={4} style={{ background: '#dcfce7', borderRadius: 8, flex: 1 }}>
+        Oge 1
+      </ResponsiveBox.Item>
+      <ResponsiveBox.Item p={4} style={{ background: '#dcfce7', borderRadius: 8, flex: 1 }}>
+        Oge 2
+      </ResponsiveBox.Item>
+      <ResponsiveBox.Item p={4} style={{ background: '#dcfce7', borderRadius: 8, flex: 1 }}>
+        Oge 3
+      </ResponsiveBox.Item>
+    </ResponsiveBox>
+  ),
+};
+
+export const Playground: Story = {
+  render: () => (
+    <ResponsiveBox
+      display={{ base: 'block', md: 'flex' }}
+      gap={{ base: 3, md: 5 }}
+      p={{ base: 3, md: 6 }}
+      style={{ background: '#fef3c7', borderRadius: 12 }}
+    >
+      <Box p={4} style={{ background: '#fde68a', borderRadius: 8, flex: 1 }}>A</Box>
+      <Box p={4} style={{ background: '#fde68a', borderRadius: 8, flex: 1 }}>B</Box>
     </ResponsiveBox>
   ),
 };

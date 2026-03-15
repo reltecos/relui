@@ -14,6 +14,7 @@ import { ScrollArea } from '../scroll-area';
 const meta: Meta<typeof Sticky> = {
   title: 'Layout/Sticky',
   component: Sticky,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
     position: {
@@ -157,7 +158,52 @@ export const CustomSlotStyles: Story = {
         <Stack spacing={4} style={{ marginTop: 16 }}>
           {Array.from({ length: 20 }, (_, i) => (
             <div key={i} style={{ padding: '10px', background: '#f1f5f9', borderRadius: 4 }}>
-              Satır {i + 1}
+              Satir {i + 1}
+            </div>
+          ))}
+        </Stack>
+      </div>
+    </ScrollArea>
+  ),
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <ScrollArea height={300} style={{ border: '1px solid #e2e8f0', borderRadius: 8 }}>
+      <div style={{ padding: 16 }}>
+        <Sticky offset={0} style={{ background: '#7c3aed', color: 'white', padding: '12px 16px', borderRadius: 8 }}>
+          <Sticky.Content>Compound Sticky Header</Sticky.Content>
+        </Sticky>
+        <Stack spacing={4} style={{ marginTop: 16 }}>
+          {Array.from({ length: 20 }, (_, i) => (
+            <div key={i} style={{ padding: '10px', background: '#f1f5f9', borderRadius: 4 }}>
+              Satir {i + 1}
+            </div>
+          ))}
+        </Stack>
+      </div>
+    </ScrollArea>
+  ),
+};
+
+export const Playground: Story = {
+  args: {
+    position: 'top',
+    offset: 0,
+    zIndex: 100,
+    enabled: true,
+  },
+  render: (args) => (
+    <ScrollArea height={300} style={{ border: '1px solid #e2e8f0', borderRadius: 8 }}>
+      <div style={{ padding: 16 }}>
+        <Sticky {...args} style={{ background: '#0ea5e9', color: 'white', padding: '12px 16px', borderRadius: 8 }}>
+          Playground Sticky
+        </Sticky>
+        <Stack spacing={4} style={{ marginTop: 16 }}>
+          {Array.from({ length: 20 }, (_, i) => (
+            <div key={i} style={{ padding: '10px', background: '#f1f5f9', borderRadius: 4 }}>
+              Satir {i + 1}
             </div>
           ))}
         </Stack>

@@ -303,3 +303,69 @@ describe('Progress', () => {
     expect(screen.getByTestId('progress-circular')).toBeInTheDocument();
   });
 });
+
+// ── Compound API ──────────────────────────────────────
+
+describe('Progress (Compound)', () => {
+  it('compound: Track sub-component render edilir', () => {
+    render(
+      <Progress value={50}>
+        <Progress.Track>
+          <Progress.Fill />
+        </Progress.Track>
+      </Progress>,
+    );
+    expect(screen.getByTestId('progress-track')).toBeInTheDocument();
+    expect(screen.getByTestId('progress-fill')).toBeInTheDocument();
+  });
+
+  it('compound: Fill genisligi yuzdeye gore ayarlanir', () => {
+    render(
+      <Progress value={40}>
+        <Progress.Track>
+          <Progress.Fill />
+        </Progress.Track>
+      </Progress>,
+    );
+    const fill = screen.getByTestId('progress-fill');
+    expect(fill).toHaveStyle({ width: '40%' });
+  });
+
+  it('compound: Label sub-component render edilir', () => {
+    render(
+      <Progress value={50}>
+        <Progress.Label>Yukleniyor</Progress.Label>
+        <Progress.Track>
+          <Progress.Fill />
+        </Progress.Track>
+      </Progress>,
+    );
+    expect(screen.getByTestId('progress-label')).toHaveTextContent('Yukleniyor');
+  });
+
+  it('compound: Value sub-component otomatik formatlanir', () => {
+    render(
+      <Progress value={75}>
+        <Progress.Track>
+          <Progress.Fill />
+        </Progress.Track>
+        <Progress.Value />
+      </Progress>,
+    );
+    expect(screen.getByTestId('progress-value')).toHaveTextContent('75%');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Progress value={50} classNames={{ label: 'cmp-label', value: 'cmp-value' }}>
+        <Progress.Label>Test</Progress.Label>
+        <Progress.Track>
+          <Progress.Fill />
+        </Progress.Track>
+        <Progress.Value />
+      </Progress>,
+    );
+    expect(screen.getByTestId('progress-label').className).toContain('cmp-label');
+    expect(screen.getByTestId('progress-value').className).toContain('cmp-value');
+  });
+});

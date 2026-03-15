@@ -7,10 +7,10 @@
  */
 
 /**
- * MasterDetailLayout — liste + detay yan yana layout bileşeni.
+ * MasterDetailLayout — liste + detay yan yana layout bileseni (Dual API).
  *
- * Master (liste) ve detail (içerik) panellerinden oluşur.
- * Seçim, daraltma, pozisyon ve görünürlük yönetimi sağlar.
+ * Props-based: `<MasterDetailLayout master={<List />} detail={<Detail />} />`
+ * Compound:    `<MasterDetail><MasterDetail.Master>...</MasterDetail.Master><MasterDetail.Detail>...</MasterDetail.Detail></MasterDetail>`
  *
  * @packageDocumentation
  */
@@ -20,63 +20,168 @@ import React, {
   useRef,
   useEffect,
   useReducer,
+  createContext,
+  useContext,
   type CSSProperties,
   type ReactNode,
 } from 'react';
 import { createMasterDetail } from '@relteco/relui-core';
 import type { MasterDetailAPI, MasterPosition, DetailVisibility } from '@relteco/relui-core';
 import { getSlotProps, type SlotStyleProps } from '../utils';
+import type { ClassNames, Styles } from '../utils/slot-styles';
+import {
+  rootStyle,
+  masterStyle,
+  detailStyle,
+  collapseButtonStyle,
+} from './master-detail.css';
 
 /** MasterDetailLayout slot isimleri. */
 export type MasterDetailSlot = 'root' | 'master' | 'detail' | 'collapseButton';
 
-/** MasterDetailLayout bileşen prop'ları. */
+// ── Context (Compound API) ──────────────────────────
+
+interface MasterDetailContextValue {
+  classNames: ClassNames<MasterDetailSlot> | undefined;
+  styles: Styles<MasterDetailSlot> | undefined;
+  masterPosition: MasterPosition;
+  currentCollapsed: boolean;
+  currentSize: number | string;
+  detailVisible: boolean;
+  horizontal: boolean;
+}
+
+const MasterDetailContext = createContext<MasterDetailContextValue | null>(null);
+
+/** MasterDetail compound context hook. */
+export function useMasterDetailContext(): MasterDetailContextValue {
+  const ctx = useContext(MasterDetailContext);
+  if (!ctx) throw new Error('MasterDetail compound sub-components must be used within <MasterDetailLayout>.');
+  return ctx;
+}
+
+// ── Compound: MasterDetail.Master ────────────────────
+
+/** MasterDetail.Master props */
+export interface MasterDetailMasterProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MasterDetailMaster = forwardRef<HTMLDivElement, MasterDetailMasterProps>(
+  function MasterDetailMaster(props, ref) {
+    const { children, className } = props;
+    const ctx = useMasterDetailContext();
+
+    const sizeValue = typeof ctx.currentSize === 'number' ? `${ctx.currentSize}px` : ctx.currentSize;
+    const masterSlot = getSlotProps('master', masterStyle, ctx.classNames, ctx.styles, {
+      [ctx.horizontal ? 'width' : 'height']: ctx.currentCollapsed ? 0 : sizeValue,
+    });
+    const cls = className ? `${masterSlot.className} ${className}` : masterSlot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={masterSlot.style}
+        data-panel="master"
+        data-testid="master-detail-master"
+        data-collapsed={ctx.currentCollapsed || undefined}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: MasterDetail.Detail ────────────────────
+
+/** MasterDetail.Detail props */
+export interface MasterDetailDetailProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MasterDetailDetail = forwardRef<HTMLDivElement, MasterDetailDetailProps>(
+  function MasterDetailDetail(props, ref) {
+    const { children, className } = props;
+    const ctx = useMasterDetailContext();
+
+    const detailSlot = getSlotProps('detail', detailStyle, ctx.classNames, ctx.styles, {
+      display: ctx.detailVisible ? undefined : 'none',
+    });
+    const cls = className ? `${detailSlot.className} ${className}` : detailSlot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={detailSlot.style}
+        data-panel="detail"
+        data-testid="master-detail-detail"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+/** MasterDetailLayout bilesen prop'lari. */
 export interface MasterDetailComponentProps
   extends SlotStyleProps<MasterDetailSlot>,
     Omit<React.HTMLAttributes<HTMLDivElement>, 'style'> {
   /** Root element inline style. */
   style?: CSSProperties;
-  /** Master panel pozisyonu. Varsayılan: 'left'. */
+  /** Master panel pozisyonu. Varsayilan: 'left'. */
   masterPosition?: MasterPosition;
-  /** Master panel boyutu (px veya CSS string). Varsayılan: 300. */
+  /** Master panel boyutu (px veya CSS string). Varsayilan: 300. */
   masterSize?: number | string;
-  /** Detail panel görünürlük modu. Varsayılan: 'always'. */
+  /** Detail panel gorunurluk modu. Varsayilan: 'always'. */
   detailVisibility?: DetailVisibility;
-  /** Seçili item ID. */
+  /** Secili item ID. */
   selectedId?: string | null;
-  /** Master panel daraltılabilir mi. Varsayılan: false. */
+  /** Master panel daraltilabilir mi. Varsayilan: false. */
   collapsible?: boolean;
-  /** Master panel daraltılmış mı. */
+  /** Master panel daraltilmis mi. */
   collapsed?: boolean;
-  /** Master panelde gösterilecek içerik. */
-  master: ReactNode;
-  /** Detail panelde gösterilecek içerik. */
-  detail: ReactNode;
-  /** Seçim değiştiğinde çağrılır. */
+  /** Master panelde gosterilecek icerik (props-based). */
+  master?: ReactNode;
+  /** Detail panelde gosterilecek icerik (props-based). */
+  detail?: ReactNode;
+  /** Secim degistiginde cagrilir. */
   onSelectionChange?: (id: string | null) => void;
-  /** Daraltma durumu değiştiğinde çağrılır. */
+  /** Daraltma durumu degistiginde cagrilir. */
   onCollapseChange?: (collapsed: boolean) => void;
+  /** Compound API icin children. */
+  children?: ReactNode;
 }
 
-/** Yön horizontal mı kontrol et. */
+/** Yon horizontal mi kontrol et. */
 function isHorizontal(pos: MasterPosition): boolean {
   return pos === 'left' || pos === 'right';
 }
 
 /**
- * MasterDetailLayout — liste + detay panel layout.
+ * MasterDetailLayout — liste + detay panel layout (Dual API).
  *
- * @example
+ * @example Props-based
  * ```tsx
- * <MasterDetailLayout
- *   masterPosition="left"
- *   masterSize={300}
- *   master={<ItemList />}
- *   detail={<ItemDetail />}
- * />
+ * <MasterDetailLayout master={<ItemList />} detail={<ItemDetail />} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <MasterDetailLayout>
+ *   <MasterDetailLayout.Master><ItemList /></MasterDetailLayout.Master>
+ *   <MasterDetailLayout.Detail><ItemDetail /></MasterDetailLayout.Detail>
+ * </MasterDetailLayout>
  * ```
  */
-export const MasterDetailLayout = forwardRef<HTMLDivElement, MasterDetailComponentProps>(
+const MasterDetailBase = forwardRef<HTMLDivElement, MasterDetailComponentProps>(
   function MasterDetailLayout(props, ref) {
     const {
       className,
@@ -93,6 +198,7 @@ export const MasterDetailLayout = forwardRef<HTMLDivElement, MasterDetailCompone
       detail,
       onSelectionChange: _onSelectionChange,
       onCollapseChange,
+      children,
       ...rest
     } = props;
 
@@ -166,40 +272,83 @@ export const MasterDetailLayout = forwardRef<HTMLDivElement, MasterDetailCompone
 
     // ── Layout styles ────────────────────────────────────
 
+    const flexDir = horizontal
+      ? (currentPosition === 'right' ? 'row-reverse' : 'row')
+      : (currentPosition === 'bottom' ? 'column-reverse' : 'column');
+
     const rootSlot = getSlotProps(
       'root',
-      undefined,
+      rootStyle,
       classNames,
       slotStyles,
       {
-        display: 'flex',
-        flexDirection: horizontal
-          ? (currentPosition === 'right' ? 'row-reverse' : 'row')
-          : (currentPosition === 'bottom' ? 'column-reverse' : 'column'),
+        flexDirection: flexDir,
         ...style,
       },
     );
 
-    const sizeValue = typeof currentSize === 'number' ? `${currentSize}px` : currentSize;
-
-    const masterSlot = getSlotProps('master', undefined, classNames, slotStyles, {
-      [horizontal ? 'width' : 'height']: currentCollapsed ? 0 : sizeValue,
-      overflow: 'hidden',
-      flexShrink: 0,
-      transition: 'width 0.2s ease, height 0.2s ease',
-    });
-
-    const detailSlot = getSlotProps('detail', undefined, classNames, slotStyles, {
-      flex: 1,
-      overflow: 'auto',
-      display: detailVisible ? undefined : 'none',
-    });
-
-    const collapseSlot = getSlotProps('collapseButton', undefined, classNames, slotStyles);
-
     const finalClass = [rootSlot.className, className].filter(Boolean).join(' ') || undefined;
 
-    // ── Render ───────────────────────────────────────────
+    // ── Context for compound API ─────────────────────────
+
+    const ctxValue: MasterDetailContextValue = {
+      classNames,
+      styles: slotStyles,
+      masterPosition: currentPosition,
+      currentCollapsed,
+      currentSize,
+      detailVisible,
+      horizontal,
+    };
+
+    // ── Collapse button ──────────────────────────────────
+
+    const collapseSlot = getSlotProps('collapseButton', collapseButtonStyle, classNames, slotStyles);
+
+    const collapseButton = collapsible ? (
+      <button
+        type="button"
+        onClick={handleToggleCollapse}
+        className={collapseSlot.className || undefined}
+        style={collapseSlot.style}
+        aria-label={currentCollapsed ? 'Expand panel' : 'Collapse panel'}
+        aria-expanded={!currentCollapsed}
+        data-collapse-button
+      />
+    ) : null;
+
+    // ── Compound API ─────────────────────────────────────
+
+    if (children) {
+      return (
+        <MasterDetailContext.Provider value={ctxValue}>
+          <div
+            ref={mergedRef}
+            {...rest}
+            className={finalClass}
+            style={rootSlot.style}
+            data-position={currentPosition}
+            data-collapsed={currentCollapsed || undefined}
+            data-testid="master-detail-root"
+          >
+            {children}
+            {collapseButton}
+          </div>
+        </MasterDetailContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──────────────────────────────────
+
+    const sizeValue = typeof currentSize === 'number' ? `${currentSize}px` : currentSize;
+
+    const masterSlot = getSlotProps('master', masterStyle, classNames, slotStyles, {
+      [horizontal ? 'width' : 'height']: currentCollapsed ? 0 : sizeValue,
+    });
+
+    const detailSlot = getSlotProps('detail', detailStyle, classNames, slotStyles, {
+      display: detailVisible ? undefined : 'none',
+    });
 
     const masterPanel = (
       <div
@@ -232,19 +381,17 @@ export const MasterDetailLayout = forwardRef<HTMLDivElement, MasterDetailCompone
         data-collapsed={currentCollapsed || undefined}
       >
         {masterPanel}
-        {collapsible && (
-          <button
-            type="button"
-            onClick={handleToggleCollapse}
-            className={collapseSlot.className || undefined}
-            style={collapseSlot.style}
-            aria-label={currentCollapsed ? 'Expand panel' : 'Collapse panel'}
-            aria-expanded={!currentCollapsed}
-            data-collapse-button
-          />
-        )}
+        {collapseButton}
         {detailPanel}
       </div>
     );
   },
 );
+
+/**
+ * MasterDetailLayout — Dual API (props-based + compound).
+ */
+export const MasterDetailLayout = Object.assign(MasterDetailBase, {
+  Master: MasterDetailMaster,
+  Detail: MasterDetailDetail,
+});

@@ -13,6 +13,7 @@ import { Box } from '../box';
 const meta: Meta<typeof Grid> = {
   title: 'Layout/Grid',
   component: Grid,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -20,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof Grid>;
 
 const Cell = ({ children }: { children: React.ReactNode }) => (
-  <Box p={4} style={{ background: '#ede9fe', borderRadius: '8px', textAlign: 'center' }}>
+  <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #ede9fe)', borderRadius: '8px', textAlign: 'center' }}>
     {children}
   </Box>
 );
@@ -52,7 +53,7 @@ export const TwoColumns: Story = {
   render: () => (
     <Grid columns={2} gap={6}>
       <Cell>Sol</Cell>
-      <Cell>Sağ</Cell>
+      <Cell>Sag</Cell>
     </Grid>
   ),
 };
@@ -60,21 +61,35 @@ export const TwoColumns: Story = {
 export const TwelveColumns: Story = {
   render: () => (
     <Grid columns={12} gap={2}>
-      <Box gridColumn="span-8" p={4} style={{ background: '#dbeafe', borderRadius: '8px' }}>
+      <Box gridColumn="span-8" p={4} style={{ background: 'var(--rel-color-bg-subtle, #dbeafe)', borderRadius: '8px' }}>
         8 / 12
       </Box>
-      <Box gridColumn="span-4" p={4} style={{ background: '#fef3c7', borderRadius: '8px' }}>
+      <Box gridColumn="span-4" p={4} style={{ background: 'var(--rel-color-bg-subtle, #fef3c7)', borderRadius: '8px' }}>
         4 / 12
       </Box>
-      <Box gridColumn="span-3" p={4} style={{ background: '#dcfce7', borderRadius: '8px' }}>
-        3 / 12
-      </Box>
-      <Box gridColumn="span-6" p={4} style={{ background: '#fce7f3', borderRadius: '8px' }}>
-        6 / 12
-      </Box>
-      <Box gridColumn="span-3" p={4} style={{ background: '#fed7aa', borderRadius: '8px' }}>
-        3 / 12
-      </Box>
+    </Grid>
+  ),
+};
+
+/** Compound API — Grid.Item ile kullanim. */
+export const Compound: Story = {
+  render: () => (
+    <Grid columns={3} gap={4}>
+      <Grid.Item>
+        <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #ede9fe)', borderRadius: '8px', textAlign: 'center' }}>
+          Grid.Item 1
+        </Box>
+      </Grid.Item>
+      <Grid.Item>
+        <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #dbeafe)', borderRadius: '8px', textAlign: 'center' }}>
+          Grid.Item 2
+        </Box>
+      </Grid.Item>
+      <Grid.Item>
+        <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #dcfce7)', borderRadius: '8px', textAlign: 'center' }}>
+          Grid.Item 3
+        </Box>
+      </Grid.Item>
     </Grid>
   ),
 };
@@ -85,7 +100,7 @@ export const CustomSlotStyles: Story = {
       columns={2}
       gap={4}
       classNames={{ root: 'custom-grid' }}
-      styles={{ root: { border: '2px dashed #8b5cf6', padding: '16px', borderRadius: '12px' } }}
+      styles={{ root: { border: '2px dashed var(--rel-color-primary, #8b5cf6)', padding: '16px', borderRadius: '12px' } }}
     >
       <Cell>Slot styled</Cell>
       <Cell>Grid</Cell>

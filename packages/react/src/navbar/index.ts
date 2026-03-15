@@ -6,5 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Navbar, type NavbarComponentProps, type NavbarSlot } from './Navbar';
+export {
+  Navbar,
+  type NavbarComponentProps,
+  type NavbarSlot,
+  type NavbarBrandProps,
+  type NavbarItemsProps,
+  type NavbarItemProps,
+  type NavbarActionsProps,
+} from './Navbar';
 export { useNavbar, type UseNavbarProps, type UseNavbarReturn } from './useNavbar';

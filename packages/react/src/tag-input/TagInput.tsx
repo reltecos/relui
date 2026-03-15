@@ -7,16 +7,18 @@
  */
 
 /**
- * TagInput — styled tag input bileşeni.
- * TagInput — styled tag input component.
+ * TagInput — styled tag input bilesen (Dual API).
+ * TagInput — styled tag input component (Dual API).
  *
- * Combobox + MultiSelect birleşimi: aranabilir çoklu seçim, Tag bileşeni ile gösterim.
- * Kendi Tag bileşenimizi (@relteco/relui-react) reuse eder.
+ * Props-based: `<TagInput options={opts} placeholder="Ara" />`
+ * Compound:    `<TagInput options={opts}><TagInput.Tag>...</TagInput.Tag><TagInput.Input /></TagInput>`
+ *
+ * Combobox + MultiSelect birlesimi: aranabilir coklu secim, Tag bilesen ile gosterim.
  *
  * @packageDocumentation
  */
 
-import { forwardRef } from 'react';
+import React, { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type {
   TagInputVariant,
   TagInputSize,
@@ -35,7 +37,7 @@ import {
   selectListboxStyle,
   selectOptionStyle,
 } from '../select/select.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** TagInput slot isimleri. */
 export type TagInputSlot =
@@ -49,14 +51,98 @@ export type TagInputSlot =
   | 'option'
   | 'noResult';
 
+// ── Context (Compound API) ──────────────────────────
+
+interface TagInputContextValue {
+  classNames: ClassNames<TagInputSlot> | undefined;
+  styles: Styles<TagInputSlot> | undefined;
+  variant: TagInputVariant;
+  size: TagInputSize;
+}
+
+const TagInputContext = createContext<TagInputContextValue | null>(null);
+
+function useTagInputContext(): TagInputContextValue {
+  const ctx = useContext(TagInputContext);
+  if (!ctx) throw new Error('TagInput compound sub-components must be used within <TagInput>.');
+  return ctx;
+}
+
+// ── Compound: TagInput.Tag ──────────────────────────
+
+/** TagInput.Tag props */
+export interface TagInputTagProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Inline style / Inline style */
+  style?: React.CSSProperties;
+}
+
+const TagInputTag = forwardRef<HTMLSpanElement, TagInputTagProps>(
+  function TagInputTag(props, ref) {
+    const { children, className, style: styleProp } = props;
+    const ctx = useTagInputContext();
+    const slot = getSlotProps('tag', undefined, ctx.classNames, ctx.styles, styleProp);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-testid="tag-input-tag"
+      >
+        {children}
+      </span>
+    );
+  },
+);
+
+// ── Compound: TagInput.Input ────────────────────────
+
+/** TagInput.Input props */
+export interface TagInputInputProps {
+  /** Ek className / Additional className */
+  className?: string;
+  /** Inline style / Inline style */
+  style?: React.CSSProperties;
+  /** Icerik / Content (opsiyonel) */
+  children?: ReactNode;
+}
+
+const TagInputInput = forwardRef<HTMLDivElement, TagInputInputProps>(
+  function TagInputInput(props, ref) {
+    const { className, style: styleProp, children } = props;
+    const ctx = useTagInputContext();
+    const slot = getSlotProps('input', tagInputInnerInputStyle, ctx.classNames, ctx.styles, styleProp);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-testid="tag-input-input"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
 // ── TagInput Component Props ───────────────────────────────────────
 
 export interface TagInputComponentProps extends UseTagInputProps, SlotStyleProps<TagInputSlot> {
-  /** Görsel varyant / Visual variant */
+  /** Gorsel varyant / Visual variant */
   variant?: TagInputVariant;
 
   /** Boyut / Size */
   size?: TagInputSize;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 
   /** Ek className / Additional className */
   className?: string;
@@ -75,27 +161,34 @@ export interface TagInputComponentProps extends UseTagInputProps, SlotStyleProps
 }
 
 /**
- * TagInput bileşeni — aranabilir çoklu seçim, tag gösterimi.
- * TagInput component — searchable multi-select with tag display.
+ * TagInput bilesen — Dual API (props-based + compound).
  *
- * @example
+ * @example Props-based
  * ```tsx
  * <TagInput
  *   options={[
  *     { value: 'react', label: 'React' },
  *     { value: 'vue', label: 'Vue' },
- *     { value: 'svelte', label: 'Svelte' },
  *   ]}
- *   placeholder="Teknoloji arayın"
+ *   placeholder="Teknoloji arayin"
  *   onValueChange={(values) => console.log(values)}
  * />
  * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <TagInput options={opts}>
+ *   <TagInput.Tag>Custom tag</TagInput.Tag>
+ *   <TagInput.Input />
+ * </TagInput>
+ * ```
  */
-export const TagInput = forwardRef<HTMLDivElement, TagInputComponentProps>(
+const TagInputBase = forwardRef<HTMLDivElement, TagInputComponentProps>(
   function TagInput(props, ref) {
     const {
       variant = 'outline',
       size = 'md',
+      children,
       className,
       classNames,
       styles,
@@ -127,6 +220,26 @@ export const TagInput = forwardRef<HTMLDivElement, TagInputComponentProps>(
       ? `${rootSlot.className} ${className}`
       : rootSlot.className;
 
+    const ctxValue: TagInputContextValue = { classNames, styles, variant, size };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <TagInputContext.Provider value={ctxValue}>
+          <div
+            ref={ref}
+            className={combinedRootClassName}
+            style={rootSlot.style}
+            id={id}
+            data-testid="tag-input-root"
+          >
+            {children}
+          </div>
+        </TagInputContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const triggerWrapperStyle = {
       height: 'auto' as const,
       minHeight: size === 'xs' ? '1.5rem' : size === 'sm' ? '1.75rem' : size === 'lg' ? '2.5rem' : size === 'xl' ? '2.75rem' : '2rem',
@@ -171,14 +284,14 @@ export const TagInput = forwardRef<HTMLDivElement, TagInputComponentProps>(
         style={rootSlot.style}
         id={id}
       >
-        {/* Trigger wrapper — input gibi görünür */}
+        {/* Trigger wrapper — input gibi gorunur */}
         <div
           className={triggerWrapperSlot.className}
           style={triggerWrapperSlot.style}
           data-disabled={isDisabled ? '' : undefined}
         >
           <div className={tagsWrapperSlot.className} style={tagsWrapperSlot.style}>
-            {/* Seçili tag'lar */}
+            {/* Secili tag lar */}
             {selectedLabels.map((label, idx) => {
               const val = selectedValues[idx] ?? '';
               return (
@@ -198,7 +311,7 @@ export const TagInput = forwardRef<HTMLDivElement, TagInputComponentProps>(
               );
             })}
 
-            {/* Arama input'u */}
+            {/* Arama input u */}
             <input
               className={inputSlot.className}
               style={inputSlot.style}
@@ -271,3 +384,11 @@ export const TagInput = forwardRef<HTMLDivElement, TagInputComponentProps>(
 function preventBlur(event: React.MouseEvent) {
   event.preventDefault();
 }
+
+/**
+ * TagInput bilesen — Dual API (props-based + compound).
+ */
+export const TagInput = Object.assign(TagInputBase, {
+  Tag: TagInputTag,
+  Input: TagInputInput,
+});

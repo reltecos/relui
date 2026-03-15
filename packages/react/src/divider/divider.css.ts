@@ -14,6 +14,7 @@
  */
 
 import { recipe, type RecipeVariants } from '@vanilla-extract/recipes';
+import { style } from '@vanilla-extract/css';
 import { cssVar } from '@relteco/relui-tokens';
 
 export const dividerRecipe = recipe({
@@ -58,3 +59,24 @@ export const dividerRecipe = recipe({
 
 /** Divider recipe varyant tipleri. */
 export type DividerRecipeVariants = RecipeVariants<typeof dividerRecipe>;
+
+// ── Divider label (with-label layout) ────────────────────────────
+
+export const dividerWithLabelStyle = style({
+  display: 'flex',
+  alignItems: 'center',
+  border: 'none',
+});
+
+export const dividerLabelLineStyle = style({
+  flex: 1,
+  borderBottom: `1px solid ${cssVar.borderDefault}`,
+});
+
+export const dividerLabelTextStyle = style({
+  padding: '0 0.75rem',
+  fontSize: 'var(--rel-text-sm, 13px)',
+  fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
+  color: cssVar.fgMuted,
+  whiteSpace: 'nowrap',
+});

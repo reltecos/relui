@@ -13,6 +13,7 @@ import { Box } from '../box';
 const meta: Meta<typeof Container> = {
   title: 'Layout/Container',
   component: Container,
+  tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
 };
 
@@ -21,9 +22,9 @@ type Story = StoryObj<typeof Container>;
 
 export const Default: Story = {
   render: () => (
-    <Container px={4} style={{ background: '#f1f5f9' }}>
-      <Box p={6} style={{ background: '#e2e8f0', borderRadius: '8px' }}>
-        Varsayılan: max-width 1024px, ortalanmış.
+    <Container style={{ background: 'var(--rel-color-bg-subtle, #f1f5f9)' }}>
+      <Box p={6} style={{ background: 'var(--rel-color-bg-subtle, #e2e8f0)', borderRadius: '8px' }}>
+        Varsayilan: max-width 1024px, ortalanmis.
       </Box>
     </Container>
   ),
@@ -31,8 +32,8 @@ export const Default: Story = {
 
 export const Small: Story = {
   render: () => (
-    <Container size="sm" px={4} style={{ background: '#fef3c7' }}>
-      <Box p={6} style={{ background: '#fde68a', borderRadius: '8px' }}>
+    <Container size="sm" style={{ background: 'var(--rel-color-bg-subtle, #fef3c7)' }}>
+      <Box p={6} style={{ background: 'var(--rel-color-bg-subtle, #fde68a)', borderRadius: '8px' }}>
         size=sm: max-width 640px
       </Box>
     </Container>
@@ -41,8 +42,8 @@ export const Small: Story = {
 
 export const ExtraLarge: Story = {
   render: () => (
-    <Container size="2xl" px={4} style={{ background: '#dcfce7' }}>
-      <Box p={6} style={{ background: '#bbf7d0', borderRadius: '8px' }}>
+    <Container size="2xl" style={{ background: 'var(--rel-color-bg-subtle, #dcfce7)' }}>
+      <Box p={6} style={{ background: 'var(--rel-color-bg-subtle, #bbf7d0)', borderRadius: '8px' }}>
         size=2xl: max-width 1536px
       </Box>
     </Container>
@@ -51,8 +52,8 @@ export const ExtraLarge: Story = {
 
 export const Full: Story = {
   render: () => (
-    <Container size="full" px={4} style={{ background: '#ede9fe' }}>
-      <Box p={6} style={{ background: '#ddd6fe', borderRadius: '8px' }}>
+    <Container size="full" style={{ background: 'var(--rel-color-bg-subtle, #ede9fe)' }}>
+      <Box p={6} style={{ background: 'var(--rel-color-bg-subtle, #ddd6fe)', borderRadius: '8px' }}>
         size=full: max-width 100%
       </Box>
     </Container>
@@ -61,9 +62,9 @@ export const Full: Story = {
 
 export const CenteredContent: Story = {
   render: () => (
-    <Container size="md" centerContent px={4} style={{ background: '#fce7f3', minHeight: '200px' }}>
-      <Box p={6} style={{ background: '#fbcfe8', borderRadius: '8px' }}>
-        Ortalanmış içerik (centerContent)
+    <Container size="md" centerContent style={{ background: 'var(--rel-color-bg-subtle, #fce7f3)', minHeight: '200px' }}>
+      <Box p={6} style={{ background: 'var(--rel-color-bg-subtle, #fbcfe8)', borderRadius: '8px' }}>
+        Ortalanmis icerik (centerContent)
       </Box>
     </Container>
   ),
@@ -72,11 +73,10 @@ export const CenteredContent: Story = {
 export const CustomSlotStyles: Story = {
   render: () => (
     <Container
-      px={4}
       classNames={{ root: 'custom-container' }}
-      styles={{ root: { border: '2px dashed #f59e0b', borderRadius: '12px', padding: '16px' } }}
+      styles={{ root: { border: '2px dashed var(--rel-color-warning, #f59e0b)', borderRadius: '12px', padding: '16px' } }}
     >
-      <Box p={4} style={{ background: '#fef3c7', borderRadius: '8px' }}>
+      <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #fef3c7)', borderRadius: '8px' }}>
         Slot styled Container
       </Box>
     </Container>

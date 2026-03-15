@@ -10,6 +10,9 @@ export {
   DropdownTree,
   type DropdownTreeComponentProps,
   type DropdownTreeSlot,
+  type DropdownTreeTriggerProps,
+  type DropdownTreeContentProps,
+  type DropdownTreeNodeProps,
 } from './DropdownTree';
 export {
   useDropdownTree,

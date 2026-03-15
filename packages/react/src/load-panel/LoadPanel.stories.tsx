@@ -12,6 +12,7 @@ import { LoadPanel } from './LoadPanel';
 const meta: Meta<typeof LoadPanel> = {
   title: 'Feedback/LoadPanel',
   component: LoadPanel,
+  tags: ['autodocs'],
   args: {
     visible: true,
     message: 'Yukleniyor...',
@@ -94,4 +95,21 @@ export const CustomIndicator: Story = {
     ),
     message: 'Ozel gosterge',
   },
+};
+
+// ── Compound ──
+
+export const Compound: Story = {
+  render: () => (
+    <div style={{ position: 'relative', height: 300, border: '1px solid #e2e8f0', borderRadius: 8, overflow: 'hidden' }}>
+      <div style={{ padding: 16, fontFamily: 'system-ui' }}>
+        <h3 style={{ margin: '0 0 8px' }}>Compound LoadPanel</h3>
+        <p style={{ margin: 0, color: '#64748b' }}>Sub-component API ile olusturulmus.</p>
+      </div>
+      <LoadPanel>
+        <LoadPanel.Spinner color="#8b5cf6" />
+        <LoadPanel.Message>Compound yukleniyor...</LoadPanel.Message>
+      </LoadPanel>
+    </div>
+  ),
 };

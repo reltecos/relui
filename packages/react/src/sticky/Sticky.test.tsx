@@ -178,3 +178,36 @@ describe('Sticky', () => {
     });
   });
 });
+
+// ── Compound API ──
+
+describe('Sticky (Compound)', () => {
+  it('compound: Sticky.Content render edilir', () => {
+    render(
+      <Sticky data-testid="sticky">
+        <Sticky.Content>Navigation</Sticky.Content>
+      </Sticky>,
+    );
+    expect(screen.getByTestId('sticky-content')).toBeInTheDocument();
+    expect(screen.getByText('Navigation')).toBeInTheDocument();
+  });
+
+  it('compound: Sticky.Content ref forward edilir', () => {
+    let refValue: HTMLDivElement | null = null;
+    render(
+      <Sticky>
+        <Sticky.Content ref={(el) => { refValue = el; }}>Nav</Sticky.Content>
+      </Sticky>,
+    );
+    expect(refValue).toBe(screen.getByTestId('sticky-content'));
+  });
+
+  it('compound: position sticky uygulanir', () => {
+    render(
+      <Sticky data-testid="sticky" offset={10}>
+        <Sticky.Content>Nav</Sticky.Content>
+      </Sticky>,
+    );
+    expect(screen.getByTestId('sticky')).toHaveStyle({ position: 'sticky', top: '10px' });
+  });
+});

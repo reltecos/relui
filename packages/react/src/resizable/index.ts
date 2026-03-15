@@ -6,5 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Resizable, type ResizableComponentProps, type ResizableSlot } from './Resizable';
+export {
+  Resizable,
+  type ResizableComponentProps,
+  type ResizableSlot,
+  type ResizableHandleProps,
+} from './Resizable';
 export { useResizable, type UseResizableProps, type UseResizableReturn } from './useResizable';

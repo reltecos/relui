@@ -177,7 +177,7 @@ export const sidebarItemBadgeStyle = style({
   padding: '2px 6px',
   borderRadius: '10px',
   backgroundColor: cssVar.accentDefault,
-  color: '#fff',
+  color: 'var(--rel-color-text-inverse, #fff)',
   selectors: {
     '[data-collapsed] &': {
       display: 'none',

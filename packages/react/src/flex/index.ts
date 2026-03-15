@@ -6,4 +6,4 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Flex, type FlexProps, type FlexSlot } from './Flex';
+export { Flex, type FlexProps, type FlexSlot, type FlexItemProps } from './Flex';

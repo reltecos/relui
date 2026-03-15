@@ -7,15 +7,16 @@
  */
 
 /**
- * Navbar — styled ust navigasyon cubugu bilesen.
- * Navbar — styled top navigation bar component.
+ * Navbar — styled ust navigasyon cubugu bilesen (Dual API).
+ * Navbar — styled top navigation bar component (Dual API).
  *
- * Logo, nav linkler, aksiyonlar, mobil menu destegi.
+ * Props-based: `<Navbar items={[...]} brand={<Logo />} />`
+ * Compound:    `<Navbar><Navbar.Brand>Logo</Navbar.Brand><Navbar.Items>...</Navbar.Items></Navbar>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type { NavbarSize, NavbarVariant, NavbarItem } from '@relteco/relui-core';
 import { useNavbar, type UseNavbarProps } from './useNavbar';
 import {
@@ -29,7 +30,7 @@ import {
   navbarDesktopContentStyle,
   navbarDesktopActionsStyle,
 } from './navbar.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /**
  * Navbar slot isimleri / Navbar slot names.
@@ -44,6 +45,146 @@ export type NavbarSlot =
   | 'actions'
   | 'mobileToggle'
   | 'mobileMenu';
+
+// ── Context (Compound API) ──────────────────────────────────────
+
+interface NavbarContextValue {
+  size: NavbarSize;
+  variant: NavbarVariant;
+  classNames: ClassNames<NavbarSlot> | undefined;
+  styles: Styles<NavbarSlot> | undefined;
+}
+
+const NavbarContext = createContext<NavbarContextValue | null>(null);
+
+function useNavbarContext(): NavbarContextValue {
+  const ctx = useContext(NavbarContext);
+  if (!ctx) throw new Error('Navbar compound sub-components must be used within <Navbar>.');
+  return ctx;
+}
+
+// ── Compound: Navbar.Brand ──────────────────────────────────────
+
+/** Navbar.Brand props */
+export interface NavbarBrandProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const NavbarBrand = forwardRef<HTMLDivElement, NavbarBrandProps>(
+  function NavbarBrand(props, ref) {
+    const { children, className } = props;
+    const ctx = useNavbarContext();
+    const slot = getSlotProps('brand', navbarBrandStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="navbar-brand">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Navbar.Items ──────────────────────────────────────
+
+/** Navbar.Items props */
+export interface NavbarItemsProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const NavbarItems = forwardRef<HTMLDivElement, NavbarItemsProps>(
+  function NavbarItems(props, ref) {
+    const { children, className } = props;
+    const ctx = useNavbarContext();
+    const slot = getSlotProps('content', navbarDesktopContentStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="navbar-items">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Navbar.Item ───────────────────────────────────────
+
+/** Navbar.Item props */
+export interface NavbarItemProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Aktif mi / Is active */
+  active?: boolean;
+  /** Devre disi mi / Is disabled */
+  disabled?: boolean;
+  /** Tiklama callback / Click callback */
+  onClick?: () => void;
+  /** Link href */
+  href?: string;
+}
+
+const NavbarItemComponent = forwardRef<HTMLElement, NavbarItemProps>(
+  function NavbarItem(props, ref) {
+    const { children, className, active, disabled, onClick, href } = props;
+    const ctx = useNavbarContext();
+    const slot = getSlotProps('item', navbarItemStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    const Element = href ? 'a' : 'button';
+    const elementProps = href
+      ? { href }
+      : { type: 'button' as const };
+
+    return (
+      <Element
+        ref={ref as never}
+        className={cls}
+        style={slot.style}
+        data-testid="navbar-item"
+        data-active={active ? '' : undefined}
+        aria-current={active ? 'page' : undefined}
+        aria-disabled={disabled ? 'true' : undefined}
+        onClick={disabled ? undefined : onClick}
+        {...elementProps}
+      >
+        {children}
+      </Element>
+    );
+  },
+);
+
+// ── Compound: Navbar.Actions ────────────────────────────────────
+
+/** Navbar.Actions props */
+export interface NavbarActionsProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const NavbarActions = forwardRef<HTMLDivElement, NavbarActionsProps>(
+  function NavbarActions(props, ref) {
+    const { children, className } = props;
+    const ctx = useNavbarContext();
+    const slot = getSlotProps('actions', navbarDesktopActionsStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="navbar-actions">
+        {children}
+      </div>
+    );
+  },
+);
 
 // ── Navbar Component Props ─────────────────────────────────────
 
@@ -77,6 +218,9 @@ export interface NavbarComponentProps extends UseNavbarProps, SlotStyleProps<Nav
 
   /** Oge render override / Item render override */
   renderItem?: (item: NavbarItem, props: { isActive: boolean }) => ReactNode;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
 /**
@@ -95,7 +239,7 @@ export interface NavbarComponentProps extends UseNavbarProps, SlotStyleProps<Nav
  * />
  * ```
  */
-export const Navbar = forwardRef<HTMLElement, NavbarComponentProps>(
+const NavbarBase = forwardRef<HTMLElement, NavbarComponentProps>(
   function Navbar(props, ref) {
     const {
       size = 'md',
@@ -110,6 +254,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarComponentProps>(
       sticky = false,
       renderIcon,
       renderItem,
+      children,
       ...navbarProps
     } = props;
 
@@ -148,6 +293,28 @@ export const Navbar = forwardRef<HTMLElement, NavbarComponentProps>(
       styles,
     );
     const mobileMenuSlot = getSlotProps('mobileMenu', navbarMobileMenuStyle, classNames, styles);
+
+    const ctxValue: NavbarContextValue = { size, variant, classNames, styles };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <NavbarContext.Provider value={ctxValue}>
+          <nav
+            ref={ref}
+            className={combinedRootClassName}
+            style={combinedRootStyle}
+            id={id}
+            data-variant={variant}
+            data-sticky={sticky ? '' : undefined}
+            data-testid="navbar-root"
+            aria-label="Navbar"
+          >
+            {children}
+          </nav>
+        </NavbarContext.Provider>
+      );
+    }
 
     // ── Render item ──
     function renderNavItem(item: NavbarItem) {
@@ -272,3 +439,30 @@ export const Navbar = forwardRef<HTMLElement, NavbarComponentProps>(
     );
   },
 );
+
+/**
+ * Navbar bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Navbar items={[...]} brand={<Logo />} defaultActiveKey="home" />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Navbar>
+ *   <Navbar.Brand>Logo</Navbar.Brand>
+ *   <Navbar.Items>
+ *     <Navbar.Item active>Ana Sayfa</Navbar.Item>
+ *     <Navbar.Item href="/about">Hakkinda</Navbar.Item>
+ *   </Navbar.Items>
+ *   <Navbar.Actions><button>Login</button></Navbar.Actions>
+ * </Navbar>
+ * ```
+ */
+export const Navbar = Object.assign(NavbarBase, {
+  Brand: NavbarBrand,
+  Items: NavbarItems,
+  Item: NavbarItemComponent,
+  Actions: NavbarActions,
+});

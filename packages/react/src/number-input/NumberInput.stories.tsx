@@ -20,6 +20,7 @@ import { NumberInput } from './NumberInput';
 const meta: Meta<typeof NumberInput> = {
   title: 'Components/NumberInput',
   component: NumberInput,
+  tags: ['autodocs'],
   args: {
     placeholder: '0',
   },
@@ -167,6 +168,21 @@ export const Playground: Story = {
     hideStepper: false,
     placeholder: 'Sayı girin...',
   },
+};
+
+// ── Compound API ───────────────────────────────────────────────────
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '300px' }}>
+      <NumberInput aria-label="Sayi" value={42} min={0} max={100}>
+        <NumberInput.Field placeholder="Sayi girin" />
+        <NumberInput.IncrementButton />
+        <NumberInput.DecrementButton />
+      </NumberInput>
+    </div>
+  ),
 };
 
 // ── Custom Slot Styles ──────────────────────────────────────────────

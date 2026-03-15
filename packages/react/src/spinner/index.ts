@@ -11,4 +11,5 @@ export {
   type SpinnerComponentProps,
   type SpinnerSlot,
   type SpinnerSize,
+  type SpinnerLabelProps,
 } from './Spinner';

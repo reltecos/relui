@@ -148,3 +148,66 @@ describe('LoadPanel', () => {
     expect(screen.getByTestId('load-panel-message')).toHaveStyle({ fontSize: '16px' });
   });
 });
+
+// ── Compound API ──
+
+describe('LoadPanel (Compound)', () => {
+  it('compound: children ile load-panel render eder', () => {
+    render(
+      <LoadPanel>
+        <LoadPanel.Spinner />
+        <LoadPanel.Message>Yukleniyor...</LoadPanel.Message>
+      </LoadPanel>,
+    );
+    expect(screen.getByTestId('load-panel')).toBeInTheDocument();
+  });
+
+  it('compound: LoadPanel.Spinner render edilir', () => {
+    render(
+      <LoadPanel>
+        <LoadPanel.Spinner />
+      </LoadPanel>,
+    );
+    expect(screen.getByTestId('load-panel-spinner')).toBeInTheDocument();
+  });
+
+  it('compound: LoadPanel.Message render edilir', () => {
+    render(
+      <LoadPanel>
+        <LoadPanel.Message>Veri yukleniyor</LoadPanel.Message>
+      </LoadPanel>,
+    );
+    expect(screen.getByTestId('load-panel-message')).toHaveTextContent('Veri yukleniyor');
+  });
+
+  it('compound: LoadPanel.Spinner ozel icerik destekler', () => {
+    render(
+      <LoadPanel>
+        <LoadPanel.Spinner><span data-testid="custom-sp">*</span></LoadPanel.Spinner>
+      </LoadPanel>,
+    );
+    expect(screen.getByTestId('custom-sp')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <LoadPanel classNames={{ message: 'cmp-msg' }}>
+        <LoadPanel.Message>Test</LoadPanel.Message>
+      </LoadPanel>,
+    );
+    expect(screen.getByTestId('load-panel-message').className).toContain('cmp-msg');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <LoadPanel styles={{ message: { fontSize: '22px' } }}>
+        <LoadPanel.Message>Test</LoadPanel.Message>
+      </LoadPanel>,
+    );
+    expect(screen.getByTestId('load-panel-message')).toHaveStyle({ fontSize: '22px' });
+  });
+
+  it('LoadPanel.Spinner context disinda hata firlatir', () => {
+    expect(() => render(<LoadPanel.Spinner />)).toThrow();
+  });
+});

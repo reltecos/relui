@@ -301,4 +301,63 @@ describe('MDI', () => {
       expect(taskbar).toHaveClass('custom-taskbar');
     });
   });
+
+  // ── Compound API ──────────────────────────────────────
+
+  describe('compound API', () => {
+    it('renders MDI.Window with data-mdi-window', () => {
+      const { container } = render(
+        <MDI>
+          <MDI.Window id="doc1" title="Document 1">
+            <div>Doc 1 Content</div>
+          </MDI.Window>
+        </MDI>,
+      );
+      expect(container.querySelector('[data-mdi-window="doc1"]')).toBeInTheDocument();
+      expect(screen.getByText('Doc 1 Content')).toBeInTheDocument();
+    });
+
+    it('renders MDI.Window title in title bar', () => {
+      const { container } = render(
+        <MDI>
+          <MDI.Window id="a" title="My Window">
+            <div>Content</div>
+          </MDI.Window>
+        </MDI>,
+      );
+      const titleBar = container.querySelector('[data-mdi-title-bar]');
+      expect(titleBar).toHaveTextContent('My Window');
+    });
+
+    it('renders MDI.Toolbar with data-mdi-taskbar', () => {
+      const { container } = render(
+        <MDI>
+          <MDI.Window id="a" title="A"><div>Content</div></MDI.Window>
+          <MDI.Toolbar>Custom Toolbar</MDI.Toolbar>
+        </MDI>,
+      );
+      expect(container.querySelector('[data-mdi-taskbar]')).toBeInTheDocument();
+      expect(screen.getByText('Custom Toolbar')).toBeInTheDocument();
+    });
+
+    it('compound MDI root has data-mdi attribute', () => {
+      render(
+        <MDI data-testid="root">
+          <MDI.Window id="a" title="A"><div>Content</div></MDI.Window>
+        </MDI>,
+      );
+      expect(screen.getByTestId('root')).toHaveAttribute('data-mdi');
+    });
+
+    it('renders multiple MDI.Window elements', () => {
+      const { container } = render(
+        <MDI>
+          <MDI.Window id="a" title="Window A"><div>A</div></MDI.Window>
+          <MDI.Window id="b" title="Window B"><div>B</div></MDI.Window>
+        </MDI>,
+      );
+      expect(container.querySelector('[data-mdi-window="a"]')).toBeInTheDocument();
+      expect(container.querySelector('[data-mdi-window="b"]')).toBeInTheDocument();
+    });
+  });
 });

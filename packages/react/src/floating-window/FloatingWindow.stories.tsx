@@ -13,6 +13,7 @@ import { FloatingWindow } from './FloatingWindow';
 const meta: Meta<typeof FloatingWindow> = {
   title: 'Window Manager/FloatingWindow',
   component: FloatingWindow,
+  tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
 };
 
@@ -150,6 +151,24 @@ export const CustomSlotStyles: Story = {
         }}
       >
         <p>Custom slot styled window</p>
+      </FloatingWindow>
+    </div>
+  ),
+};
+
+export const Compound: Story = {
+  render: () => (
+    <div style={{ position: 'relative', width: '100%', height: 600, background: '#f1f5f9' }}>
+      <FloatingWindow defaultPosition={{ x: 100, y: 50 }} defaultSize={{ width: 400, height: 300 }}>
+        <FloatingWindow.Header title="Compound Window" />
+        <FloatingWindow.Body>
+          <div style={{ padding: 16 }}>
+            <p>Bu pencere Compound API ile olusturuldu.</p>
+            <p style={{ color: '#64748b', fontSize: 13 }}>
+              Header ve Body ayri sub-component olarak kullanildi.
+            </p>
+          </div>
+        </FloatingWindow.Body>
       </FloatingWindow>
     </div>
   ),

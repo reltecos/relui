@@ -27,7 +27,7 @@ export const alertDialogOverlayStyle = style({
   position: 'fixed',
   inset: 0,
   zIndex: 500,
-  backgroundColor: 'rgba(0, 0, 0, 0.45)',
+  backgroundColor: 'var(--rel-color-overlay, rgba(0, 0, 0, 0.45))',
   animation: `${fadeIn} 150ms ease-out`,
 });
 
@@ -40,7 +40,7 @@ export const alertDialogContentRecipe = recipe({
     left: '50%',
     transform: 'translate(-50%, -50%)',
     zIndex: 501,
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--rel-color-text-inverse, #fff)',
     borderRadius: 12,
     boxShadow: '0 20px 60px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1)',
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
@@ -140,13 +140,13 @@ export const alertDialogCancelButtonStyle = style({
   lineHeight: 1,
   border: '1px solid var(--rel-color-border, #d1d5db)',
   borderRadius: 8,
-  backgroundColor: '#fff',
+  backgroundColor: 'var(--rel-color-text-inverse, #fff)',
   color: 'var(--rel-color-text, #374151)',
   cursor: 'pointer',
   transition: 'background-color 150ms ease, border-color 150ms ease',
   ':hover': {
-    backgroundColor: '#f9fafb',
-    borderColor: '#9ca3af',
+    backgroundColor: 'var(--rel-color-bg-subtle, #f9fafb)',
+    borderColor: 'var(--rel-color-border-default, #9ca3af)',
   },
   ':focus-visible': {
     outline: '2px solid var(--rel-color-primary, #3b82f6)',
@@ -171,7 +171,7 @@ export const alertDialogConfirmButtonRecipe = recipe({
     lineHeight: 1,
     border: '1px solid transparent',
     borderRadius: 8,
-    color: '#fff',
+    color: 'var(--rel-color-text-inverse, #fff)',
     cursor: 'pointer',
     transition: 'background-color 150ms ease, opacity 150ms ease',
     ':focus-visible': {
@@ -190,20 +190,20 @@ export const alertDialogConfirmButtonRecipe = recipe({
       danger: {
         backgroundColor: 'var(--rel-color-error, #dc2626)',
         ':hover': {
-          backgroundColor: '#b91c1c',
+          backgroundColor: 'var(--rel-color-error-hover, #b91c1c)',
         },
       },
       warning: {
         backgroundColor: 'var(--rel-color-warning, #f59e0b)',
-        color: '#1f2937',
+        color: 'var(--rel-color-text, #1f2937)',
         ':hover': {
-          backgroundColor: '#d97706',
+          backgroundColor: 'var(--rel-color-warning, #d97706)',
         },
       },
       info: {
         backgroundColor: 'var(--rel-color-info, #3b82f6)',
         ':hover': {
-          backgroundColor: '#2563eb',
+          backgroundColor: 'var(--rel-color-info-hover, #2563eb)',
         },
       },
     },

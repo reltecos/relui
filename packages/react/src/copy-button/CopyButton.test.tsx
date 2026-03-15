@@ -273,3 +273,58 @@ describe('CopyButton — classNames & styles', () => {
     expect(container.querySelector('span')).toHaveStyle({ fontSize: '20px' });
   });
 });
+
+// ── Compound API ──
+
+describe('CopyButton (Compound)', () => {
+  it('compound: CopyButton.Icon render edilir', () => {
+    render(
+      <CopyButton value="test" aria-label="Kopyala">
+        <CopyButton.Icon />
+      </CopyButton>,
+    );
+    expect(screen.getByTestId('copy-button-icon')).toBeInTheDocument();
+  });
+
+  it('compound: CopyButton.Label render edilir', () => {
+    render(
+      <CopyButton value="test" aria-label="Kopyala">
+        <CopyButton.Icon />
+        <CopyButton.Label>Kopyala</CopyButton.Label>
+      </CopyButton>,
+    );
+    expect(screen.getByTestId('copy-button-label')).toBeInTheDocument();
+    expect(screen.getByTestId('copy-button-label')).toHaveTextContent('Kopyala');
+  });
+
+  it('compound: click ile kopyalama calisir', async () => {
+    render(
+      <CopyButton value="compound-test" aria-label="Kopyala">
+        <CopyButton.Icon />
+      </CopyButton>,
+    );
+    const btn = screen.getByRole('button', { name: 'Kopyala' });
+
+    await act(async () => {
+      fireEvent.click(btn);
+    });
+
+    expect(writeTextMock).toHaveBeenCalledWith('compound-test');
+    expect(btn).toHaveAttribute('data-copied', '');
+  });
+
+  it('compound: icon aria-hidden', () => {
+    render(
+      <CopyButton value="test" aria-label="Kopyala">
+        <CopyButton.Icon />
+      </CopyButton>,
+    );
+    expect(screen.getByTestId('copy-button-icon')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<CopyButton value="test" aria-label="Kopyala" ref={ref} />);
+    expect(ref).toHaveBeenCalled();
+  });
+});

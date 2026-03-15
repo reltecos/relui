@@ -203,4 +203,65 @@ describe('ButtonGroup', () => {
     expect(el).toHaveStyle({ margin: '4px' });
     expect(el).toHaveStyle({ padding: '10px' });
   });
+
+  // ──────────────────────────────────────────
+  // Orientation
+  // ──────────────────────────────────────────
+
+  it('varsayilan orientation horizontal', () => {
+    render(
+      <ButtonGroup>
+        <Button>A</Button>
+      </ButtonGroup>,
+    );
+    // horizontal default, className icinde horizontalStyle olmali
+    expect(screen.getByRole('group').className).toBeTruthy();
+  });
+
+  it('orientation vertical destekler', () => {
+    render(
+      <ButtonGroup orientation="vertical">
+        <Button>A</Button>
+      </ButtonGroup>,
+    );
+    expect(screen.getByRole('group').className).toBeTruthy();
+  });
+
+  // ──────────────────────────────────────────
+  // Attached
+  // ──────────────────────────────────────────
+
+  it('attached=true mod destekler', () => {
+    render(
+      <ButtonGroup attached>
+        <Button>A</Button>
+        <Button>B</Button>
+      </ButtonGroup>,
+    );
+    expect(screen.getByRole('group').className).toBeTruthy();
+  });
+
+  it('attached + vertical mod destekler', () => {
+    render(
+      <ButtonGroup attached orientation="vertical">
+        <Button>A</Button>
+        <Button>B</Button>
+      </ButtonGroup>,
+    );
+    expect(screen.getByRole('group').className).toBeTruthy();
+  });
+
+  // ──────────────────────────────────────────
+  // Shared context props
+  // ──────────────────────────────────────────
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(
+      <ButtonGroup ref={ref}>
+        <Button>A</Button>
+      </ButtonGroup>,
+    );
+    expect(ref).toHaveBeenCalled();
+  });
 });

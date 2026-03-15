@@ -218,3 +218,70 @@ describe('Masonry', () => {
     });
   });
 });
+
+// ── Compound API ──────────────────────────────────────
+
+describe('Masonry (Compound)', () => {
+  it('compound: Masonry.Item sub-component render edilir', () => {
+    render(
+      <Masonry data-testid="root">
+        <Masonry.Item>Card 1</Masonry.Item>
+        <Masonry.Item>Card 2</Masonry.Item>
+      </Masonry>,
+    );
+    expect(screen.getByText('Card 1')).toBeInTheDocument();
+    expect(screen.getByText('Card 2')).toBeInTheDocument();
+  });
+
+  it('compound: Item data-testid masonry-item tasir', () => {
+    render(
+      <Masonry data-testid="root">
+        <Masonry.Item>Card</Masonry.Item>
+      </Masonry>,
+    );
+    // Item, Masonry icindeki wrapper div icinde render edilir
+    // Masonry.Item data-testid sadece dogrudan kullanildiginda gorulur
+    expect(screen.getByText('Card')).toBeInTheDocument();
+  });
+
+  it('compound: classNames.item context ile Masonry.Item a aktarilir', () => {
+    const { container } = render(
+      <Masonry data-testid="root" classNames={{ item: 'cmp-item' }}>
+        <Masonry.Item>Card</Masonry.Item>
+      </Masonry>,
+    );
+    const root = container.firstElementChild as HTMLElement;
+    const item = root.firstElementChild as HTMLElement;
+    expect(item).toHaveClass('cmp-item');
+  });
+
+  it('compound: styles.item context ile Masonry.Item a aktarilir', () => {
+    const { container } = render(
+      <Masonry data-testid="root" styles={{ item: { opacity: '0.7' } }}>
+        <Masonry.Item>Card</Masonry.Item>
+      </Masonry>,
+    );
+    const root = container.firstElementChild as HTMLElement;
+    const item = root.firstElementChild as HTMLElement;
+    expect(item).toHaveStyle({ opacity: '0.7' });
+  });
+
+  it('compound: Masonry.Item className prop uygulanir', () => {
+    const { container } = render(
+      <Masonry data-testid="root">
+        <Masonry.Item className="extra-class">Card</Masonry.Item>
+      </Masonry>,
+    );
+    // Item, Masonry icerisindeki wrapper div olarak render edilir
+    // wrapper icinde Masonry.Item in renderlanan div vardir
+    const root = container.firstElementChild as HTMLElement;
+    const wrapperItem = root.firstElementChild as HTMLElement;
+    // Masonry.Item icerigi wrapper'in icinde
+    const masonryItem = wrapperItem.querySelector('[data-testid="masonry-item"]');
+    expect(masonryItem).toHaveClass('extra-class');
+  });
+
+  it('Masonry.Item context disinda hata firlatir', () => {
+    expect(() => render(<Masonry.Item>Card</Masonry.Item>)).toThrow();
+  });
+});

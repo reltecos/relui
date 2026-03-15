@@ -247,3 +247,60 @@ describe('BackToTop slot API', () => {
     expect(screen.getByTestId('back-to-top').style.fontSize).toBe('20px');
   });
 });
+
+// ── Compound API ────────────────────────────────────────────
+
+describe('BackToTop (Compound)', () => {
+  it('compound: BackToTop.Icon render edilir', () => {
+    const { div, setScrollTop } = createScrollTarget(0);
+    render(
+      <BackToTop scrollTarget={div}>
+        <BackToTop.Icon><span data-testid="custom-arrow">UP</span></BackToTop.Icon>
+      </BackToTop>,
+    );
+    setScrollTop(400);
+    expect(screen.getByTestId('back-to-top-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-arrow')).toBeInTheDocument();
+  });
+
+  it('compound: children ile varsayilan ikon gosterilmez', () => {
+    const { div, setScrollTop } = createScrollTarget(0);
+    render(
+      <BackToTop scrollTarget={div}>
+        <BackToTop.Icon><span>UP</span></BackToTop.Icon>
+      </BackToTop>,
+    );
+    setScrollTop(400);
+    const btn = screen.getByTestId('back-to-top');
+    expect(btn.querySelector('svg')).not.toBeInTheDocument();
+  });
+
+  it('compound: tiklaninca scrollTo cagirir', () => {
+    const { div, setScrollTop } = createScrollTarget(0);
+    render(
+      <BackToTop scrollTarget={div}>
+        <BackToTop.Icon><span>UP</span></BackToTop.Icon>
+      </BackToTop>,
+    );
+    setScrollTop(400);
+    fireEvent.click(screen.getByTestId('back-to-top'));
+    expect(div.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+  });
+
+  it('compound: classNames context ile aktarilir', () => {
+    const { div, setScrollTop } = createScrollTarget(0);
+    render(
+      <BackToTop scrollTarget={div} classNames={{ icon: 'custom-icon-cls' }}>
+        <BackToTop.Icon><span>UP</span></BackToTop.Icon>
+      </BackToTop>,
+    );
+    setScrollTop(400);
+    expect(screen.getByTestId('back-to-top-icon').className).toContain('custom-icon-cls');
+  });
+
+  it('compound: context disinda hata firlatir', () => {
+    expect(() => {
+      render(<BackToTop.Icon><span>UP</span></BackToTop.Icon>);
+    }).toThrow('BackToTop compound sub-components must be used within <BackToTop>.');
+  });
+});

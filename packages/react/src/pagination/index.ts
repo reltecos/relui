@@ -7,6 +7,12 @@
  */
 
 export { Pagination } from './Pagination';
-export type { PaginationComponentProps, PaginationSlot } from './Pagination';
+export type {
+  PaginationComponentProps,
+  PaginationSlot,
+  PaginationPrevButtonProps,
+  PaginationNextButtonProps,
+  PaginationPageButtonProps,
+} from './Pagination';
 export { usePagination } from './usePagination';
 export type { UsePaginationProps, UsePaginationReturn } from './usePagination';

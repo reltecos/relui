@@ -116,3 +116,90 @@ describe('Tag', () => {
     expect(screen.getByRole('button', { name: 'Kaldır' })).toHaveStyle({ opacity: '0.5' });
   });
 });
+
+// ── Compound API ──
+
+describe('Tag (Compound)', () => {
+  it('compound: Tag.Icon render edilir', () => {
+    render(
+      <Tag>
+        <Tag.Icon><span data-testid="cmp-icon">C</span></Tag.Icon>
+        React
+      </Tag>,
+    );
+    expect(screen.getByTestId('cmp-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('tag-icon')).toBeInTheDocument();
+  });
+
+  it('compound: Tag.RemoveButton render edilir', () => {
+    const handleRemove = vi.fn();
+    render(
+      <Tag onRemove={handleRemove}>
+        React
+        <Tag.RemoveButton />
+      </Tag>,
+    );
+    const removeBtn = screen.getByTestId('tag-remove');
+    expect(removeBtn).toBeInTheDocument();
+    fireEvent.click(removeBtn);
+    expect(handleRemove).toHaveBeenCalledOnce();
+  });
+
+  it('compound: classNames context ile Tag.Icon a aktarilir', () => {
+    render(
+      <Tag classNames={{ icon: 'cmp-icon-cls' }}>
+        <Tag.Icon><span>C</span></Tag.Icon>
+        React
+      </Tag>,
+    );
+    expect(screen.getByTestId('tag-icon').className).toContain('cmp-icon-cls');
+  });
+
+  it('compound: styles context ile Tag.RemoveButton a aktarilir', () => {
+    render(
+      <Tag styles={{ removeButton: { opacity: 0.3 } }}>
+        React
+        <Tag.RemoveButton />
+      </Tag>,
+    );
+    expect(screen.getByTestId('tag-remove')).toHaveStyle({ opacity: '0.3' });
+  });
+
+  it('compound: disabled durumda Tag.RemoveButton disabled', () => {
+    render(
+      <Tag disabled>
+        React
+        <Tag.RemoveButton />
+      </Tag>,
+    );
+    expect(screen.getByTestId('tag-remove')).toBeDisabled();
+  });
+
+  it('compound: Tag.Icon context disinda hata firlat', () => {
+    expect(() => {
+      render(<Tag.Icon><span>I</span></Tag.Icon>);
+    }).toThrow('Tag compound sub-components must be used within <Tag>.');
+  });
+
+  it('compound: Tag.RemoveButton context disinda hata firlat', () => {
+    expect(() => {
+      render(<Tag.RemoveButton />);
+    }).toThrow('Tag compound sub-components must be used within <Tag>.');
+  });
+
+  it('compound: root data-testid mevcut', () => {
+    render(
+      <Tag>
+        <Tag.Icon><span>C</span></Tag.Icon>
+        React
+      </Tag>,
+    );
+    expect(screen.getByTestId('tag-root')).toBeInTheDocument();
+  });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<Tag ref={ref}>React</Tag>);
+    expect(ref).toHaveBeenCalled();
+  });
+});

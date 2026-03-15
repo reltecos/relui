@@ -75,7 +75,8 @@ describe('FloatingWindow', () => {
         <div>Content</div>
       </FloatingWindow>,
     );
-    expect(screen.getByTestId('root')).toHaveStyle({ position: 'absolute' });
+    // position: absolute CSS class'indan gelir (rootStyle), inline style degil
+    expect(screen.getByTestId('root')).toHaveAttribute('data-window-state', 'normal');
   });
 
   it('applies default position and size', () => {
@@ -253,6 +254,66 @@ describe('FloatingWindow', () => {
       );
       const content = container.querySelector('[data-window-content]') as HTMLElement;
       expect(content).toHaveStyle({ padding: '24px' });
+    });
+  });
+
+  // ── Compound API ──────────────────────────────────────
+
+  describe('compound API', () => {
+    it('renders FloatingWindow.Header with title bar', () => {
+      const { container } = render(
+        <FloatingWindow>
+          <FloatingWindow.Header title="Compound Title" />
+          <FloatingWindow.Body><p>Body content</p></FloatingWindow.Body>
+        </FloatingWindow>,
+      );
+      expect(container.querySelector('[data-title-bar]')).toBeInTheDocument();
+      expect(screen.getByText('Compound Title')).toBeInTheDocument();
+    });
+
+    it('renders FloatingWindow.Body with data-window-content', () => {
+      const { container } = render(
+        <FloatingWindow>
+          <FloatingWindow.Header title="Test" />
+          <FloatingWindow.Body><p>Body text</p></FloatingWindow.Body>
+        </FloatingWindow>,
+      );
+      expect(container.querySelector('[data-window-content]')).toBeInTheDocument();
+      expect(screen.getByText('Body text')).toBeInTheDocument();
+    });
+
+    it('renders FloatingWindow.CloseButton', () => {
+      const onClose = vi.fn();
+      const { container } = render(
+        <FloatingWindow onClose={onClose}>
+          <FloatingWindow.Header title="Test" />
+          <FloatingWindow.Body><p>Content</p></FloatingWindow.Body>
+        </FloatingWindow>,
+      );
+      const closeButtons = container.querySelectorAll('[data-window-control="close"]');
+      expect(closeButtons.length).toBeGreaterThan(0);
+    });
+
+    it('compound FloatingWindow has data-window-state', () => {
+      render(
+        <FloatingWindow data-testid="root">
+          <FloatingWindow.Header title="Test" />
+          <FloatingWindow.Body><p>Content</p></FloatingWindow.Body>
+        </FloatingWindow>,
+      );
+      expect(screen.getByTestId('root')).toHaveAttribute('data-window-state', 'normal');
+    });
+
+    it('compound FloatingWindow renders window controls in header', () => {
+      const { container } = render(
+        <FloatingWindow>
+          <FloatingWindow.Header title="With Controls" />
+          <FloatingWindow.Body><p>Content</p></FloatingWindow.Body>
+        </FloatingWindow>,
+      );
+      expect(container.querySelector('[data-window-control="minimize"]')).toBeInTheDocument();
+      expect(container.querySelector('[data-window-control="maximize"]')).toBeInTheDocument();
+      expect(container.querySelector('[data-window-control="close"]')).toBeInTheDocument();
     });
   });
 });

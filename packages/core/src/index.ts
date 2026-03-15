@@ -788,3 +788,109 @@ export type {
   TourConfig,
   TourAPI,
 } from './tour';
+
+// ── SplashScreen ─────────────────────────────────────────
+export { createSplashScreen } from './splash-screen';
+export type {
+  SplashScreenEvent,
+  SplashScreenContext,
+  SplashScreenConfig,
+  SplashScreenAPI,
+} from './splash-screen';
+
+// ── ValidationSummary ────────────────────────────────────
+export { createValidationSummary } from './validation-summary';
+export type {
+  ValidationSeverity,
+  ValidationError,
+  ValidationSummaryEvent,
+  ValidationSummaryContext,
+  ValidationSummaryConfig,
+  ValidationSummaryAPI,
+} from './validation-summary';
+
+// ── Modal ────────────────────────────────────────────────
+export { createModal } from './modal';
+export type {
+  ModalSize,
+  ModalEvent,
+  ModalContext,
+  ModalConfig,
+  ModalAPI,
+} from './modal';
+
+// ── Drawer ───────────────────────────────────────────────
+export { createDrawer } from './drawer';
+export type {
+  DrawerPlacement,
+  DrawerSize,
+  DrawerEvent,
+  DrawerContext,
+  DrawerConfig,
+  DrawerAPI,
+} from './drawer';
+
+// ── Popover ─────────────────────────────────────────────
+export { createPopover } from './popover';
+export type {
+  PopoverPlacement,
+  PopoverAlignment,
+  PopoverEvent,
+  PopoverContext,
+  PopoverConfig,
+  PopoverAPI,
+} from './popover';
+
+// ── Tooltip ─────────────────────────────────────────────
+export { createTooltip } from './tooltip';
+export type {
+  TooltipPlacement,
+  TooltipAlignment,
+  TooltipEvent,
+  TooltipContext,
+  TooltipConfig,
+  TooltipAPI,
+} from './tooltip';
+
+// ── ContextMenu ─────────────────────────────────────────
+export { createContextMenu } from './context-menu';
+export type {
+  ContextMenuItemType,
+  ContextMenuItem,
+  ContextMenuEvent,
+  ContextMenuContext,
+  ContextMenuConfig,
+  ContextMenuAPI,
+} from './context-menu';
+
+// ── DropdownMenu ────────────────────────────────────────
+export { createDropdownMenu } from './dropdown-menu';
+export type {
+  DropdownMenuItem,
+  DropdownMenuItemType,
+  DropdownMenuPlacement,
+  DropdownMenuEvent,
+  DropdownMenuContext,
+  DropdownMenuConfig,
+  DropdownMenuAPI,
+} from './dropdown-menu';
+
+// ── Flyout ──────────────────────────────────────────────
+export { createFlyout } from './flyout';
+export type {
+  FlyoutPlacement,
+  FlyoutSize,
+  FlyoutEvent,
+  FlyoutContext,
+  FlyoutConfig,
+  FlyoutAPI,
+} from './flyout';
+
+// ── Accordion ───────────────────────────────────────────
+export { createAccordion } from './accordion';
+export type {
+  AccordionEvent,
+  AccordionContext,
+  AccordionConfig,
+  AccordionAPI,
+} from './accordion';

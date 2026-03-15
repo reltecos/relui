@@ -14,6 +14,7 @@ import { Badge } from './Badge';
 const meta: Meta<typeof Badge> = {
   title: 'Data Display/Badge',
   component: Badge,
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
@@ -143,6 +144,33 @@ export const CustomSlotStyles: Story = {
       >
         Merged
       </Badge>
+    </div>
+  ),
+};
+
+// ── Compound ──
+
+export const Compound: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+      <Badge color="success">
+        <Badge.Icon><span style={{ marginRight: 2 }}>&#10003;</span></Badge.Icon>
+        Aktif
+      </Badge>
+      <Badge color="destructive">
+        <Badge.Icon><span style={{ marginRight: 2 }}>&#10007;</span></Badge.Icon>
+        Hata
+      </Badge>
+    </div>
+  ),
+};
+
+export const WithIcon: Story = {
+  name: 'Icon (Props-based)',
+  render: () => (
+    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+      <Badge color="success" icon={<span>&#10003;</span>}>Aktif</Badge>
+      <Badge color="destructive" icon={<span>&#10007;</span>}>Hata</Badge>
     </div>
   ),
 };

@@ -276,3 +276,91 @@ describe('Pagination variant', () => {
     expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
 });
+
+// ── Compound API ──────────────────────────────────────────────────
+
+describe('Pagination (Compound)', () => {
+  it('compound: nav render edilir', () => {
+    render(
+      <Pagination totalItems={30} pageSize={10}>
+        <Pagination.PrevButton />
+        <Pagination.PageButton page={1} />
+        <Pagination.PageButton page={2} />
+        <Pagination.PageButton page={3} />
+        <Pagination.NextButton />
+      </Pagination>,
+    );
+    const nav = screen.getByRole('navigation');
+    expect(nav).toBeInTheDocument();
+    expect(nav).toHaveAttribute('aria-label', 'Pagination');
+  });
+
+  it('compound: PrevButton render edilir', () => {
+    render(
+      <Pagination totalItems={30} pageSize={10}>
+        <Pagination.PrevButton />
+        <Pagination.PageButton page={1} />
+        <Pagination.NextButton />
+      </Pagination>,
+    );
+    expect(screen.getByTestId('pagination-prev')).toBeInTheDocument();
+  });
+
+  it('compound: NextButton render edilir', () => {
+    render(
+      <Pagination totalItems={30} pageSize={10}>
+        <Pagination.PrevButton />
+        <Pagination.PageButton page={1} />
+        <Pagination.NextButton />
+      </Pagination>,
+    );
+    expect(screen.getByTestId('pagination-next')).toBeInTheDocument();
+  });
+
+  it('compound: PageButton render edilir ve aktif sayfa aria-current tasir', () => {
+    render(
+      <Pagination totalItems={30} pageSize={10}>
+        <Pagination.PrevButton />
+        <Pagination.PageButton page={1} />
+        <Pagination.PageButton page={2} />
+        <Pagination.NextButton />
+      </Pagination>,
+    );
+    const pages = screen.getAllByTestId('pagination-page');
+    expect(pages).toHaveLength(2);
+    expect(pages[0]).toHaveAttribute('aria-current', 'page');
+    expect(pages[1]).not.toHaveAttribute('aria-current');
+  });
+
+  it('compound: PageButton tiklaninca sayfa degisir', () => {
+    const onPageChange = vi.fn();
+    render(
+      <Pagination totalItems={30} pageSize={10} onPageChange={onPageChange}>
+        <Pagination.PrevButton />
+        <Pagination.PageButton page={1} />
+        <Pagination.PageButton page={2} />
+        <Pagination.PageButton page={3} />
+        <Pagination.NextButton />
+      </Pagination>,
+    );
+    fireEvent.click(screen.getAllByTestId('pagination-page')[1]);
+    expect(onPageChange).toHaveBeenCalledWith(2);
+  });
+
+  it('compound: context disinda hata firlatir', () => {
+    expect(() => {
+      render(<Pagination.PrevButton />);
+    }).toThrow('Pagination compound sub-components must be used within <Pagination>.');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Pagination totalItems={30} pageSize={10} classNames={{ control: 'custom-ctrl-cls' }}>
+        <Pagination.PrevButton />
+        <Pagination.PageButton page={1} />
+        <Pagination.NextButton />
+      </Pagination>,
+    );
+    expect(screen.getByTestId('pagination-prev').className).toContain('custom-ctrl-cls');
+  });
+});

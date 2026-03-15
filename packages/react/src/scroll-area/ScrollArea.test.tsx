@@ -359,3 +359,58 @@ describe('ScrollArea', () => {
     });
   });
 });
+
+// ── Compound API ──────────────────────────────────────
+
+describe('ScrollArea (Compound)', () => {
+  it('compound: Viewport sub-component render edilir', () => {
+    render(
+      <ScrollArea data-testid="root" height={200}>
+        <ScrollArea.Viewport data-testid="compound-viewport">
+          <p>Compound icerik</p>
+        </ScrollArea.Viewport>
+      </ScrollArea>,
+    );
+    expect(screen.getByText('Compound icerik')).toBeInTheDocument();
+  });
+
+  it('compound: Scrollbar sub-component render edilir', () => {
+    render(
+      <ScrollArea data-testid="root" height={200}>
+        <ScrollArea.Scrollbar orientation="vertical" />
+      </ScrollArea>,
+    );
+    expect(screen.getByTestId('scroll-area-scrollbar-vertical')).toBeInTheDocument();
+  });
+
+  it('compound: Viewport classNames context ile aktarilir', () => {
+    render(
+      <ScrollArea data-testid="root" height={200} classNames={{ viewport: 'cmp-vp' }}>
+        <ScrollArea.Viewport>
+          <p>Test</p>
+        </ScrollArea.Viewport>
+      </ScrollArea>,
+    );
+    expect(screen.getByTestId('scroll-area-viewport')).toHaveClass('cmp-vp');
+  });
+
+  it('compound: Viewport styles context ile aktarilir', () => {
+    render(
+      <ScrollArea data-testid="root" height={200} styles={{ viewport: { padding: '20px' } }}>
+        <ScrollArea.Viewport>
+          <p>Test</p>
+        </ScrollArea.Viewport>
+      </ScrollArea>,
+    );
+    expect(screen.getByTestId('scroll-area-viewport')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('compound: Scrollbar orientation data attribute set edilir', () => {
+    render(
+      <ScrollArea data-testid="root" height={200}>
+        <ScrollArea.Scrollbar orientation="horizontal" />
+      </ScrollArea>,
+    );
+    expect(screen.getByTestId('scroll-area-scrollbar-horizontal')).toHaveAttribute('data-orientation', 'horizontal');
+  });
+});

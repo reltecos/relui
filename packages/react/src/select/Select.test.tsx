@@ -284,7 +284,7 @@ describe('Select', () => {
   it('bos options bos mesaj gosterir / empty options shows empty message', () => {
     render(<Select options={[]} aria-label="Ulke" />);
     fireEvent.click(screen.getByRole('combobox'));
-    expect(screen.getByText('Seçenek yok')).toBeInTheDocument();
+    expect(screen.getByText('Secenek yok')).toBeInTheDocument();
   });
 
   // ── classNames & styles ─────────────────────────────────────────
@@ -381,5 +381,75 @@ describe('Select', () => {
     fireEvent.click(screen.getByRole('combobox'));
     expect(screen.getByText('Avrupa')).toHaveStyle({ fontWeight: 'bold' });
     expect(screen.getByText('Asya')).toHaveStyle({ fontWeight: 'bold' });
+  });
+});
+
+// ── Compound API ──
+
+describe('Select (Compound)', () => {
+  it('compound: root render edilir', () => {
+    render(
+      <Select options={basicOptions}>
+        <Select.Trigger>
+          <Select.Value placeholder="Ulke secin" />
+        </Select.Trigger>
+        <Select.Content />
+      </Select>,
+    );
+    expect(screen.getByTestId('select-root')).toBeInTheDocument();
+  });
+
+  it('compound: trigger render edilir', () => {
+    render(
+      <Select options={basicOptions}>
+        <Select.Trigger>
+          <Select.Value placeholder="Ulke secin" />
+        </Select.Trigger>
+        <Select.Content />
+      </Select>,
+    );
+    expect(screen.getByTestId('select-trigger')).toBeInTheDocument();
+  });
+
+  it('compound: value placeholder gosterir', () => {
+    render(
+      <Select options={basicOptions}>
+        <Select.Trigger>
+          <Select.Value placeholder="Ulke secin" />
+        </Select.Trigger>
+        <Select.Content />
+      </Select>,
+    );
+    expect(screen.getByTestId('select-value')).toHaveTextContent('Ulke secin');
+  });
+
+  it('compound: content acilir ve kapanir', () => {
+    render(
+      <Select options={basicOptions}>
+        <Select.Trigger>
+          <Select.Value placeholder="Ulke secin" />
+        </Select.Trigger>
+        <Select.Content />
+      </Select>,
+    );
+    const trigger = screen.getByTestId('select-trigger');
+    fireEvent.click(trigger);
+    expect(screen.getByTestId('select-content')).toBeInTheDocument();
+  });
+
+  it('compound: secim yapilir', () => {
+    const onValueChange = vi.fn();
+    render(
+      <Select options={basicOptions} onValueChange={onValueChange}>
+        <Select.Trigger>
+          <Select.Value placeholder="Ulke secin" />
+        </Select.Trigger>
+        <Select.Content />
+      </Select>,
+    );
+    const trigger = screen.getByTestId('select-trigger');
+    fireEvent.click(trigger);
+    fireEvent.click(screen.getByText('ABD'));
+    expect(onValueChange).toHaveBeenCalledWith('us');
   });
 });

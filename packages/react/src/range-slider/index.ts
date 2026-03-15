@@ -6,5 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { RangeSlider, type RangeSliderComponentProps, type RangeSliderSlot } from './RangeSlider';
+export {
+  RangeSlider,
+  useRangeSliderContext,
+  type RangeSliderComponentProps,
+  type RangeSliderSlot,
+  type RangeSliderTrackProps,
+  type RangeSliderThumbProps,
+} from './RangeSlider';
 export { useRangeSlider, type UseRangeSliderProps, type UseRangeSliderReturn } from './useRangeSlider';

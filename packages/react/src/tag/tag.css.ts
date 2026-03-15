@@ -143,11 +143,11 @@ export const tagRecipe = recipe({
 
   compoundVariants: [
     // Solid — dolu renkler
-    { variants: { variant: 'solid', color: 'accent' }, style: { vars: { [tgBg]: cssVar.accentDefault, [tgFg]: '#ffffff' } } },
+    { variants: { variant: 'solid', color: 'accent' }, style: { vars: { [tgBg]: cssVar.accentDefault, [tgFg]: 'var(--rel-color-text-inverse, #fff)' } } },
     { variants: { variant: 'solid', color: 'neutral' }, style: { vars: { [tgBg]: cssVar.bgComponent, [tgFg]: cssVar.fgDefault } } },
-    { variants: { variant: 'solid', color: 'destructive' }, style: { vars: { [tgBg]: cssVar.destructiveDefault, [tgFg]: '#ffffff' } } },
-    { variants: { variant: 'solid', color: 'success' }, style: { vars: { [tgBg]: cssVar.successDefault, [tgFg]: '#ffffff' } } },
-    { variants: { variant: 'solid', color: 'warning' }, style: { vars: { [tgBg]: cssVar.warningDefault, [tgFg]: '#ffffff' } } },
+    { variants: { variant: 'solid', color: 'destructive' }, style: { vars: { [tgBg]: cssVar.destructiveDefault, [tgFg]: 'var(--rel-color-text-inverse, #fff)' } } },
+    { variants: { variant: 'solid', color: 'success' }, style: { vars: { [tgBg]: cssVar.successDefault, [tgFg]: 'var(--rel-color-text-inverse, #fff)' } } },
+    { variants: { variant: 'solid', color: 'warning' }, style: { vars: { [tgBg]: cssVar.warningDefault, [tgFg]: 'var(--rel-color-text-inverse, #fff)' } } },
 
     // Outline — transparan bg, renkli border
     { variants: { variant: 'outline', color: 'accent' }, style: { vars: { [tgBorder]: cssVar.accentDefault } } },
@@ -168,6 +168,15 @@ export const tagRecipe = recipe({
 export type TagRecipeVariants = RecipeVariants<typeof tagRecipe>;
 
 // ── Remove button ───────────────────────────────────────────────────
+
+export const tagIconStyle = style({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+  fontSize: '1em',
+  lineHeight: 1,
+});
 
 export const tagRemoveButtonStyle = style({
   display: 'inline-flex',

@@ -15,6 +15,7 @@ import { Switch } from './Switch';
 const meta: Meta<typeof Switch> = {
   title: 'Primitives/Switch',
   component: Switch,
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
@@ -150,6 +151,34 @@ export const FormExample: Story = {
       </Switch>
     </div>
   ),
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => {
+    const [checked, setChecked] = useState(false);
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <Switch>
+          <Switch.Track><Switch.Thumb /></Switch.Track>
+          <Switch.Label>Compound switch — unchecked</Switch.Label>
+        </Switch>
+        <Switch checked>
+          <Switch.Track><Switch.Thumb /></Switch.Track>
+          <Switch.Label>Compound switch — checked</Switch.Label>
+        </Switch>
+        <Switch checked={checked} onCheckedChange={setChecked}>
+          <Switch.Track><Switch.Thumb /></Switch.Track>
+          <Switch.Label>Kontrollü compound: {checked ? 'Acik' : 'Kapali'}</Switch.Label>
+        </Switch>
+        <Switch disabled>
+          <Switch.Track><Switch.Thumb /></Switch.Track>
+          <Switch.Label>Compound switch — disabled</Switch.Label>
+        </Switch>
+      </div>
+    );
+  },
 };
 
 export const CustomSlotStyles: Story = {

@@ -153,6 +153,28 @@ export const CustomSlotStyles: Story = {
   ),
 };
 
+// ── Compound ────────────────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <div style={{ fontFamily: 'var(--rel-font-sans, system-ui)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <Link href="#">
+        <Link.Icon><span style={{ fontSize: '1em' }}>★</span></Link.Icon>
+        Link with start icon
+      </Link>
+      <Link href="#">
+        Link with end icon
+        <Link.Icon position="end"><span style={{ fontSize: '1em' }}>→</span></Link.Icon>
+      </Link>
+      <Link href="#">
+        <Link.Icon><span style={{ fontSize: '1em' }}>🔍</span></Link.Icon>
+        Search
+        <Link.Icon position="end"><span style={{ fontSize: '1em' }}>↗</span></Link.Icon>
+      </Link>
+    </div>
+  ),
+};
+
 export const Playground: Story = {
   args: {
     href: '#',

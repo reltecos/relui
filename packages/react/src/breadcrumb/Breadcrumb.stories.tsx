@@ -182,6 +182,40 @@ export const CustomSlotStyles: Story = {
   ),
 };
 
+// ── Compound ───────────────────────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <Breadcrumb>
+      <Breadcrumb.Item href="/">Ana Sayfa</Breadcrumb.Item>
+      <Breadcrumb.Separator />
+      <Breadcrumb.Item href="/products">Urunler</Breadcrumb.Item>
+      <Breadcrumb.Separator />
+      <Breadcrumb.Item isLast>Urun Detayi</Breadcrumb.Item>
+    </Breadcrumb>
+  ),
+};
+
+// ── CompoundWithLink ────────────────────────────────────────────────
+
+export const CompoundWithLink: Story = {
+  render: () => (
+    <Breadcrumb separator="→">
+      <li>
+        <Breadcrumb.Link href="/">Ana Sayfa</Breadcrumb.Link>
+      </li>
+      <Breadcrumb.Separator />
+      <li>
+        <Breadcrumb.Link href="/products">Urunler</Breadcrumb.Link>
+      </li>
+      <Breadcrumb.Separator />
+      <li>
+        <Breadcrumb.Link isLast>Detay</Breadcrumb.Link>
+      </li>
+    </Breadcrumb>
+  ),
+};
+
 // ── Playground ──────────────────────────────────────────────────────
 
 export const Playground: Story = {

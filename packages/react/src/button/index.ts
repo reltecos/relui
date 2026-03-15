@@ -6,5 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Button, type ButtonProps, type ButtonSlot } from './Button';
+export {
+  Button,
+  type ButtonProps,
+  type ButtonSlot,
+  type ButtonLeftIconProps,
+  type ButtonRightIconProps,
+} from './Button';
 export { useButton, type UseButtonProps, type UseButtonReturn } from './useButton';

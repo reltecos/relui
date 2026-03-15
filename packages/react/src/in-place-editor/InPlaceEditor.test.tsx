@@ -360,3 +360,71 @@ describe('InPlaceEditor — classNames & styles', () => {
     expect(screen.getByLabelText('İptal')).toHaveClass('my-cancel');
   });
 });
+
+// ── Compound API ──────────────────────────────────────
+
+describe('InPlaceEditor (Compound)', () => {
+  it('compound: Display sub-component render edilir', () => {
+    render(
+      <InPlaceEditor defaultValue="Test">
+        <InPlaceEditor.Display>Ozel metin</InPlaceEditor.Display>
+      </InPlaceEditor>,
+    );
+    expect(screen.getByTestId('in-place-editor-display')).toHaveTextContent('Ozel metin');
+  });
+
+  it('compound: Input sub-component render edilir', () => {
+    render(
+      <InPlaceEditor defaultValue="Test">
+        <InPlaceEditor.Input>
+          <span data-testid="custom-input">Custom</span>
+        </InPlaceEditor.Input>
+      </InPlaceEditor>,
+    );
+    expect(screen.getByTestId('in-place-editor-input')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-input')).toBeInTheDocument();
+  });
+
+  it('compound: Actions sub-component render edilir', () => {
+    render(
+      <InPlaceEditor defaultValue="Test">
+        <InPlaceEditor.Actions>
+          <button data-testid="cmp-save">Kaydet</button>
+          <button data-testid="cmp-cancel">Iptal</button>
+        </InPlaceEditor.Actions>
+      </InPlaceEditor>,
+    );
+    expect(screen.getByTestId('in-place-editor-actions')).toBeInTheDocument();
+    expect(screen.getByTestId('cmp-save')).toBeInTheDocument();
+    expect(screen.getByTestId('cmp-cancel')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <InPlaceEditor defaultValue="Test" classNames={{ display: 'cmp-display' }}>
+        <InPlaceEditor.Display>Metin</InPlaceEditor.Display>
+      </InPlaceEditor>,
+    );
+    expect(screen.getByTestId('in-place-editor-display').className).toContain('cmp-display');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <InPlaceEditor defaultValue="Test" styles={{ actions: { padding: '12px' } }}>
+        <InPlaceEditor.Actions>
+          <button>OK</button>
+        </InPlaceEditor.Actions>
+      </InPlaceEditor>,
+    );
+    expect(screen.getByTestId('in-place-editor-actions')).toHaveStyle({ padding: '12px' });
+  });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<InPlaceEditor defaultValue="Test" ref={ref} />);
+    // ref sadece editing modunda input mount olunca cagrilir
+    const displayEl = screen.getByText('Test');
+    fireEvent.click(displayEl);
+    expect(ref).toHaveBeenCalled();
+  });
+});

@@ -191,3 +191,98 @@ describe('Alert slot API', () => {
     expect(screen.getByTestId('alert').style.fontSize).toBe('20px');
   });
 });
+
+// ── Compound API ────────────────────────────────────────
+
+describe('Alert (Compound)', () => {
+  it('compound: icon render edilir', () => {
+    render(
+      <Alert severity="error" compound>
+        <Alert.Icon><span data-testid="cmp-icon">!</span></Alert.Icon>
+        <Alert.Title>Hata</Alert.Title>
+      </Alert>,
+    );
+    expect(screen.getByTestId('alert-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('cmp-icon')).toBeInTheDocument();
+  });
+
+  it('compound: title render edilir', () => {
+    render(
+      <Alert severity="info" compound>
+        <Alert.Title>Bilgi Basligi</Alert.Title>
+      </Alert>,
+    );
+    expect(screen.getByTestId('alert-title')).toHaveTextContent('Bilgi Basligi');
+  });
+
+  it('compound: description render edilir', () => {
+    render(
+      <Alert severity="warning" compound>
+        <Alert.Title>Uyari</Alert.Title>
+        <Alert.Description>Detayli aciklama</Alert.Description>
+      </Alert>,
+    );
+    expect(screen.getByTestId('alert-description')).toHaveTextContent('Detayli aciklama');
+  });
+
+  it('compound: close button render edilir', () => {
+    const onClose = vi.fn();
+    render(
+      <Alert severity="success" compound>
+        <Alert.Title>Basarili</Alert.Title>
+        <Alert.CloseButton onClick={onClose} />
+      </Alert>,
+    );
+    expect(screen.getByTestId('alert-close')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('alert-close'));
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('compound: severity context ile aktarilir', () => {
+    render(
+      <Alert severity="error" compound>
+        <Alert.Title>Hata</Alert.Title>
+      </Alert>,
+    );
+    expect(screen.getByTestId('alert')).toHaveAttribute('data-severity', 'error');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Alert severity="info" compound classNames={{ title: 'cmp-title' }}>
+        <Alert.Title>Bilgi</Alert.Title>
+      </Alert>,
+    );
+    expect(screen.getByTestId('alert-title').className).toContain('cmp-title');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <Alert severity="info" compound styles={{ title: { fontSize: '20px' } }}>
+        <Alert.Title>Bilgi</Alert.Title>
+      </Alert>,
+    );
+    expect(screen.getByTestId('alert-title')).toHaveStyle({ fontSize: '20px' });
+  });
+
+  it('compound: context disinda kullanim hata firlat', () => {
+    expect(() => render(<Alert.Title>Baslik</Alert.Title>)).toThrow(
+      'Alert compound sub-components must be used within <Alert>.',
+    );
+  });
+
+  it('compound: tum sub-component lar birlikte render edilir', () => {
+    render(
+      <Alert severity="error" compound>
+        <Alert.Icon><span>X</span></Alert.Icon>
+        <Alert.Title>Hata</Alert.Title>
+        <Alert.Description>Aciklama</Alert.Description>
+        <Alert.CloseButton />
+      </Alert>,
+    );
+    expect(screen.getByTestId('alert-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('alert-title')).toBeInTheDocument();
+    expect(screen.getByTestId('alert-description')).toBeInTheDocument();
+    expect(screen.getByTestId('alert-close')).toBeInTheDocument();
+  });
+});

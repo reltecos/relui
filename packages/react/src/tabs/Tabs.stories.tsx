@@ -316,6 +316,60 @@ export const CustomSlotStyles: Story = {
   ),
 };
 
+// ── Compound API ──────────────────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <Tabs items={basicItems} defaultValue="overview">
+      <Tabs.List aria-label="Bilgi Sekmeleri">
+        <Tabs.Tab value="overview">Genel Bakis</Tabs.Tab>
+        <Tabs.Tab value="features">Ozellikler</Tabs.Tab>
+        <Tabs.Tab value="pricing">Fiyatlandirma</Tabs.Tab>
+        <Tabs.Tab value="faq">SSS</Tabs.Tab>
+      </Tabs.List>
+      <Tabs.Panel value="overview">
+        <p>RelUI, dunyanin en guclu web UI toolkit&apos;idir.</p>
+      </Tabs.Panel>
+      <Tabs.Panel value="features">
+        <ul>
+          <li>200+ bilesen</li>
+          <li>Framework-agnostic core</li>
+        </ul>
+      </Tabs.Panel>
+      <Tabs.Panel value="pricing">
+        <p>Core + Tokens: MIT (ucretsiz).</p>
+      </Tabs.Panel>
+      <Tabs.Panel value="faq">
+        <p>Sikca Sorulan Sorular</p>
+      </Tabs.Panel>
+    </Tabs>
+  ),
+};
+
+// ── Compound + CustomSlotStyles ──────────────────────────────────
+
+export const CompoundCustomSlotStyles: Story = {
+  render: () => (
+    <Tabs
+      items={basicItems}
+      defaultValue="overview"
+      classNames={{ list: 'custom-list' }}
+      styles={{
+        root: { fontFamily: 'monospace' },
+        tab: { letterSpacing: '0.5px' },
+        panel: { padding: '24px', fontSize: '14px' },
+      }}
+    >
+      <Tabs.List aria-label="Bilgi Sekmeleri">
+        <Tabs.Tab value="overview">Genel Bakis</Tabs.Tab>
+        <Tabs.Tab value="features">Ozellikler</Tabs.Tab>
+      </Tabs.List>
+      <Tabs.Panel value="overview">Genel bakis icerigi</Tabs.Panel>
+      <Tabs.Panel value="features">Ozellikler icerigi</Tabs.Panel>
+    </Tabs>
+  ),
+};
+
 // ── Playground ──────────────────────────────────────────────────
 
 export const Playground: Story = {

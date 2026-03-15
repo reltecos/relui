@@ -10,4 +10,6 @@ export {
   BookLayout,
   type BookLayoutComponentProps,
   type BookLayoutSlot,
+  type BookLayoutPageProps,
+  type BookLayoutNavigationProps,
 } from './BookLayout';

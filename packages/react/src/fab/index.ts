@@ -12,6 +12,8 @@ export {
   type FABSlot,
   type FABSize,
   type FABVariant,
+  type FABIconProps,
+  type FABLabelProps,
 } from './FAB';
 export {
   useFAB,

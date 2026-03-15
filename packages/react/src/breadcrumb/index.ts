@@ -7,6 +7,12 @@
  */
 
 export { Breadcrumb } from './Breadcrumb';
-export type { BreadcrumbComponentProps, BreadcrumbSlot } from './Breadcrumb';
+export type {
+  BreadcrumbComponentProps,
+  BreadcrumbSlot,
+  BreadcrumbItemCompoundProps,
+  BreadcrumbSeparatorProps,
+  BreadcrumbLinkProps,
+} from './Breadcrumb';
 export { useBreadcrumb } from './useBreadcrumb';
 export type { UseBreadcrumbProps, UseBreadcrumbReturn } from './useBreadcrumb';

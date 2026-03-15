@@ -396,3 +396,74 @@ describe('CommandPalette filtering', () => {
     expect(screen.getByTestId('cp-empty')).toBeInTheDocument();
   });
 });
+
+// ── Compound API ──────────────────────────────────────────────
+
+describe('CommandPalette (Compound)', () => {
+  it('compound: dialog render edilir', () => {
+    render(
+      <OpenCommandPalette items={[]}>
+        <CommandPalette.Input placeholder="Search..." />
+        <CommandPalette.List>
+          <CommandPalette.Item>Save</CommandPalette.Item>
+        </CommandPalette.List>
+      </OpenCommandPalette>,
+    );
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  it('compound: input render edilir', () => {
+    render(
+      <OpenCommandPalette items={[]}>
+        <CommandPalette.Input placeholder="Type here..." />
+        <CommandPalette.List>
+          <CommandPalette.Item>Save</CommandPalette.Item>
+        </CommandPalette.List>
+      </OpenCommandPalette>,
+    );
+    expect(screen.getByTestId('cp-input')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Type here...')).toBeInTheDocument();
+  });
+
+  it('compound: list ve item render edilir', () => {
+    render(
+      <OpenCommandPalette items={[]}>
+        <CommandPalette.Input />
+        <CommandPalette.List>
+          <CommandPalette.Item>Save File</CommandPalette.Item>
+          <CommandPalette.Item>Open File</CommandPalette.Item>
+        </CommandPalette.List>
+      </OpenCommandPalette>,
+    );
+    expect(screen.getByTestId('cp-list')).toBeInTheDocument();
+    const items = screen.getAllByTestId('cp-item');
+    expect(items).toHaveLength(2);
+  });
+
+  it('compound: group render edilir', () => {
+    render(
+      <OpenCommandPalette items={[]}>
+        <CommandPalette.Input />
+        <CommandPalette.List>
+          <CommandPalette.Group heading="File">
+            <CommandPalette.Item>Save</CommandPalette.Item>
+          </CommandPalette.Group>
+        </CommandPalette.List>
+      </OpenCommandPalette>,
+    );
+    expect(screen.getByTestId('cp-group')).toBeInTheDocument();
+    expect(screen.getByText('File')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <OpenCommandPalette items={[]} classNames={{ item: 'cmp-item' }}>
+        <CommandPalette.Input />
+        <CommandPalette.List>
+          <CommandPalette.Item>Save</CommandPalette.Item>
+        </CommandPalette.List>
+      </OpenCommandPalette>,
+    );
+    expect(screen.getByTestId('cp-item').className).toContain('cmp-item');
+  });
+});

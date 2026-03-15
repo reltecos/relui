@@ -7,16 +7,16 @@
  */
 
 /**
- * TableOfContents — scroll spy navigasyon bilesen.
- * TableOfContents — scroll spy navigation component.
+ * TableOfContents — scroll spy navigasyon bilesen (Dual API).
+ * TableOfContents — scroll spy navigation component (Dual API).
  *
- * Sayfadaki basliklari izler, aktif basligi highlight eder,
- * tiklayinca ilgili bolume smooth scroll yapar.
+ * Props-based: `<TableOfContents items={[...]} />`
+ * Compound:    `<TableOfContents items={[...]}><TableOfContents.Item id="intro"><TableOfContents.Link>Intro</TableOfContents.Link></TableOfContents.Item></TableOfContents>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import {
   tocRootRecipe,
   tocLinkRecipe,
@@ -25,7 +25,7 @@ import {
   tocIndicatorStyle,
   tocIndicatorActiveStyle,
 } from './table-of-contents.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 import { useTableOfContents, type UseTableOfContentsProps } from './useTableOfContents';
 import type { TocItem } from '@relteco/relui-core';
 
@@ -47,6 +47,131 @@ export type TableOfContentsSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
  * TableOfContents varyantlari / TableOfContents variants.
  */
 export type TableOfContentsVariant = 'default' | 'filled' | 'dots';
+
+// ── Context (Compound API) ──────────────────────────
+
+interface TableOfContentsContextValue {
+  variant: TableOfContentsVariant;
+  size: TableOfContentsSize;
+  depthIndent: number;
+  activeId: string | null;
+  scrollTo: (id: string) => void;
+  classNames: ClassNames<TableOfContentsSlot> | undefined;
+  styles: Styles<TableOfContentsSlot> | undefined;
+}
+
+const TableOfContentsContext = createContext<TableOfContentsContextValue | null>(null);
+
+function useTableOfContentsContext(): TableOfContentsContextValue {
+  const ctx = useContext(TableOfContentsContext);
+  if (!ctx) throw new Error('TableOfContents compound sub-components must be used within <TableOfContents>.');
+  return ctx;
+}
+
+// ── Compound: TableOfContents.Item ──────────────────
+
+/** TableOfContents.Item props */
+export interface TableOfContentsItemProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const TableOfContentsItem = forwardRef<HTMLLIElement, TableOfContentsItemProps>(
+  function TableOfContentsItem(props, ref) {
+    const { children, className } = props;
+    const ctx = useTableOfContentsContext();
+    const slot = getSlotProps('item', tocItemStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <li ref={ref} className={cls} style={slot.style} data-testid="table-of-contents-item">
+        {children}
+      </li>
+    );
+  },
+);
+
+// ── Compound: TableOfContents.Link ──────────────────
+
+/** TableOfContents.Link props */
+export interface TableOfContentsLinkProps {
+  /** Hedef element id / Target element id */
+  href: string;
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Derinlik seviyesi / Depth level */
+  depth?: number;
+  /** Pasif / Disabled */
+  disabled?: boolean;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const TableOfContentsLink = forwardRef<HTMLAnchorElement, TableOfContentsLinkProps>(
+  function TableOfContentsLink(props, ref) {
+    const { href, children, depth = 0, disabled = false, className } = props;
+    const ctx = useTableOfContentsContext();
+
+    const targetId = href.startsWith('#') ? href.slice(1) : href;
+    const isActive = ctx.activeId === targetId;
+
+    const linkClass = tocLinkRecipe({
+      variant: ctx.variant,
+      size: ctx.size,
+      active: isActive,
+      disabled,
+    });
+    const slot = getSlotProps('link', linkClass, ctx.classNames, ctx.styles);
+
+    const indent = depth * ctx.depthIndent;
+    const linkStyle: React.CSSProperties = {
+      ...slot.style,
+      paddingLeft: ctx.variant === 'dots'
+        ? indent
+        : (ctx.variant === 'default' ? 12 + indent : 8 + indent),
+    };
+
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    const indicatorSlot = getSlotProps(
+      'indicator',
+      `${tocIndicatorStyle}${isActive ? ` ${tocIndicatorActiveStyle}` : ''}`,
+      ctx.classNames,
+      ctx.styles,
+    );
+
+    return (
+      <a
+        ref={ref}
+        href={`#${targetId}`}
+        className={cls}
+        style={linkStyle}
+        aria-current={isActive ? 'location' : undefined}
+        aria-disabled={disabled || undefined}
+        data-active={isActive || undefined}
+        data-depth={depth}
+        data-testid="table-of-contents-link"
+        onClick={(e) => {
+          e.preventDefault();
+          if (!disabled) {
+            ctx.scrollTo(targetId);
+          }
+        }}
+      >
+        {ctx.variant === 'dots' && (
+          <span
+            className={indicatorSlot.className}
+            style={indicatorSlot.style}
+            aria-hidden="true"
+          />
+        )}
+        {children}
+      </a>
+    );
+  },
+);
 
 // ── Component Props ──────────────────────────────────
 
@@ -76,25 +201,14 @@ export interface TableOfContentsComponentProps
 
   /** Ozel link render / Custom link render */
   renderLink?: (item: TocItem, isActive: boolean) => ReactNode;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
 // ── Component ────────────────────────────────────────
 
-/**
- * TableOfContents bilesen — scroll spy navigasyon.
- * TableOfContents component — scroll spy navigation.
- *
- * @example
- * ```tsx
- * <TableOfContents
- *   items={[
- *     { id: 'intro', label: 'Introduction', depth: 0 },
- *     { id: 'install', label: 'Installation', depth: 1 },
- *   ]}
- * />
- * ```
- */
-export const TableOfContents = forwardRef<HTMLElement, TableOfContentsComponentProps>(
+const TableOfContentsBase = forwardRef<HTMLElement, TableOfContentsComponentProps>(
   function TableOfContents(props, ref) {
     const {
       variant = 'default',
@@ -107,6 +221,7 @@ export const TableOfContents = forwardRef<HTMLElement, TableOfContentsComponentP
       'aria-label': ariaLabel = 'Table of contents',
       depthIndent = 16,
       renderLink,
+      children,
       // useTableOfContents props
       items,
       activeId: activeIdProp,
@@ -138,7 +253,38 @@ export const TableOfContents = forwardRef<HTMLElement, TableOfContentsComponentP
     const listSlot = getSlotProps('list', tocListStyle, classNames, styles);
     const itemSlot = getSlotProps('item', tocItemStyle, classNames, styles);
 
-    // ── Render link ──
+    const ctxValue: TableOfContentsContextValue = {
+      variant,
+      size,
+      depthIndent,
+      activeId: context.activeId,
+      scrollTo,
+      classNames,
+      styles,
+    };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <TableOfContentsContext.Provider value={ctxValue}>
+          <nav
+            ref={ref}
+            className={combinedRootClassName}
+            style={combinedRootStyle}
+            id={id}
+            role="navigation"
+            aria-label={ariaLabel}
+            data-testid="table-of-contents"
+          >
+            <ul className={listSlot.className} style={listSlot.style}>
+              {children}
+            </ul>
+          </nav>
+        </TableOfContentsContext.Provider>
+      );
+    }
+
+    // ── Props-based API (render link) ──
     function renderTocLink(item: TocItem) {
       const isActive = context.activeId === item.id;
       const isDisabled = item.disabled ?? false;
@@ -223,3 +369,30 @@ export const TableOfContents = forwardRef<HTMLElement, TableOfContentsComponentP
     );
   },
 );
+
+/**
+ * TableOfContents bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <TableOfContents
+ *   items={[
+ *     { id: 'intro', label: 'Introduction', depth: 0 },
+ *     { id: 'install', label: 'Installation', depth: 1 },
+ *   ]}
+ * />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <TableOfContents items={[{ id: 'intro', label: 'Intro', depth: 0 }]}>
+ *   <TableOfContents.Item>
+ *     <TableOfContents.Link href="intro" depth={0}>Introduction</TableOfContents.Link>
+ *   </TableOfContents.Item>
+ * </TableOfContents>
+ * ```
+ */
+export const TableOfContents = Object.assign(TableOfContentsBase, {
+  Item: TableOfContentsItem,
+  Link: TableOfContentsLink,
+});

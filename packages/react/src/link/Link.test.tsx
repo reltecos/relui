@@ -283,3 +283,57 @@ describe('NavLink variants', () => {
     expect(screen.getByRole('link')).toBeInTheDocument();
   });
 });
+
+// ── Compound API ────────────────────────────────────────────
+
+describe('Link (Compound)', () => {
+  it('compound: Link.Icon start pozisyonunda render edilir', () => {
+    render(
+      <Link href="#">
+        <Link.Icon><span data-testid="star">*</span></Link.Icon>
+        Link Text
+      </Link>,
+    );
+    expect(screen.getByTestId('link-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('star')).toBeInTheDocument();
+  });
+
+  it('compound: Link.Icon end pozisyonunda render edilir', () => {
+    render(
+      <Link href="#">
+        Link Text
+        <Link.Icon position="end"><span data-testid="arrow">→</span></Link.Icon>
+      </Link>,
+    );
+    const icon = screen.getByTestId('link-icon');
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveStyle({ marginLeft: '0.25em' });
+  });
+
+  it('compound: Link.Icon varsayilan start marginRight', () => {
+    render(
+      <Link href="#">
+        <Link.Icon><span>*</span></Link.Icon>
+        Text
+      </Link>,
+    );
+    const icon = screen.getByTestId('link-icon');
+    expect(icon).toHaveStyle({ marginRight: '0.25em' });
+  });
+
+  it('compound: Link.Icon aria-hidden', () => {
+    render(
+      <Link href="#">
+        <Link.Icon><span>*</span></Link.Icon>
+        Text
+      </Link>,
+    );
+    expect(screen.getByTestId('link-icon')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('compound: context disinda hata firlatir', () => {
+    expect(() => {
+      render(<Link.Icon><span>*</span></Link.Icon>);
+    }).toThrow('Link compound sub-components must be used within <Link>.');
+  });
+});

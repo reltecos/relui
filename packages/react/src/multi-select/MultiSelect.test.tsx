@@ -313,7 +313,7 @@ describe('MultiSelect', () => {
   it('bos options bos mesaj gosterir / empty options shows empty message', () => {
     render(<MultiSelect options={[]} aria-label="Ulke" />);
     fireEvent.click(screen.getByRole('combobox'));
-    expect(screen.getByText('Seçenek yok')).toBeInTheDocument();
+    expect(screen.getByText('Secenek yok')).toBeInTheDocument();
   });
 
   // ── MaxSelections ─────────────────────────────────────────────
@@ -408,5 +408,75 @@ describe('MultiSelect', () => {
 
     expect(tag).toBeInTheDocument();
     expect(removeBtn).toBeInTheDocument();
+  });
+});
+
+// ── Compound API ──
+
+describe('MultiSelect (Compound)', () => {
+  it('compound: root render edilir', () => {
+    render(
+      <MultiSelect options={basicOptions}>
+        <MultiSelect.Trigger>
+          <MultiSelect.Value placeholder="Ulke secin" />
+        </MultiSelect.Trigger>
+        <MultiSelect.Content />
+      </MultiSelect>,
+    );
+    expect(screen.getByTestId('multiselect-root')).toBeInTheDocument();
+  });
+
+  it('compound: trigger render edilir', () => {
+    render(
+      <MultiSelect options={basicOptions}>
+        <MultiSelect.Trigger>
+          <MultiSelect.Value placeholder="Ulke secin" />
+        </MultiSelect.Trigger>
+        <MultiSelect.Content />
+      </MultiSelect>,
+    );
+    expect(screen.getByTestId('multiselect-trigger')).toBeInTheDocument();
+  });
+
+  it('compound: value placeholder gosterir', () => {
+    render(
+      <MultiSelect options={basicOptions}>
+        <MultiSelect.Trigger>
+          <MultiSelect.Value placeholder="Ulke secin" />
+        </MultiSelect.Trigger>
+        <MultiSelect.Content />
+      </MultiSelect>,
+    );
+    expect(screen.getByTestId('multiselect-value')).toHaveTextContent('Ulke secin');
+  });
+
+  it('compound: content acilir', () => {
+    render(
+      <MultiSelect options={basicOptions}>
+        <MultiSelect.Trigger>
+          <MultiSelect.Value placeholder="Ulke secin" />
+        </MultiSelect.Trigger>
+        <MultiSelect.Content />
+      </MultiSelect>,
+    );
+    const trigger = screen.getByTestId('multiselect-trigger');
+    fireEvent.click(trigger);
+    expect(screen.getByTestId('multiselect-content')).toBeInTheDocument();
+  });
+
+  it('compound: secim yapilir', () => {
+    const onValueChange = vi.fn();
+    render(
+      <MultiSelect options={basicOptions} onValueChange={onValueChange}>
+        <MultiSelect.Trigger>
+          <MultiSelect.Value placeholder="Ulke secin" />
+        </MultiSelect.Trigger>
+        <MultiSelect.Content />
+      </MultiSelect>,
+    );
+    const trigger = screen.getByTestId('multiselect-trigger');
+    fireEvent.click(trigger);
+    fireEvent.click(screen.getByText('ABD'));
+    expect(onValueChange).toHaveBeenCalledWith(['us']);
   });
 });

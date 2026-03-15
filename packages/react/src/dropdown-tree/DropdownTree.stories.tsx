@@ -98,6 +98,7 @@ const fileSystemNodes: TreeNode[] = [
 const meta: Meta<typeof DropdownTree> = {
   title: 'Selects/DropdownTree',
   component: DropdownTree,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -265,6 +266,20 @@ export const ControlledMultiple: Story = {
       </div>
     );
   },
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ maxWidth: '400px' }}>
+      <DropdownTree nodes={departmentNodes} placeholder="Departman secin">
+        <DropdownTree.Trigger>
+          <span>Departman secin (Compound)</span>
+        </DropdownTree.Trigger>
+        <DropdownTree.Content />
+      </DropdownTree>
+    </div>
+  ),
 };
 
 export const CustomSlotStyles: Story = {

@@ -51,6 +51,7 @@ const CloseIcon = () => (
 const meta: Meta<typeof IconButton> = {
   title: 'Primitives/IconButton',
   component: IconButton,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -205,6 +206,29 @@ export const SizeVariantMatrix: Story = {
       </div>
     );
   },
+};
+
+// ── Compound API ─────────────────────────────────────────────────────
+
+/** Compound API ile ikon kullanimi / Icon usage with Compound API */
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+      <IconButton aria-label="Ara" variant="ghost">
+        <IconButton.Icon><SearchIcon /></IconButton.Icon>
+      </IconButton>
+      <IconButton aria-label="Sil" variant="solid" color="destructive">
+        <IconButton.Icon><TrashIcon /></IconButton.Icon>
+      </IconButton>
+      <IconButton aria-label="Ekle" variant="outline">
+        <IconButton.Icon><PlusIcon /></IconButton.Icon>
+      </IconButton>
+      <IconButton aria-label="Ayarlar" variant="soft" color="neutral">
+        <IconButton.Icon><SettingsIcon /></IconButton.Icon>
+      </IconButton>
+    </div>
+  ),
 };
 
 // ── Slot Customization ──────────────────────────────────────────────

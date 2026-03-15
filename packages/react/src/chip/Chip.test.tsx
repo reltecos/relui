@@ -139,4 +139,83 @@ describe('Chip', () => {
 
     expect(screen.getByRole('button', { name: 'Kaldır' })).toHaveStyle({ opacity: '0.5' });
   });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<Chip ref={ref}>Test</Chip>);
+    expect(ref).toHaveBeenCalled();
+  });
+});
+
+// ── Compound API ──
+
+describe('Chip (Compound)', () => {
+  it('compound: Chip.Icon render edilir', () => {
+    render(
+      <Chip>
+        <Chip.Icon><span data-testid="cmp-icon">F</span></Chip.Icon>
+        Filtre
+      </Chip>,
+    );
+    expect(screen.getByTestId('cmp-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('chip-icon')).toBeInTheDocument();
+  });
+
+  it('compound: Chip.RemoveButton render edilir', () => {
+    const handleRemove = vi.fn();
+    render(
+      <Chip onRemove={handleRemove}>
+        Filtre
+        <Chip.RemoveButton />
+      </Chip>,
+    );
+    const removeBtn = screen.getByTestId('chip-remove');
+    expect(removeBtn).toBeInTheDocument();
+    fireEvent.click(removeBtn);
+    expect(handleRemove).toHaveBeenCalledOnce();
+  });
+
+  it('compound: classNames context ile Chip.Icon a aktarilir', () => {
+    render(
+      <Chip classNames={{ icon: 'cmp-icon-cls' }}>
+        <Chip.Icon><span>F</span></Chip.Icon>
+        Filtre
+      </Chip>,
+    );
+    expect(screen.getByTestId('chip-icon').className).toContain('cmp-icon-cls');
+  });
+
+  it('compound: styles context ile Chip.RemoveButton a aktarilir', () => {
+    render(
+      <Chip styles={{ removeButton: { opacity: 0.3 } }}>
+        Filtre
+        <Chip.RemoveButton />
+      </Chip>,
+    );
+    expect(screen.getByTestId('chip-remove')).toHaveStyle({ opacity: '0.3' });
+  });
+
+  it('compound: disabled durumda Chip.RemoveButton tiklama yok', () => {
+    const handleRemove = vi.fn();
+    render(
+      <Chip disabled onRemove={handleRemove}>
+        Filtre
+        <Chip.RemoveButton />
+      </Chip>,
+    );
+    fireEvent.click(screen.getByTestId('chip-remove'));
+    expect(handleRemove).not.toHaveBeenCalled();
+  });
+
+  it('compound: Chip.Icon context disinda hata firlat', () => {
+    expect(() => {
+      render(<Chip.Icon><span>I</span></Chip.Icon>);
+    }).toThrow('Chip compound sub-components must be used within <Chip>.');
+  });
+
+  it('compound: Chip.RemoveButton context disinda hata firlat', () => {
+    expect(() => {
+      render(<Chip.RemoveButton />);
+    }).toThrow('Chip compound sub-components must be used within <Chip>.');
+  });
 });

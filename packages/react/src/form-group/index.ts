@@ -6,4 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { FormGroup, type FormGroupComponentProps, type FormGroupSlot } from './FormGroup';
+export {
+  FormGroup,
+  type FormGroupComponentProps,
+  type FormGroupSlot,
+  type FormGroupLegendProps,
+  type FormGroupContentProps,
+} from './FormGroup';

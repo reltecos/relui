@@ -7,47 +7,132 @@
  */
 
 /**
- * Tag — styled React tag component.
- * Tag — stilize edilmiş React tag bileşeni.
+ * Tag — styled React tag component (Dual API).
+ * Tag — stilize edilmis React tag bileseni (Dual API).
  *
- * Etiket / kategorileme bileşeni — opsiyonel kaldırma butonu.
+ * Props-based: `<Tag removable onRemove={fn}>React</Tag>`
+ * Compound:    `<Tag><Tag.Icon>...</Tag.Icon>React<Tag.RemoveButton /></Tag>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type { TagSize, TagColor, TagVariant } from '@relteco/relui-core';
 import { CloseIcon } from '@relteco/relui-icons';
-import { tagRecipe, tagRemoveButtonStyle } from './tag.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { tagRecipe, tagIconStyle, tagRemoveButtonStyle } from './tag.css';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
+
+// ── Slot ──────────────────────────────────────────────
 
 /** Tag slot isimleri. */
-export type TagSlot = 'root' | 'removeButton';
+export type TagSlot = 'root' | 'icon' | 'removeButton';
+
+// ── Context (Compound API) ──────────────────────────
+
+interface TagContextValue {
+  size: TagSize;
+  color: TagColor;
+  variant: TagVariant;
+  disabled: boolean;
+  onRemove: (() => void) | undefined;
+  classNames: ClassNames<TagSlot> | undefined;
+  styles: Styles<TagSlot> | undefined;
+}
+
+const TagContext = createContext<TagContextValue | null>(null);
+
+function useTagContext(): TagContextValue {
+  const ctx = useContext(TagContext);
+  if (!ctx) throw new Error('Tag compound sub-components must be used within <Tag>.');
+  return ctx;
+}
+
+// ── Compound: Tag.Icon ──────────────────────────────
+
+/** Tag.Icon props */
+export interface TagIconProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const TagIcon = forwardRef<HTMLSpanElement, TagIconProps>(
+  function TagIcon(props, ref) {
+    const { children, className } = props;
+    const ctx = useTagContext();
+    const slot = getSlotProps('icon', tagIconStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="tag-icon">
+        {children}
+      </span>
+    );
+  },
+);
+
+// ── Compound: Tag.RemoveButton ──────────────────────
+
+/** Tag.RemoveButton props */
+export interface TagRemoveButtonProps {
+  /** Ek className / Additional className */
+  className?: string;
+  /** Aria label */
+  'aria-label'?: string;
+}
+
+const TagRemoveButton = forwardRef<HTMLButtonElement, TagRemoveButtonProps>(
+  function TagRemoveButton(props, ref) {
+    const { className, 'aria-label': ariaLabel = 'Kaldır' } = props;
+    const ctx = useTagContext();
+    const slot = getSlotProps('removeButton', tagRemoveButtonStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <button
+        ref={ref}
+        type="button"
+        className={cls}
+        style={slot.style}
+        onClick={ctx.onRemove}
+        disabled={ctx.disabled}
+        aria-label={ariaLabel}
+        tabIndex={ctx.disabled ? -1 : 0}
+        data-testid="tag-remove"
+      >
+        <CloseIcon size="0.75em" />
+      </button>
+    );
+  },
+);
+
+// ── Component Props ───────────────────────────────────
 
 /**
- * Tag bileşen props'ları.
+ * Tag bilesen props'lari.
  * Tag component props.
  */
 export interface TagComponentProps extends SlotStyleProps<TagSlot> {
   /** Boyut / Size */
   size?: TagSize;
 
-  /** Renk şeması / Color scheme */
+  /** Renk semasi / Color scheme */
   color?: TagColor;
 
-  /** Görünüm varyantı / Visual variant */
+  /** Gorunum varyanti / Visual variant */
   variant?: TagVariant;
 
-  /** Kaldırılabilir mi / Is removable */
+  /** Kaldirilabilir mi / Is removable */
   removable?: boolean;
 
-  /** Kaldırma callback'i / Remove callback */
+  /** Kaldirma callback'i / Remove callback */
   onRemove?: () => void;
 
   /** Pasif durumu / Disabled state */
   disabled?: boolean;
 
-  /** Ek CSS sınıfı / Additional CSS class */
+  /** Ek CSS sinifi / Additional CSS class */
   className?: string;
 
   /** HTML id */
@@ -56,21 +141,13 @@ export interface TagComponentProps extends SlotStyleProps<TagSlot> {
   /** Inline stil / Inline style */
   style?: React.CSSProperties;
 
-  /** İçerik / Content */
-  children?: React.ReactNode;
+  /** Icerik / Content */
+  children?: ReactNode;
 }
 
-/**
- * Tag — RelUI tag bileşeni.
- * Tag — RelUI tag component.
- *
- * @example
- * ```tsx
- * <Tag color="success">React</Tag>
- * <Tag removable onRemove={() => handleRemove('ts')}>TypeScript</Tag>
- * ```
- */
-export const Tag = forwardRef<HTMLSpanElement, TagComponentProps>(function Tag(
+// ── Component ─────────────────────────────────────────
+
+const TagBase = forwardRef<HTMLSpanElement, TagComponentProps>(function Tag(
   {
     size = 'md',
     color = 'accent',
@@ -95,28 +172,64 @@ export const Tag = forwardRef<HTMLSpanElement, TagComponentProps>(function Tag(
 
   const removeBtnSlot = getSlotProps('removeButton', tagRemoveButtonStyle, classNames, styles);
 
+  const ctxValue: TagContextValue = {
+    size,
+    color,
+    variant,
+    disabled,
+    onRemove,
+    classNames,
+    styles,
+  };
+
   return (
-    <span
-      ref={forwardedRef}
-      id={id}
-      className={combinedClassName}
-      style={rootSlot.style}
-      data-disabled={disabled ? '' : undefined}
-    >
-      {children}
-      {removable && (
-        <button
-          type="button"
-          className={removeBtnSlot.className}
-          style={removeBtnSlot.style}
-          onClick={onRemove}
-          disabled={disabled}
-          aria-label="Kaldır"
-          tabIndex={disabled ? -1 : 0}
-        >
-          <CloseIcon size="0.75em" />
-        </button>
-      )}
-    </span>
+    <TagContext.Provider value={ctxValue}>
+      <span
+        ref={forwardedRef}
+        id={id}
+        className={combinedClassName}
+        style={rootSlot.style}
+        data-disabled={disabled ? '' : undefined}
+        data-testid="tag-root"
+      >
+        {children}
+        {removable && (
+          <button
+            type="button"
+            className={removeBtnSlot.className}
+            style={removeBtnSlot.style}
+            onClick={onRemove}
+            disabled={disabled}
+            aria-label="Kaldır"
+            tabIndex={disabled ? -1 : 0}
+          >
+            <CloseIcon size="0.75em" />
+          </button>
+        )}
+      </span>
+    </TagContext.Provider>
   );
+});
+
+/**
+ * Tag bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Tag color="success">React</Tag>
+ * <Tag removable onRemove={() => handleRemove('ts')}>TypeScript</Tag>
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Tag color="success">
+ *   <Tag.Icon><CodeIcon /></Tag.Icon>
+ *   React
+ *   <Tag.RemoveButton />
+ * </Tag>
+ * ```
+ */
+export const Tag = Object.assign(TagBase, {
+  Icon: TagIcon,
+  RemoveButton: TagRemoveButton,
 });

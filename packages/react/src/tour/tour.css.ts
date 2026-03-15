@@ -48,7 +48,7 @@ export const tourPopoverRecipe = recipe({
   base: {
     position: 'absolute',
     zIndex: 9999,
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--rel-color-text-inverse, #fff)',
     borderRadius: 12,
     boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
@@ -132,11 +132,11 @@ export const tourPrevButtonStyle = style({
   fontWeight: 500,
   border: '1px solid var(--rel-color-border, #d1d5db)',
   borderRadius: 6,
-  backgroundColor: '#fff',
+  backgroundColor: 'var(--rel-color-text-inverse, #fff)',
   color: 'var(--rel-color-text, #374151)',
   cursor: 'pointer',
   ':hover': {
-    backgroundColor: '#f9fafb',
+    backgroundColor: 'var(--rel-color-bg-subtle, #f9fafb)',
   },
   selectors: {
     '&:disabled': {
@@ -153,9 +153,9 @@ export const tourNextButtonStyle = style({
   border: '1px solid transparent',
   borderRadius: 6,
   backgroundColor: 'var(--rel-color-primary, #3b82f6)',
-  color: '#fff',
+  color: 'var(--rel-color-text-inverse, #fff)',
   cursor: 'pointer',
   ':hover': {
-    backgroundColor: '#2563eb',
+    backgroundColor: 'var(--rel-color-primary-hover, #2563eb)',
   },
 });

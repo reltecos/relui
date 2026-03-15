@@ -48,7 +48,7 @@ describe('TileLayout', () => {
       />,
     );
     const root = screen.getByTestId('root');
-    expect(root).toHaveStyle({ display: 'grid' });
+    // display: grid CSS class'indan gelir (rootStyle), inline style degil
     expect(root).toHaveStyle({ gap: '12px' });
   });
 
@@ -227,6 +227,61 @@ describe('TileLayout', () => {
       );
       const tile = container.querySelector('[data-tile-id="a"]') as HTMLElement;
       expect(tile).toHaveStyle({ background: 'red' });
+    });
+  });
+
+  // ── Compound API ──────────────────────────────────────
+
+  describe('compound API', () => {
+    it('renders TileLayout.Tile with content', () => {
+      render(
+        <TileLayout columns={3}>
+          <TileLayout.Tile row={0} col={0} id="t1">Tile 1 Content</TileLayout.Tile>
+        </TileLayout>,
+      );
+      expect(screen.getByText('Tile 1 Content')).toBeInTheDocument();
+    });
+
+    it('renders TileLayout.Tile with data-tile-id', () => {
+      const { container } = render(
+        <TileLayout columns={3}>
+          <TileLayout.Tile row={0} col={0} id="abc">Content</TileLayout.Tile>
+        </TileLayout>,
+      );
+      expect(container.querySelector('[data-tile-id="abc"]')).toBeInTheDocument();
+    });
+
+    it('renders multiple TileLayout.Tile elements', () => {
+      const { container } = render(
+        <TileLayout columns={3}>
+          <TileLayout.Tile row={0} col={0} id="a">A</TileLayout.Tile>
+          <TileLayout.Tile row={0} col={1} id="b">B</TileLayout.Tile>
+          <TileLayout.Tile row={1} col={0} id="c" colSpan={2}>C</TileLayout.Tile>
+        </TileLayout>,
+      );
+      expect(container.querySelector('[data-tile-id="a"]')).toBeInTheDocument();
+      expect(container.querySelector('[data-tile-id="b"]')).toBeInTheDocument();
+      expect(container.querySelector('[data-tile-id="c"]')).toBeInTheDocument();
+    });
+
+    it('compound root has data-tile-layout attribute', () => {
+      render(
+        <TileLayout data-testid="root" columns={2}>
+          <TileLayout.Tile row={0} col={0}>Content</TileLayout.Tile>
+        </TileLayout>,
+      );
+      expect(screen.getByTestId('root')).toHaveAttribute('data-tile-layout');
+    });
+
+    it('TileLayout.Tile applies grid placement', () => {
+      const { container } = render(
+        <TileLayout columns={4}>
+          <TileLayout.Tile row={1} col={2} rowSpan={2} colSpan={3} id="x">X</TileLayout.Tile>
+        </TileLayout>,
+      );
+      const tile = container.querySelector('[data-tile-id="x"]') as HTMLElement;
+      expect(tile).toHaveStyle({ gridRow: '2 / span 2' });
+      expect(tile).toHaveStyle({ gridColumn: '3 / span 3' });
     });
   });
 });

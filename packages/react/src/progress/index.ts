@@ -11,4 +11,8 @@ export {
   type ProgressComponentProps,
   type ProgressSlot,
   type ProgressType,
+  type ProgressTrackProps,
+  type ProgressFillProps,
+  type ProgressLabelProps,
+  type ProgressValueProps,
 } from './Progress';

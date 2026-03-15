@@ -7,15 +7,16 @@
  */
 
 /**
- * Menu — styled masaustu tarzi menu cubugu bilesen.
- * Menu — styled desktop-style menu bar component.
+ * Menu — styled masaustu tarzi menu cubugu bilesen (Dual API).
+ * Menu — styled desktop-style menu bar component (Dual API).
  *
- * File/Edit/View/Help pattern, submenu, shortcut, divider.
+ * Props-based: `<Menu items={[...]} />`
+ * Compound:    `<Menu><Menu.Group label="File"><Menu.Item>New</Menu.Item></Menu.Group></Menu>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, useEffect, useCallback, type ReactNode } from 'react';
+import { forwardRef, useEffect, useCallback, createContext, useContext, type ReactNode } from 'react';
 import type { MenuSize, MenuItem } from '@relteco/relui-core';
 import { useMenu, type UseMenuProps } from './useMenu';
 import {
@@ -31,7 +32,7 @@ import {
   menuSubmenuIndicatorStyle,
   menuDividerStyle,
 } from './menu.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /**
  * Menu slot isimleri / Menu slot names.
@@ -47,6 +48,182 @@ export type MenuSlot =
   | 'itemCheck'
   | 'submenuIndicator'
   | 'divider';
+
+// ── Context (Compound API) ──────────────────────────────────────
+
+interface MenuContextValue {
+  size: MenuSize;
+  classNames: ClassNames<MenuSlot> | undefined;
+  styles: Styles<MenuSlot> | undefined;
+}
+
+const MenuContext = createContext<MenuContextValue | null>(null);
+
+function useMenuContext(): MenuContextValue {
+  const ctx = useContext(MenuContext);
+  if (!ctx) throw new Error('Menu compound sub-components must be used within <Menu>.');
+  return ctx;
+}
+
+// ── Compound: Menu.Item ─────────────────────────────────────────
+
+/** Menu.Item props */
+export interface MenuItemComponentProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Devre disi mi / Is disabled */
+  disabled?: boolean;
+  /** Tiklama callback / Click callback */
+  onClick?: () => void;
+  /** Kisayol / Shortcut */
+  shortcut?: string;
+  /** Ikon / Icon */
+  icon?: ReactNode;
+  /** Isaretli mi / Is checked */
+  checked?: boolean;
+}
+
+const MenuItemCompound = forwardRef<HTMLButtonElement, MenuItemComponentProps>(
+  function MenuItem(props, ref) {
+    const { children, className, disabled, onClick, shortcut, icon, checked } = props;
+    const ctx = useMenuContext();
+    const slot = getSlotProps('item', menuItemStyle, ctx.classNames, ctx.styles);
+    const iconSlot = getSlotProps('itemIcon', menuItemIconStyle, ctx.classNames, ctx.styles);
+    const labelSlot = getSlotProps('itemLabel', menuItemLabelStyle, ctx.classNames, ctx.styles);
+    const shortcutSlot = getSlotProps('itemShortcut', menuItemShortcutStyle, ctx.classNames, ctx.styles);
+    const checkSlot = getSlotProps('itemCheck', menuItemCheckStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <button
+        ref={ref}
+        type="button"
+        className={cls}
+        style={slot.style}
+        data-testid="menu-item"
+        data-disabled={disabled ? '' : undefined}
+        aria-disabled={disabled ? 'true' : undefined}
+        role="menuitem"
+        onClick={disabled ? undefined : onClick}
+      >
+        {checked !== undefined && (
+          <span className={checkSlot.className} style={checkSlot.style}>
+            {checked ? '\u2713' : ''}
+          </span>
+        )}
+        {icon && (
+          <span className={iconSlot.className} style={iconSlot.style}>
+            {icon}
+          </span>
+        )}
+        <span className={labelSlot.className} style={labelSlot.style}>
+          {children}
+        </span>
+        {shortcut && (
+          <span className={shortcutSlot.className} style={shortcutSlot.style}>
+            {shortcut}
+          </span>
+        )}
+      </button>
+    );
+  },
+);
+
+// ── Compound: Menu.Group ────────────────────────────────────────
+
+/** Menu.Group props */
+export interface MenuGroupProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Grup basligi / Group label */
+  label: string;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MenuGroup = forwardRef<HTMLDivElement, MenuGroupProps>(
+  function MenuGroup(props, ref) {
+    const { children, label, className } = props;
+    const ctx = useMenuContext();
+    const triggerSlot = getSlotProps('trigger', menuTriggerStyle, ctx.classNames, ctx.styles);
+    const dropdownSlot = getSlotProps('dropdown', menuDropdownStyle, ctx.classNames, ctx.styles);
+
+    return (
+      <div ref={ref} style={{ position: 'relative' }} data-testid="menu-group">
+        <button
+          type="button"
+          className={className ? `${triggerSlot.className} ${className}` : triggerSlot.className}
+          style={triggerSlot.style}
+          aria-haspopup="true"
+        >
+          {label}
+        </button>
+        <div className={dropdownSlot.className} style={dropdownSlot.style} role="menu">
+          {children}
+        </div>
+      </div>
+    );
+  },
+);
+
+// ── Compound: Menu.Separator ────────────────────────────────────
+
+/** Menu.Separator props */
+export interface MenuSeparatorProps {
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MenuSeparator = forwardRef<HTMLDivElement, MenuSeparatorProps>(
+  function MenuSeparator(props, ref) {
+    const { className } = props;
+    const ctx = useMenuContext();
+    const slot = getSlotProps('divider', menuDividerStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        role="separator"
+        data-testid="menu-separator"
+      />
+    );
+  },
+);
+
+// ── Compound: Menu.Label ────────────────────────────────────────
+
+/** Menu.Label props */
+export interface MenuLabelProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const MenuLabel = forwardRef<HTMLDivElement, MenuLabelProps>(
+  function MenuLabel(props, ref) {
+    const { children, className } = props;
+    const ctx = useMenuContext();
+    const slot = getSlotProps('itemLabel', menuItemLabelStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={{ ...slot.style, fontWeight: 600, opacity: 0.7, fontSize: '0.85em', pointerEvents: 'none' }}
+        data-testid="menu-label"
+      >
+        {children}
+      </div>
+    );
+  },
+);
 
 // ── Menu Component Props ───────────────────────────────────────
 
@@ -65,6 +242,9 @@ export interface MenuComponentProps extends UseMenuProps, SlotStyleProps<MenuSlo
 
   /** Ikon render callback / Icon render callback */
   renderIcon?: (icon: string) => ReactNode;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
 /**
@@ -85,7 +265,7 @@ export interface MenuComponentProps extends UseMenuProps, SlotStyleProps<MenuSlo
  * />
  * ```
  */
-export const Menu = forwardRef<HTMLDivElement, MenuComponentProps>(
+const MenuBase = forwardRef<HTMLDivElement, MenuComponentProps>(
   function Menu(props, ref) {
     const {
       size = 'md',
@@ -95,6 +275,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuComponentProps>(
       styles,
       id,
       renderIcon,
+      children,
       ...menuProps
     } = props;
 
@@ -138,6 +319,8 @@ export const Menu = forwardRef<HTMLDivElement, MenuComponentProps>(
     );
     const dividerSlot = getSlotProps('divider', menuDividerStyle, classNames, styles);
 
+    const ctxValue: MenuContextValue = { size, classNames, styles };
+
     // ── Close on outside click / Escape ──
     const handleKeyDown = useCallback(
       (e: KeyboardEvent) => {
@@ -168,6 +351,25 @@ export const Menu = forwardRef<HTMLDivElement, MenuComponentProps>(
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }, [handleKeyDown, handleClickOutside]);
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <MenuContext.Provider value={ctxValue}>
+          <div
+            ref={ref}
+            className={combinedRootClassName}
+            style={combinedRootStyle}
+            id={id}
+            role="menubar"
+            aria-label="Menu"
+            data-testid="menu-root"
+          >
+            {children}
+          </div>
+        </MenuContext.Provider>
+      );
+    }
 
     // ── Render menu item ──
     function renderMenuItem(item: MenuItem, depth: number) {
@@ -307,3 +509,29 @@ export const Menu = forwardRef<HTMLDivElement, MenuComponentProps>(
     );
   },
 );
+
+/**
+ * Menu bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Menu items={[...]} onSelect={(key) => handle(key)} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Menu>
+ *   <Menu.Group label="File">
+ *     <Menu.Item shortcut="Ctrl+N">New</Menu.Item>
+ *     <Menu.Separator />
+ *     <Menu.Item shortcut="Ctrl+S">Save</Menu.Item>
+ *   </Menu.Group>
+ * </Menu>
+ * ```
+ */
+export const Menu = Object.assign(MenuBase, {
+  Item: MenuItemCompound,
+  Group: MenuGroup,
+  Separator: MenuSeparator,
+  Label: MenuLabel,
+});

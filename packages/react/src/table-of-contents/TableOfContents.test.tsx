@@ -351,3 +351,73 @@ describe('TableOfContents renderLink', () => {
     expect(screen.getByTestId('custom-api')).toBeInTheDocument();
   });
 });
+
+// ── Compound API ──────────────────────────────────────
+
+describe('TableOfContents (Compound)', () => {
+  it('compound: Item sub-component render edilir', () => {
+    render(
+      <TableOfContents items={makeItems()} activeId="intro">
+        <TableOfContents.Item>
+          <TableOfContents.Link href="intro" depth={0}>Introduction</TableOfContents.Link>
+        </TableOfContents.Item>
+        <TableOfContents.Item>
+          <TableOfContents.Link href="api" depth={0}>API Reference</TableOfContents.Link>
+        </TableOfContents.Item>
+      </TableOfContents>,
+    );
+    const items = screen.getAllByTestId('table-of-contents-item');
+    expect(items).toHaveLength(2);
+  });
+
+  it('compound: Link sub-component render edilir', () => {
+    render(
+      <TableOfContents items={makeItems()} activeId="intro">
+        <TableOfContents.Item>
+          <TableOfContents.Link href="intro" depth={0}>Introduction</TableOfContents.Link>
+        </TableOfContents.Item>
+      </TableOfContents>,
+    );
+    const link = screen.getByTestId('table-of-contents-link');
+    expect(link).toHaveTextContent('Introduction');
+    expect(link).toHaveAttribute('href', '#intro');
+  });
+
+  it('compound: aktif link aria-current gosterir', () => {
+    render(
+      <TableOfContents items={makeItems()} activeId="api">
+        <TableOfContents.Item>
+          <TableOfContents.Link href="intro" depth={0}>Introduction</TableOfContents.Link>
+        </TableOfContents.Item>
+        <TableOfContents.Item>
+          <TableOfContents.Link href="api" depth={0}>API Reference</TableOfContents.Link>
+        </TableOfContents.Item>
+      </TableOfContents>,
+    );
+    const links = screen.getAllByTestId('table-of-contents-link');
+    expect(links[0]).not.toHaveAttribute('aria-current');
+    expect(links[1]).toHaveAttribute('aria-current', 'location');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <TableOfContents items={makeItems()} classNames={{ item: 'cmp-item' }}>
+        <TableOfContents.Item>
+          <TableOfContents.Link href="intro" depth={0}>Intro</TableOfContents.Link>
+        </TableOfContents.Item>
+      </TableOfContents>,
+    );
+    expect(screen.getByTestId('table-of-contents-item').className).toContain('cmp-item');
+  });
+
+  it('compound: disabled link aria-disabled gosterir', () => {
+    render(
+      <TableOfContents items={makeItems()}>
+        <TableOfContents.Item>
+          <TableOfContents.Link href="faq" depth={0} disabled>FAQ</TableOfContents.Link>
+        </TableOfContents.Item>
+      </TableOfContents>,
+    );
+    expect(screen.getByTestId('table-of-contents-link')).toHaveAttribute('aria-disabled', 'true');
+  });
+});

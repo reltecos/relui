@@ -6,4 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { AlertDialog, type AlertDialogComponentProps, type AlertDialogSlot } from './AlertDialog';
+export {
+  AlertDialog,
+  type AlertDialogComponentProps,
+  type AlertDialogSlot,
+  type AlertDialogTitleProps,
+  type AlertDialogDescriptionProps,
+  type AlertDialogActionsProps,
+  type AlertDialogCancelButtonProps,
+  type AlertDialogConfirmButtonProps,
+} from './AlertDialog';

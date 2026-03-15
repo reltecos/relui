@@ -12,4 +12,6 @@ export {
   type LoadPanelSlot,
   type LoadPanelSize,
   type LoadPanelBackdrop,
+  type LoadPanelSpinnerProps,
+  type LoadPanelMessageProps,
 } from './LoadPanel';

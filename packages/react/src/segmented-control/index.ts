@@ -7,7 +7,11 @@
  */
 
 export { SegmentedControl } from './SegmentedControl';
-export type { SegmentedControlComponentProps, SegmentedControlSlot } from './SegmentedControl';
+export type {
+  SegmentedControlComponentProps,
+  SegmentedControlSlot,
+  SegmentedControlOptionProps,
+} from './SegmentedControl';
 export { useSegmentedControl } from './useSegmentedControl';
 export type { UseSegmentedControlProps, UseSegmentedControlReturn } from './useSegmentedControl';
 export { segmentedControlRootRecipe, segmentedControlItemStyle } from './segmented-control.css';

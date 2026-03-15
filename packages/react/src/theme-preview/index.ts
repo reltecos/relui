@@ -6,4 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { ThemePreview } from './ThemePreview';
+export {
+  ThemePreview,
+  useThemePreviewContext,
+  type ThemePreviewComponentProps,
+  type ThemePreviewSlot,
+  type ThemePreviewColorSectionProps,
+  type ThemePreviewTypographySectionProps,
+  type ColorGroup,
+} from './ThemePreview';

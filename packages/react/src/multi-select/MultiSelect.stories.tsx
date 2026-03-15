@@ -62,6 +62,7 @@ const withDisabled = [
 const meta = {
   title: 'Primitives/MultiSelect',
   component: MultiSelect,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -334,6 +335,21 @@ export const CustomSlotStyles: Story = {
         }}
         aria-label="Ulke2"
       />
+    </div>
+  ),
+};
+
+/** Compound API */
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ maxWidth: 350 }}>
+      <MultiSelect options={countries} aria-label="Ulke">
+        <MultiSelect.Trigger>
+          <MultiSelect.Value placeholder="Ulke secin" />
+        </MultiSelect.Trigger>
+        <MultiSelect.Content />
+      </MultiSelect>
     </div>
   ),
 };

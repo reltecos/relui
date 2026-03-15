@@ -15,6 +15,7 @@ import { CurrencyInput } from './CurrencyInput';
 const meta = {
   title: 'Primitives/CurrencyInput',
   component: CurrencyInput,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -222,6 +223,24 @@ export const Playground: Story = {
   render: (args) => (
     <div style={{ maxWidth: 300 }}>
       <CurrencyInput {...args} aria-label="Fiyat" />
+    </div>
+  ),
+};
+
+/** Compound API */
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: 400 }}>
+      <CurrencyInput aria-label="Compound TRY" value={1234.56} locale="tr-TR" currency="TRY">
+        <CurrencyInput.Symbol />
+      </CurrencyInput>
+      <CurrencyInput aria-label="Compound USD" value={9999.99} locale="en-US" currency="USD">
+        <CurrencyInput.Symbol />
+      </CurrencyInput>
+      <CurrencyInput aria-label="Custom sembol" value={500}>
+        <CurrencyInput.Symbol>TL</CurrencyInput.Symbol>
+      </CurrencyInput>
     </div>
   ),
 };

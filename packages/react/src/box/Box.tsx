@@ -7,8 +7,11 @@
  */
 
 /**
- * Box — polymorphic layout primitive.
- * Tüm layout bileşenlerinin temeli. Sprinkles ile responsive prop destekler.
+ * Box — polymorphic layout primitive (Dual API).
+ * Tum layout bilesenlerinin temeli. Sprinkles ile responsive prop destekler.
+ *
+ * Props-based: `<Box display="flex" gap={4} p={6}>icerik</Box>`
+ * Compound:    `<Box>icerik</Box>` (minimal — sub-component gereksiz)
  *
  * @packageDocumentation
  */
@@ -23,23 +26,28 @@ import {
   type Ref,
 } from 'react';
 import { sprinkles, type Sprinkles } from '../utils/sprinkles.css';
+import { rootStyle } from './box.css';
 import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
 
-/** Box slot isimleri. */
+// ── Slot ──────────────────────────────────────────────
+
+/** Box slot isimleri / Box slot names. */
 export type BoxSlot = 'root';
 
+// ── Types ─────────────────────────────────────────────
+
 /**
- * Box prop'ları.
+ * Box prop'lari.
  *
- * Tüm Sprinkles responsive prop'ları + HTML attribute'ları + Slot API.
+ * Tum Sprinkles responsive prop'lari + HTML attribute'lari + Slot API.
  */
 export type BoxProps = Sprinkles &
   SlotStyleProps<BoxSlot> & {
-    /** Render edilecek HTML elementi. Varsayılan: 'div'. */
+    /** Render edilecek HTML elementi. Varsayilan: 'div'. */
     as?: ElementType;
     /** Alt elementler. */
     children?: ReactNode;
-    /** Root elemente ek CSS sınıfı. */
+    /** Root elemente ek CSS sinifi. */
     className?: string;
     /** Root elemente inline stil. */
     style?: CSSProperties;
@@ -47,19 +55,24 @@ export type BoxProps = Sprinkles &
     ref?: Ref<HTMLElement>;
   } & Omit<HTMLAttributes<HTMLElement>, keyof Sprinkles>;
 
+// ── Component ─────────────────────────────────────────
+
 /**
- * Box — polymorphic layout primitive.
+ * Box — polymorphic layout primitive (Dual API).
  *
- * Tüm layout prop'larını responsive olarak destekler.
- * `as` prop ile farklı HTML elementleri olarak render edilebilir.
+ * Tum layout prop'larini responsive olarak destekler.
+ * `as` prop ile farkli HTML elementleri olarak render edilebilir.
  *
- * @example
+ * @example Props-based
  * ```tsx
  * <Box display="flex" gap={4} p={6}>
  *   <Box width="1/3">Sol</Box>
- *   <Box width="2/3">Sağ</Box>
+ *   <Box width="2/3">Sag</Box>
  * </Box>
+ * ```
  *
+ * @example Responsive
+ * ```tsx
  * <Box
  *   display={{ base: 'block', md: 'flex' }}
  *   gap={{ base: 2, lg: 4 }}
@@ -80,7 +93,7 @@ export const Box = forwardRef<HTMLElement, BoxProps>(function Box(props, ref) {
     ...rest
   } = props;
 
-  // Sprinkles prop'larını HTML prop'larından ayır
+  // Sprinkles prop'larini HTML prop'larindan ayir
   const sprinklesProps: Record<string, unknown> = {};
   const htmlProps: Record<string, unknown> = {};
 
@@ -92,15 +105,18 @@ export const Box = forwardRef<HTMLElement, BoxProps>(function Box(props, ref) {
     }
   }
 
-  // Atomic CSS class'larını oluştur
+  // Atomic CSS class'larini olustur
   const atomicClass = Object.keys(sprinklesProps).length > 0
     ? sprinkles(sprinklesProps as Sprinkles)
     : '';
 
+  // Root base + sprinkles merge
+  const baseClass = [rootStyle, atomicClass].filter(Boolean).join(' ');
+
   // Slot API: className + classNames.root + sprinkles merge
   const { className: slotClass, style: slotStyle } = getSlotProps(
     'root',
-    atomicClass,
+    baseClass,
     classNames,
     styles,
     style,

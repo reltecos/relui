@@ -13,6 +13,7 @@ import { Box } from '../box';
 const meta: Meta<typeof Stack> = {
   title: 'Layout/Stack',
   component: Stack,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
 };
 
@@ -20,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof Stack>;
 
 const Item = ({ children }: { children: React.ReactNode }) => (
-  <Box p={4} style={{ background: '#dcfce7', borderRadius: '8px' }}>
+  <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #dcfce7)', borderRadius: '8px' }}>
     {children}
   </Box>
 );
@@ -40,7 +41,7 @@ export const Horizontal: Story = {
     <Stack direction="horizontal" spacing={4}>
       <Item>Sol</Item>
       <Item>Orta</Item>
-      <Item>Sağ</Item>
+      <Item>Sag</Item>
     </Stack>
   ),
 };
@@ -48,7 +49,7 @@ export const Horizontal: Story = {
 export const ResponsiveSpacing: Story = {
   render: () => (
     <Stack spacing={{ base: 2, md: 4, lg: 8 }}>
-      <Item>Spacing: 2 → md: 4 → lg: 8</Item>
+      <Item>Spacing: 2 - md: 4 - lg: 8</Item>
       <Item>Responsive gap</Item>
       <Item>Deneme</Item>
     </Stack>
@@ -58,13 +59,13 @@ export const ResponsiveSpacing: Story = {
 export const NestedStacks: Story = {
   render: () => (
     <Stack spacing={6}>
-      <Box p={4} style={{ background: '#f1f5f9', borderRadius: '8px' }}>
+      <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #f1f5f9)', borderRadius: '8px' }}>
         <Stack direction="horizontal" spacing={4}>
           <Item>A1</Item>
           <Item>A2</Item>
         </Stack>
       </Box>
-      <Box p={4} style={{ background: '#f1f5f9', borderRadius: '8px' }}>
+      <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #f1f5f9)', borderRadius: '8px' }}>
         <Stack direction="horizontal" spacing={4}>
           <Item>B1</Item>
           <Item>B2</Item>
@@ -75,12 +76,35 @@ export const NestedStacks: Story = {
   ),
 };
 
+/** Compound API — Stack.Item ile kullanim. */
+export const Compound: Story = {
+  render: () => (
+    <Stack spacing={4}>
+      <Stack.Item>
+        <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #dcfce7)', borderRadius: '8px' }}>
+          Stack.Item 1
+        </Box>
+      </Stack.Item>
+      <Stack.Item>
+        <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #dbeafe)', borderRadius: '8px' }}>
+          Stack.Item 2
+        </Box>
+      </Stack.Item>
+      <Stack.Item>
+        <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #fef3c7)', borderRadius: '8px' }}>
+          Stack.Item 3
+        </Box>
+      </Stack.Item>
+    </Stack>
+  ),
+};
+
 export const CustomSlotStyles: Story = {
   render: () => (
     <Stack
       spacing={4}
       classNames={{ root: 'custom-stack' }}
-      styles={{ root: { border: '2px dashed #10b981', padding: '16px', borderRadius: '12px' } }}
+      styles={{ root: { border: '2px dashed var(--rel-color-success, #10b981)', padding: '16px', borderRadius: '12px' } }}
     >
       <Item>Slot styled</Item>
       <Item>Stack</Item>

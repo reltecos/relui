@@ -998,5 +998,76 @@ describe('DockLayout', () => {
       const content = container.querySelector('[data-dock-panel="a"]');
       expect(content).toHaveStyle({ padding: '16px' });
     });
+
+    it('applies classNames.tab', () => {
+      const { container } = render(
+        <DockLayout
+          panels={[{ id: 'a', title: 'A' }]}
+          classNames={{ tab: 'custom-tab' }}
+          renderPanel={defaultRender}
+        />,
+      );
+      const tab = container.querySelector('[data-dock-tab="a"]');
+      expect(tab).toHaveClass('custom-tab');
+    });
+
+    it('applies classNames.panelContent', () => {
+      const { container } = render(
+        <DockLayout
+          panels={[{ id: 'a', title: 'A' }]}
+          classNames={{ panelContent: 'custom-content' }}
+          renderPanel={defaultRender}
+        />,
+      );
+      const content = container.querySelector('[data-dock-panel="a"]');
+      expect(content).toHaveClass('custom-content');
+    });
+
+    it('applies styles.group', () => {
+      const { container } = render(
+        <DockLayout
+          panels={[{ id: 'a', title: 'A' }]}
+          styles={{ group: { background: '#000' } }}
+          renderPanel={defaultRender}
+        />,
+      );
+      const group = container.querySelector('[data-dock-group]');
+      expect(group).toHaveStyle({ background: '#000' });
+    });
+
+    it('applies styles.tabBar', () => {
+      const { container } = render(
+        <DockLayout
+          panels={[{ id: 'a', title: 'A' }]}
+          styles={{ tabBar: { padding: '10px' } }}
+          renderPanel={defaultRender}
+        />,
+      );
+      const tabBar = container.querySelector('[data-dock-tab-bar]');
+      expect(tabBar).toHaveStyle({ padding: '10px' });
+    });
+
+    it('applies classNames.resizeHandle to split resize handles', () => {
+      const initialRoot: DockSplitNode = {
+        type: 'split',
+        id: 's1',
+        direction: 'horizontal',
+        children: [
+          { type: 'group', id: 'g1', panelIds: ['a'], activePanelId: 'a' },
+          { type: 'group', id: 'g2', panelIds: ['b'], activePanelId: 'b' },
+        ],
+        sizes: [0.5, 0.5],
+      };
+      const { container } = render(
+        <DockLayout
+          initialRoot={initialRoot}
+          panels={[{ id: 'a', title: 'A' }, { id: 'b', title: 'B' }]}
+          classNames={{ resizeHandle: 'custom-handle' }}
+          renderPanel={defaultRender}
+        />,
+      );
+      const handle = container.querySelector('[data-dock-resize-handle]');
+      expect(handle).toHaveClass('custom-handle');
+    });
   });
 });

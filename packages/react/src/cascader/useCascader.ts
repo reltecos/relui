@@ -331,12 +331,6 @@ export function useCascader(props: UseCascaderProps): UseCascaderReturn {
       if (opt.children && opt.children.length > 0) {
         // Has children → expand
         send({ type: 'EXPAND', level, value: opt.value });
-        // Seviyeyi de güncelle
-        const ctx = machine.getContext();
-        if (ctx.activeLevel !== level) {
-          // activeLevel'ı güncellemek için tekrar expand gönder
-          // (machine zaten doğru activePath'i ayarlamış olacak)
-        }
       } else {
         // Yaprak düğüm → seç
         const ctx = machine.getContext();
@@ -354,11 +348,6 @@ export function useCascader(props: UseCascaderProps): UseCascaderReturn {
     (level: number, index: number) => {
       const ctx = machine.getContext();
       const expandTrigger = ctx.expandTrigger;
-
-      // Seviye değiştiyse activeLevel güncelle
-      if (level !== ctx.activeLevel) {
-        // Level değişikliği olmadan sadece highlight
-      }
 
       // Highlight güncelle — aynı seviyedeyse
       if (level === ctx.activeLevel) {

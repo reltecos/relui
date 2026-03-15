@@ -7,19 +7,24 @@
  */
 
 /**
- * RadialMenu — styled dairesel sag tik menu bilesen.
- * RadialMenu — styled radial/pie context menu component.
+ * RadialMenu — styled dairesel sag tik menu bilesen (Dual API).
+ * RadialMenu — styled radial/pie context menu component (Dual API).
+ *
+ * Props-based: `<RadialMenu items={[...]} open={true} position={{x:200,y:200}} />`
+ * Compound:    `<RadialMenu items={[...]} open={true} position={{x:200,y:200}}><RadialMenu.Center>X</RadialMenu.Center></RadialMenu>`
  *
  * Blender/Maya tarzi sag tik dairesel menu.
  * Mouse hareketi ile sektor vurgulama, birakmakla secim.
  *
- * Portal ile document.body'ye render edilir — parent stacking context'ten bagimsiz.
+ * Portal ile document.body ye render edilir — parent stacking context ten bagimsiz.
  *
  * @packageDocumentation
  */
 
 import {
   forwardRef,
+  createContext,
+  useContext,
   useEffect,
   useCallback,
   useRef,
@@ -39,7 +44,7 @@ import {
   radialCenterStyle,
   radialSubmenuIndicatorStyle,
 } from './radial-menu.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /**
  * RadialMenu slot isimleri / RadialMenu slot names.
@@ -106,6 +111,89 @@ function sectorPath(
   ].join(' ');
 }
 
+// ── Context (Compound API) ──────────────────────────────
+
+interface RadialMenuContextValue {
+  size: RadialMenuSize;
+  isInSubmenu: boolean;
+  highlightedIndex: number;
+  classNames: ClassNames<RadialMenuSlot> | undefined;
+  styles: Styles<RadialMenuSlot> | undefined;
+}
+
+const RadialMenuContext = createContext<RadialMenuContextValue | null>(null);
+
+function useRadialMenuContext(): RadialMenuContextValue {
+  const ctx = useContext(RadialMenuContext);
+  if (!ctx) throw new Error('RadialMenu compound sub-components must be used within <RadialMenu>.');
+  return ctx;
+}
+
+// ── Compound: RadialMenu.Item ──────────────────────────
+
+/** RadialMenu.Item props — dekoratif sektor label wrapper. */
+export interface RadialMenuItemProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const RadialMenuItem = forwardRef<HTMLDivElement, RadialMenuItemProps>(
+  function RadialMenuItem(props, ref) {
+    const { children, className } = props;
+    const ctx = useRadialMenuContext();
+    const slot = getSlotProps('label', radialLabelStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="radial-menu-item">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: RadialMenu.Center ─────────────────────────
+
+/** RadialMenu.Center props — merkez noktasi icerigi. */
+export interface RadialMenuCenterProps {
+  /** Icerik / Content */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const RadialMenuCenter = forwardRef<HTMLDivElement, RadialMenuCenterProps>(
+  function RadialMenuCenter(props, ref) {
+    const { children, className } = props;
+    const ctx = useRadialMenuContext();
+    const slot = getSlotProps('center', radialCenterStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="radial-center">
+        {children !== undefined ? children : (
+          ctx.isInSubmenu && (
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          )
+        )}
+      </div>
+    );
+  },
+);
+
 // ── Component Props ─────────────────────────────────────────
 
 export interface RadialMenuComponentProps extends UseRadialMenuProps, SlotStyleProps<RadialMenuSlot> {
@@ -129,31 +217,14 @@ export interface RadialMenuComponentProps extends UseRadialMenuProps, SlotStyleP
 
   /** Portal hedef elementi / Portal container element */
   portalContainer?: HTMLElement;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
-/**
- * RadialMenu bilesen — dairesel sag tik menu.
- * RadialMenu component — radial/pie context menu.
- *
- * Portal ile document.body'ye render edilir. Parent stacking context'ten tamamen bagimsizdir.
- *
- * @example
- * ```tsx
- * <RadialMenu
- *   items={[
- *     { key: 'cut', label: 'Kes', icon: 'scissors' },
- *     { key: 'copy', label: 'Kopyala', icon: 'copy' },
- *     { key: 'paste', label: 'Yapistir', icon: 'clipboard' },
- *   ]}
- *   open={isOpen}
- *   position={{ x: 300, y: 200 }}
- *   onSelect={(key) => console.log('Selected:', key)}
- *   onOpenChange={(open) => setIsOpen(open)}
- *   renderIcon={(icon) => <MyIcon name={icon} />}
- * />
- * ```
- */
-export const RadialMenu = forwardRef<HTMLDivElement, RadialMenuComponentProps>(
+// ── Component ─────────────────────────────────────────────
+
+const RadialMenuBase = forwardRef<HTMLDivElement, RadialMenuComponentProps>(
   function RadialMenu(props, ref) {
     const {
       size = 'md',
@@ -165,6 +236,7 @@ export const RadialMenu = forwardRef<HTMLDivElement, RadialMenuComponentProps>(
       renderIcon,
       deadzone = 20,
       portalContainer,
+      children,
       ...menuHookProps
     } = props;
 
@@ -192,7 +264,7 @@ export const RadialMenu = forwardRef<HTMLDivElement, RadialMenuComponentProps>(
     const anchorRef = useRef<HTMLSpanElement>(null);
     const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
 
-    // Tema container'ini bul — en yakin [data-theme] ancestor
+    // Tema container ini bul — en yakin [data-theme] ancestor
     useEffect(() => {
       if (portalContainer) {
         setPortalTarget(portalContainer);
@@ -340,140 +412,171 @@ export const RadialMenu = forwardRef<HTMLDivElement, RadialMenuComponentProps>(
       };
     }, [handleKeyDown]);
 
-    // Gizli anchor — tema container'ini bulmak icin DOM'da kalmali
+    // Gizli anchor — tema container ini bulmak icin DOM da kalmali
     const anchor = <span ref={anchorRef} style={{ display: 'none' }} />;
 
     if (!isOpen || !portalTarget) return anchor;
 
+    const ctxValue: RadialMenuContextValue = {
+      size,
+      isInSubmenu,
+      highlightedIndex,
+      classNames,
+      styles,
+    };
+
+    // ── children icinden Center sub-component ini bul ──
+    let centerContent: ReactNode = null;
+    let hasCompoundCenter = false;
+
+    if (children) {
+      const childArray = Array.isArray(children) ? children : [children];
+      for (const child of childArray) {
+        if (
+          child &&
+          typeof child === 'object' &&
+          'type' in child &&
+          child.type === RadialMenuCenter
+        ) {
+          hasCompoundCenter = true;
+          centerContent = child;
+        }
+      }
+    }
+
     const overlay = (
-      <div
-        className={overlaySlot.className}
-        style={overlaySlot.style}
-        onClick={handleOverlayClick}
-        data-testid="radial-overlay"
-      >
+      <RadialMenuContext.Provider value={ctxValue}>
         <div
-          ref={(node) => {
-            (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-            if (typeof ref === 'function') ref(node);
-            else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
-          }}
-          className={combinedRootClassName}
-          style={{
-            ...combinedRootStyle,
-            left: position.x - radius,
-            top: position.y - radius,
-          }}
-          id={id}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          {...domMenuProps}
+          className={overlaySlot.className}
+          style={overlaySlot.style}
+          onClick={handleOverlayClick}
+          data-testid="radial-overlay"
         >
-          {/* SVG sector paths */}
-          <svg
-            className={radialSvgStyle}
-            viewBox={`0 0 ${diameter} ${diameter}`}
-            data-testid="radial-svg"
+          <div
+            ref={(node) => {
+              (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+              if (typeof ref === 'function') ref(node);
+              else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+            }}
+            className={combinedRootClassName}
+            style={{
+              ...combinedRootStyle,
+              left: position.x - radius,
+              top: position.y - radius,
+            }}
+            id={id}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            {...domMenuProps}
           >
+            {/* SVG sector paths */}
+            <svg
+              className={radialSvgStyle}
+              viewBox={`0 0 ${diameter} ${diameter}`}
+              data-testid="radial-svg"
+            >
+              {sectors.map((sector) => {
+                const isHighlighted = highlightedIndex === sector.index;
+                const item = items[sector.index];
+                const isDisabled = item ? !!item.disabled : false;
+                const domProps = getSectorProps(sector.index);
+
+                return (
+                  <path
+                    key={sector.index}
+                    className={sectorSlot.className}
+                    style={sectorSlot.style}
+                    d={sectorPath(
+                      radius,
+                      radius,
+                      radius - 2,
+                      innerR,
+                      sector.startAngle,
+                      sector.endAngle,
+                    )}
+                    data-highlighted={isHighlighted ? '' : undefined}
+                    data-disabled={isDisabled ? '' : undefined}
+                    data-index={sector.index}
+                    onPointerEnter={() => {
+                      if (!isDisabled) highlightSector(sector.index);
+                    }}
+                    onClick={() => {
+                      if (!isDisabled) selectIndex(sector.index);
+                    }}
+                    role={domProps.role}
+                    aria-label={domProps['aria-label']}
+                    aria-disabled={domProps['aria-disabled']}
+                  />
+                );
+              })}
+            </svg>
+
+            {/* Labels positioned around the circle */}
             {sectors.map((sector) => {
-              const isHighlighted = highlightedIndex === sector.index;
               const item = items[sector.index];
-              const isDisabled = item ? !!item.disabled : false;
-              const domProps = getSectorProps(sector.index);
+              if (!item) return null;
+
+              const isHighlighted = highlightedIndex === sector.index;
+              const isDisabled = !!item.disabled;
+              const hasChildren = item.children && item.children.length > 0;
+              const labelPos = polarToCartesian(radius, radius, labelR, sector.midAngle);
 
               return (
-                <path
-                  key={sector.index}
-                  className={sectorSlot.className}
-                  style={sectorSlot.style}
-                  d={sectorPath(
-                    radius,
-                    radius,
-                    radius - 2,
-                    innerR,
-                    sector.startAngle,
-                    sector.endAngle,
-                  )}
+                <div
+                  key={`label-${sector.index}`}
+                  className={labelSlot.className}
+                  style={{
+                    ...labelSlot.style,
+                    position: 'absolute',
+                    left: labelPos.x,
+                    top: labelPos.y,
+                    transform: 'translate(-50%, -50%)',
+                  }}
                   data-highlighted={isHighlighted ? '' : undefined}
                   data-disabled={isDisabled ? '' : undefined}
-                  data-index={sector.index}
-                  onPointerEnter={() => {
-                    if (!isDisabled) highlightSector(sector.index);
-                  }}
-                  onClick={() => {
-                    if (!isDisabled) selectIndex(sector.index);
-                  }}
-                  role={domProps.role}
-                  aria-label={domProps['aria-label']}
-                  aria-disabled={domProps['aria-disabled']}
-                />
+                >
+                  {item.icon && renderIcon && (
+                    <span className={iconSlot.className} style={iconSlot.style}>
+                      {renderIcon(item.icon)}
+                    </span>
+                  )}
+                  <span>{item.label}</span>
+                  {hasChildren && (
+                    <span
+                      className={submenuIndicatorSlot.className}
+                      style={submenuIndicatorSlot.style}
+                    />
+                  )}
+                </div>
               );
             })}
-          </svg>
 
-          {/* Labels positioned around the circle */}
-          {sectors.map((sector) => {
-            const item = items[sector.index];
-            if (!item) return null;
-
-            const isHighlighted = highlightedIndex === sector.index;
-            const isDisabled = !!item.disabled;
-            const hasChildren = item.children && item.children.length > 0;
-            const labelPos = polarToCartesian(radius, radius, labelR, sector.midAngle);
-
-            return (
+            {/* Center dot — compound veya varsayilan */}
+            {hasCompoundCenter ? centerContent : (
               <div
-                key={`label-${sector.index}`}
-                className={labelSlot.className}
-                style={{
-                  ...labelSlot.style,
-                  position: 'absolute',
-                  left: labelPos.x,
-                  top: labelPos.y,
-                  transform: 'translate(-50%, -50%)',
-                }}
-                data-highlighted={isHighlighted ? '' : undefined}
-                data-disabled={isDisabled ? '' : undefined}
+                className={centerSlot.className}
+                style={centerSlot.style}
+                data-testid="radial-center"
               >
-                {item.icon && renderIcon && (
-                  <span className={iconSlot.className} style={iconSlot.style}>
-                    {renderIcon(item.icon)}
-                  </span>
-                )}
-                <span>{item.label}</span>
-                {hasChildren && (
-                  <span
-                    className={submenuIndicatorSlot.className}
-                    style={submenuIndicatorSlot.style}
-                  />
+                {isInSubmenu && (
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
                 )}
               </div>
-            );
-          })}
-
-          {/* Center dot */}
-          <div
-            className={centerSlot.className}
-            style={centerSlot.style}
-            data-testid="radial-center"
-          >
-            {isInSubmenu && (
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
             )}
           </div>
         </div>
-      </div>
+      </RadialMenuContext.Provider>
     );
 
     return (
@@ -484,3 +587,31 @@ export const RadialMenu = forwardRef<HTMLDivElement, RadialMenuComponentProps>(
     );
   },
 );
+
+/**
+ * RadialMenu bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <RadialMenu
+ *   items={[{ key: 'cut', label: 'Kes' }]}
+ *   open={isOpen}
+ *   position={{ x: 300, y: 200 }}
+ *   onSelect={(key) => console.log(key)}
+ *   onOpenChange={(open) => setIsOpen(open)}
+ * />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <RadialMenu items={items} open={isOpen} position={pos}>
+ *   <RadialMenu.Center>
+ *     <MyCustomIcon />
+ *   </RadialMenu.Center>
+ * </RadialMenu>
+ * ```
+ */
+export const RadialMenu = Object.assign(RadialMenuBase, {
+  Item: RadialMenuItem,
+  Center: RadialMenuCenter,
+});

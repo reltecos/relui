@@ -85,7 +85,7 @@ export const multiSelectCheckboxStyle = style({
     '&[data-checked]': {
       background: cssVar.accentDefault,
       borderColor: cssVar.accentDefault,
-      color: 'white',
+      color: 'var(--rel-color-text-inverse, #fff)',
     },
   },
 });

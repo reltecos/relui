@@ -353,3 +353,51 @@ describe('RangeSlider', () => {
     expect(sliders[1]).toHaveStyle({ boxShadow: '0 0 5px blue' });
   });
 });
+
+// ── Compound API ──
+
+describe('RangeSlider (Compound)', () => {
+  it('compound: Track render edilir', () => {
+    render(
+      <RangeSlider aria-label="Test" value={[20, 80]}>
+        <RangeSlider.Track />
+        <RangeSlider.Thumb which="start" aria-label="Min" />
+        <RangeSlider.Thumb which="end" aria-label="Max" />
+      </RangeSlider>,
+    );
+    expect(screen.getByTestId('range-slider-track')).toBeInTheDocument();
+  });
+
+  it('compound: Thumb start render edilir', () => {
+    render(
+      <RangeSlider aria-label="Test" value={[20, 80]}>
+        <RangeSlider.Track />
+        <RangeSlider.Thumb which="start" aria-label="Min" />
+        <RangeSlider.Thumb which="end" aria-label="Max" />
+      </RangeSlider>,
+    );
+    expect(screen.getByTestId('range-slider-start-thumb')).toBeInTheDocument();
+  });
+
+  it('compound: Thumb end render edilir', () => {
+    render(
+      <RangeSlider aria-label="Test" value={[20, 80]}>
+        <RangeSlider.Track />
+        <RangeSlider.Thumb which="start" aria-label="Min" />
+        <RangeSlider.Thumb which="end" aria-label="Max" />
+      </RangeSlider>,
+    );
+    expect(screen.getByTestId('range-slider-end-thumb')).toBeInTheDocument();
+  });
+
+  it('compound: Track data-orientation set edilir', () => {
+    render(
+      <RangeSlider aria-label="Test" value={[20, 80]} orientation="vertical">
+        <RangeSlider.Track />
+        <RangeSlider.Thumb which="start" aria-label="Min" />
+        <RangeSlider.Thumb which="end" aria-label="Max" />
+      </RangeSlider>,
+    );
+    expect(screen.getByTestId('range-slider-track')).toHaveAttribute('data-orientation', 'vertical');
+  });
+});

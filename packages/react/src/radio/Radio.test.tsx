@@ -272,6 +272,57 @@ describe('Radio — classNames & styles', () => {
   });
 });
 
+// ── Compound API ──
+
+describe('Radio (Compound)', () => {
+  it('compound: Indicator render edilir', () => {
+    render(
+      <Radio value="a">
+        <Radio.Indicator />
+        <Radio.Label>Secenek A</Radio.Label>
+      </Radio>,
+    );
+    expect(screen.getByTestId('radio-indicator')).toBeInTheDocument();
+    expect(screen.getByRole('radio')).toBeInTheDocument();
+  });
+
+  it('compound: Label render edilir', () => {
+    render(
+      <Radio value="a">
+        <Radio.Indicator />
+        <Radio.Label>Secenek A</Radio.Label>
+      </Radio>,
+    );
+    expect(screen.getByTestId('radio-label')).toHaveTextContent('Secenek A');
+  });
+
+  it('compound: checked state context ile aktarilir', () => {
+    render(
+      <Radio value="a" checked>
+        <Radio.Indicator />
+        <Radio.Label>Secili</Radio.Label>
+      </Radio>,
+    );
+    expect(screen.getByRole('radio')).toHaveAttribute('aria-checked', 'true');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Radio value="a" classNames={{ label: 'cmp-label-cls' }}>
+        <Radio.Indicator />
+        <Radio.Label>Test</Radio.Label>
+      </Radio>,
+    );
+    expect(screen.getByTestId('radio-label').className).toContain('cmp-label-cls');
+  });
+
+  it('compound: context disinda kullanilirsa hata firlatir', () => {
+    expect(() => {
+      render(<Radio.Indicator />);
+    }).toThrow('Radio compound sub-components must be used within <Radio>.');
+  });
+});
+
 describe('RadioGroup', () => {
   // ──────────────────────────────────────────
   // Render

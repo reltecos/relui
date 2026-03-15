@@ -12,6 +12,7 @@ import { Progress } from './Progress';
 const meta: Meta<typeof Progress> = {
   title: 'Feedback/Progress',
   component: Progress,
+  tags: ['autodocs'],
   args: {
     value: 60,
     size: 'md',
@@ -148,6 +149,43 @@ export const FormatValue: Story = {
     label: 'Dosya yuklemesi',
     formatValue: (val, pct) => `${val}MB / 1000MB (${Math.round(pct)}%)`,
   },
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 300 }}>
+      <Progress value={65}>
+        <Progress.Label>Yukleniyor</Progress.Label>
+        <Progress.Track>
+          <Progress.Fill />
+        </Progress.Track>
+        <Progress.Value />
+      </Progress>
+    </div>
+  ),
+};
+
+export const CompoundCustomSlotStyles: Story = {
+  name: 'Compound + Custom Slot Styles',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 300 }}>
+      <Progress
+        value={80}
+        color="#e11d48"
+        styles={{
+          label: { fontSize: '14px', fontWeight: 600 },
+          value: { color: '#e11d48' },
+        }}
+      >
+        <Progress.Label>Kritik Seviye</Progress.Label>
+        <Progress.Track>
+          <Progress.Fill />
+        </Progress.Track>
+        <Progress.Value />
+      </Progress>
+    </div>
+  ),
 };
 
 export const AllTypes: Story = {

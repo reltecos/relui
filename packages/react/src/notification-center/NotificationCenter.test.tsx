@@ -333,3 +333,86 @@ describe('NotificationCenter', () => {
     expect(screen.getByTestId('nc-empty')).toHaveStyle({ fontSize: '18px' });
   });
 });
+
+// ── Compound API ──
+
+describe('NotificationCenter (Compound)', () => {
+  it('compound: children ile panel render eder', () => {
+    render(
+      <NotificationCenter notifications={[makeNotif()]} open={true} unreadCount={1}>
+        <NotificationCenter.Header>Bildirimler</NotificationCenter.Header>
+      </NotificationCenter>,
+    );
+    expect(screen.getByTestId('nc-panel')).toBeInTheDocument();
+    expect(screen.getByTestId('nc-overlay')).toBeInTheDocument();
+  });
+
+  it('compound: NotificationCenter.Header render edilir', () => {
+    render(
+      <NotificationCenter notifications={[makeNotif()]} open={true} unreadCount={1}>
+        <NotificationCenter.Header>Ozel Baslik</NotificationCenter.Header>
+      </NotificationCenter>,
+    );
+    expect(screen.getByTestId('nc-header')).toHaveTextContent('Ozel Baslik');
+  });
+
+  it('compound: NotificationCenter.Item render edilir', () => {
+    render(
+      <NotificationCenter notifications={[makeNotif()]} open={true} unreadCount={1}>
+        <NotificationCenter.Item severity="success" read={false}>
+          Islem basarili
+        </NotificationCenter.Item>
+      </NotificationCenter>,
+    );
+    const item = screen.getByTestId('nc-item');
+    expect(item).toBeInTheDocument();
+    expect(item).toHaveAttribute('data-severity', 'success');
+    expect(item).toHaveAttribute('data-read', 'false');
+  });
+
+  it('compound: NotificationCenter.EmptyState render edilir', () => {
+    render(
+      <NotificationCenter notifications={[]} open={true} unreadCount={0}>
+        <NotificationCenter.EmptyState>Hic bildirim yok</NotificationCenter.EmptyState>
+      </NotificationCenter>,
+    );
+    expect(screen.getByTestId('nc-empty')).toHaveTextContent('Hic bildirim yok');
+  });
+
+  it('compound: NotificationCenter.EmptyState varsayilan metin', () => {
+    render(
+      <NotificationCenter notifications={[]} open={true} unreadCount={0}>
+        <NotificationCenter.EmptyState />
+      </NotificationCenter>,
+    );
+    expect(screen.getByTestId('nc-empty')).toHaveTextContent('Bildirim yok');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <NotificationCenter
+        notifications={[makeNotif()]}
+        open={true}
+        unreadCount={1}
+        classNames={{ header: 'cmp-header' }}
+      >
+        <NotificationCenter.Header>Test</NotificationCenter.Header>
+      </NotificationCenter>,
+    );
+    expect(screen.getByTestId('nc-header').className).toContain('cmp-header');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <NotificationCenter
+        notifications={[]}
+        open={true}
+        unreadCount={0}
+        styles={{ emptyState: { fontSize: '24px' } }}
+      >
+        <NotificationCenter.EmptyState />
+      </NotificationCenter>,
+    );
+    expect(screen.getByTestId('nc-empty')).toHaveStyle({ fontSize: '24px' });
+  });
+});

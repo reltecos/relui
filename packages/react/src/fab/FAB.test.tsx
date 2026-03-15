@@ -268,3 +268,55 @@ describe('FAB renderActionIcon', () => {
     expect(screen.getByTestId('icon-edit')).toBeInTheDocument();
   });
 });
+
+// ── Compound API ──────────────────────────────────────────
+
+describe('FAB (Compound)', () => {
+  it('compound: FAB.Icon render edilir', () => {
+    render(
+      <FAB>
+        <FAB.Icon><span data-testid="custom-plus">+</span></FAB.Icon>
+      </FAB>,
+    );
+    expect(screen.getByTestId('fab-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-plus')).toBeInTheDocument();
+  });
+
+  it('compound: FAB.Label render edilir', () => {
+    render(
+      <FAB>
+        <FAB.Icon><span>+</span></FAB.Icon>
+        <FAB.Label>Ekle</FAB.Label>
+      </FAB>,
+    );
+    expect(screen.getByTestId('fab-label')).toBeInTheDocument();
+    expect(screen.getByTestId('fab-label')).toHaveTextContent('Ekle');
+  });
+
+  it('compound: children ile buton render edilir', () => {
+    render(
+      <FAB>
+        <FAB.Icon><span>+</span></FAB.Icon>
+      </FAB>,
+    );
+    expect(screen.getByTestId('fab')).toBeInTheDocument();
+    expect(screen.getByTestId('fab-button')).toBeInTheDocument();
+  });
+
+  it('compound: tiklaninca toggle calisir', () => {
+    const onOpenChange = vi.fn();
+    render(
+      <FAB actions={makeActions()} onOpenChange={onOpenChange}>
+        <FAB.Icon><span>+</span></FAB.Icon>
+      </FAB>,
+    );
+    fireEvent.click(screen.getByTestId('fab-button'));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+  });
+
+  it('compound: context disinda hata firlatir', () => {
+    expect(() => {
+      render(<FAB.Icon><span>+</span></FAB.Icon>);
+    }).toThrow('FAB compound sub-components must be used within <FAB>.');
+  });
+});

@@ -6,5 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Textarea, type TextareaComponentProps, type TextareaSlot } from './Textarea';
+export {
+  Textarea,
+  useTextareaContext,
+  type TextareaComponentProps,
+  type TextareaSlot,
+  type TextareaLabelProps,
+  type TextareaCounterProps,
+} from './Textarea';
 export { useTextarea, type UseTextareaProps, type UseTextareaReturn } from './useTextarea';

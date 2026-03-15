@@ -7,15 +7,18 @@
  */
 
 /**
- * FloatingActionButton (FAB) — yuzen aksiyon butonu.
- * FloatingActionButton (FAB) — floating action button with speed dial.
+ * FloatingActionButton (FAB) — yuzen aksiyon butonu (Dual API).
+ * FloatingActionButton (FAB) — floating action button with speed dial (Dual API).
+ *
+ * Props-based: `<FAB icon={<PlusIcon />} actions={[...]} />`
+ * Compound:    `<FAB><FAB.Icon><PlusIcon /></FAB.Icon><FAB.Label>Ekle</FAB.Label></FAB>`
  *
  * Ana buton + tiklaninca acilan mini aksiyon butonlari (speed dial).
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import {
   fabRootRecipe,
   fabButtonRecipe,
@@ -27,7 +30,7 @@ import {
   fabActionLabelStyle,
   fabOverlayStyle,
 } from './fab.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 import { useFAB, type UseFABProps } from './useFAB';
 import type { FabPosition, FabAction } from '@relteco/relui-core';
 
@@ -43,6 +46,76 @@ export type FABSlot = 'root' | 'button' | 'icon' | 'action' | 'actionButton' | '
 export type FABSize = 'sm' | 'md' | 'lg';
 export type FABVariant = 'filled' | 'secondary' | 'danger';
 
+// ── Context (Compound API) ───────────────────────────
+
+interface FABContextValue {
+  size: FABSize;
+  variant: FABVariant;
+  isOpen: boolean;
+  classNames: ClassNames<FABSlot> | undefined;
+  styles: Styles<FABSlot> | undefined;
+}
+
+const FABContext = createContext<FABContextValue | null>(null);
+
+function useFabContext(): FABContextValue {
+  const ctx = useContext(FABContext);
+  if (!ctx) throw new Error('FAB compound sub-components must be used within <FAB>.');
+  return ctx;
+}
+
+// ── Compound: FAB.Icon ──────────────────────────────
+
+/** FAB.Icon props */
+export interface FABIconProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const FABIcon = forwardRef<HTMLSpanElement, FABIconProps>(
+  function FABIcon(props, ref) {
+    const { children, className } = props;
+    const ctx = useFabContext();
+    const iconClass = `${fabIconStyle}${ctx.isOpen ? ` ${fabIconOpenStyle}` : ''}`;
+    const iconSizeClass = fabIconSizeRecipe({ size: ctx.size });
+    const slot = getSlotProps('icon', `${iconClass} ${iconSizeClass}`, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="fab-icon">
+        {children}
+      </span>
+    );
+  },
+);
+
+// ── Compound: FAB.Label ─────────────────────────────
+
+/** FAB.Label props */
+export interface FABLabelProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const FABLabel = forwardRef<HTMLSpanElement, FABLabelProps>(
+  function FABLabel(props, ref) {
+    const { children, className } = props;
+    const ctx = useFabContext();
+    const slot = getSlotProps('actionLabel', fabActionLabelStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="fab-label">
+        {children}
+      </span>
+    );
+  },
+);
+
 // ── Component Props ──────────────────────────────────
 
 export interface FABComponentProps
@@ -57,11 +130,14 @@ export interface FABComponentProps
   /** Boyut / Size */
   size?: FABSize;
 
-  /** Ana buton ikonu / Main button icon */
+  /** Props-based: ana buton ikonu / Main button icon */
   icon?: ReactNode;
 
   /** Ozel aksiyon ikon render / Custom action icon renderer */
   renderActionIcon?: (action: FabAction) => ReactNode;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 
   /** Ek className / Additional className */
   className?: string;
@@ -103,10 +179,10 @@ function DefaultPlusIcon() {
 // ── Component ────────────────────────────────────────
 
 /**
- * FloatingActionButton (FAB) bilesen.
- * FloatingActionButton (FAB) component with speed dial.
+ * FloatingActionButton (FAB) bilesen (Dual API).
+ * FloatingActionButton (FAB) component with speed dial (Dual API).
  *
- * @example
+ * @example Props-based
  * ```tsx
  * <FAB
  *   actions={[
@@ -116,8 +192,16 @@ function DefaultPlusIcon() {
  *   onSelectAction={(id) => console.log(id)}
  * />
  * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <FAB>
+ *   <FAB.Icon><PlusIcon /></FAB.Icon>
+ *   <FAB.Label>Yeni ekle</FAB.Label>
+ * </FAB>
+ * ```
  */
-export const FAB = forwardRef<HTMLDivElement, FABComponentProps>(
+const FABBase = forwardRef<HTMLDivElement, FABComponentProps>(
   function FAB(props, ref) {
     const {
       position = 'bottom-right',
@@ -125,6 +209,7 @@ export const FAB = forwardRef<HTMLDivElement, FABComponentProps>(
       size = 'md',
       icon,
       renderActionIcon,
+      children,
       className,
       style: styleProp,
       classNames,
@@ -161,14 +246,56 @@ export const FAB = forwardRef<HTMLDivElement, FABComponentProps>(
     const buttonClass = fabButtonRecipe({ variant, size });
     const buttonSlot = getSlotProps('button', buttonClass, classNames, styles);
 
-    const iconClass = `${fabIconStyle}${context.open ? ` ${fabIconOpenStyle}` : ''}`;
-    const iconSizeClass = fabIconSizeRecipe({ size });
-    const iconSlot = getSlotProps('icon', `${iconClass} ${iconSizeClass}`, classNames, styles);
-
     const overlaySlot = getSlotProps('overlay', fabOverlayStyle, classNames, styles);
 
     // ── Resolve aria-label ──
     const resolvedAriaLabel = ariaLabel ?? (context.open ? 'Close actions' : 'Open actions');
+
+    const ctxValue: FABContextValue = { size, variant, isOpen: context.open, classNames, styles };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <FABContext.Provider value={ctxValue}>
+          <>
+            {showOverlay && context.open && (
+              <div
+                className={overlaySlot.className}
+                style={overlaySlot.style}
+                onClick={toggle}
+                data-testid="fab-overlay"
+              />
+            )}
+
+            <div
+              ref={ref}
+              className={combinedRootClassName}
+              style={combinedRootStyle}
+              id={id}
+              data-testid="fab"
+            >
+              <button
+                className={buttonSlot.className}
+                style={buttonSlot.style}
+                onClick={toggle}
+                type="button"
+                aria-expanded={context.open}
+                aria-haspopup={context.actions.length > 0 ? 'true' : undefined}
+                aria-label={resolvedAriaLabel}
+                data-testid="fab-button"
+              >
+                {children}
+              </button>
+            </div>
+          </>
+        </FABContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
+    const iconClass = `${fabIconStyle}${context.open ? ` ${fabIconOpenStyle}` : ''}`;
+    const iconSizeClass = fabIconSizeRecipe({ size });
+    const iconSlot = getSlotProps('icon', `${iconClass} ${iconSizeClass}`, classNames, styles);
 
     return (
       <>
@@ -256,3 +383,24 @@ export const FAB = forwardRef<HTMLDivElement, FABComponentProps>(
     );
   },
 );
+
+/**
+ * FAB bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <FAB actions={[...]} icon={<PlusIcon />} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <FAB>
+ *   <FAB.Icon><PlusIcon /></FAB.Icon>
+ *   <FAB.Label>Ekle</FAB.Label>
+ * </FAB>
+ * ```
+ */
+export const FAB = Object.assign(FABBase, {
+  Icon: FABIcon,
+  Label: FABLabel,
+});

@@ -13,6 +13,7 @@ import { MDI } from './MDI';
 const meta: Meta<typeof MDI> = {
   title: 'Window Manager/MDI',
   component: MDI,
+  tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
 };
 
@@ -112,6 +113,30 @@ export const CustomSlotStyles: Story = {
         }}
         renderWindow={windowContent}
       />
+    </div>
+  ),
+};
+
+export const Compound: Story = {
+  render: () => (
+    <div style={{ height: 600 }}>
+      <MDI>
+        <MDI.Window id="doc1" title="Document 1">
+          <div style={{ padding: 16 }}>
+            <h3 style={{ margin: '0 0 8px', fontSize: 14 }}>Document 1</h3>
+            <p style={{ color: '#64748b', fontSize: 13 }}>Compound API ile olusturuldu.</p>
+          </div>
+        </MDI.Window>
+        <MDI.Window id="doc2" title="Document 2">
+          <div style={{ padding: 16 }}>
+            <h3 style={{ margin: '0 0 8px', fontSize: 14 }}>Document 2</h3>
+            <p style={{ color: '#64748b', fontSize: 13 }}>Ikinci pencere.</p>
+          </div>
+        </MDI.Window>
+        <MDI.Toolbar>
+          <span style={{ fontSize: 12, padding: '0 8px', color: '#64748b' }}>MDI Toolbar</span>
+        </MDI.Toolbar>
+      </MDI>
     </div>
   ),
 };

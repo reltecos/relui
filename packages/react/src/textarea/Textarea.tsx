@@ -7,26 +7,116 @@
  */
 
 /**
- * Textarea — styled React textarea component.
- * Textarea — stilize edilmiş React textarea bileşeni.
+ * Textarea — styled React textarea component (Dual API).
+ * Textarea — stilize edilmis React textarea bileseni (Dual API).
  *
- * 3 varyant × 5 boyut × 4 resize modu. Vanilla Extract + CSS Variables ile tema desteği.
- * autoResize ile içerik büyüdükçe otomatik yükseklik artışı.
+ * Props-based: `<Textarea placeholder="Aciklama..." />`
+ * Compound:    `<Textarea><Textarea.Label>Aciklama</Textarea.Label><Textarea.Counter /></Textarea>`
+ *
+ * 3 varyant x 5 boyut x 4 resize modu. Vanilla Extract + CSS Variables ile tema destegi.
+ * autoResize ile icerik buyudukce otomatik yukseklik artisi.
  *
  * @packageDocumentation
  */
 
-import { forwardRef, useCallback, useRef } from 'react';
+import { forwardRef, createContext, useContext, useCallback, useRef, type ReactNode } from 'react';
 import type { TextareaVariant, TextareaSize, TextareaResize } from '@relteco/relui-core';
 import { useTextarea, type UseTextareaProps } from './useTextarea';
 import { textareaRecipe } from './textarea.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** Textarea slot isimleri. */
-export type TextareaSlot = 'root';
+export type TextareaSlot = 'root' | 'label' | 'counter' | 'wrapper';
+
+// ── Context (Compound API) ──────────────────────────
+
+interface TextareaContextValue {
+  size: TextareaSize;
+  variant: TextareaVariant;
+  disabled: boolean;
+  classNames: ClassNames<TextareaSlot> | undefined;
+  styles: Styles<TextareaSlot> | undefined;
+}
+
+const TextareaContext = createContext<TextareaContextValue | null>(null);
+
+/** Textarea compound sub-component context hook. */
+export function useTextareaContext(): TextareaContextValue {
+  const ctx = useContext(TextareaContext);
+  if (!ctx) throw new Error('Textarea compound sub-components must be used within <Textarea>.');
+  return ctx;
+}
+
+// ── Compound: Textarea.Label ────────────────────────
+
+/** Textarea.Label props */
+export interface TextareaLabelProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Label htmlFor attribute */
+  htmlFor?: string;
+}
+
+const TextareaLabel = forwardRef<HTMLLabelElement, TextareaLabelProps>(
+  function TextareaLabel(props, ref) {
+    const { children, className, htmlFor } = props;
+    const ctx = useTextareaContext();
+    const slot = getSlotProps('label', undefined, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <label
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        htmlFor={htmlFor}
+        data-testid="textarea-label"
+      >
+        {children}
+      </label>
+    );
+  },
+);
+
+// ── Compound: Textarea.Counter ──────────────────────
+
+/** Textarea.Counter props */
+export interface TextareaCounterProps {
+  /** Mevcut karakter sayisi / Current character count */
+  count: number;
+  /** Maksimum karakter sayisi / Maximum character count */
+  max?: number;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const TextareaCounter = forwardRef<HTMLSpanElement, TextareaCounterProps>(
+  function TextareaCounter(props, ref) {
+    const { count, max, className } = props;
+    const ctx = useTextareaContext();
+    const slot = getSlotProps('counter', undefined, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    const text = max !== undefined ? `${count}/${max}` : `${count}`;
+
+    return (
+      <span
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-testid="textarea-counter"
+        aria-live="polite"
+      >
+        {text}
+      </span>
+    );
+  },
+);
 
 /**
- * Textarea bileşen props'ları.
+ * Textarea bilesen props'lari.
  * Textarea component props.
  */
 export interface TextareaComponentProps extends UseTextareaProps, SlotStyleProps<TextareaSlot> {
@@ -72,10 +162,13 @@ export interface TextareaComponentProps extends UseTextareaProps, SlotStyleProps
 
   /** aria-describedby */
   'aria-describedby'?: string;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
 /**
- * autoResize: textarea yüksekliğini scrollHeight'a göre ayarlar.
+ * autoResize: textarea yuksekligini scrollHeight'a gore ayarlar.
  */
 function adjustHeight(el: HTMLTextAreaElement): void {
   el.style.height = 'auto';
@@ -83,27 +176,23 @@ function adjustHeight(el: HTMLTextAreaElement): void {
 }
 
 /**
- * Textarea — RelUI textarea bileşeni.
- * Textarea — RelUI textarea component.
+ * Textarea — RelUI textarea bileseni (Dual API).
+ * Textarea — RelUI textarea component (Dual API).
  *
- * @example
+ * @example Props-based
  * ```tsx
- * <Textarea placeholder="Açıklama yazın..." variant="outline" />
+ * <Textarea placeholder="Aciklama yazin..." variant="outline" />
+ * ```
  *
- * <Textarea
- *   placeholder="Otomatik büyüyen..."
- *   autoResize
- *   rows={2}
- * />
- *
- * <Textarea
- *   placeholder="Sabit boyut"
- *   resize="none"
- *   rows={5}
- * />
+ * @example Compound
+ * ```tsx
+ * <Textarea placeholder="Aciklama...">
+ *   <Textarea.Label>Aciklama</Textarea.Label>
+ *   <Textarea.Counter count={0} max={500} />
+ * </Textarea>
  * ```
  */
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaComponentProps>(function Textarea(
+const TextareaBase = forwardRef<HTMLTextAreaElement, TextareaComponentProps>(function Textarea(
   {
     variant = 'outline',
     size = 'md',
@@ -122,13 +211,14 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaComponentProps>(
     'aria-describedby': ariaDescribedBy,
     autoResize,
     onChange,
+    children,
     ...hookProps
   },
   forwardedRef,
 ) {
-  const { textareaProps } = useTextarea({ ...hookProps, autoResize, onChange });
+  const { textareaProps, isDisabled } = useTextarea({ ...hookProps, autoResize, onChange });
 
-  // autoResize aktifse resize'ı none yap
+  // autoResize aktifse resize none yap
   const effectiveResize = autoResize ? 'none' : resize;
 
   const recipeClass = textareaRecipe({ variant, size, resize: effectiveResize });
@@ -152,7 +242,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaComponentProps>(
         forwardedRef.current = el;
       }
 
-      // İlk render'da yüksekliği ayarla
+      // Ilk render'da yuksekligi ayarla
       if (el && autoResize) {
         adjustHeight(el);
       }
@@ -160,7 +250,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaComponentProps>(
     [forwardedRef, autoResize],
   );
 
-  // autoResize: onChange'de yüksekliği ayarla
+  // autoResize: onChange'de yuksekligi ayarla
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       textareaProps.onChange(event);
@@ -171,7 +261,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaComponentProps>(
     [textareaProps.onChange, autoResize],
   );
 
-  // autoResize aktifse overflow hidden (scrollbar gösterme)
+  // autoResize aktifse overflow hidden (scrollbar gosterme)
   const autoResizeStyle: React.CSSProperties | undefined = autoResize
     ? { overflow: 'hidden' }
     : undefined;
@@ -181,7 +271,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaComponentProps>(
       ? { ...autoResizeStyle, ...inlineStyle, ...rootSlot.style }
       : undefined;
 
-  return (
+  const textareaElement = (
     <textarea
       {...textareaProps}
       onChange={handleChange}
@@ -198,4 +288,54 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaComponentProps>(
       aria-describedby={ariaDescribedBy}
     />
   );
+
+  // ── Compound API ──
+  if (children) {
+    const ctxValue: TextareaContextValue = {
+      size,
+      variant,
+      disabled: isDisabled,
+      classNames,
+      styles,
+    };
+
+    const wrapperSlot = getSlotProps('wrapper', undefined, classNames, styles);
+
+    return (
+      <TextareaContext.Provider value={ctxValue}>
+        <div
+          className={wrapperSlot.className || undefined}
+          style={wrapperSlot.style}
+          data-testid="textarea-wrapper"
+        >
+          {children}
+          {textareaElement}
+        </div>
+      </TextareaContext.Provider>
+    );
+  }
+
+  // ── Props-based API ──
+  return textareaElement;
+});
+
+/**
+ * Textarea bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Textarea placeholder="Aciklama yazin..." />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Textarea placeholder="Aciklama...">
+ *   <Textarea.Label>Aciklama</Textarea.Label>
+ *   <Textarea.Counter count={42} max={500} />
+ * </Textarea>
+ * ```
+ */
+export const Textarea = Object.assign(TextareaBase, {
+  Label: TextareaLabel,
+  Counter: TextareaCounter,
 });

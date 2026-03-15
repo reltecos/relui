@@ -10,4 +10,5 @@ export {
   TileLayout,
   type TileLayoutComponentProps,
   type TileLayoutSlot,
+  type TileLayoutTileProps,
 } from './TileLayout';

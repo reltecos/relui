@@ -177,3 +177,18 @@ export const CustomSlotStyles: Story = {
     },
   },
 };
+
+// ── Compound API ──────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <MultiColumnCombobox columns={employeeColumns} items={employeeItems} placeholder="Calisan arayin...">
+      <MultiColumnCombobox.Input />
+      <MultiColumnCombobox.Content>
+        <MultiColumnCombobox.Column>Kod</MultiColumnCombobox.Column>
+        <MultiColumnCombobox.Column>Ad Soyad</MultiColumnCombobox.Column>
+        <MultiColumnCombobox.Column>Departman</MultiColumnCombobox.Column>
+      </MultiColumnCombobox.Content>
+    </MultiColumnCombobox>
+  ),
+};

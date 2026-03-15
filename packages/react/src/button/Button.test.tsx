@@ -199,6 +199,12 @@ describe('Button', () => {
     expect(el).toHaveStyle({ padding: '10px' });
   });
 
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<Button ref={ref}>Test</Button>);
+    expect(ref).toHaveBeenCalled();
+  });
+
   it('classNames.spinner uygulanir', () => {
     render(<Button loading classNames={{ spinner: 'my-spinner' }}>Test</Button>);
     const button = screen.getByRole('button');
@@ -269,5 +275,69 @@ describe('Button', () => {
     const iconWrapper = screen.getByTestId('right-icon').parentElement;
 
     expect(iconWrapper).toHaveStyle({ padding: '17px' });
+  });
+});
+
+// ── Compound API ──
+
+describe('Button (Compound)', () => {
+  it('compound: LeftIcon render edilir', () => {
+    render(
+      <Button>
+        <Button.LeftIcon><span data-testid="cmp-left">L</span></Button.LeftIcon>
+        Kaydet
+      </Button>,
+    );
+    expect(screen.getByTestId('cmp-left')).toBeInTheDocument();
+    expect(screen.getByTestId('button-lefticon')).toBeInTheDocument();
+  });
+
+  it('compound: RightIcon render edilir', () => {
+    render(
+      <Button>
+        Devam
+        <Button.RightIcon><span data-testid="cmp-right">R</span></Button.RightIcon>
+      </Button>,
+    );
+    expect(screen.getByTestId('cmp-right')).toBeInTheDocument();
+    expect(screen.getByTestId('button-righticon')).toBeInTheDocument();
+  });
+
+  it('compound: LeftIcon + RightIcon birlikte render edilir', () => {
+    render(
+      <Button>
+        <Button.LeftIcon><span data-testid="cmp-left">L</span></Button.LeftIcon>
+        Ara
+        <Button.RightIcon><span data-testid="cmp-right">R</span></Button.RightIcon>
+      </Button>,
+    );
+    expect(screen.getByTestId('cmp-left')).toBeInTheDocument();
+    expect(screen.getByTestId('cmp-right')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Button classNames={{ leftIcon: 'cmp-left-cls' }}>
+        <Button.LeftIcon><span>L</span></Button.LeftIcon>
+        Test
+      </Button>,
+    );
+    expect(screen.getByTestId('button-lefticon').className).toContain('cmp-left-cls');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <Button styles={{ rightIcon: { letterSpacing: '3px' } }}>
+        Test
+        <Button.RightIcon><span>R</span></Button.RightIcon>
+      </Button>,
+    );
+    expect(screen.getByTestId('button-righticon')).toHaveStyle({ letterSpacing: '3px' });
+  });
+
+  it('compound: context disinda kullanilirsa hata firlatir', () => {
+    expect(() => {
+      render(<Button.LeftIcon><span>L</span></Button.LeftIcon>);
+    }).toThrow('Button compound sub-components must be used within <Button>.');
   });
 });

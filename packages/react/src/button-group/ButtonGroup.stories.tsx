@@ -67,6 +67,7 @@ const AlignRightIcon = () => (
 const meta: Meta<typeof ButtonGroup> = {
   title: 'Primitives/ButtonGroup',
   component: ButtonGroup,
+  tags: ['autodocs'],
   argTypes: {
     orientation: {
       control: 'select',

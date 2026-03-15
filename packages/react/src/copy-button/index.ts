@@ -6,5 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { CopyButton, type CopyButtonComponentProps, type CopyButtonSlot } from './CopyButton';
+export {
+  CopyButton,
+  useCopyButtonContext,
+  type CopyButtonComponentProps,
+  type CopyButtonSlot,
+  type CopyButtonIconProps,
+  type CopyButtonLabelProps,
+} from './CopyButton';
 export { useCopyButton, type UseCopyButtonProps, type UseCopyButtonReturn } from './useCopyButton';

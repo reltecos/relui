@@ -6,7 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { MaskedInput, type MaskedInputComponentProps, type MaskedInputSlot } from './MaskedInput';
+export {
+  MaskedInput,
+  useMaskedInputContext,
+  type MaskedInputComponentProps,
+  type MaskedInputSlot,
+  type MaskedInputFieldProps,
+} from './MaskedInput';
 export {
   useMaskedInput,
   type UseMaskedInputProps,

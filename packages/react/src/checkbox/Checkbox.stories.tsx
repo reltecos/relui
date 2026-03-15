@@ -16,6 +16,7 @@ import { Checkbox } from './Checkbox';
 const meta: Meta<typeof Checkbox> = {
   title: 'Primitives/Checkbox',
   component: Checkbox,
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
@@ -131,6 +132,30 @@ export const WithoutLabel: Story = {
       <Checkbox aria-label="Seçenek 1" />
       <Checkbox aria-label="Seçenek 2" checked />
       <Checkbox aria-label="Seçenek 3" checked="indeterminate" />
+    </div>
+  ),
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <Checkbox>
+        <Checkbox.Indicator />
+        <Checkbox.Label>Compound checkbox — unchecked</Checkbox.Label>
+      </Checkbox>
+      <Checkbox checked>
+        <Checkbox.Indicator />
+        <Checkbox.Label>Compound checkbox — checked</Checkbox.Label>
+      </Checkbox>
+      <Checkbox checked="indeterminate">
+        <Checkbox.Indicator />
+        <Checkbox.Label>Compound checkbox — indeterminate</Checkbox.Label>
+      </Checkbox>
+      <Checkbox disabled>
+        <Checkbox.Indicator />
+        <Checkbox.Label>Compound checkbox — disabled</Checkbox.Label>
+      </Checkbox>
     </div>
   ),
 };

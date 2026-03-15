@@ -7,15 +7,16 @@
  */
 
 /**
- * Sidebar — styled sidebar bilesen.
- * Sidebar — styled sidebar component.
+ * Sidebar — styled sidebar bilesen (Dual API).
+ * Sidebar — styled sidebar component (Dual API).
  *
- * Daraltilabilir navigasyon paneli. Gruplama, ikon, badge, bolum destegi.
+ * Props-based: `<Sidebar items={[...]} header={<Logo />} />`
+ * Compound:    `<Sidebar><Sidebar.Header>Logo</Sidebar.Header><Sidebar.Section>...</Sidebar.Section></Sidebar>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type { SidebarSize, SidebarPosition, SidebarItem } from '@relteco/relui-core';
 import { useSidebar, type UseSidebarProps } from './useSidebar';
 import {
@@ -34,7 +35,7 @@ import {
   sidebarSectionHeaderStyle,
   sidebarDividerStyle,
 } from './sidebar.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /**
  * Sidebar slot isimleri / Sidebar slot names.
@@ -53,6 +54,174 @@ export type SidebarSlot =
   | 'collapseButton'
   | 'sectionHeader'
   | 'divider';
+
+// ── Context (Compound API) ──────────────────────────────────────
+
+interface SidebarContextValue {
+  size: SidebarSize;
+  collapsed: boolean;
+  variant: SidebarPosition;
+  classNames: ClassNames<SidebarSlot> | undefined;
+  styles: Styles<SidebarSlot> | undefined;
+}
+
+const SidebarContext = createContext<SidebarContextValue | null>(null);
+
+function useSidebarContext(): SidebarContextValue {
+  const ctx = useContext(SidebarContext);
+  if (!ctx) throw new Error('Sidebar compound sub-components must be used within <Sidebar>.');
+  return ctx;
+}
+
+// ── Compound: Sidebar.Header ────────────────────────────────────
+
+/** Sidebar.Header props */
+export interface SidebarHeaderProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SidebarHeader = forwardRef<HTMLDivElement, SidebarHeaderProps>(
+  function SidebarHeader(props, ref) {
+    const { children, className } = props;
+    const ctx = useSidebarContext();
+    const slot = getSlotProps('header', sidebarHeaderStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="sidebar-header">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Sidebar.Section ───────────────────────────────────
+
+/** Sidebar.Section props */
+export interface SidebarSectionProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Bolum baslik / Section title */
+  title?: string;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SidebarSection = forwardRef<HTMLDivElement, SidebarSectionProps>(
+  function SidebarSection(props, ref) {
+    const { children, title, className } = props;
+    const ctx = useSidebarContext();
+    const contentSlot = getSlotProps('content', sidebarContentStyle, ctx.classNames, ctx.styles);
+    const sectionSlot = getSlotProps('sectionHeader', sidebarSectionHeaderStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${contentSlot.className} ${className}` : contentSlot.className;
+
+    return (
+      <div ref={ref} className={cls} style={contentSlot.style} data-testid="sidebar-section">
+        {title && (
+          <div className={sectionSlot.className} style={sectionSlot.style}>
+            {title}
+          </div>
+        )}
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Sidebar.Item ──────────────────────────────────────
+
+/** Sidebar.Item props */
+export interface SidebarItemProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Aktif mi / Is active */
+  active?: boolean;
+  /** Devre disi mi / Is disabled */
+  disabled?: boolean;
+  /** Tiklama callback / Click callback */
+  onClick?: () => void;
+  /** Link href */
+  href?: string;
+  /** Ikon / Icon */
+  icon?: ReactNode;
+  /** Badge / Badge */
+  badge?: ReactNode;
+}
+
+const SidebarItemComponent = forwardRef<HTMLElement, SidebarItemProps>(
+  function SidebarItem(props, ref) {
+    const { children, className, active, disabled, onClick, href, icon, badge } = props;
+    const ctx = useSidebarContext();
+    const slot = getSlotProps('item', sidebarItemStyle, ctx.classNames, ctx.styles);
+    const iconSlot = getSlotProps('itemIcon', sidebarItemIconStyle, ctx.classNames, ctx.styles);
+    const labelSlot = getSlotProps('itemLabel', sidebarItemLabelStyle, ctx.classNames, ctx.styles);
+    const badgeSlot = getSlotProps('itemBadge', sidebarItemBadgeStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    const Element = href ? 'a' : 'button';
+    const elementProps = href
+      ? { href }
+      : { type: 'button' as const };
+
+    return (
+      <Element
+        ref={ref as never}
+        className={cls}
+        style={slot.style}
+        data-testid="sidebar-item"
+        data-active={active ? '' : undefined}
+        aria-current={active ? 'page' : undefined}
+        aria-disabled={disabled ? 'true' : undefined}
+        onClick={disabled ? undefined : onClick}
+        {...elementProps}
+      >
+        {icon && (
+          <span className={iconSlot.className} style={iconSlot.style}>
+            {icon}
+          </span>
+        )}
+        <span className={labelSlot.className} style={labelSlot.style}>
+          {children}
+        </span>
+        {badge && (
+          <span className={badgeSlot.className} style={badgeSlot.style}>
+            {badge}
+          </span>
+        )}
+      </Element>
+    );
+  },
+);
+
+// ── Compound: Sidebar.Footer ────────────────────────────────────
+
+/** Sidebar.Footer props */
+export interface SidebarFooterProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SidebarFooter = forwardRef<HTMLDivElement, SidebarFooterProps>(
+  function SidebarFooter(props, ref) {
+    const { children, className } = props;
+    const ctx = useSidebarContext();
+    const slot = getSlotProps('footer', sidebarFooterStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="sidebar-footer">
+        {children}
+      </div>
+    );
+  },
+);
 
 // ── Sidebar Component Props ─────────────────────────────────────────
 
@@ -86,6 +255,9 @@ export interface SidebarComponentProps extends UseSidebarProps, SlotStyleProps<S
 
   /** Oge render override / Item render override */
   renderItem?: (item: SidebarItem, props: { isActive: boolean; isCollapsed: boolean }) => ReactNode;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
 /**
@@ -105,7 +277,7 @@ export interface SidebarComponentProps extends UseSidebarProps, SlotStyleProps<S
  * />
  * ```
  */
-export const Sidebar = forwardRef<HTMLElement, SidebarComponentProps>(
+const SidebarBase = forwardRef<HTMLElement, SidebarComponentProps>(
   function Sidebar(props, ref) {
     const {
       size = 'md',
@@ -120,6 +292,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarComponentProps>(
       showCollapseButton = true,
       renderIcon,
       renderItem,
+      children,
       ...sidebarProps
     } = props;
 
@@ -157,6 +330,34 @@ export const Sidebar = forwardRef<HTMLElement, SidebarComponentProps>(
     const collapseSlot = getSlotProps('collapseButton', sidebarCollapseButtonStyle, classNames, styles);
     const sectionHeaderSlot = getSlotProps('sectionHeader', sidebarSectionHeaderStyle, classNames, styles);
     const dividerSlot = getSlotProps('divider', sidebarDividerStyle, classNames, styles);
+
+    const ctxValue: SidebarContextValue = {
+      size,
+      collapsed: isCollapsed,
+      variant: position,
+      classNames,
+      styles,
+    };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <SidebarContext.Provider value={ctxValue}>
+          <nav
+            ref={ref}
+            className={combinedRootClassName}
+            style={combinedRootStyle}
+            id={id}
+            data-position={position}
+            data-collapsed={isCollapsed ? '' : undefined}
+            data-testid="sidebar-root"
+            aria-label="Sidebar"
+          >
+            {children}
+          </nav>
+        </SidebarContext.Provider>
+      );
+    }
 
     // ── Render item ──
     function renderSidebarItem(item: SidebarItem, depth: number) {
@@ -335,3 +536,30 @@ export const Sidebar = forwardRef<HTMLElement, SidebarComponentProps>(
     );
   },
 );
+
+/**
+ * Sidebar bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Sidebar items={[...]} header={<Logo />} defaultActiveKey="home" />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Sidebar>
+ *   <Sidebar.Header>Logo</Sidebar.Header>
+ *   <Sidebar.Section title="Navigasyon">
+ *     <Sidebar.Item active icon={<HomeIcon />}>Ana Sayfa</Sidebar.Item>
+ *     <Sidebar.Item icon={<SettingsIcon />}>Ayarlar</Sidebar.Item>
+ *   </Sidebar.Section>
+ *   <Sidebar.Footer>v1.0</Sidebar.Footer>
+ * </Sidebar>
+ * ```
+ */
+export const Sidebar = Object.assign(SidebarBase, {
+  Header: SidebarHeader,
+  Section: SidebarSection,
+  Item: SidebarItemComponent,
+  Footer: SidebarFooter,
+});

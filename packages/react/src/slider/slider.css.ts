@@ -207,7 +207,7 @@ export const sliderThumbRecipe = recipe({
   base: {
     position: 'absolute',
     borderRadius: '50%',
-    background: '#ffffff',
+    background: 'var(--rel-color-bg, #ffffff)',
     border: '2px solid',
     borderColor: slFill,
     boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',

@@ -6,4 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Divider, type DividerProps, type DividerSlot } from './Divider';
+export {
+  Divider,
+  type DividerProps,
+  type DividerSlot,
+  type DividerLabelProps,
+} from './Divider';

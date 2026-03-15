@@ -280,3 +280,66 @@ describe('SegmentedControl', () => {
     });
   });
 });
+
+// ── Compound API ──
+
+describe('SegmentedControl (Compound)', () => {
+  it('compound: option render edilir', () => {
+    render(
+      <SegmentedControl options={basicOptions} aria-label="Gorunum">
+        <SegmentedControl.Option value="list">Liste</SegmentedControl.Option>
+        <SegmentedControl.Option value="grid">Izgara</SegmentedControl.Option>
+        <SegmentedControl.Option value="kanban">Kanban</SegmentedControl.Option>
+      </SegmentedControl>,
+    );
+    expect(screen.getAllByTestId('segmented-control-option')).toHaveLength(3);
+  });
+
+  it('compound: tiklaninca secer', () => {
+    const onValueChange = vi.fn();
+    render(
+      <SegmentedControl options={basicOptions} aria-label="Gorunum" onValueChange={onValueChange}>
+        <SegmentedControl.Option value="list">Liste</SegmentedControl.Option>
+        <SegmentedControl.Option value="grid">Izgara</SegmentedControl.Option>
+        <SegmentedControl.Option value="kanban">Kanban</SegmentedControl.Option>
+      </SegmentedControl>,
+    );
+    fireEvent.click(screen.getByText('Izgara'));
+    expect(onValueChange).toHaveBeenCalledWith('grid');
+  });
+
+  it('compound: secili option aria-selected=true', () => {
+    render(
+      <SegmentedControl options={basicOptions} defaultValue="grid" aria-label="Gorunum">
+        <SegmentedControl.Option value="list">Liste</SegmentedControl.Option>
+        <SegmentedControl.Option value="grid">Izgara</SegmentedControl.Option>
+        <SegmentedControl.Option value="kanban">Kanban</SegmentedControl.Option>
+      </SegmentedControl>,
+    );
+    const options = screen.getAllByTestId('segmented-control-option');
+    expect(options[1]).toHaveAttribute('aria-selected', 'true');
+    expect(options[0]).toHaveAttribute('aria-selected', 'false');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <SegmentedControl options={basicOptions} aria-label="Gorunum" classNames={{ item: 'cmp-item' }}>
+        <SegmentedControl.Option value="list">Liste</SegmentedControl.Option>
+      </SegmentedControl>,
+    );
+    expect(screen.getByTestId('segmented-control-option').className).toContain('cmp-item');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <SegmentedControl options={basicOptions} aria-label="Gorunum" styles={{ item: { fontWeight: 'bold' } }}>
+        <SegmentedControl.Option value="list">Liste</SegmentedControl.Option>
+      </SegmentedControl>,
+    );
+    expect(screen.getByTestId('segmented-control-option')).toHaveStyle({ fontWeight: 'bold' });
+  });
+
+  it('SegmentedControl.Option context disinda hata firlatir', () => {
+    expect(() => render(<SegmentedControl.Option value="test">Test</SegmentedControl.Option>)).toThrow();
+  });
+});

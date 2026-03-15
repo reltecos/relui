@@ -265,4 +265,57 @@ describe('IconButton', () => {
 
     expect(iconWrapper).toHaveStyle({ padding: '8px' });
   });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<IconButton icon={<TestIcon />} aria-label="Test" ref={ref} />);
+    expect(ref).toHaveBeenCalled();
+  });
+});
+
+// ── Compound API ──
+
+describe('IconButton (Compound)', () => {
+  it('compound: Icon render edilir', () => {
+    render(
+      <IconButton aria-label="Ara">
+        <IconButton.Icon><TestIcon /></IconButton.Icon>
+      </IconButton>,
+    );
+    expect(screen.getByTestId('test-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('iconbutton-icon')).toBeInTheDocument();
+  });
+
+  it('compound: aria-label dogru set edilir', () => {
+    render(
+      <IconButton aria-label="Ayarlar">
+        <IconButton.Icon><TestIcon /></IconButton.Icon>
+      </IconButton>,
+    );
+    expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'Ayarlar');
+  });
+
+  it('compound: classNames context ile sub-component a aktarilir', () => {
+    render(
+      <IconButton aria-label="Test" classNames={{ icon: 'cmp-icon-cls' }}>
+        <IconButton.Icon><TestIcon /></IconButton.Icon>
+      </IconButton>,
+    );
+    expect(screen.getByTestId('iconbutton-icon').className).toContain('cmp-icon-cls');
+  });
+
+  it('compound: styles context ile sub-component a aktarilir', () => {
+    render(
+      <IconButton aria-label="Test" styles={{ icon: { letterSpacing: '3px' } }}>
+        <IconButton.Icon><TestIcon /></IconButton.Icon>
+      </IconButton>,
+    );
+    expect(screen.getByTestId('iconbutton-icon')).toHaveStyle({ letterSpacing: '3px' });
+  });
+
+  it('compound: context disinda kullanilirsa hata firlatir', () => {
+    expect(() => {
+      render(<IconButton.Icon><TestIcon /></IconButton.Icon>);
+    }).toThrow('IconButton compound sub-components must be used within <IconButton>.');
+  });
 });

@@ -7,16 +7,18 @@
  */
 
 /**
- * MultiColumnCombobox — styled multi-column combobox bileşeni.
- * MultiColumnCombobox — styled multi-column combobox component.
+ * MultiColumnCombobox — styled multi-column combobox bilesen (Dual API).
+ * MultiColumnCombobox — styled multi-column combobox component (Dual API).
  *
- * Combobox'ın çok sütunlu versiyonu — dropdown'da tablo gibi birden fazla sütun gösterilir.
- * Multi-column version of Combobox — displays multiple columns in dropdown like a table.
+ * Props-based: `<MultiColumnCombobox columns={cols} items={items} />`
+ * Compound:    `<MultiColumnCombobox columns={cols} items={items}><MultiColumnCombobox.Input /><MultiColumnCombobox.Content>...</MultiColumnCombobox.Content></MultiColumnCombobox>`
+ *
+ * Combobox in cok sutunlu versiyonu — dropdown da tablo gibi birden fazla sutun gosterilir.
  *
  * @packageDocumentation
  */
 
-import { forwardRef, useMemo } from 'react';
+import React, { forwardRef, createContext, useContext, useMemo, type ReactNode } from 'react';
 import type {
   MCComboboxVariant,
   MCComboboxSize,
@@ -37,7 +39,7 @@ import {
   mccbCellStyle,
   mccbNoResultStyle,
 } from './multi-column-combobox.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** MultiColumnCombobox slot isimleri. */
 export type MultiColumnComboboxSlot =
@@ -53,16 +55,134 @@ export type MultiColumnComboboxSlot =
   | 'cell'
   | 'noResult';
 
+// ── Context (Compound API) ──────────────────────────
+
+interface MultiColumnComboboxContextValue {
+  classNames: ClassNames<MultiColumnComboboxSlot> | undefined;
+  styles: Styles<MultiColumnComboboxSlot> | undefined;
+  variant: MCComboboxVariant;
+  size: MCComboboxSize;
+}
+
+const MultiColumnComboboxContext = createContext<MultiColumnComboboxContextValue | null>(null);
+
+function useMultiColumnComboboxContext(): MultiColumnComboboxContextValue {
+  const ctx = useContext(MultiColumnComboboxContext);
+  if (!ctx) throw new Error('MultiColumnCombobox compound sub-components must be used within <MultiColumnCombobox>.');
+  return ctx;
+}
+
+// ── Compound: MultiColumnCombobox.Input ─────────────
+
+/** MultiColumnCombobox.Input props */
+export interface MultiColumnComboboxInputProps {
+  /** Ek className / Additional className */
+  className?: string;
+  /** Inline style / Inline style */
+  style?: React.CSSProperties;
+  /** Icerik / Content (opsiyonel) */
+  children?: ReactNode;
+}
+
+const MultiColumnComboboxInput = forwardRef<HTMLDivElement, MultiColumnComboboxInputProps>(
+  function MultiColumnComboboxInput(props, ref) {
+    const { className, style: styleProp, children } = props;
+    const ctx = useMultiColumnComboboxContext();
+    const recipeClass = inputRecipe({ variant: ctx.variant, size: ctx.size });
+    const slot = getSlotProps('input', recipeClass, ctx.classNames, ctx.styles, styleProp);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-testid="multi-column-combobox-input"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: MultiColumnCombobox.Content ───────────
+
+/** MultiColumnCombobox.Content props */
+export interface MultiColumnComboboxContentProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Inline style / Inline style */
+  style?: React.CSSProperties;
+}
+
+const MultiColumnComboboxContent = forwardRef<HTMLDivElement, MultiColumnComboboxContentProps>(
+  function MultiColumnComboboxContent(props, ref) {
+    const { children, className, style: styleProp } = props;
+    const ctx = useMultiColumnComboboxContext();
+    const slot = getSlotProps('listbox', selectListboxStyle, ctx.classNames, ctx.styles, styleProp);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-testid="multi-column-combobox-content"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: MultiColumnCombobox.Column ────────────
+
+/** MultiColumnCombobox.Column props */
+export interface MultiColumnComboboxColumnProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Inline style / Inline style */
+  style?: React.CSSProperties;
+}
+
+const MultiColumnComboboxColumn = forwardRef<HTMLDivElement, MultiColumnComboboxColumnProps>(
+  function MultiColumnComboboxColumn(props, ref) {
+    const { children, className, style: styleProp } = props;
+    const ctx = useMultiColumnComboboxContext();
+    const slot = getSlotProps('headerCell', mccbHeaderCellStyle, ctx.classNames, ctx.styles, styleProp);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls || undefined}
+        style={slot.style}
+        data-testid="multi-column-combobox-column"
+        role="columnheader"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
 // ── Component Props ─────────────────────────────────────────────────
 
 export interface MultiColumnComboboxComponentProps
   extends UseMultiColumnComboboxProps,
     SlotStyleProps<MultiColumnComboboxSlot> {
-  /** Görsel varyant / Visual variant */
+  /** Gorsel varyant / Visual variant */
   variant?: MCComboboxVariant;
 
   /** Boyut / Size */
   size?: MCComboboxSize;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 
   /** Ek className / Additional className */
   className?: string;
@@ -83,42 +203,46 @@ export interface MultiColumnComboboxComponentProps
   id?: string;
 
   /**
-   * Dropdown genişliği (CSS değeri).
+   * Dropdown genisligi (CSS degeri).
    * Dropdown width (CSS value).
-   * - `'auto'`: içeriğe göre genişler, minWidth input genişliği (varsayılan)
-   * - `'100%'`: input genişliğinde sabit
-   * - `'30rem'`, `'500px'` vb: sabit genişlik
    * @default 'auto'
    */
   dropdownWidth?: string;
 }
 
 /**
- * MultiColumnCombobox bileşeni — çok sütunlu arama + filtreleme dropdown.
- * MultiColumnCombobox component — multi-column search + filtering dropdown.
+ * MultiColumnCombobox bilesen — Dual API (props-based + compound).
  *
- * @example
+ * @example Props-based
  * ```tsx
  * <MultiColumnCombobox
  *   columns={[
  *     { key: 'code', header: 'Kod', width: '4rem' },
- *     { key: 'name', header: 'İsim' },
- *     { key: 'dept', header: 'Departman' },
+ *     { key: 'name', header: 'Isim' },
  *   ]}
  *   items={[
- *     { value: 1, label: 'Ali Yılmaz', data: { code: 'E001', name: 'Ali Yılmaz', dept: 'Mühendislik' } },
- *     { value: 2, label: 'Ayşe Demir', data: { code: 'E002', name: 'Ayşe Demir', dept: 'Pazarlama' } },
+ *     { value: 1, label: 'Ali', data: { code: 'E001', name: 'Ali' } },
  *   ]}
- *   placeholder="Çalışan arayın"
- *   onValueChange={(v) => console.log(v)}
+ *   placeholder="Calisan arayin"
  * />
  * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <MultiColumnCombobox columns={cols} items={items}>
+ *   <MultiColumnCombobox.Input />
+ *   <MultiColumnCombobox.Content>
+ *     <MultiColumnCombobox.Column>Kod</MultiColumnCombobox.Column>
+ *   </MultiColumnCombobox.Content>
+ * </MultiColumnCombobox>
+ * ```
  */
-export const MultiColumnCombobox = forwardRef<HTMLDivElement, MultiColumnComboboxComponentProps>(
+const MultiColumnComboboxBase = forwardRef<HTMLDivElement, MultiColumnComboboxComponentProps>(
   function MultiColumnCombobox(props, ref) {
     const {
       variant = 'outline',
       size = 'md',
+      children,
       className,
       style: inlineStyle,
       classNames,
@@ -149,6 +273,20 @@ export const MultiColumnCombobox = forwardRef<HTMLDivElement, MultiColumnCombobo
       ? `${rootSlot.className} ${className}`
       : rootSlot.className;
 
+    const ctxValue: MultiColumnComboboxContextValue = { classNames, styles, variant, size };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <MultiColumnComboboxContext.Provider value={ctxValue}>
+          <div ref={ref} className={rootClassName} style={rootSlot.style} id={id} data-testid="multi-column-combobox-root">
+            {children}
+          </div>
+        </MultiColumnComboboxContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const inputWrapperSlot = getSlotProps(
       'inputWrapper',
       undefined,
@@ -337,3 +475,12 @@ export const MultiColumnCombobox = forwardRef<HTMLDivElement, MultiColumnCombobo
 function preventBlur(event: React.MouseEvent) {
   event.preventDefault();
 }
+
+/**
+ * MultiColumnCombobox bilesen — Dual API (props-based + compound).
+ */
+export const MultiColumnCombobox = Object.assign(MultiColumnComboboxBase, {
+  Input: MultiColumnComboboxInput,
+  Content: MultiColumnComboboxContent,
+  Column: MultiColumnComboboxColumn,
+});

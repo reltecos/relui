@@ -7,27 +7,40 @@
  */
 
 /**
- * Spacer — flex container içinde esnek boşluk bileşeni.
- * Kalan alanı doldurarak elemanları itmek için kullanılır.
+ * Spacer — flex container icinde esnek bosluk bilesen (Dual API).
+ * Kalan alani doldurarak elemanlari itmek icin kullanilir.
+ *
+ * Props-based: `<Spacer />` veya `<Spacer size="2rem" />`
+ * Compound:    minimal — sub-component gereksiz
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type HTMLAttributes, type CSSProperties, type Ref } from 'react';
+import {
+  forwardRef,
+  type HTMLAttributes,
+  type CSSProperties,
+  type Ref,
+} from 'react';
+import { rootFlexStyle, rootFixedStyle } from './spacer.css';
 import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
 
-/** Spacer slot isimleri. */
+// ── Slot ──────────────────────────────────────────────
+
+/** Spacer slot isimleri / Spacer slot names. */
 export type SpacerSlot = 'root';
 
+// ── Types ─────────────────────────────────────────────
+
 /**
- * Spacer prop'ları.
+ * Spacer prop'lari.
  */
 export interface SpacerProps
   extends HTMLAttributes<HTMLDivElement>,
     SlotStyleProps<SpacerSlot> {
-  /** Sabit genişlik (px veya CSS değeri). Verilmezse flex: 1. */
+  /** Sabit genislik (px veya CSS degeri). Verilmezse flex: 1. */
   size?: string | number;
-  /** Ek CSS sınıfı. */
+  /** Ek CSS sinifi. */
   className?: string;
   /** Inline stil. */
   style?: CSSProperties;
@@ -35,41 +48,24 @@ export interface SpacerProps
   ref?: Ref<HTMLDivElement>;
 }
 
-/**
- * Spacer — flex container içinde esnek boşluk bileşeni.
- *
- * Varsayılan `flex: 1` ile kalan alanı doldurur.
- * `size` prop ile sabit boşluk da verilebilir.
- *
- * @example
- * ```tsx
- * <Flex>
- *   <Box>Sol</Box>
- *   <Spacer />
- *   <Box>Sağ</Box>
- * </Flex>
- *
- * <Flex direction="column">
- *   <Box>Üst</Box>
- *   <Spacer size="2rem" />
- *   <Box>Alt</Box>
- * </Flex>
- * ```
- */
-export const Spacer = forwardRef<HTMLDivElement, SpacerProps>(
+// ── Component ─────────────────────────────────────────
+
+const SpacerBase = forwardRef<HTMLDivElement, SpacerProps>(
   function Spacer(props, ref) {
     const { size, className, style, classNames, styles, ...htmlProps } = props;
 
-    const baseStyle: CSSProperties = size !== undefined
-      ? { flexShrink: 0, width: typeof size === 'number' ? `${size}px` : size, height: typeof size === 'number' ? `${size}px` : size }
-      : { flex: 1 };
+    // CSS class + dinamik inline style
+    const baseClass = size !== undefined ? rootFixedStyle : rootFlexStyle;
+    const dynamicStyle: CSSProperties | undefined = size !== undefined
+      ? { width: typeof size === 'number' ? `${size}px` : size, height: typeof size === 'number' ? `${size}px` : size }
+      : undefined;
 
     const { className: slotClass, style: slotStyle } = getSlotProps(
       'root',
-      undefined,
+      baseClass,
       classNames,
       styles,
-      { ...baseStyle, ...style },
+      { ...dynamicStyle, ...style },
     );
     const finalClass = [slotClass, className].filter(Boolean).join(' ');
 
@@ -79,8 +75,32 @@ export const Spacer = forwardRef<HTMLDivElement, SpacerProps>(
         aria-hidden="true"
         className={finalClass || undefined}
         style={slotStyle}
+        data-testid="spacer-root"
         {...htmlProps}
       />
     );
   },
 );
+
+/**
+ * Spacer bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Flex>
+ *   <Box>Sol</Box>
+ *   <Spacer />
+ *   <Box>Sag</Box>
+ * </Flex>
+ * ```
+ *
+ * @example Sabit boyut
+ * ```tsx
+ * <Flex direction="column">
+ *   <Box>Ust</Box>
+ *   <Spacer size="2rem" />
+ *   <Box>Alt</Box>
+ * </Flex>
+ * ```
+ */
+export const Spacer = SpacerBase;

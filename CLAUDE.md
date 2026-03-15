@@ -4,6 +4,14 @@
 
 RelUI — dünyanın en güçlü, en eksiksiz web UI toolkit'i. Qt/WPF/GTK seviyesinde bileşen derinliği, framework-agnostic core, headless + styled iki katman.
 
+## !! YENİ OTURUM İÇİN ZORUNLU !!
+Bileşen yazmadan ÖNCE bu dosyaları oku:
+1. `CLAUDE.md` (bu dosya)
+2. `COMPONENT_GUIDE.md` (repo kökünde — tüm pattern'lar, şablonlar, yasaklar)
+3. `MEMORY.md` (`~/.claude/projects/.../memory/`)
+4. `relui-lessons.md` (aynı dizin)
+5. `RELUI_BRIEF.md` (`/Users/reltecoteknoloji/PROJECTS/RELUI_BRIEF.md`)
+
 ## Teknoloji Stack
 
 - **Monorepo:** Turborepo + pnpm workspaces
@@ -53,7 +61,7 @@ pnpm clean          # Build çıktılarını temizle
 Bir bileşen bu 7 kriteri karşılamadan bir sonrakine geçilmez:
 
 1. Core logic — state machine yazıldı, unit test geçiyor
-2. Framework binding — React hook + styled compound component
+2. Framework binding — React hook + styled component (Dual API: props-based + compound)
 3. Storybook — tüm varyasyonlar, interaktif kontroller, dark/light tema
 4. Test — core: unit test, react: render test
 5. Tipler — tam TypeScript, JSDoc ile TR/EN açıklama
@@ -79,7 +87,7 @@ packages/core/src/{component}/
 └── index.ts                   ← Public API
 
 packages/react/src/{component}/
-├── {Component}.tsx            ← Styled compound component
+├── {Component}.tsx            ← Styled component (Dual API: props-based + compound)
 ├── use{Component}.ts          ← React hook
 ├── {Component}.stories.tsx    ← Storybook story
 ├── {Component}.test.tsx       ← Render test

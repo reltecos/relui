@@ -7,4 +7,11 @@
  */
 
 export { Tour } from './Tour';
-export type { TourComponentProps, TourSlot } from './Tour';
+export type {
+  TourComponentProps,
+  TourSlot,
+  TourStepProps,
+  TourStepTitleProps,
+  TourStepContentProps,
+  TourNavigationProps,
+} from './Tour';

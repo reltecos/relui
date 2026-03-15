@@ -145,7 +145,7 @@ export const menuItemStyle = style({
   selectors: {
     '&:hover:not([data-disabled]), &[data-highlighted]:not([data-disabled])': {
       backgroundColor: cssVar.accentDefault,
-      color: '#fff',
+      color: 'var(--rel-color-text-inverse, #fff)',
     },
     '&[data-disabled]': {
       opacity: 0.4,
@@ -187,7 +187,7 @@ export const menuItemShortcutStyle = style({
   paddingLeft: '16px',
   selectors: {
     '[data-highlighted] > &': {
-      color: 'rgba(255,255,255,0.7)',
+      color: 'var(--rel-color-text-inverse-muted, rgba(255,255,255,0.7))',
     },
   },
 });
@@ -213,7 +213,7 @@ export const menuSubmenuIndicatorStyle = style({
   color: cssVar.fgMuted,
   selectors: {
     '[data-highlighted] > &': {
-      color: 'rgba(255,255,255,0.7)',
+      color: 'var(--rel-color-text-inverse-muted, rgba(255,255,255,0.7))',
     },
   },
 });

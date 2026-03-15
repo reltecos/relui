@@ -203,3 +203,72 @@ export const AsyncConfirm: Story = {
 export const AllSeverities: Story = {
   render: () => <AllSeveritiesDemo />,
 };
+
+// ── Compound API ──────────────────────────────────────
+
+function CompoundDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <button
+        onClick={() => setOpen(true)}
+        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #dc2626', color: '#dc2626', cursor: 'pointer' }}
+      >
+        Compound Dialog Ac
+      </button>
+      <AlertDialog
+        open={open}
+        onOpenChange={setOpen}
+        severity="danger"
+        onCancel={() => setOpen(false)}
+        onConfirm={() => {}}
+      >
+        <AlertDialog.Title>Kaydi silmek istiyor musunuz?</AlertDialog.Title>
+        <AlertDialog.Description>Bu islem geri alinamaz.</AlertDialog.Description>
+        <AlertDialog.Actions>
+          <AlertDialog.CancelButton onClick={() => setOpen(false)}>Vazgec</AlertDialog.CancelButton>
+          <AlertDialog.ConfirmButton onClick={() => setOpen(false)}>Sil</AlertDialog.ConfirmButton>
+        </AlertDialog.Actions>
+      </AlertDialog>
+    </div>
+  );
+}
+
+export const Compound: Story = {
+  render: () => <CompoundDemo />,
+};
+
+// ── Custom Slot Styles ──────────────────────────────
+
+function CustomSlotDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <button
+        onClick={() => setOpen(true)}
+        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #6366f1', color: '#6366f1', cursor: 'pointer' }}
+      >
+        Custom Slot Dialog
+      </button>
+      <AlertDialog
+        open={open}
+        onOpenChange={setOpen}
+        severity="info"
+        title="Slot Customization Demo"
+        description="Bu dialog slot stilleri ile ozellesmis."
+        onConfirm={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        classNames={{ content: 'custom-content' }}
+        styles={{
+          content: { borderRadius: '16px' },
+          title: { letterSpacing: '0.05em' },
+          footer: { padding: '16px' },
+        }}
+      />
+    </div>
+  );
+}
+
+export const CustomSlotStyles: Story = {
+  render: () => <CustomSlotDemo />,
+};

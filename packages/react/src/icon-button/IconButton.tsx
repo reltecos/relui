@@ -7,50 +7,111 @@
  */
 
 /**
- * IconButton — kare, sadece ikon içeren buton bileşeni.
- * IconButton — square, icon-only button component.
+ * IconButton — kare, sadece ikon iceren buton bileseni (Dual API).
+ * IconButton — square, icon-only button component (Dual API).
  *
- * Button bileşenini temel alır, kare boyutlandırma ve zorunlu
- * aria-label ile erişilebilirlik sağlar.
+ * Props-based: `<IconButton icon={<SearchIcon />} aria-label="Ara" />`
+ * Compound:    `<IconButton aria-label="Ara"><IconButton.Icon><SearchIcon /></IconButton.Icon></IconButton>`
+ *
+ * Button bilesenini temel alir, kare boyutlandirma ve zorunlu
+ * aria-label ile erisilebilirlik saglar.
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type { ButtonVariant, ButtonSize, ButtonColor } from '@relteco/relui-core';
 import { useButton, type UseButtonProps } from '../button/useButton';
 import { buttonRecipe, spinnerStyle } from '../button/button.css';
 import { iconButtonSizeRecipe } from './icon-button.css';
 import { useButtonGroupContext } from '../button-group/ButtonGroupContext';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** IconButton slot isimleri. */
 export type IconButtonSlot = 'root' | 'spinner' | 'icon';
 
+// ── Context (Compound API) ──────────────────────────
+
+interface IconButtonContextValue {
+  size: ButtonSize;
+  variant: ButtonVariant;
+  color: ButtonColor;
+  disabled: boolean | undefined;
+  loading: boolean;
+  classNames: ClassNames<IconButtonSlot> | undefined;
+  styles: Styles<IconButtonSlot> | undefined;
+}
+
+const IconButtonContext = createContext<IconButtonContextValue | null>(null);
+
+function useIconButtonContext(): IconButtonContextValue {
+  const ctx = useContext(IconButtonContext);
+  if (!ctx) throw new Error('IconButton compound sub-components must be used within <IconButton>.');
+  return ctx;
+}
+
+// ── Compound: IconButton.Icon ────────────────────────
+
+/** IconButton.Icon props */
+export interface IconButtonIconProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const IconButtonIcon = forwardRef<HTMLSpanElement, IconButtonIconProps>(
+  function IconButtonIcon(props, ref) {
+    const { children, className } = props;
+    const ctx = useIconButtonContext();
+    const slot = getSlotProps('icon', undefined, ctx.classNames, ctx.styles);
+    const cls = className
+      ? slot.className ? `${slot.className} ${className}` : className
+      : slot.className || undefined;
+
+    return (
+      <span
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        aria-hidden="true"
+        data-testid="iconbutton-icon"
+      >
+        {children}
+      </span>
+    );
+  },
+);
+
+// ── Component Props ───────────────────────────────────
+
 /**
- * IconButton bileşen props'ları.
+ * IconButton bilesen props.
  * IconButton component props.
  */
 export interface IconButtonComponentProps extends UseButtonProps, SlotStyleProps<IconButtonSlot> {
-  /** İkon / Icon (required) */
-  icon: ReactNode;
+  /** Ikon / Icon (props-based kullanim icin) */
+  icon?: ReactNode;
 
-  /** Görsel varyant / Visual variant */
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
+
+  /** Gorsel varyant / Visual variant */
   variant?: ButtonVariant;
 
   /** Boyut / Size */
   size?: ButtonSize;
 
-  /** Renk şeması / Color scheme */
+  /** Renk semasi / Color scheme */
   color?: ButtonColor;
 
   /**
-   * Erişilebilirlik etiketi — ZORUNLU.
+   * Erisilebilirlik etiketi — ZORUNLU.
    * Accessibility label — REQUIRED.
    */
   'aria-label': string;
 
-  /** Ek CSS sınıfı / Additional CSS class */
+  /** Ek CSS sinifi / Additional CSS class */
   className?: string;
 
   /** HTML id */
@@ -60,14 +121,16 @@ export interface IconButtonComponentProps extends UseButtonProps, SlotStyleProps
   style?: React.CSSProperties;
 }
 
+// ── Component ─────────────────────────────────────────
+
 /**
- * IconButton — RelUI ikon buton bileşeni.
- * IconButton — RelUI icon button component.
+ * IconButton — RelUI ikon buton bileseni (Dual API).
+ * IconButton — RelUI icon button component (Dual API).
  *
- * Kare boyutlu, sadece ikon içerir. aria-label zorunludur.
- * Button'ın tüm variant ve color desteğini taşır.
+ * Kare boyutlu, sadece ikon icerir. aria-label zorunludur.
+ * Button tum variant ve color destegini tasir.
  *
- * @example
+ * @example Props-based
  * ```tsx
  * <IconButton
  *   icon={<SearchIcon />}
@@ -75,20 +138,20 @@ export interface IconButtonComponentProps extends UseButtonProps, SlotStyleProps
  *   variant="ghost"
  *   size="md"
  * />
+ * ```
  *
- * <IconButton
- *   icon={<TrashIcon />}
- *   aria-label="Sil"
- *   variant="solid"
- *   color="destructive"
- *   loading
- * />
+ * @example Compound
+ * ```tsx
+ * <IconButton aria-label="Ara" variant="ghost">
+ *   <IconButton.Icon><SearchIcon /></IconButton.Icon>
+ * </IconButton>
  * ```
  */
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonComponentProps>(
+const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonComponentProps>(
   function IconButton(
     {
       icon,
+      children,
       variant: variantProp,
       size: sizeProp,
       color: colorProp,
@@ -103,7 +166,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonComponentProps
     },
     forwardedRef,
   ) {
-    // ButtonGroup context — grup varsa grup props'ları override eder
+    // ButtonGroup context — grup varsa grup props override eder
     const groupCtx = useButtonGroupContext();
 
     const variant = groupCtx?.variant ?? variantProp ?? 'solid';
@@ -124,31 +187,77 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonComponentProps
     const spinnerSlot = getSlotProps('spinner', spinnerStyle, classNames, styles);
     const iconSlot = getSlotProps('icon', undefined, classNames, styles);
 
-    return (
-      <button
-        {...buttonProps}
-        ref={forwardedRef}
-        id={id}
-        className={combinedClassName}
-        style={rootSlot.style}
-        aria-label={ariaLabel}
-      >
-        {isLoading ? (
+    const ctxValue: IconButtonContextValue = {
+      size,
+      variant,
+      color,
+      disabled,
+      loading: isLoading,
+      classNames,
+      styles,
+    };
+
+    // Compound mode: icon prop yoksa children kullan
+    const isCompound = !icon && children;
+
+    const renderContent = () => {
+      if (isLoading) {
+        return (
           <span
             className={spinnerSlot.className}
             style={spinnerSlot.style}
             aria-hidden="true"
           />
-        ) : (
-          <span
-            className={iconSlot.className || undefined}
-            style={iconSlot.style}
-            aria-hidden="true"
-          >
-            {icon}
-          </span>
-        )}
-      </button>
+        );
+      }
+
+      if (isCompound) {
+        return children;
+      }
+
+      return (
+        <span
+          className={iconSlot.className || undefined}
+          style={iconSlot.style}
+          aria-hidden="true"
+        >
+          {icon}
+        </span>
+      );
+    };
+
+    return (
+      <IconButtonContext.Provider value={ctxValue}>
+        <button
+          {...buttonProps}
+          ref={forwardedRef}
+          id={id}
+          className={combinedClassName}
+          style={rootSlot.style}
+          aria-label={ariaLabel}
+        >
+          {renderContent()}
+        </button>
+      </IconButtonContext.Provider>
     );
   },
 );
+
+/**
+ * IconButton bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <IconButton icon={<SearchIcon />} aria-label="Ara" />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <IconButton aria-label="Ara">
+ *   <IconButton.Icon><SearchIcon /></IconButton.Icon>
+ * </IconButton>
+ * ```
+ */
+export const IconButton = Object.assign(IconButtonBase, {
+  Icon: IconButtonIcon,
+});

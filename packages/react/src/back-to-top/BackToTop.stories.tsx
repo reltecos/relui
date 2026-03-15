@@ -120,6 +120,20 @@ export const CustomSlotStyles: Story = {
   ),
 };
 
+// ── Compound ────────────────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <LongPage>
+      <BackToTop>
+        <BackToTop.Icon>
+          <span style={{ fontSize: 20, fontWeight: 'bold' }}>↑</span>
+        </BackToTop.Icon>
+      </BackToTop>
+    </LongPage>
+  ),
+};
+
 export const Playground: Story = {
   args: {
     variant: 'filled',

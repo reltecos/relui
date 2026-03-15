@@ -178,3 +178,110 @@ describe('Skeleton', () => {
     expect(group).toHaveStyle({ gap: '12px' });
   });
 });
+
+// ── Compound API ──
+
+describe('Skeleton (Compound)', () => {
+  it('compound: circle render edilir', () => {
+    render(
+      <Skeleton compound>
+        <Skeleton.Circle width={56} />
+      </Skeleton>,
+    );
+    const skeletons = screen.getAllByTestId('skeleton');
+    expect(skeletons.length).toBe(1);
+    expect(skeletons[0]).toHaveStyle({ width: '56px', height: '56px' });
+  });
+
+  it('compound: rect render edilir', () => {
+    render(
+      <Skeleton compound>
+        <Skeleton.Rect width={200} height={100} radius={8} />
+      </Skeleton>,
+    );
+    const skeletons = screen.getAllByTestId('skeleton');
+    expect(skeletons.length).toBe(1);
+    expect(skeletons[0]).toHaveStyle({ width: '200px', height: '100px', borderRadius: '8px' });
+  });
+
+  it('compound: text render edilir', () => {
+    render(
+      <Skeleton compound>
+        <Skeleton.Text lines={3} />
+      </Skeleton>,
+    );
+    const group = screen.getAllByTestId('skeleton-group')[0];
+    expect(group).toBeInTheDocument();
+    const skeletons = screen.getAllByTestId('skeleton');
+    expect(skeletons.length).toBe(3);
+  });
+
+  it('compound: text tek satir render edilir', () => {
+    render(
+      <Skeleton compound>
+        <Skeleton.Text width="80%" height={16} />
+      </Skeleton>,
+    );
+    const skeletons = screen.getAllByTestId('skeleton');
+    expect(skeletons.length).toBe(1);
+  });
+
+  it('compound: birden fazla sub-component birlikte render edilir', () => {
+    render(
+      <Skeleton compound>
+        <Skeleton.Circle width={48} />
+        <Skeleton.Text lines={2} />
+        <Skeleton.Rect width="100%" height={80} />
+      </Skeleton>,
+    );
+    // 1 circle + 2 text lines + 1 rect = 4 skeleton
+    const skeletons = screen.getAllByTestId('skeleton');
+    expect(skeletons.length).toBe(4);
+  });
+
+  it('compound: animation context ile aktarilir', () => {
+    render(
+      <Skeleton compound animation="pulse">
+        <Skeleton.Circle width={40} />
+      </Skeleton>,
+    );
+    expect(screen.getByTestId('skeleton-group')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Skeleton compound classNames={{ root: 'cmp-root' }}>
+        <Skeleton.Circle width={40} />
+      </Skeleton>,
+    );
+    const skeleton = screen.getAllByTestId('skeleton')[0];
+    expect(skeleton.className).toContain('cmp-root');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <Skeleton compound styles={{ root: { opacity: '0.5' } }}>
+        <Skeleton.Rect width={100} height={50} />
+      </Skeleton>,
+    );
+    const skeleton = screen.getAllByTestId('skeleton')[0];
+    expect(skeleton).toHaveStyle({ opacity: '0.5' });
+  });
+
+  it('compound: context disinda kullanim hata firlat', () => {
+    expect(() => render(<Skeleton.Circle width={40} />)).toThrow(
+      'Skeleton compound sub-components must be used within <Skeleton>.',
+    );
+  });
+
+  it('compound: wrapper role=status ve aria-busy tasir', () => {
+    render(
+      <Skeleton compound>
+        <Skeleton.Circle width={40} />
+      </Skeleton>,
+    );
+    const group = screen.getByTestId('skeleton-group');
+    expect(group).toHaveAttribute('role', 'status');
+    expect(group).toHaveAttribute('aria-busy', 'true');
+  });
+});

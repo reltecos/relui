@@ -6,5 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Sidebar, type SidebarComponentProps, type SidebarSlot } from './Sidebar';
+export {
+  Sidebar,
+  type SidebarComponentProps,
+  type SidebarSlot,
+  type SidebarHeaderProps,
+  type SidebarSectionProps,
+  type SidebarItemProps,
+  type SidebarFooterProps,
+} from './Sidebar';
 export { useSidebar, type UseSidebarProps, type UseSidebarReturn } from './useSidebar';

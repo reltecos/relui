@@ -7,15 +7,16 @@
  */
 
 /**
- * Toast — bildirim bilesen.
- * Toast — notification component.
+ * Toast — bildirim bilesen (Dual API).
+ * Toast — notification component (Dual API).
  *
- * Stack, auto-dismiss, pozisyon, hover pause.
+ * Props-based: `<Toast toasts={toasts} position="top-right" onClose={remove} />`
+ * Compound:    `<Toast position="top-right"><Toast.Icon>...</Toast.Icon><Toast.Title>Bilgi</Toast.Title>...</Toast>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   toastContainerRecipe,
   toastItemRecipe,
@@ -26,7 +27,7 @@ import {
   toastCloseButtonStyle,
   toastProgressBarStyle,
 } from './toast.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 import type { ToastItem, ToastPosition, ToastStatus } from '@relteco/relui-core';
 import {
   InfoCircleIcon,
@@ -42,6 +43,131 @@ import {
  * Toast slot isimleri / Toast slot names.
  */
 export type ToastSlot = 'root' | 'item' | 'icon' | 'content' | 'title' | 'message' | 'closeButton' | 'progressBar';
+
+// ── Context (Compound API) ──────────────────────────
+
+interface ToastContextValue {
+  classNames: ClassNames<ToastSlot> | undefined;
+  styles: Styles<ToastSlot> | undefined;
+}
+
+const ToastContext = createContext<ToastContextValue | null>(null);
+
+function useToastContext(): ToastContextValue {
+  const ctx = useContext(ToastContext);
+  if (!ctx) throw new Error('Toast compound sub-components must be used within <Toast>.');
+  return ctx;
+}
+
+// ── Compound: Toast.Icon ────────────────────────────
+
+/** Toast.Icon props */
+export interface ToastIconProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ToastIcon = forwardRef<HTMLSpanElement, ToastIconProps>(
+  function ToastIcon(props, ref) {
+    const { children, className } = props;
+    const ctx = useToastContext();
+    const slot = getSlotProps('icon', toastIconStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span ref={ref} className={cls} style={slot.style} data-testid="toast-icon">
+        {children}
+      </span>
+    );
+  },
+);
+
+// ── Compound: Toast.Title ───────────────────────────
+
+/** Toast.Title props */
+export interface ToastTitleProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ToastTitle = forwardRef<HTMLDivElement, ToastTitleProps>(
+  function ToastTitle(props, ref) {
+    const { children, className } = props;
+    const ctx = useToastContext();
+    const slot = getSlotProps('title', toastTitleStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="toast-title">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Toast.Description ─────────────────────
+
+/** Toast.Description props */
+export interface ToastDescriptionProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const ToastDescription = forwardRef<HTMLDivElement, ToastDescriptionProps>(
+  function ToastDescription(props, ref) {
+    const { children, className } = props;
+    const ctx = useToastContext();
+    const slot = getSlotProps('message', toastMessageStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} data-testid="toast-description">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Toast.CloseButton ─────────────────────
+
+/** Toast.CloseButton props */
+export interface ToastCloseButtonProps {
+  /** Tiklaninca callback / On click callback */
+  onClick?: () => void;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Buton icerik (varsayilan: CloseIcon) / Button content (default: CloseIcon) */
+  children?: ReactNode;
+}
+
+const ToastCloseButton = forwardRef<HTMLButtonElement, ToastCloseButtonProps>(
+  function ToastCloseButton(props, ref) {
+    const { onClick, className, children } = props;
+    const ctx = useToastContext();
+    const slot = getSlotProps('closeButton', toastCloseButtonStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <button
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        onClick={onClick}
+        type="button"
+        aria-label="Close"
+        data-testid="toast-closebutton"
+      >
+        {children ?? <CloseIcon size={12} />}
+      </button>
+    );
+  },
+);
 
 // ── Animation helper ────────────────────────────────
 
@@ -65,7 +191,7 @@ const defaultIcons: Record<ToastStatus, typeof InfoCircleIcon> = {
 
 export interface ToastComponentProps extends SlotStyleProps<ToastSlot> {
   /** Toast listesi / Toast list */
-  toasts: ToastItem[];
+  toasts?: ToastItem[];
   /** Pozisyon / Position */
   position?: ToastPosition;
   /** Hover'da duraklat / Pause on hover */
@@ -78,6 +204,8 @@ export interface ToastComponentProps extends SlotStyleProps<ToastSlot> {
   onPause?: (id: string) => void;
   /** Toast devam ettir / On resume */
   onResume?: (id: string) => void;
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
   /** Ek className / Additional className */
   className?: string;
   /** Inline style / Inline style */
@@ -203,16 +331,12 @@ function ToastItemComponent(props: ToastItemComponentProps) {
 // ── Component ─────────────────────────────────────────
 
 /**
- * Toast bilesen — bildirim stack.
- * Toast component — notification stack.
+ * Toast bilesen — Dual API (props-based + compound).
+ * Toast component — Dual API (props-based + compound).
  *
- * @example
+ * @example Props-based
  * ```tsx
  * const { toasts, add, remove, pause, resume } = useToast();
- *
- * <button onClick={() => add({ message: 'Kaydedildi!', status: 'success' })}>
- *   Kaydet
- * </button>
  *
  * <Toast
  *   toasts={toasts}
@@ -224,8 +348,18 @@ function ToastItemComponent(props: ToastItemComponentProps) {
  *   onResume={resume}
  * />
  * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Toast position="top-right">
+ *   <Toast.Icon><InfoCircleIcon size={18} /></Toast.Icon>
+ *   <Toast.Title>Bilgi</Toast.Title>
+ *   <Toast.Description>Islem basarili.</Toast.Description>
+ *   <Toast.CloseButton onClick={handleClose} />
+ * </Toast>
+ * ```
  */
-export const Toast = forwardRef<HTMLDivElement, ToastComponentProps>(
+const ToastBase = forwardRef<HTMLDivElement, ToastComponentProps>(
   function Toast(props, ref) {
     const {
       toasts,
@@ -235,14 +369,13 @@ export const Toast = forwardRef<HTMLDivElement, ToastComponentProps>(
       onClose,
       onPause,
       onResume,
+      children,
       className,
       style: styleProp,
       classNames,
       styles,
       id,
     } = props;
-
-    if (toasts.length === 0) return null;
 
     // ── Slots ──
     const rootClass = toastContainerRecipe({ position });
@@ -253,6 +386,32 @@ export const Toast = forwardRef<HTMLDivElement, ToastComponentProps>(
     const combinedRootStyle = styleProp
       ? { ...rootSlot.style, ...styleProp }
       : rootSlot.style;
+
+    const ctxValue: ToastContextValue = { classNames, styles };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <ToastContext.Provider value={ctxValue}>
+          <div
+            ref={ref}
+            className={combinedRootClassName}
+            style={combinedRootStyle}
+            id={id}
+            data-testid="toast-container"
+            role="region"
+            aria-label="Bildirimler"
+            aria-live="polite"
+          >
+            {children}
+          </div>
+        </ToastContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
+    const toastList = toasts ?? [];
+    if (toastList.length === 0) return null;
 
     const itemSlot = getSlotProps('item', '', classNames, styles);
     const iconSlot = getSlotProps('icon', toastIconStyle, classNames, styles);
@@ -275,7 +434,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastComponentProps>(
         aria-label="Bildirimler"
         aria-live="polite"
       >
-        {toasts.map((toast) => (
+        {toastList.map((toast) => (
           <ToastItemComponent
             key={toast.id}
             toast={toast}
@@ -298,3 +457,28 @@ export const Toast = forwardRef<HTMLDivElement, ToastComponentProps>(
     );
   },
 );
+
+/**
+ * Toast bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Toast toasts={toasts} position="top-right" onClose={remove} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Toast position="top-right">
+ *   <Toast.Icon><InfoCircleIcon size={18} /></Toast.Icon>
+ *   <Toast.Title>Bilgi</Toast.Title>
+ *   <Toast.Description>Islem basarili.</Toast.Description>
+ *   <Toast.CloseButton onClick={handleClose} />
+ * </Toast>
+ * ```
+ */
+export const Toast = Object.assign(ToastBase, {
+  Icon: ToastIcon,
+  Title: ToastTitle,
+  Description: ToastDescription,
+  CloseButton: ToastCloseButton,
+});

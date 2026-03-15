@@ -15,6 +15,7 @@ import { InPlaceEditor } from './InPlaceEditor';
 const meta: Meta<typeof InPlaceEditor> = {
   title: 'Editors/InPlaceEditor',
   component: InPlaceEditor,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -178,9 +179,29 @@ export const CustomSlotStyles: Story = {
         styles={{ display: { fontWeight: 'bold', letterSpacing: '1px' } }}
       />
       <InPlaceEditor
-        defaultValue="Input styled (düzenle)"
+        defaultValue="Input styled (duzenle)"
         styles={{ input: { letterSpacing: '2px' } }}
       />
+    </div>
+  ),
+};
+
+// ── Compound API ──────────────────────────────────────
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
+      <InPlaceEditor defaultValue="Compound ornek">
+        <InPlaceEditor.Display>Compound display icerigi</InPlaceEditor.Display>
+      </InPlaceEditor>
+      <InPlaceEditor defaultValue="Aksiyonlu compound">
+        <InPlaceEditor.Display>Metin goruntule</InPlaceEditor.Display>
+        <InPlaceEditor.Actions>
+          <button style={{ fontSize: '0.75rem' }}>Kaydet</button>
+          <button style={{ fontSize: '0.75rem' }}>Iptal</button>
+        </InPlaceEditor.Actions>
+      </InPlaceEditor>
     </div>
   ),
 };

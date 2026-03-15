@@ -6,5 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Spotlight, type SpotlightComponentProps, type SpotlightSlot } from './Spotlight';
+export {
+  Spotlight,
+  type SpotlightComponentProps,
+  type SpotlightSlot,
+  type SpotlightInputProps,
+  type SpotlightListProps,
+  type SpotlightItemComponentProps,
+} from './Spotlight';
 export { useSpotlight, type UseSpotlightProps, type UseSpotlightReturn } from './useSpotlight';

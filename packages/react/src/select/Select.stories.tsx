@@ -60,6 +60,7 @@ const withDisabled = [
 const meta = {
   title: 'Primitives/Select',
   component: Select,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -301,6 +302,21 @@ export const CustomSlotStyles: Story = {
           groupLabel: { color: 'orange', fontWeight: 'bold' },
         }}
       />
+    </div>
+  ),
+};
+
+/** Compound API */
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ maxWidth: 300 }}>
+      <Select options={countries} aria-label="Ulke">
+        <Select.Trigger>
+          <Select.Value placeholder="Ulke secin" />
+        </Select.Trigger>
+        <Select.Content />
+      </Select>
     </div>
   ),
 };

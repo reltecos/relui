@@ -7,16 +7,19 @@
  */
 
 /**
- * Input — styled React input component.
- * Input — stilize edilmiş React input bileşeni.
+ * Input — styled React input component (Dual API).
+ * Input — stilize edilmiş React input bileseni (Dual API).
  *
- * 3 varyant × 5 boyut. Vanilla Extract + CSS Variables ile tema desteği.
+ * Props-based: `<Input placeholder="E-posta" leftElement={<MailIcon />} />`
+ * Compound:    `<Input><Input.LeftAddon>...</Input.LeftAddon></Input>`
+ *
+ * 3 varyant x 5 boyut. Vanilla Extract + CSS Variables ile tema destegi.
  * leftElement/rightElement ile ikon veya metin eklenir.
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type { InputVariant, InputSize } from '@relteco/relui-core';
 import { useInput, type UseInputProps } from './useInput';
 import {
@@ -25,17 +28,122 @@ import {
   inputElementLeftStyle,
   inputElementRightStyle,
 } from './input.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** Input slot isimleri. */
 export type InputSlot = 'root' | 'wrapper' | 'leftElement' | 'rightElement';
 
+// ── Context (Compound API) ──────────────────────────
+
+interface InputContextValue {
+  size: InputSize;
+  variant: InputVariant;
+  disabled: boolean;
+  classNames: ClassNames<InputSlot> | undefined;
+  styles: Styles<InputSlot> | undefined;
+}
+
+const InputContext = createContext<InputContextValue | null>(null);
+
+/** Input compound sub-component context hook. */
+export function useInputContext(): InputContextValue {
+  const ctx = useContext(InputContext);
+  if (!ctx) throw new Error('Input compound sub-components must be used within <Input>.');
+  return ctx;
+}
+
+// ── Compound: Input.LeftAddon ────────────────────────
+
+/** Input.LeftAddon props */
+export interface InputLeftAddonProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const InputLeftAddon = forwardRef<HTMLSpanElement, InputLeftAddonProps>(
+  function InputLeftAddon(props, ref) {
+    const { children, className } = props;
+    const ctx = useInputContext();
+
+    const ELEMENT_WIDTH_MAP: Record<InputSize, string> = {
+      xs: '1.5rem',
+      sm: '1.75rem',
+      md: '2rem',
+      lg: '2.25rem',
+      xl: '2.5rem',
+    };
+
+    const slot = getSlotProps('leftElement', inputElementLeftStyle, ctx.classNames, ctx.styles, {
+      width: ELEMENT_WIDTH_MAP[ctx.size],
+      paddingLeft: 'var(--rel-spacing-2)',
+    });
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        aria-hidden="true"
+        data-testid="input-leftaddon"
+      >
+        {children}
+      </span>
+    );
+  },
+);
+
+// ── Compound: Input.RightAddon ───────────────────────
+
+/** Input.RightAddon props */
+export interface InputRightAddonProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const InputRightAddon = forwardRef<HTMLSpanElement, InputRightAddonProps>(
+  function InputRightAddon(props, ref) {
+    const { children, className } = props;
+    const ctx = useInputContext();
+
+    const ELEMENT_WIDTH_MAP: Record<InputSize, string> = {
+      xs: '1.5rem',
+      sm: '1.75rem',
+      md: '2rem',
+      lg: '2.25rem',
+      xl: '2.5rem',
+    };
+
+    const slot = getSlotProps('rightElement', inputElementRightStyle, ctx.classNames, ctx.styles, {
+      width: ELEMENT_WIDTH_MAP[ctx.size],
+      paddingRight: 'var(--rel-spacing-2)',
+    });
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <span
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        aria-hidden="true"
+        data-testid="input-rightaddon"
+      >
+        {children}
+      </span>
+    );
+  },
+);
+
 /**
- * Input bileşen props'ları.
+ * Input bilesen props'lari.
  * Input component props.
  */
 export interface InputComponentProps extends UseInputProps, SlotStyleProps<InputSlot> {
-  /** Görsel varyant / Visual variant */
+  /** Gorsel varyant / Visual variant */
   variant?: InputVariant;
 
   /** Boyut / Size */
@@ -48,20 +156,20 @@ export interface InputComponentProps extends UseInputProps, SlotStyleProps<Input
    * Sol element / Left element.
    *
    * Ikon, metin veya herhangi bir ReactNode.
-   * Mutlak konumlandırılır, input padding'i buna göre ayarlanmalı.
+   * Mutlak konumlandirilir, input padding'i buna gore ayarlanmali.
    *
    * @example <SearchIcon />
    */
   leftElement?: ReactNode;
 
   /**
-   * Sağ element / Right element.
+   * Sag element / Right element.
    *
    * @example <EyeIcon /> (password toggle)
    */
   rightElement?: ReactNode;
 
-  /** Ek CSS sınıfı / Additional CSS class */
+  /** Ek CSS sinifi / Additional CSS class */
   className?: string;
 
   /** HTML id */
@@ -90,6 +198,9 @@ export interface InputComponentProps extends UseInputProps, SlotStyleProps<Input
 
   /** aria-describedby */
   'aria-describedby'?: string;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
 // ── Size → element padding map ───────────────────────────────────────
@@ -111,28 +222,23 @@ const ELEMENT_WIDTH: Record<InputSize, string> = {
 };
 
 /**
- * Input — RelUI input bileşeni.
- * Input — RelUI input component.
+ * Input — RelUI input bileseni (Dual API).
+ * Input — RelUI input component (Dual API).
  *
- * @example
+ * @example Props-based
  * ```tsx
  * <Input placeholder="E-posta" type="email" variant="outline" />
+ * <Input placeholder="Ara..." leftElement={<SearchIcon />} variant="filled" />
+ * ```
  *
- * <Input
- *   placeholder="Ara..."
- *   leftElement={<SearchIcon />}
- *   variant="filled"
- * />
- *
- * <Input
- *   placeholder="Şifre"
- *   type="password"
- *   rightElement={<EyeIcon />}
- *   invalid
- * />
+ * @example Compound
+ * ```tsx
+ * <Input placeholder="Ara...">
+ *   <Input.LeftAddon><SearchIcon /></Input.LeftAddon>
+ * </Input>
  * ```
  */
-export const Input = forwardRef<HTMLInputElement, InputComponentProps>(function Input(
+const InputBase = forwardRef<HTMLInputElement, InputComponentProps>(function Input(
   {
     variant = 'outline',
     size = 'md',
@@ -151,13 +257,70 @@ export const Input = forwardRef<HTMLInputElement, InputComponentProps>(function 
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
     'aria-describedby': ariaDescribedBy,
+    children,
     ...hookProps
   },
   forwardedRef,
 ) {
-  const { inputProps } = useInput(hookProps);
+  const { inputProps, isDisabled } = useInput(hookProps);
 
   const recipeClass = inputRecipe({ variant, size });
+
+  const ctxValue: InputContextValue = {
+    size,
+    variant,
+    disabled: isDisabled,
+    classNames,
+    styles,
+  };
+
+  // ── Compound API ──
+  if (children) {
+    // Compound modda input + children wrapper icinde render edilir
+    const rootSlot = getSlotProps('root', recipeClass, classNames, styles);
+    const baseClassName = className
+      ? `${rootSlot.className} ${className}`
+      : rootSlot.className;
+    const mergedStyle =
+      inlineStyle || rootSlot.style
+        ? { ...inlineStyle, ...rootSlot.style }
+        : undefined;
+
+    const wrapperSlot = getSlotProps('wrapper', inputWrapperStyle, classNames, styles);
+
+    const inputEl = (
+      <input
+        {...inputProps}
+        ref={forwardedRef}
+        id={id}
+        className={baseClassName}
+        style={mergedStyle}
+        placeholder={placeholder}
+        value={value}
+        defaultValue={defaultValue}
+        name={name}
+        autoComplete={autoComplete}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+      />
+    );
+
+    return (
+      <InputContext.Provider value={ctxValue}>
+        <div
+          className={wrapperSlot.className}
+          style={wrapperSlot.style}
+          data-testid="input-wrapper"
+        >
+          {children}
+          {inputEl}
+        </div>
+      </InputContext.Provider>
+    );
+  }
+
+  // ── Props-based API ──
 
   // leftElement/rightElement varsa padding override
   const paddingOverrides: React.CSSProperties = {};
@@ -168,7 +331,7 @@ export const Input = forwardRef<HTMLInputElement, InputComponentProps>(function 
     paddingOverrides.paddingRight = ELEMENT_PADDING[size];
   }
 
-  // Merge sırası: paddingOverrides → inlineStyle → styles.root (kullanıcı kazanır)
+  // Merge sirasi: paddingOverrides -> inlineStyle -> styles.root (kullanici kazanir)
   const rootSlot = getSlotProps('root', recipeClass, classNames, styles);
   const hasPadding = Object.keys(paddingOverrides).length > 0;
   const baseStyle =
@@ -202,12 +365,12 @@ export const Input = forwardRef<HTMLInputElement, InputComponentProps>(function 
     />
   );
 
-  // Element yoksa sadece input döndür
+  // Element yoksa sadece input dondur
   if (!leftElement && !rightElement) {
     return inputElement;
   }
 
-  // Element varsa wrapper ile döndür
+  // Element varsa wrapper ile dondur
   const wrapperSlot = getSlotProps('wrapper', inputWrapperStyle, classNames, styles);
   const leftSlot = getSlotProps('leftElement', inputElementLeftStyle, classNames, styles, {
     width: ELEMENT_WIDTH[size],
@@ -243,4 +406,24 @@ export const Input = forwardRef<HTMLInputElement, InputComponentProps>(function 
       ) : null}
     </div>
   );
+});
+
+/**
+ * Input bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Input placeholder="E-posta" leftElement={<MailIcon />} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Input placeholder="Ara...">
+ *   <Input.LeftAddon><SearchIcon /></Input.LeftAddon>
+ * </Input>
+ * ```
+ */
+export const Input = Object.assign(InputBase, {
+  LeftAddon: InputLeftAddon,
+  RightAddon: InputRightAddon,
 });

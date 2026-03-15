@@ -224,9 +224,9 @@ export const tabsTabEnclosedStyle = style({
     '[data-orientation="horizontal"] &[data-state="active"]': {
       color: tabsActiveFg,
       fontWeight: '600',
-      backgroundColor: '#fff',
+      backgroundColor: 'var(--rel-color-bg, #fff)',
       borderColor: tabsBorderColor,
-      borderBottom: '1px solid #fff',
+      borderBottom: '1px solid var(--rel-color-bg, #fff)',
     },
     '[data-orientation="vertical"] &': {
       marginRight: '-1px',
@@ -238,9 +238,9 @@ export const tabsTabEnclosedStyle = style({
     '[data-orientation="vertical"] &[data-state="active"]': {
       color: tabsActiveFg,
       fontWeight: '600',
-      backgroundColor: '#fff',
+      backgroundColor: 'var(--rel-color-bg, #fff)',
       borderColor: tabsBorderColor,
-      borderRight: '1px solid #fff',
+      borderRight: '1px solid var(--rel-color-bg, #fff)',
     },
   },
 });
@@ -272,7 +272,7 @@ export const tabsTabPillsStyle = style({
       backgroundColor: tabsHoverBg,
     },
     '&[data-state="active"]': {
-      color: '#fff',
+      color: 'var(--rel-color-text-inverse, #fff)',
       fontWeight: '600',
       backgroundColor: tabsActiveIndicator,
       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',

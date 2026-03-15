@@ -313,3 +313,78 @@ describe('Tour', () => {
     expect(screen.getByTestId('tour-skip')).toHaveStyle({ fontWeight: '700' });
   });
 });
+
+// ── Compound API ──
+
+describe('Tour (Compound)', () => {
+  it('compound: children ile compound root render eder', () => {
+    render(
+      <Tour active={true}>
+        <Tour.Step>
+          <Tour.StepTitle>Merhaba</Tour.StepTitle>
+          <Tour.StepContent>Aciklama metni</Tour.StepContent>
+        </Tour.Step>
+      </Tour>,
+    );
+    expect(screen.getByTestId('tour-compound-root')).toBeInTheDocument();
+  });
+
+  it('compound: Tour.StepTitle render edilir', () => {
+    render(
+      <Tour active={true}>
+        <Tour.StepTitle>Adim Basligi</Tour.StepTitle>
+      </Tour>,
+    );
+    expect(screen.getByTestId('tour-steptitle')).toHaveTextContent('Adim Basligi');
+  });
+
+  it('compound: Tour.StepContent render edilir', () => {
+    render(
+      <Tour active={true}>
+        <Tour.StepContent>Icerik metni</Tour.StepContent>
+      </Tour>,
+    );
+    expect(screen.getByTestId('tour-stepcontent')).toHaveTextContent('Icerik metni');
+  });
+
+  it('compound: Tour.Navigation render edilir', () => {
+    render(
+      <Tour active={true}>
+        <Tour.Navigation>
+          <button>Ileri</button>
+        </Tour.Navigation>
+      </Tour>,
+    );
+    expect(screen.getByTestId('tour-navigation')).toBeInTheDocument();
+    expect(screen.getByText('Ileri')).toBeInTheDocument();
+  });
+
+  it('compound: Tour.Step render edilir', () => {
+    render(
+      <Tour active={true}>
+        <Tour.Step>
+          <Tour.StepTitle>Test</Tour.StepTitle>
+        </Tour.Step>
+      </Tour>,
+    );
+    expect(screen.getByTestId('tour-step')).toBeInTheDocument();
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Tour active={true} classNames={{ title: 'cmp-title' }}>
+        <Tour.StepTitle>Test</Tour.StepTitle>
+      </Tour>,
+    );
+    expect(screen.getByTestId('tour-steptitle').className).toContain('cmp-title');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <Tour active={true} styles={{ description: { fontSize: '24px' } }}>
+        <Tour.StepContent>Test</Tour.StepContent>
+      </Tour>,
+    );
+    expect(screen.getByTestId('tour-stepcontent')).toHaveStyle({ fontSize: '24px' });
+  });
+});

@@ -6,4 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Label, type LabelComponentProps, type LabelSlot } from './Label';
+export {
+  Label,
+  type LabelComponentProps,
+  type LabelSlot,
+  type LabelTextProps,
+  type LabelRequiredIndicatorProps,
+} from './Label';

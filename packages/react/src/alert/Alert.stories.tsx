@@ -108,6 +108,28 @@ export const NoIcon: Story = {
   ),
 };
 
+export const Compound: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <Alert severity="error" compound>
+        <Alert.Icon><span style={{ fontSize: 18 }}>X</span></Alert.Icon>
+        <div style={{ flex: 1 }}>
+          <Alert.Title>Hata Olustu</Alert.Title>
+          <Alert.Description>Islem sirasinda bir sorun ile karsilasildi.</Alert.Description>
+        </div>
+        <Alert.CloseButton />
+      </Alert>
+      <Alert severity="success" compound>
+        <Alert.Icon><span style={{ fontSize: 18 }}>V</span></Alert.Icon>
+        <div style={{ flex: 1 }}>
+          <Alert.Title>Basarili!</Alert.Title>
+          <Alert.Description>Degisiklikler kaydedildi.</Alert.Description>
+        </div>
+      </Alert>
+    </div>
+  ),
+};
+
 export const CustomSlotStyles: Story = {
   render: () => (
     <Alert

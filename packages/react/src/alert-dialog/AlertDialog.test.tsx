@@ -275,3 +275,72 @@ describe('AlertDialog', () => {
     expect(screen.queryByTestId('alert-dialog-content')).not.toBeInTheDocument();
   });
 });
+
+// ── Compound API ──────────────────────────────────────
+
+describe('AlertDialog (Compound)', () => {
+  it('compound: title render edilir', () => {
+    render(
+      <AlertDialog open={true} portalContainer={document.body}>
+        <AlertDialog.Title>Compound Baslik</AlertDialog.Title>
+        <AlertDialog.Actions>
+          <AlertDialog.CancelButton onClick={() => {}}>Vazgec</AlertDialog.CancelButton>
+          <AlertDialog.ConfirmButton onClick={() => {}}>Onayla</AlertDialog.ConfirmButton>
+        </AlertDialog.Actions>
+      </AlertDialog>,
+    );
+    expect(screen.getByTestId('alert-dialog-title')).toHaveTextContent('Compound Baslik');
+  });
+
+  it('compound: description render edilir', () => {
+    render(
+      <AlertDialog open={true} portalContainer={document.body}>
+        <AlertDialog.Title>Test</AlertDialog.Title>
+        <AlertDialog.Description>Compound aciklama</AlertDialog.Description>
+        <AlertDialog.Actions>
+          <AlertDialog.CancelButton onClick={() => {}}>Vazgec</AlertDialog.CancelButton>
+        </AlertDialog.Actions>
+      </AlertDialog>,
+    );
+    expect(screen.getByTestId('alert-dialog-description')).toHaveTextContent('Compound aciklama');
+  });
+
+  it('compound: actions footer render edilir', () => {
+    render(
+      <AlertDialog open={true} portalContainer={document.body}>
+        <AlertDialog.Title>Test</AlertDialog.Title>
+        <AlertDialog.Actions>
+          <AlertDialog.CancelButton onClick={() => {}}>Iptal</AlertDialog.CancelButton>
+          <AlertDialog.ConfirmButton onClick={() => {}}>Sil</AlertDialog.ConfirmButton>
+        </AlertDialog.Actions>
+      </AlertDialog>,
+    );
+    expect(screen.getByTestId('alert-dialog-footer')).toBeInTheDocument();
+    expect(screen.getByTestId('alert-dialog-cancel')).toHaveTextContent('Iptal');
+    expect(screen.getByTestId('alert-dialog-confirm')).toHaveTextContent('Sil');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <AlertDialog open={true} portalContainer={document.body} classNames={{ title: 'cmp-title' }}>
+        <AlertDialog.Title>Test</AlertDialog.Title>
+        <AlertDialog.Actions>
+          <AlertDialog.CancelButton onClick={() => {}}>Vazgec</AlertDialog.CancelButton>
+        </AlertDialog.Actions>
+      </AlertDialog>,
+    );
+    expect(screen.getByTestId('alert-dialog-title').className).toContain('cmp-title');
+  });
+
+  it('compound: styles context ile sub-component lara aktarilir', () => {
+    render(
+      <AlertDialog open={true} portalContainer={document.body} styles={{ title: { fontSize: '28px' } }}>
+        <AlertDialog.Title>Test</AlertDialog.Title>
+        <AlertDialog.Actions>
+          <AlertDialog.CancelButton onClick={() => {}}>Vazgec</AlertDialog.CancelButton>
+        </AlertDialog.Actions>
+      </AlertDialog>,
+    );
+    expect(screen.getByTestId('alert-dialog-title')).toHaveStyle({ fontSize: '28px' });
+  });
+});

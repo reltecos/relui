@@ -6,5 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Input, type InputComponentProps, type InputSlot } from './Input';
+export {
+  Input,
+  useInputContext,
+  type InputComponentProps,
+  type InputSlot,
+  type InputLeftAddonProps,
+  type InputRightAddonProps,
+} from './Input';
 export { useInput, type UseInputProps, type UseInputReturn } from './useInput';

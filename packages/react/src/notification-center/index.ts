@@ -6,5 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { NotificationCenter, type NotificationCenterComponentProps, type NotificationCenterSlot } from './NotificationCenter';
+export {
+  NotificationCenter,
+  type NotificationCenterComponentProps,
+  type NotificationCenterSlot,
+  type NotificationCenterHeaderProps,
+  type NotificationCenterItemProps,
+  type NotificationCenterEmptyStateProps,
+} from './NotificationCenter';
 export { useNotificationCenter, type UseNotificationCenterProps, type UseNotificationCenterReturn } from './useNotificationCenter';

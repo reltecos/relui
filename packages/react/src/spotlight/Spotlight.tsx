@@ -7,12 +7,11 @@
  */
 
 /**
- * Spotlight — macOS Spotlight tarzi global arama bilesen.
- * Spotlight — macOS Spotlight-style global search component.
+ * Spotlight — macOS Spotlight tarzi global arama bilesen (Dual API).
+ * Spotlight — macOS Spotlight-style global search component (Dual API).
  *
- * Async arama, kategorize sonuclar, son aramalar, klavye navigasyon.
- *
- * Portal ile document.body'ye (veya en yakin [data-theme] ancestor'a) render edilir.
+ * Props-based: `<Spotlight items={[...]} open={true} />`
+ * Compound:    `<Spotlight open={true}><Spotlight.Input /><Spotlight.List>...</Spotlight.List></Spotlight>`
  *
  * @packageDocumentation
  */
@@ -23,6 +22,8 @@ import {
   useCallback,
   useRef,
   useState,
+  createContext,
+  useContext,
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
@@ -46,7 +47,7 @@ import {
   spotRecentClearStyle,
   spotRecentItemStyle,
 } from './spotlight.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /**
  * Spotlight slot isimleri / Spotlight slot names.
@@ -67,6 +68,154 @@ export type SpotlightSlot =
   | 'loading'
   | 'recentHeader'
   | 'recentItem';
+
+// ── Context (Compound API) ──────────────────────────────────
+
+interface SpotlightContextValue {
+  size: SpotlightSize;
+  classNames: ClassNames<SpotlightSlot> | undefined;
+  styles: Styles<SpotlightSlot> | undefined;
+}
+
+const SpotlightContext = createContext<SpotlightContextValue | null>(null);
+
+function useSpotlightContext(): SpotlightContextValue {
+  const ctx = useContext(SpotlightContext);
+  if (!ctx) throw new Error('Spotlight compound sub-components must be used within <Spotlight>.');
+  return ctx;
+}
+
+// ── Compound: Spotlight.Input ───────────────────────────────────
+
+/** Spotlight.Input props */
+export interface SpotlightInputProps {
+  /** Placeholder / Placeholder */
+  placeholder?: string;
+  /** Deger / Value */
+  value?: string;
+  /** Degisim callback / Change callback */
+  onChange?: (value: string) => void;
+  /** Arama ikonu / Search icon */
+  searchIcon?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SpotlightInput = forwardRef<HTMLInputElement, SpotlightInputProps>(
+  function SpotlightInput(props, ref) {
+    const { placeholder, value, onChange, searchIcon, className } = props;
+    const ctx = useSpotlightContext();
+    const wrapperSlot = getSlotProps('inputWrapper', spotInputWrapperStyle, ctx.classNames, ctx.styles);
+    const iconSlot = getSlotProps('inputIcon', spotInputIconStyle, ctx.classNames, ctx.styles);
+    const inputSlot = getSlotProps('input', spotInputStyle, ctx.classNames, ctx.styles);
+    const inputCls = className ? `${inputSlot.className} ${className}` : inputSlot.className;
+
+    return (
+      <div className={wrapperSlot.className} style={wrapperSlot.style} data-testid="spot-input-wrapper">
+        {searchIcon && (
+          <span className={iconSlot.className} style={iconSlot.style}>
+            {searchIcon}
+          </span>
+        )}
+        <input
+          ref={ref}
+          type="text"
+          className={inputCls}
+          style={inputSlot.style}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
+          data-testid="spot-input"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="true"
+        />
+      </div>
+    );
+  },
+);
+
+// ── Compound: Spotlight.List ────────────────────────────────────
+
+/** Spotlight.List props */
+export interface SpotlightListProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const SpotlightList = forwardRef<HTMLDivElement, SpotlightListProps>(
+  function SpotlightList(props, ref) {
+    const { children, className } = props;
+    const ctx = useSpotlightContext();
+    const slot = getSlotProps('list', spotListStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div ref={ref} className={cls} style={slot.style} role="listbox" data-testid="spot-list">
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: Spotlight.Item ────────────────────────────────────
+
+/** Spotlight.Item props */
+export interface SpotlightItemComponentProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+  /** Devre disi mi / Is disabled */
+  disabled?: boolean;
+  /** Tiklama callback / Click callback */
+  onClick?: () => void;
+  /** Ikon / Icon */
+  icon?: ReactNode;
+  /** Aciklama / Description */
+  description?: string;
+}
+
+const SpotlightItemCompound = forwardRef<HTMLDivElement, SpotlightItemComponentProps>(
+  function SpotlightItem(props, ref) {
+    const { children, className, disabled, onClick, icon, description } = props;
+    const ctx = useSpotlightContext();
+    const slot = getSlotProps('item', spotItemStyle, ctx.classNames, ctx.styles);
+    const iconSlot = getSlotProps('itemIcon', spotItemIconStyle, ctx.classNames, ctx.styles);
+    const labelSlot = getSlotProps('itemLabel', spotItemLabelStyle, ctx.classNames, ctx.styles);
+    const descSlot = getSlotProps('itemDescription', spotItemDescriptionStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        role="option"
+        data-testid="spot-item"
+        data-disabled={disabled ? '' : undefined}
+        aria-disabled={disabled ? 'true' : undefined}
+        onClick={disabled ? undefined : onClick}
+      >
+        {icon && (
+          <span className={iconSlot.className} style={iconSlot.style}>
+            {icon}
+          </span>
+        )}
+        <span className={labelSlot.className} style={labelSlot.style}>
+          {children}
+        </span>
+        {description && (
+          <span className={descSlot.className} style={descSlot.style}>
+            {description}
+          </span>
+        )}
+      </div>
+    );
+  },
+);
 
 // ── Component Props ─────────────────────────────────────────
 
@@ -93,6 +242,9 @@ export interface SpotlightComponentProps
 
   /** Portal hedef elementi / Portal container element */
   portalContainer?: HTMLElement;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
 /**
@@ -112,7 +264,7 @@ export interface SpotlightComponentProps
  * />
  * ```
  */
-export const Spotlight = forwardRef<HTMLDivElement, SpotlightComponentProps>(
+const SpotlightBase = forwardRef<HTMLDivElement, SpotlightComponentProps>(
   function Spotlight(props, ref) {
     const {
       size = 'md',
@@ -124,6 +276,7 @@ export const Spotlight = forwardRef<HTMLDivElement, SpotlightComponentProps>(
       renderIcon,
       searchIcon,
       portalContainer,
+      children,
       ...hookProps
     } = props;
 
@@ -246,6 +399,45 @@ export const Spotlight = forwardRef<HTMLDivElement, SpotlightComponentProps>(
     const loadingSlotProps = getSlotProps('loading', spotLoadingStyle, classNames, styles);
     const recentHeaderSlot = getSlotProps('recentHeader', spotRecentHeaderStyle, classNames, styles);
     const recentItemSlot = getSlotProps('recentItem', spotRecentItemStyle, classNames, styles);
+
+    const ctxValue: SpotlightContextValue = { size, classNames, styles };
+
+    // ── Compound API ──
+    if (children) {
+      const anchor = <span ref={anchorRef} style={{ display: 'none' }} />;
+      if (!isOpen || !portalTarget) return anchor;
+
+      const compoundOverlay = (
+        <div
+          className={overlaySlot.className}
+          style={overlaySlot.style}
+          onClick={handleOverlayClick}
+          data-testid="spot-overlay"
+        >
+          <SpotlightContext.Provider value={ctxValue}>
+            <div
+              ref={ref}
+              className={combinedRootClassName}
+              style={combinedRootStyle}
+              id={id}
+              role="dialog"
+              aria-label="Spotlight Search"
+              aria-modal="true"
+              data-testid="spot-root"
+            >
+              {children}
+            </div>
+          </SpotlightContext.Provider>
+        </div>
+      );
+
+      return (
+        <>
+          {anchor}
+          {createPortal(compoundOverlay, portalTarget)}
+        </>
+      );
+    }
 
     // ── Gruplama ──
     const groups: { key: string; label: string; items: { item: typeof filteredItems[0]; globalIndex: number }[] }[] = [];
@@ -419,3 +611,27 @@ export const Spotlight = forwardRef<HTMLDivElement, SpotlightComponentProps>(
     );
   },
 );
+
+/**
+ * Spotlight bilesen — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <Spotlight items={[...]} open={isOpen} onSelect={(key) => handle(key)} />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <Spotlight open={isOpen} onOpenChange={setIsOpen}>
+ *   <Spotlight.Input placeholder="Search..." searchIcon={<SearchIcon />} />
+ *   <Spotlight.List>
+ *     <Spotlight.Item icon={<FileIcon />} description="Project docs">README.md</Spotlight.Item>
+ *   </Spotlight.List>
+ * </Spotlight>
+ * ```
+ */
+export const Spotlight = Object.assign(SpotlightBase, {
+  Input: SpotlightInput,
+  List: SpotlightList,
+  Item: SpotlightItemCompound,
+});

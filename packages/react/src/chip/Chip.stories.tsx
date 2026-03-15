@@ -13,6 +13,7 @@ import { Chip } from './Chip';
 const meta: Meta<typeof Chip> = {
   title: 'Data Display/Chip',
   component: Chip,
+  tags: ['autodocs'],
   argTypes: {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     color: { control: 'select', options: ['accent', 'neutral', 'destructive', 'success', 'warning'] },
@@ -96,6 +97,45 @@ export const Disabled: Story = {
     <div style={{ display: 'flex', gap: '0.5rem' }}>
       <Chip disabled>Pasif</Chip>
       <Chip disabled selected>Pasif + Seçili</Chip>
+    </div>
+  ),
+};
+
+// ── Compound ──
+
+export const Compound: Story = {
+  render: () => {
+    const [items, setItems] = useState(['React', 'Vue', 'Svelte']);
+
+    return (
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        {items.map((item) => (
+          <Chip
+            key={item}
+            selected
+            onRemove={() => setItems((prev) => prev.filter((i) => i !== item))}
+          >
+            <Chip.Icon><span style={{ fontSize: '0.75em' }}>&#9733;</span></Chip.Icon>
+            {item}
+            <Chip.RemoveButton />
+          </Chip>
+        ))}
+      </div>
+    );
+  },
+};
+
+export const CustomSlotStyles: Story = {
+  name: 'Slot Customization',
+  render: () => (
+    <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <Chip
+        selected
+        classNames={{ root: 'my-chip' }}
+        styles={{ root: { boxShadow: '0 0 0 2px currentColor' } }}
+      >
+        Custom
+      </Chip>
     </div>
   ),
 };

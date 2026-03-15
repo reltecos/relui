@@ -332,3 +332,86 @@ describe('Breadcrumb id', () => {
     expect(nav).toHaveAttribute('id', 'bc-1');
   });
 });
+
+// ── Compound API ──────────────────────────────────────────────────
+
+describe('Breadcrumb (Compound)', () => {
+  it('compound: nav render edilir', () => {
+    render(
+      <Breadcrumb>
+        <Breadcrumb.Item href="/">Ana Sayfa</Breadcrumb.Item>
+        <Breadcrumb.Separator />
+        <Breadcrumb.Item isLast>Detay</Breadcrumb.Item>
+      </Breadcrumb>,
+    );
+    const nav = screen.getByRole('navigation');
+    expect(nav).toBeInTheDocument();
+    expect(nav).toHaveAttribute('aria-label', 'Breadcrumb');
+  });
+
+  it('compound: item render edilir', () => {
+    render(
+      <Breadcrumb>
+        <Breadcrumb.Item href="/">Ana Sayfa</Breadcrumb.Item>
+        <Breadcrumb.Separator />
+        <Breadcrumb.Item isLast>Detay</Breadcrumb.Item>
+      </Breadcrumb>,
+    );
+    expect(screen.getByText('Ana Sayfa')).toBeInTheDocument();
+    expect(screen.getByText('Detay')).toBeInTheDocument();
+  });
+
+  it('compound: separator render edilir', () => {
+    render(
+      <Breadcrumb>
+        <Breadcrumb.Item href="/">Ana Sayfa</Breadcrumb.Item>
+        <Breadcrumb.Separator />
+        <Breadcrumb.Item isLast>Detay</Breadcrumb.Item>
+      </Breadcrumb>,
+    );
+    expect(screen.getByTestId('breadcrumb-separator')).toBeInTheDocument();
+    expect(screen.getByTestId('breadcrumb-separator')).toHaveTextContent('/');
+  });
+
+  it('compound: ozel separator icerigi', () => {
+    render(
+      <Breadcrumb separator=">">
+        <Breadcrumb.Item href="/">Ana Sayfa</Breadcrumb.Item>
+        <Breadcrumb.Separator />
+        <Breadcrumb.Item isLast>Detay</Breadcrumb.Item>
+      </Breadcrumb>,
+    );
+    expect(screen.getByTestId('breadcrumb-separator')).toHaveTextContent('>');
+  });
+
+  it('compound: link render edilir', () => {
+    render(
+      <Breadcrumb>
+        <Breadcrumb.Link href="/">Ana Sayfa</Breadcrumb.Link>
+        <Breadcrumb.Separator />
+        <Breadcrumb.Link isLast>Detay</Breadcrumb.Link>
+      </Breadcrumb>,
+    );
+    const links = screen.getAllByTestId('breadcrumb-link');
+    expect(links).toHaveLength(2);
+    expect(links[0].tagName).toBe('A');
+    expect(links[1].tagName).toBe('SPAN');
+  });
+
+  it('compound: context disinda hata firlatir', () => {
+    expect(() => {
+      render(<Breadcrumb.Item>Test</Breadcrumb.Item>);
+    }).toThrow('Breadcrumb compound sub-components must be used within <Breadcrumb>.');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Breadcrumb classNames={{ separator: 'custom-sep-cls' }}>
+        <Breadcrumb.Item href="/">Ana Sayfa</Breadcrumb.Item>
+        <Breadcrumb.Separator />
+        <Breadcrumb.Item isLast>Detay</Breadcrumb.Item>
+      </Breadcrumb>,
+    );
+    expect(screen.getByTestId('breadcrumb-separator').className).toContain('custom-sep-cls');
+  });
+});

@@ -8,12 +8,12 @@
 
 export {
   MultiSelect,
-  MultiSelectTrigger,
-  MultiSelectContent,
-  MultiSelectOption,
-  MultiSelectGroup,
   type MultiSelectComponentProps,
   type MultiSelectSlot,
+  type MultiSelectTriggerProps,
+  type MultiSelectValueProps,
+  type MultiSelectContentProps,
+  type MultiSelectOptionProps,
 } from './MultiSelect';
 export {
   useMultiSelect,

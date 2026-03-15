@@ -109,7 +109,7 @@ export const paginationPageRecipe = recipe({
           '&[data-selected]': {
             backgroundColor: cssVar.accentDefault,
             borderColor: cssVar.accentDefault,
-            color: '#fff',
+            color: 'var(--rel-color-text-inverse, #fff)',
             fontWeight: '600',
           },
         },
@@ -124,7 +124,7 @@ export const paginationPageRecipe = recipe({
           },
           '&[data-selected]': {
             backgroundColor: cssVar.accentDefault,
-            color: '#fff',
+            color: 'var(--rel-color-text-inverse, #fff)',
             fontWeight: '600',
           },
         },

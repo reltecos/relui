@@ -8,6 +8,9 @@
 
 export {
   MasterDetailLayout,
+  useMasterDetailContext,
   type MasterDetailComponentProps,
   type MasterDetailSlot,
+  type MasterDetailMasterProps,
+  type MasterDetailDetailProps,
 } from './MasterDetailLayout';

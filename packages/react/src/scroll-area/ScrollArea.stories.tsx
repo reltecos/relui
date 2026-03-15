@@ -13,6 +13,7 @@ import { Stack } from '../stack';
 const meta: Meta<typeof ScrollArea> = {
   title: 'Layout/ScrollArea',
   component: ScrollArea,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
     type: {
@@ -205,10 +206,26 @@ export const CustomSlotStyles: Story = {
       <div>
         {Array.from({ length: 20 }, (_, i) => (
           <p key={i} style={{ margin: '4px 0' }}>
-            Custom slot styled satır {i + 1}
+            Custom slot styled satir {i + 1}
           </p>
         ))}
       </div>
+    </ScrollArea>
+  ),
+};
+
+// ── Compound API ──────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <ScrollArea height={250} type="always" style={{ border: '1px solid #e2e8f0', borderRadius: 8 }}>
+      <ScrollArea.Viewport style={{ padding: 16 }}>
+        {Array.from({ length: 20 }, (_, i) => (
+          <p key={i} style={{ margin: '6px 0' }}>
+            Compound Viewport ile satir {i + 1}
+          </p>
+        ))}
+      </ScrollArea.Viewport>
     </ScrollArea>
   ),
 };

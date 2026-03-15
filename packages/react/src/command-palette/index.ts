@@ -6,5 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { CommandPalette, type CommandPaletteComponentProps, type CommandPaletteSlot } from './CommandPalette';
+export {
+  CommandPalette,
+  type CommandPaletteComponentProps,
+  type CommandPaletteSlot,
+  type CommandPaletteInputProps,
+  type CommandPaletteListProps,
+  type CommandPaletteItemComponentProps,
+  type CommandPaletteGroupProps,
+} from './CommandPalette';
 export { useCommandPalette, type UseCommandPaletteProps, type UseCommandPaletteReturn } from './useCommandPalette';

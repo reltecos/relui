@@ -38,6 +38,7 @@ const withDisabled = [
 const meta = {
   title: 'Primitives/Combobox',
   component: Combobox,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -244,6 +245,19 @@ export const AllowCustomValue: Story = {
       </div>
     );
   },
+};
+
+/** Compound API */
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ maxWidth: 300 }}>
+      <Combobox options={countries} aria-label="Ulke" placeholder="Ulke arayin">
+        <Combobox.Input />
+        <Combobox.Content />
+      </Combobox>
+    </div>
+  ),
 };
 
 /** Playground — interaktif kontroller / Interactive controls */

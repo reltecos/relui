@@ -8,12 +8,12 @@
 
 export {
   Combobox,
-  ComboboxInput,
-  ComboboxContent,
-  ComboboxOption,
-  ComboboxGroup,
   type ComboboxComponentProps,
   type ComboboxSlot,
+  type ComboboxInputProps,
+  type ComboboxContentProps,
+  type ComboboxOptionProps,
+  type ComboboxEmptyProps,
 } from './Combobox';
 export {
   useCombobox,

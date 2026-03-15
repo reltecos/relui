@@ -307,6 +307,29 @@ export const CustomPlaceholder: Story = {
   ),
 };
 
+export const Compound: Story = {
+  render: () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [query, setQuery] = useState('');
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 40 }}>
+        <button onClick={() => setIsOpen(true)} style={{ padding: '12px 24px', borderRadius: 12, border: '1px solid #e0e0e0', background: 'transparent', cursor: 'pointer', fontSize: 14 }}>
+          Open Compound Spotlight
+        </button>
+        <Spotlight open={isOpen} onOpenChange={setIsOpen} items={[]}>
+          <Spotlight.Input placeholder="Search anything..." searchIcon={<SearchIcon size={18} />} value={query} onChange={setQuery} />
+          <Spotlight.List>
+            <Spotlight.Item icon={<FilePlusIcon size={16} />} description="Project documentation">README.md</Spotlight.Item>
+            <Spotlight.Item icon={<FilePlusIcon size={16} />} description="Package configuration">package.json</Spotlight.Item>
+            <Spotlight.Item icon={<FolderOpenIcon size={16} />} description="Open settings">Settings</Spotlight.Item>
+          </Spotlight.List>
+        </Spotlight>
+      </div>
+    );
+  },
+};
+
 export const CustomSlotStyles: Story = {
   render: () => (
     <SpotlightDemo

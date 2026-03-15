@@ -7,16 +7,16 @@
  */
 
 /**
- * RangeSlider — styled React range slider component.
- * RangeSlider — stilize edilmiş React range slider bileşeni.
+ * RangeSlider — styled React range slider component (Dual API).
+ * RangeSlider — stilize edilmis React range slider bileseni (Dual API).
  *
- * Track + fill (aradaki bölge) + iki thumb pattern.
- * 3 boyut x 5 renk, horizontal/vertical orientation.
+ * Props-based: `<RangeSlider value={[20, 80]} />`
+ * Compound:    `<RangeSlider><RangeSlider.Track /><RangeSlider.Thumb which="start" /></RangeSlider>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import type { SliderSize, SliderColor, SliderOrientation } from '@relteco/relui-core';
 import { useRangeSlider, type UseRangeSliderProps } from './useRangeSlider';
 import {
@@ -29,27 +29,133 @@ import {
   sliderFillVerticalStyle,
   sliderThumbRecipe,
   hiddenSliderInputStyle,
-} from '../slider/slider.css';
+} from './range-slider.css';
 import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import type { ClassNames, Styles } from '../utils/slot-styles';
 
 /** RangeSlider slot isimleri. */
 export type RangeSliderSlot = 'root' | 'track' | 'fill' | 'startThumb' | 'endThumb';
 
+// ── Context (Compound API) ──────────────────────────
+
+interface RangeSliderContextValue {
+  size: SliderSize;
+  color: SliderColor;
+  orientation: SliderOrientation;
+  classNames: ClassNames<RangeSliderSlot> | undefined;
+  styles: Styles<RangeSliderSlot> | undefined;
+  hookReturn: ReturnType<typeof useRangeSlider>;
+}
+
+const RangeSliderContext = createContext<RangeSliderContextValue | null>(null);
+
+/** RangeSlider compound context hook. */
+export function useRangeSliderContext(): RangeSliderContextValue {
+  const ctx = useContext(RangeSliderContext);
+  if (!ctx) throw new Error('RangeSlider compound sub-components must be used within <RangeSlider>.');
+  return ctx;
+}
+
+// ── Compound: RangeSlider.Track ─────────────────────
+
+/** RangeSlider.Track props */
+export interface RangeSliderTrackProps {
+  /** Ek className / Additional className */
+  className?: string;
+  /** Icerik / Content (fill icin) */
+  children?: ReactNode;
+}
+
+const RangeSliderTrack = forwardRef<HTMLDivElement, RangeSliderTrackProps>(
+  function RangeSliderTrack(props, ref) {
+    const { className, children } = props;
+    const ctx = useRangeSliderContext();
+    const isHorizontal = ctx.orientation === 'horizontal';
+
+    const trackBaseClasses = [
+      sliderTrackStyle,
+      isHorizontal ? sliderTrackHorizontalStyle : sliderTrackVerticalStyle,
+    ].join(' ');
+    const trackSlot = getSlotProps('track', trackBaseClasses, ctx.classNames, ctx.styles);
+    const cls = className ? `${trackSlot.className} ${className}` : trackSlot.className;
+
+    return (
+      <div
+        ref={ref}
+        {...ctx.hookReturn.trackProps}
+        className={cls}
+        style={trackSlot.style}
+        data-orientation={ctx.orientation}
+        data-testid="range-slider-track"
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: RangeSlider.Thumb ─────────────────────
+
+/** RangeSlider.Thumb props */
+export interface RangeSliderThumbProps {
+  /** Hangi thumb / Which thumb */
+  which: 'start' | 'end';
+  /** Ek className / Additional className */
+  className?: string;
+  /** aria-label */
+  'aria-label'?: string;
+  /** aria-valuetext */
+  'aria-valuetext'?: string;
+}
+
+const RangeSliderThumb = forwardRef<HTMLDivElement, RangeSliderThumbProps>(
+  function RangeSliderThumb(props, ref) {
+    const { which, className, 'aria-label': ariaLabel, 'aria-valuetext': ariaValueText } = props;
+    const ctx = useRangeSliderContext();
+    const isHorizontal = ctx.orientation === 'horizontal';
+
+    const thumbRecipeClass = sliderThumbRecipe({ size: ctx.size });
+    const slotName = which === 'start' ? 'startThumb' as const : 'endThumb' as const;
+    const percent = which === 'start' ? ctx.hookReturn.startPercent : ctx.hookReturn.endPercent;
+
+    const thumbPosition = isHorizontal
+      ? { left: `${percent}%`, top: '50%', transform: 'translate(-50%, -50%)' }
+      : { bottom: `${percent}%`, left: '50%', transform: 'translate(-50%, 50%)' };
+
+    const thumbSlot = getSlotProps(slotName, thumbRecipeClass, ctx.classNames, ctx.styles, thumbPosition);
+    const cls = className ? `${thumbSlot.className} ${className}` : thumbSlot.className;
+
+    const thumbProps = which === 'start' ? ctx.hookReturn.startThumbProps : ctx.hookReturn.endThumbProps;
+
+    return (
+      <div
+        ref={ref}
+        {...thumbProps}
+        className={cls}
+        style={thumbSlot.style}
+        aria-label={ariaLabel}
+        aria-valuetext={ariaValueText}
+        data-testid={`range-slider-${which}-thumb`}
+      />
+    );
+  },
+);
+
 /**
- * RangeSlider bileşen props'ları.
+ * RangeSlider bilesen props'lari.
  * RangeSlider component props.
  */
 export interface RangeSliderComponentProps extends UseRangeSliderProps, SlotStyleProps<RangeSliderSlot> {
   /** Boyut / Size */
   size?: SliderSize;
 
-  /** Renk şeması / Color scheme */
+  /** Renk semasi / Color scheme */
   color?: SliderColor;
 
-  /** Yön / Orientation */
+  /** Yon / Orientation */
   orientation?: SliderOrientation;
 
-  /** Ek CSS sınıfı / Additional CSS class */
+  /** Ek CSS sinifi / Additional CSS class */
   className?: string;
 
   /** HTML id */
@@ -75,33 +181,14 @@ export interface RangeSliderComponentProps extends UseRangeSliderProps, SlotStyl
 
   /** End thumb aria-valuetext */
   'aria-valuetext-end'?: string;
+
+  /** Compound API icin children. */
+  children?: ReactNode;
 }
 
-/**
- * RangeSlider — RelUI range slider bileşeni.
- * RangeSlider — RelUI range slider component.
- *
- * @example
- * ```tsx
- * <RangeSlider
- *   min={0}
- *   max={100}
- *   value={[20, 80]}
- *   onValueChange={setRange}
- *   aria-label="Min fiyat"
- *   aria-label-end="Max fiyat"
- * />
- *
- * <RangeSlider
- *   orientation="vertical"
- *   min={0}
- *   max={100}
- *   minDistance={10}
- *   color="success"
- * />
- * ```
- */
-export const RangeSlider = forwardRef<HTMLDivElement, RangeSliderComponentProps>(
+// ── Component ─────────────────────────────────────────
+
+const RangeSliderBase = forwardRef<HTMLDivElement, RangeSliderComponentProps>(
   function RangeSlider(
     {
       size = 'md',
@@ -119,10 +206,13 @@ export const RangeSlider = forwardRef<HTMLDivElement, RangeSliderComponentProps>
       'aria-valuetext': ariaValueText,
       'aria-valuetext-end': ariaValueTextEnd,
       name,
+      children,
       ...hookProps
     },
     forwardedRef,
   ) {
+    const hookReturn = useRangeSlider({ ...hookProps, orientation });
+
     const {
       startThumbProps,
       endThumbProps,
@@ -132,7 +222,7 @@ export const RangeSlider = forwardRef<HTMLDivElement, RangeSliderComponentProps>
       endPercent,
       isDisabled,
       isReadOnly,
-    } = useRangeSlider({ ...hookProps, orientation });
+    } = hookReturn;
 
     const recipeClass = sliderRootRecipe({ size, color, orientation });
     const thumbRecipeClass = sliderThumbRecipe({ size });
@@ -145,6 +235,35 @@ export const RangeSlider = forwardRef<HTMLDivElement, RangeSliderComponentProps>
       ? `${rootSlot.className} ${className}`
       : rootSlot.className;
 
+    const ctxValue: RangeSliderContextValue = {
+      size,
+      color,
+      orientation,
+      classNames,
+      styles,
+      hookReturn,
+    };
+
+    // ── Compound API ──
+    if (children) {
+      return (
+        <RangeSliderContext.Provider value={ctxValue}>
+          <div
+            ref={forwardedRef}
+            id={id}
+            className={rootCombinedClassName}
+            style={rootSlot.style}
+            data-disabled={isDisabled ? '' : undefined}
+            data-readonly={isReadOnly ? '' : undefined}
+            data-orientation={orientation}
+          >
+            {children}
+          </div>
+        </RangeSliderContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const trackBaseClasses = [
       sliderTrackStyle,
       isHorizontal ? sliderTrackHorizontalStyle : sliderTrackVerticalStyle,
@@ -218,7 +337,7 @@ export const RangeSlider = forwardRef<HTMLDivElement, RangeSliderComponentProps>
 
         {/* Track */}
         <div {...trackProps} className={trackSlot.className} style={trackSlot.style} data-orientation={orientation}>
-          {/* Fill — aradaki bölge */}
+          {/* Fill */}
           <div className={fillSlot.className} style={fillSlot.style} />
         </div>
 
@@ -247,3 +366,11 @@ export const RangeSlider = forwardRef<HTMLDivElement, RangeSliderComponentProps>
     );
   },
 );
+
+/**
+ * RangeSlider — Dual API (props-based + compound).
+ */
+export const RangeSlider = Object.assign(RangeSliderBase, {
+  Track: RangeSliderTrack,
+  Thumb: RangeSliderThumb,
+});

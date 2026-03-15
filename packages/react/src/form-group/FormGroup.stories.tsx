@@ -16,6 +16,7 @@ import { Input } from '../input';
 const meta: Meta<typeof FormGroup> = {
   title: 'Form/FormGroup',
   component: FormGroup,
+  tags: ['autodocs'],
   argTypes: {
     orientation: {
       control: 'select',
@@ -147,5 +148,22 @@ export const CustomSlotStyles: Story = {
         </FormField>
       </FormGroup>
     </div>
+  ),
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <FormGroup>
+      <FormGroup.Legend>Kisisel Bilgiler</FormGroup.Legend>
+      <FormGroup.Content>
+        <FormField label="Ad" required>
+          <Input placeholder="Adiniz" />
+        </FormField>
+        <FormField label="Soyad" required>
+          <Input placeholder="Soyadiniz" />
+        </FormField>
+      </FormGroup.Content>
+    </FormGroup>
   ),
 };

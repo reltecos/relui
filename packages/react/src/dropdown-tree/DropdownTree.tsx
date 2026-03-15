@@ -7,22 +7,25 @@
  */
 
 /**
- * DropdownTree — styled dropdown tree bileşeni.
- * DropdownTree — styled dropdown tree component.
+ * DropdownTree — styled dropdown tree bileseni (Dual API).
+ * DropdownTree — styled dropdown tree component (Dual API).
  *
- * Dropdown içinde tree view — hiyerarşik expand/collapse + tek/çok seçim.
- * Core state machine üzerinde React hook + Vanilla Extract stiller.
+ * Dropdown icinde tree view — hiyerarsik expand/collapse + tek/cok secim.
+ * Props-based: `<DropdownTree nodes={[...]} placeholder="Secin" />`
+ * Compound:    `<DropdownTree nodes={[...]}><DropdownTree.Trigger>...</DropdownTree.Trigger>...</DropdownTree>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef, type CSSProperties } from 'react';
+import { forwardRef, createContext, useContext, type CSSProperties, type ReactNode } from 'react';
 import type {
   DropdownTreeVariant,
   DropdownTreeSize,
+  FlatTreeNode,
+  SelectValue,
 } from '@relteco/relui-core';
 import { ChevronRightIcon, CheckIcon, CloseIcon } from '@relteco/relui-icons';
-import { useDropdownTree, type UseDropdownTreeProps } from './useDropdownTree';
+import { useDropdownTree, type UseDropdownTreeProps, type UseDropdownTreeReturn } from './useDropdownTree';
 import {
   selectRootStyle,
   selectTriggerRecipe,
@@ -41,7 +44,7 @@ import {
   dropdownTreeTagStyle,
   dropdownTreeTagRemoveStyle,
 } from './dropdown-tree.css';
-import { getSlotProps, type SlotStyleProps } from '../utils/slot-styles';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
 /** DropdownTree slot isimleri. */
 export type DropdownTreeSlot =
@@ -56,10 +59,209 @@ export type DropdownTreeSlot =
   | 'tag'
   | 'tagRemoveButton';
 
+// ── Context (Compound API) ──────────────────────────────────────────
+
+interface DropdownTreeContextValue {
+  variant: DropdownTreeVariant;
+  size: DropdownTreeSize;
+  isOpen: boolean;
+  selectedLabels: string[];
+  selectedValue: SelectValue | undefined;
+  selectedValues: Set<SelectValue>;
+  selectionMode: 'single' | 'multiple';
+  triggerProps: UseDropdownTreeReturn['triggerProps'];
+  panelProps: UseDropdownTreeReturn['panelProps'];
+  getNodeProps: UseDropdownTreeReturn['getNodeProps'];
+  visibleNodes: FlatTreeNode[];
+  placeholder: string | undefined;
+  classNames: ClassNames<DropdownTreeSlot> | undefined;
+  styles: Styles<DropdownTreeSlot> | undefined;
+  name: string | undefined;
+  ariaLabel: string | undefined;
+  ariaDescribedBy: string | undefined;
+  onValuesChange: ((values: SelectValue[]) => void) | undefined;
+}
+
+const DropdownTreeContext = createContext<DropdownTreeContextValue | null>(null);
+
+function useDropdownTreeContext(): DropdownTreeContextValue {
+  const ctx = useContext(DropdownTreeContext);
+  if (!ctx) throw new Error('DropdownTree compound sub-components must be used within <DropdownTree>.');
+  return ctx;
+}
+
+// ── Compound: DropdownTree.Trigger ──────────────────────────────────
+
+/** DropdownTree.Trigger props */
+export interface DropdownTreeTriggerProps {
+  /** Icerik / Content */
+  children: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const DropdownTreeTrigger = forwardRef<HTMLDivElement, DropdownTreeTriggerProps>(
+  function DropdownTreeTrigger(props, ref) {
+    const { children, className } = props;
+    const ctx = useDropdownTreeContext();
+    const slot = getSlotProps(
+      'trigger',
+      selectTriggerRecipe({ variant: ctx.variant, size: ctx.size }),
+      ctx.classNames,
+      ctx.styles,
+    );
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    const isMultiple = ctx.selectionMode === 'multiple';
+    const hasSelection = isMultiple
+      ? ctx.selectedValues.size > 0
+      : ctx.selectedValue !== undefined;
+
+    const triggerStyle = isMultiple && hasSelection
+      ? { ...slot.style, height: 'auto', minHeight: slot.style?.minHeight }
+      : slot.style;
+
+    return (
+      <div
+        ref={ref}
+        className={cls}
+        style={triggerStyle}
+        aria-label={ctx.ariaLabel}
+        aria-describedby={ctx.ariaDescribedBy}
+        data-testid="dropdowntree-trigger"
+        {...ctx.triggerProps}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+// ── Compound: DropdownTree.Content ──────────────────────────────────
+
+/** DropdownTree.Content props */
+export interface DropdownTreeContentProps {
+  /** Icerik / Content */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const DropdownTreeContent = forwardRef<HTMLUListElement, DropdownTreeContentProps>(
+  function DropdownTreeContent(props, ref) {
+    const { children, className } = props;
+    const ctx = useDropdownTreeContext();
+
+    if (!ctx.isOpen) return null;
+
+    const slot = getSlotProps('panel', selectListboxStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+    const nodeSlot = getSlotProps('node', dropdownTreeNodeStyle, ctx.classNames, ctx.styles);
+    const isMultiple = ctx.selectionMode === 'multiple';
+
+    return (
+      <ul
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        onMouseDown={preventBlur}
+        data-testid="dropdowntree-content"
+        {...ctx.panelProps}
+      >
+        {children ?? (
+          ctx.visibleNodes.map((flatNode) => {
+            const nodeProps = ctx.getNodeProps(flatNode);
+            const indentPx = flatNode.depth * 20 + 8;
+
+            return (
+              <li
+                key={String(flatNode.value)}
+                className={nodeSlot.className}
+                style={{ ...nodeSlot.style, paddingLeft: `${indentPx}px` }}
+                {...nodeProps}
+              >
+                {flatNode.hasChildren ? (
+                  <ExpandIcon
+                    isExpanded={flatNode.isExpanded}
+                    className={dropdownTreeExpandIconStyle}
+                  />
+                ) : (
+                  <span className={dropdownTreeExpandSpacerStyle} />
+                )}
+
+                {isMultiple && (
+                  <CheckboxIndicator
+                    checked={ctx.selectedValues.has(flatNode.value)}
+                    className={dropdownTreeCheckboxStyle}
+                  />
+                )}
+
+                <span className={dropdownTreeNodeLabelStyle}>
+                  {flatNode.label}
+                </span>
+              </li>
+            );
+          })
+        )}
+      </ul>
+    );
+  },
+);
+
+// ── Compound: DropdownTree.Node ─────────────────────────────────────
+
+/** DropdownTree.Node props */
+export interface DropdownTreeNodeProps {
+  /** Flat node verisi / Flat node data */
+  node: FlatTreeNode;
+  /** Icerik / Content */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const DropdownTreeNode = forwardRef<HTMLLIElement, DropdownTreeNodeProps>(
+  function DropdownTreeNode(props, ref) {
+    const { node, children, className } = props;
+    const ctx = useDropdownTreeContext();
+    const slot = getSlotProps('node', dropdownTreeNodeStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+    const nodeProps = ctx.getNodeProps(node);
+    const indentPx = node.depth * 20 + 8;
+
+    return (
+      <li
+        ref={ref}
+        className={cls}
+        style={{ ...slot.style, paddingLeft: `${indentPx}px` }}
+        data-testid="dropdowntree-node"
+        {...nodeProps}
+      >
+        {children ?? (
+          <>
+            {node.hasChildren ? (
+              <ExpandIcon isExpanded={node.isExpanded} className={dropdownTreeExpandIconStyle} />
+            ) : (
+              <span className={dropdownTreeExpandSpacerStyle} />
+            )}
+            {ctx.selectionMode === 'multiple' && (
+              <CheckboxIndicator
+                checked={ctx.selectedValues.has(node.value)}
+                className={dropdownTreeCheckboxStyle}
+              />
+            )}
+            <span className={dropdownTreeNodeLabelStyle}>{node.label}</span>
+          </>
+        )}
+      </li>
+    );
+  },
+);
+
 // ── Component Props ─────────────────────────────────────────────────
 
 export interface DropdownTreeComponentProps extends UseDropdownTreeProps, SlotStyleProps<DropdownTreeSlot> {
-  /** Görsel varyant / Visual variant */
+  /** Gorsel varyant / Visual variant */
   variant?: DropdownTreeVariant;
 
   /** Boyut / Size */
@@ -82,30 +284,14 @@ export interface DropdownTreeComponentProps extends UseDropdownTreeProps, SlotSt
 
   /** id */
   id?: string;
+
+  /** Compound API icin children / Children for compound API */
+  children?: ReactNode;
 }
 
-/**
- * DropdownTree bileşeni — dropdown içinde tree view.
- * DropdownTree component — tree view inside a dropdown.
- *
- * @example
- * ```tsx
- * <DropdownTree
- *   nodes={[
- *     {
- *       value: 'fruits', label: 'Meyveler',
- *       children: [
- *         { value: 'apple', label: 'Elma' },
- *         { value: 'banana', label: 'Muz' },
- *       ],
- *     },
- *   ]}
- *   placeholder="Kategori seçin"
- *   onValueChange={(value) => console.log(value)}
- * />
- * ```
- */
-export const DropdownTree = forwardRef<HTMLDivElement, DropdownTreeComponentProps>(
+// ── Component ───────────────────────────────────────────────────────
+
+const DropdownTreeBase = forwardRef<HTMLDivElement, DropdownTreeComponentProps>(
   function DropdownTree(props, ref) {
     const {
       variant = 'outline',
@@ -118,6 +304,7 @@ export const DropdownTree = forwardRef<HTMLDivElement, DropdownTreeComponentProp
       'aria-describedby': ariaDescribedBy,
       name,
       id,
+      children,
       ...dropdownTreeProps
     } = props;
 
@@ -139,6 +326,55 @@ export const DropdownTree = forwardRef<HTMLDivElement, DropdownTreeComponentProp
       ? `${rootSlot.className} ${className}`
       : rootSlot.className;
 
+    // ── Display value ──
+    const isMultiple = selectionMode === 'multiple';
+    const hasSelection = isMultiple
+      ? selectedValues.size > 0
+      : selectedValue !== undefined;
+
+    // ── Hidden input value ──
+    const hiddenInputValue = isMultiple
+      ? [...selectedValues].map(String).join(',')
+      : selectedValue !== undefined
+        ? String(selectedValue)
+        : '';
+
+    // ── Compound API ──
+    if (children) {
+      const ctxValue: DropdownTreeContextValue = {
+        variant,
+        size,
+        isOpen,
+        selectedLabels,
+        selectedValue,
+        selectedValues,
+        selectionMode,
+        triggerProps,
+        panelProps,
+        getNodeProps,
+        visibleNodes,
+        placeholder: dropdownTreeProps.placeholder,
+        classNames,
+        styles,
+        name,
+        ariaLabel,
+        ariaDescribedBy,
+        onValuesChange: dropdownTreeProps.onValuesChange,
+      };
+
+      return (
+        <DropdownTreeContext.Provider value={ctxValue}>
+          <div ref={ref} className={rootClassName} style={rootSlot.style} id={id} data-testid="dropdowntree-root">
+            {children}
+            {name && (
+              <input type="hidden" name={name} value={hiddenInputValue} />
+            )}
+          </div>
+        </DropdownTreeContext.Provider>
+      );
+    }
+
+    // ── Props-based API ──
     const triggerSlot = getSlotProps(
       'trigger',
       selectTriggerRecipe({ variant, size }),
@@ -153,19 +389,6 @@ export const DropdownTree = forwardRef<HTMLDivElement, DropdownTreeComponentProp
     const tagsContainerSlot = getSlotProps('tagsContainer', dropdownTreeTagsStyle, classNames, styles);
     const tagSlot = getSlotProps('tag', dropdownTreeTagStyle, classNames, styles);
     const tagRemoveSlot = getSlotProps('tagRemoveButton', dropdownTreeTagRemoveStyle, classNames, styles);
-
-    // ── Display value ──
-    const isMultiple = selectionMode === 'multiple';
-    const hasSelection = isMultiple
-      ? selectedValues.size > 0
-      : selectedValue !== undefined;
-
-    // ── Hidden input value ──
-    const hiddenInputValue = isMultiple
-      ? [...selectedValues].map(String).join(',')
-      : selectedValue !== undefined
-        ? String(selectedValue)
-        : '';
 
     // ── Trigger height override for multiple mode (auto-height) ──
     const triggerStyle = isMultiple && hasSelection
@@ -195,7 +418,7 @@ export const DropdownTree = forwardRef<HTMLDivElement, DropdownTreeComponentProp
                         type="button"
                         className={tagRemoveSlot.className}
                         style={tagRemoveSlot.style}
-                        aria-label={`${label} kaldır`}
+                        aria-label={`${label} kaldir`}
                         onClick={(e) => {
                           e.stopPropagation();
                           if (val !== undefined) {
@@ -254,7 +477,7 @@ export const DropdownTree = forwardRef<HTMLDivElement, DropdownTreeComponentProp
                     <span className={dropdownTreeExpandSpacerStyle} />
                   )}
 
-                  {/* Multiple modda checkbox göstergesi */}
+                  {/* Multiple modda checkbox gostergesi */}
                   {isMultiple && (
                     <CheckboxIndicator
                       checked={selectedValues.has(flatNode.value)}
@@ -285,6 +508,34 @@ export const DropdownTree = forwardRef<HTMLDivElement, DropdownTreeComponentProp
   },
 );
 
+/**
+ * DropdownTree bileseni — Dual API (props-based + compound).
+ *
+ * @example Props-based
+ * ```tsx
+ * <DropdownTree
+ *   nodes={[{ value: 'fruits', label: 'Meyveler', children: [...] }]}
+ *   placeholder="Kategori secin"
+ *   onValueChange={(value) => console.log(value)}
+ * />
+ * ```
+ *
+ * @example Compound
+ * ```tsx
+ * <DropdownTree nodes={[{ value: 'fruits', label: 'Meyveler', children: [...] }]}>
+ *   <DropdownTree.Trigger>
+ *     <span>Kategori secin</span>
+ *   </DropdownTree.Trigger>
+ *   <DropdownTree.Content />
+ * </DropdownTree>
+ * ```
+ */
+export const DropdownTree = Object.assign(DropdownTreeBase, {
+  Trigger: DropdownTreeTrigger,
+  Content: DropdownTreeContent,
+  Node: DropdownTreeNode,
+});
+
 // ── Blur engelleme ──────────────────────────────────────────────────
 
 function preventBlur(event: React.MouseEvent) {
@@ -313,7 +564,7 @@ function ChevronIndicator(props: { className: string; style?: CSSProperties }) {
   );
 }
 
-// ── Expand Icon (chevron right → rotate 90 when expanded) ───────────
+// ── Expand Icon (chevron right -> rotate 90 when expanded) ──────────
 
 function ExpandIcon(props: { isExpanded: boolean; className: string }) {
   return (

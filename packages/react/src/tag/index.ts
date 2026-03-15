@@ -6,4 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Tag, type TagComponentProps, type TagSlot } from './Tag';
+export {
+  Tag,
+  type TagComponentProps,
+  type TagSlot,
+  type TagIconProps,
+  type TagRemoveButtonProps,
+} from './Tag';

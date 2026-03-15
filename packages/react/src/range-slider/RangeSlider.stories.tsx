@@ -15,6 +15,7 @@ import { RangeSlider } from './RangeSlider';
 const meta: Meta<typeof RangeSlider> = {
   title: 'Primitives/RangeSlider',
   component: RangeSlider,
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
@@ -191,7 +192,7 @@ export const CustomSlotStyles: Story = {
 };
 
 export const Controlled: Story = {
-  name: 'Kontrollü / Controlled',
+  name: 'Kontrollu / Controlled',
   render: () => {
     const [range, setRange] = useState<[number, number]>([200, 800]);
 
@@ -211,9 +212,22 @@ export const Controlled: Story = {
           color="success"
         />
         <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>
-          Fiyat: {range[0]} TL — {range[1]} TL
+          Fiyat: {range[0]} TL -- {range[1]} TL
         </div>
       </div>
     );
   },
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ maxWidth: '300px' }}>
+      <RangeSlider aria-label="Test" value={[30, 70]}>
+        <RangeSlider.Track />
+        <RangeSlider.Thumb which="start" aria-label="Min" />
+        <RangeSlider.Thumb which="end" aria-label="Max" />
+      </RangeSlider>
+    </div>
+  ),
 };

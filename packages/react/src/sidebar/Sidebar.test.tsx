@@ -304,3 +304,76 @@ describe('Sidebar renderIcon', () => {
     expect(icons).toHaveLength(3);
   });
 });
+
+// ── Compound API ──────────────────────────────────────────────────
+
+describe('Sidebar (Compound)', () => {
+  it('compound: header render edilir', () => {
+    render(
+      <Sidebar>
+        <Sidebar.Header>MyLogo</Sidebar.Header>
+        <Sidebar.Section>
+          <Sidebar.Item>Home</Sidebar.Item>
+        </Sidebar.Section>
+      </Sidebar>,
+    );
+    expect(screen.getByTestId('sidebar-header')).toHaveTextContent('MyLogo');
+  });
+
+  it('compound: section ve item render edilir', () => {
+    render(
+      <Sidebar>
+        <Sidebar.Section title="Nav">
+          <Sidebar.Item>Home</Sidebar.Item>
+          <Sidebar.Item>About</Sidebar.Item>
+        </Sidebar.Section>
+      </Sidebar>,
+    );
+    expect(screen.getByTestId('sidebar-section')).toBeInTheDocument();
+    expect(screen.getByText('Nav')).toBeInTheDocument();
+    const items = screen.getAllByTestId('sidebar-item');
+    expect(items).toHaveLength(2);
+  });
+
+  it('compound: footer render edilir', () => {
+    render(
+      <Sidebar>
+        <Sidebar.Section>
+          <Sidebar.Item>Home</Sidebar.Item>
+        </Sidebar.Section>
+        <Sidebar.Footer>v1.0</Sidebar.Footer>
+      </Sidebar>,
+    );
+    expect(screen.getByTestId('sidebar-footer')).toHaveTextContent('v1.0');
+  });
+
+  it('compound: active item aria-current alir', () => {
+    render(
+      <Sidebar>
+        <Sidebar.Section>
+          <Sidebar.Item active>Home</Sidebar.Item>
+          <Sidebar.Item>About</Sidebar.Item>
+        </Sidebar.Section>
+      </Sidebar>,
+    );
+    const items = screen.getAllByTestId('sidebar-item');
+    expect(items[0]).toHaveAttribute('aria-current', 'page');
+    expect(items[1]).not.toHaveAttribute('aria-current');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Sidebar classNames={{ header: 'cmp-header' }}>
+        <Sidebar.Header>Logo</Sidebar.Header>
+        <Sidebar.Section>
+          <Sidebar.Item>Home</Sidebar.Item>
+        </Sidebar.Section>
+      </Sidebar>,
+    );
+    expect(screen.getByTestId('sidebar-header').className).toContain('cmp-header');
+  });
+
+  it('Sidebar.Header context disinda hata firlatir', () => {
+    expect(() => render(<Sidebar.Header>Test</Sidebar.Header>)).toThrow();
+  });
+});

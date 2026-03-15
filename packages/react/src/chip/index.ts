@@ -6,4 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { Chip, type ChipComponentProps, type ChipSlot } from './Chip';
+export {
+  Chip,
+  type ChipComponentProps,
+  type ChipSlot,
+  type ChipIconProps,
+  type ChipRemoveButtonProps,
+} from './Chip';

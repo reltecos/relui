@@ -10,4 +10,8 @@ export {
   Alert,
   type AlertComponentProps,
   type AlertSlot,
+  type AlertIconProps,
+  type AlertTitleProps,
+  type AlertDescriptionProps,
+  type AlertCloseButtonProps,
 } from './Alert';

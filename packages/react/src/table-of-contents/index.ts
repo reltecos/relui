@@ -12,6 +12,8 @@ export {
   type TableOfContentsSlot,
   type TableOfContentsSize,
   type TableOfContentsVariant,
+  type TableOfContentsItemProps,
+  type TableOfContentsLinkProps,
 } from './TableOfContents';
 export {
   useTableOfContents,

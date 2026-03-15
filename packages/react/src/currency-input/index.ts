@@ -6,7 +6,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { CurrencyInput, type CurrencyInputComponentProps, type CurrencyInputSlot } from './CurrencyInput';
+export {
+  CurrencyInput,
+  useCurrencyInputContext,
+  type CurrencyInputComponentProps,
+  type CurrencyInputSlot,
+  type CurrencyInputSymbolProps,
+  type CurrencyInputFieldProps,
+} from './CurrencyInput';
 export {
   useCurrencyInput,
   type UseCurrencyInputProps,

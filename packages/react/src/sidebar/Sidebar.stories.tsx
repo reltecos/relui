@@ -14,6 +14,7 @@ import type { SidebarItem } from '@relteco/relui-core';
 const meta: Meta<typeof Sidebar> = {
   title: 'Navigation/Sidebar',
   component: Sidebar,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
@@ -238,6 +239,29 @@ export const Controlled: Story = {
       </div>
     );
   },
+  decorators: [],
+};
+
+export const Compound: Story = {
+  render: () => (
+    <Sidebar size="md">
+      <Sidebar.Header>
+        <div style={{ fontWeight: 700, fontSize: 16 }}>RelUI Panel</div>
+      </Sidebar.Header>
+      <Sidebar.Section title="Navigasyon">
+        <Sidebar.Item active icon={<span>H</span>}>Ana Sayfa</Sidebar.Item>
+        <Sidebar.Item icon={<span>P</span>}>Urunler</Sidebar.Item>
+        <Sidebar.Item icon={<span>S</span>}>Siparisler</Sidebar.Item>
+      </Sidebar.Section>
+      <Sidebar.Section title="Diger">
+        <Sidebar.Item icon={<span>A</span>}>Ayarlar</Sidebar.Item>
+        <Sidebar.Item icon={<span>Y</span>}>Yardim</Sidebar.Item>
+      </Sidebar.Section>
+      <Sidebar.Footer>
+        <div style={{ fontSize: 11, opacity: 0.6 }}>v1.0.0 - Relteco LLC</div>
+      </Sidebar.Footer>
+    </Sidebar>
+  ),
   decorators: [],
 };
 

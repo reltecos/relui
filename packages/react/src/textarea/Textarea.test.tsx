@@ -250,3 +250,59 @@ describe('Textarea', () => {
     expect(el).toHaveStyle({ padding: '10px' });
   });
 });
+
+// ── Compound API ──
+
+describe('Textarea (Compound)', () => {
+  it('compound: Label render edilir', () => {
+    render(
+      <Textarea aria-label="Test" placeholder="Yaz...">
+        <Textarea.Label>Aciklama</Textarea.Label>
+      </Textarea>,
+    );
+    expect(screen.getByTestId('textarea-label')).toBeInTheDocument();
+    expect(screen.getByTestId('textarea-label')).toHaveTextContent('Aciklama');
+  });
+
+  it('compound: Counter render edilir', () => {
+    render(
+      <Textarea aria-label="Test" placeholder="Yaz...">
+        <Textarea.Counter count={42} max={500} />
+      </Textarea>,
+    );
+    expect(screen.getByTestId('textarea-counter')).toBeInTheDocument();
+    expect(screen.getByTestId('textarea-counter')).toHaveTextContent('42/500');
+  });
+
+  it('compound: Counter max olmadan render edilir', () => {
+    render(
+      <Textarea aria-label="Test">
+        <Textarea.Counter count={10} />
+      </Textarea>,
+    );
+    expect(screen.getByTestId('textarea-counter')).toHaveTextContent('10');
+  });
+
+  it('compound: Label ve Counter birlikte render edilir', () => {
+    render(
+      <Textarea aria-label="Test">
+        <Textarea.Label>Aciklama</Textarea.Label>
+        <Textarea.Counter count={0} max={200} />
+      </Textarea>,
+    );
+    expect(screen.getByTestId('textarea-label')).toBeInTheDocument();
+    expect(screen.getByTestId('textarea-counter')).toBeInTheDocument();
+  });
+
+  it('compound: context disinda kullanim hata firlatir', () => {
+    expect(() => {
+      render(<Textarea.Label>Test</Textarea.Label>);
+    }).toThrow('Textarea compound sub-components must be used within <Textarea>.');
+  });
+
+  it('ref forward edilir', () => {
+    const ref = vi.fn();
+    render(<Textarea aria-label="Test" ref={ref} />);
+    expect(ref).toHaveBeenCalled();
+  });
+});

@@ -35,6 +35,7 @@ const withDisabled = [
 const meta = {
   title: 'Primitives/TagInput',
   component: TagInput,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -301,6 +302,21 @@ export const Playground: Story = {
   render: (args) => (
     <div style={{ maxWidth: 400 }}>
       <TagInput {...args} aria-label="Teknolojiler" />
+    </div>
+  ),
+};
+
+// ── Compound API ──────────────────────────────────────
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ maxWidth: 400 }}>
+      <TagInput options={frameworks} aria-label="Compound Teknolojiler">
+        <TagInput.Tag>React</TagInput.Tag>
+        <TagInput.Tag>Vue</TagInput.Tag>
+        <TagInput.Input />
+      </TagInput>
     </div>
   ),
 };

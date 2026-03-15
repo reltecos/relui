@@ -7,62 +7,129 @@
  */
 
 /**
- * Grid — CSS Grid layout bileşeni.
- * Box üzerine display="grid" varsayılanı ve kısa yol prop'ları ekler.
+ * Grid — CSS Grid layout bilesen (Dual API).
+ * Box uzerine display="grid" varsayilani ve kisa yol prop'lari ekler.
+ *
+ * Props-based: `<Grid columns={3} gap={4}>icerik</Grid>`
+ * Compound:    `<Grid columns={3}><Grid.Item>1</Grid.Item></Grid>`
  *
  * @packageDocumentation
  */
 
-import { forwardRef } from 'react';
+import { forwardRef, createContext, useContext, type ReactNode } from 'react';
 import { Box, type BoxProps } from '../box';
 import type { Sprinkles } from '../utils/sprinkles.css';
+import { itemStyle } from './grid.css';
+import { getSlotProps, type SlotStyleProps, type ClassNames, type Styles } from '../utils/slot-styles';
 
-/** Grid slot isimleri. */
-export type GridSlot = 'root';
+// ── Slot ──────────────────────────────────────────────
+
+/** Grid slot isimleri / Grid slot names. */
+export type GridSlot = 'root' | 'item';
+
+// ── Context (Compound API) ────────────────────────────
+
+interface GridContextValue {
+  classNames: ClassNames<GridSlot> | undefined;
+  styles: Styles<GridSlot> | undefined;
+}
+
+const GridContext = createContext<GridContextValue | null>(null);
+
+function useGridContext(): GridContextValue {
+  const ctx = useContext(GridContext);
+  if (!ctx) throw new Error('Grid compound sub-components must be used within <Grid>.');
+  return ctx;
+}
+
+// ── Compound: Grid.Item ──────────────────────────────
+
+/** Grid.Item props */
+export interface GridItemProps extends BoxProps {
+  /** Icerik / Content */
+  children?: ReactNode;
+  /** Ek className / Additional className */
+  className?: string;
+}
+
+const GridItem = forwardRef<HTMLElement, GridItemProps>(
+  function GridItem(props, ref) {
+    const { children, className, ...rest } = props;
+    const ctx = useGridContext();
+    const slot = getSlotProps('item', itemStyle, ctx.classNames, ctx.styles);
+    const cls = className ? `${slot.className} ${className}` : slot.className;
+
+    return (
+      <Box
+        ref={ref}
+        className={cls}
+        style={slot.style}
+        data-testid="grid-item"
+        {...rest}
+      >
+        {children}
+      </Box>
+    );
+  },
+);
+
+// ── Types ─────────────────────────────────────────────
 
 /**
- * Grid prop'ları.
+ * Grid prop'lari.
  *
- * Box'un tüm prop'larını destekler + `columns` ve `rows` kısa yolları.
+ * Box'un tum prop'larini destekler + `columns` ve `rows` kisa yollari.
  */
-export interface GridProps extends BoxProps {
-  /** gridTemplateColumns kısa yolu. Sayı (1–12) veya responsive obje. */
+export interface GridProps extends Omit<BoxProps, 'classNames' | 'styles'>, SlotStyleProps<GridSlot> {
+  /** gridTemplateColumns kisa yolu. Sayi (1-12) veya responsive obje. */
   columns?: Sprinkles['gridTemplateColumns'];
-  /** gridRow kısa yolu (grid item'lar için). */
+  /** gridRow kisa yolu (grid item'lar icin). */
   rows?: Sprinkles['gridRow'];
 }
 
+// ── Component ─────────────────────────────────────────
+
+const GridBase = forwardRef<HTMLElement, GridProps>(function Grid(props, ref) {
+  const { columns, rows, classNames, styles, ...rest } = props;
+
+  const ctxValue: GridContextValue = { classNames, styles };
+
+  return (
+    <GridContext.Provider value={ctxValue}>
+      <Box
+        ref={ref}
+        display="grid"
+        classNames={classNames ? { root: classNames.root } : undefined}
+        styles={styles ? { root: styles.root } : undefined}
+        {...(columns !== undefined ? { gridTemplateColumns: columns } : {})}
+        {...(rows !== undefined ? { gridRow: rows } : {})}
+        {...rest}
+      />
+    </GridContext.Provider>
+  );
+});
+
 /**
- * Grid — CSS Grid layout bileşeni.
+ * Grid bilesen — Dual API (props-based + compound).
  *
- * `display="grid"` varsayılanıyla Box. `columns` kısa yolu ile grid sütun sayısı.
- *
- * @example
+ * @example Props-based
  * ```tsx
  * <Grid columns={3} gap={4}>
  *   <Box>1</Box>
  *   <Box>2</Box>
  *   <Box>3</Box>
  * </Grid>
+ * ```
  *
- * <Grid columns={{ base: 1, md: 2, lg: 4 }} gap={{ base: 2, lg: 4 }}>
- *   <Box>A</Box>
- *   <Box>B</Box>
- *   <Box>C</Box>
- *   <Box>D</Box>
+ * @example Compound
+ * ```tsx
+ * <Grid columns={3} gap={4}>
+ *   <Grid.Item>1</Grid.Item>
+ *   <Grid.Item>2</Grid.Item>
+ *   <Grid.Item>3</Grid.Item>
  * </Grid>
  * ```
  */
-export const Grid = forwardRef<HTMLElement, GridProps>(function Grid(props, ref) {
-  const { columns, rows, ...rest } = props;
-
-  return (
-    <Box
-      ref={ref}
-      display="grid"
-      {...(columns !== undefined ? { gridTemplateColumns: columns } : {})}
-      {...(rows !== undefined ? { gridRow: rows } : {})}
-      {...rest}
-    />
-  );
+export const Grid = Object.assign(GridBase, {
+  Item: GridItem,
 });

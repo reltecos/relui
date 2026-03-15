@@ -8,12 +8,13 @@
 
 export {
   Select,
-  SelectTrigger,
-  SelectContent,
-  SelectOption,
-  SelectGroup,
   type SelectComponentProps,
   type SelectSlot,
+  type SelectTriggerProps,
+  type SelectValueProps,
+  type SelectContentProps,
+  type SelectOptionProps,
+  type SelectGroupProps,
 } from './Select';
 export {
   useSelect,

@@ -295,3 +295,58 @@ describe('PasswordInput', () => {
     });
   });
 });
+
+// ── Compound API ──
+
+describe('PasswordInput (Compound)', () => {
+  it('compound: ToggleButton render edilir', () => {
+    render(
+      <PasswordInput aria-label="Sifre" placeholder="Sifre">
+        <PasswordInput.ToggleButton />
+      </PasswordInput>,
+    );
+    expect(screen.getByTestId('passwordinput-toggle')).toBeInTheDocument();
+  });
+
+  it('compound: toggle tiklaninca type degisir', () => {
+    render(
+      <PasswordInput aria-label="Sifre" placeholder="Sifre">
+        <PasswordInput.ToggleButton />
+      </PasswordInput>,
+    );
+    const input = screen.getByLabelText('Sifre');
+    const toggle = screen.getByTestId('passwordinput-toggle');
+
+    expect(input).toHaveAttribute('type', 'password');
+    fireEvent.click(toggle);
+    expect(input).toHaveAttribute('type', 'text');
+  });
+
+  it('compound: root data-testid eklenir', () => {
+    render(
+      <PasswordInput aria-label="Sifre">
+        <PasswordInput.ToggleButton />
+      </PasswordInput>,
+    );
+    expect(screen.getByTestId('passwordinput-root')).toBeInTheDocument();
+  });
+
+  it('compound: custom ikonlar kullanilabilir', () => {
+    render(
+      <PasswordInput aria-label="Sifre">
+        <PasswordInput.ToggleButton
+          showIcon={<span data-testid="cmp-show">S</span>}
+          hideIcon={<span data-testid="cmp-hide">H</span>}
+        />
+      </PasswordInput>,
+    );
+    const toggle = screen.getByTestId('passwordinput-toggle');
+    expect(toggle.querySelector('[data-testid="cmp-show"]')).toBeInTheDocument();
+  });
+
+  it('compound: context disinda kullanim hata firlatir', () => {
+    expect(() => {
+      render(<PasswordInput.ToggleButton />);
+    }).toThrow('PasswordInput compound sub-components must be used within <PasswordInput>.');
+  });
+});

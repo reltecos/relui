@@ -15,6 +15,7 @@ import { Slider } from './Slider';
 const meta: Meta<typeof Slider> = {
   title: 'Primitives/Slider',
   component: Slider,
+  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
@@ -180,6 +181,50 @@ export const CustomSlotStyles: Story = {
           thumb: { boxShadow: '0 0 8px rgba(0,0,0,0.3)' },
         }}
       />
+    </div>
+  ),
+};
+
+// ── Compound API ────────────────────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => {
+    const [val, setVal] = useState(50);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '300px' }}>
+        <Slider
+          min={0}
+          max={100}
+          value={val}
+          onValueChange={setVal}
+          aria-label="Compound slider"
+        >
+          <Slider.Track />
+          <Slider.Thumb aria-label="Ses" />
+          <Slider.Label>{val}</Slider.Label>
+        </Slider>
+      </div>
+    );
+  },
+};
+
+// ── Compound + CustomSlotStyles ─────────────────────────────────────
+
+export const CompoundCustomSlotStyles: Story = {
+  render: () => (
+    <div style={{ maxWidth: '300px' }}>
+      <Slider
+        value={60}
+        aria-label="Ozel stilli slider"
+        styles={{
+          track: { backgroundColor: '#e0e0e0', borderRadius: '8px' },
+          fill: { backgroundColor: 'tomato' },
+          thumb: { border: '2px solid tomato' },
+        }}
+      >
+        <Slider.Track />
+        <Slider.Thumb aria-label="Ses" />
+      </Slider>
     </div>
   ),
 };

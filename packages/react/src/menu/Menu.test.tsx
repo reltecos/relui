@@ -387,3 +387,72 @@ describe('Menu', () => {
     expect(sep?.className).toContain('custom-divider');
   });
 });
+
+// ── Compound API ──────────────────────────────────────────────
+
+describe('Menu (Compound)', () => {
+  it('compound: menubar role ile render eder', () => {
+    render(
+      <Menu>
+        <Menu.Group label="File">
+          <Menu.Item>New</Menu.Item>
+        </Menu.Group>
+      </Menu>,
+    );
+    expect(screen.getByRole('menubar')).toBeInTheDocument();
+  });
+
+  it('compound: group ve item render edilir', () => {
+    render(
+      <Menu>
+        <Menu.Group label="File">
+          <Menu.Item>New</Menu.Item>
+          <Menu.Item>Open</Menu.Item>
+        </Menu.Group>
+      </Menu>,
+    );
+    expect(screen.getByTestId('menu-group')).toBeInTheDocument();
+    expect(screen.getByText('File')).toBeInTheDocument();
+    const items = screen.getAllByTestId('menu-item');
+    expect(items).toHaveLength(2);
+  });
+
+  it('compound: separator render edilir', () => {
+    render(
+      <Menu>
+        <Menu.Group label="File">
+          <Menu.Item>New</Menu.Item>
+          <Menu.Separator />
+          <Menu.Item>Save</Menu.Item>
+        </Menu.Group>
+      </Menu>,
+    );
+    expect(screen.getByTestId('menu-separator')).toBeInTheDocument();
+    expect(screen.getByRole('separator')).toBeInTheDocument();
+  });
+
+  it('compound: label render edilir', () => {
+    render(
+      <Menu>
+        <Menu.Group label="Edit">
+          <Menu.Label>Islemler</Menu.Label>
+          <Menu.Item>Undo</Menu.Item>
+        </Menu.Group>
+      </Menu>,
+    );
+    expect(screen.getByTestId('menu-label')).toHaveTextContent('Islemler');
+  });
+
+  it('compound: classNames context ile sub-component lara aktarilir', () => {
+    render(
+      <Menu classNames={{ divider: 'cmp-divider' }}>
+        <Menu.Group label="File">
+          <Menu.Item>New</Menu.Item>
+          <Menu.Separator />
+          <Menu.Item>Save</Menu.Item>
+        </Menu.Group>
+      </Menu>,
+    );
+    expect(screen.getByTestId('menu-separator').className).toContain('cmp-divider');
+  });
+});

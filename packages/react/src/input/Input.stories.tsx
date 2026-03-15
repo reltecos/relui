@@ -51,6 +51,7 @@ const UserIcon = () => (
 const meta: Meta<typeof Input> = {
   title: 'Primitives/Input',
   component: Input,
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
@@ -211,6 +212,24 @@ export const CustomSlotStyles: Story = {
         style={{ margin: '4px' }}
         styles={{ root: { borderWidth: '2px' } }}
       />
+    </div>
+  ),
+};
+
+export const Compound: Story = {
+  name: 'Compound API',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '320px' }}>
+      <Input placeholder="Ara...">
+        <Input.LeftAddon><SearchIcon /></Input.LeftAddon>
+      </Input>
+      <Input placeholder="E-posta" type="email">
+        <Input.LeftAddon><MailIcon /></Input.LeftAddon>
+        <Input.RightAddon><EyeIcon /></Input.RightAddon>
+      </Input>
+      <Input placeholder="Sadece sag addon">
+        <Input.RightAddon><LockIcon /></Input.RightAddon>
+      </Input>
     </div>
   ),
 };

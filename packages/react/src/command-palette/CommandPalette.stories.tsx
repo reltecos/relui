@@ -245,6 +245,34 @@ export const CustomPlaceholder: Story = {
   ),
 };
 
+export const Compound: Story = {
+  render: () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [query, setQuery] = useState('');
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 40 }}>
+        <button onClick={() => setIsOpen(true)} style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid #ccc', background: 'transparent', cursor: 'pointer' }}>
+          Open Compound Command Palette
+        </button>
+        <CommandPalette open={isOpen} onOpenChange={setIsOpen} items={[]}>
+          <CommandPalette.Input placeholder="Type a command..." value={query} onChange={setQuery} />
+          <CommandPalette.List>
+            <CommandPalette.Group heading="File">
+              <CommandPalette.Item shortcut="Ctrl+S" icon={<SaveIcon size={16} />}>Save File</CommandPalette.Item>
+              <CommandPalette.Item shortcut="Ctrl+O" icon={<FolderOpenIcon size={16} />}>Open File</CommandPalette.Item>
+            </CommandPalette.Group>
+            <CommandPalette.Group heading="Edit">
+              <CommandPalette.Item shortcut="Ctrl+C" icon={<CopyIcon size={16} />}>Copy</CommandPalette.Item>
+              <CommandPalette.Item shortcut="Ctrl+V" icon={<ClipboardIcon size={16} />}>Paste</CommandPalette.Item>
+            </CommandPalette.Group>
+          </CommandPalette.List>
+        </CommandPalette>
+      </div>
+    );
+  },
+};
+
 export const CustomSlotStyles: Story = {
   render: () => (
     <CommandPaletteDemo

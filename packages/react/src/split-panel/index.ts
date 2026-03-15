@@ -10,4 +10,6 @@ export {
   SplitPanel,
   type SplitPanelComponentProps,
   type SplitPanelSlot,
+  type SplitPanelPaneProps,
+  type SplitPanelHandleProps,
 } from './SplitPanel';
