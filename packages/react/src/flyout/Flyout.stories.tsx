@@ -42,21 +42,21 @@ export const Default: Story = {
     trigger: <button>Bildirimleri Goster</button>,
     children: (
       <div>
-        <div style={{ padding: '8px 0', borderBottom: '1px solid #e5e7eb' }}>
+        <div style={{ padding: '8px 0', borderBottom: '1px solid var(--rel-color-border, #e5e7eb)' }}>
           <strong>Yeni mesaj</strong>
-          <p style={{ margin: '4px 0 0', fontSize: 13, color: '#6b7280' }}>
+          <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--rel-color-text-muted, #6b7280)' }}>
             Ahmet size bir mesaj gonderdi.
           </p>
         </div>
-        <div style={{ padding: '8px 0', borderBottom: '1px solid #e5e7eb' }}>
+        <div style={{ padding: '8px 0', borderBottom: '1px solid var(--rel-color-border, #e5e7eb)' }}>
           <strong>Sistem guncelleme</strong>
-          <p style={{ margin: '4px 0 0', fontSize: 13, color: '#6b7280' }}>
+          <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--rel-color-text-muted, #6b7280)' }}>
             Sistem basariyla guncellendi.
           </p>
         </div>
         <div style={{ padding: '8px 0' }}>
           <strong>Hatirlatma</strong>
-          <p style={{ margin: '4px 0 0', fontSize: 13, color: '#6b7280' }}>
+          <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--rel-color-text-muted, #6b7280)' }}>
             Toplanti 15 dakika sonra basliyor.
           </p>
         </div>
@@ -95,10 +95,10 @@ export const WithFooter: Story = {
     trigger: <button>Ayarlar</button>,
     footer: (
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-        <button style={{ padding: '6px 12px', borderRadius: 4, border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer' }}>
+        <button style={{ padding: '6px 12px', borderRadius: 4, border: '1px solid var(--rel-color-border, #d1d5db)', background: 'var(--rel-color-bg, #fff)', cursor: 'pointer' }}>
           Iptal
         </button>
-        <button style={{ padding: '6px 12px', borderRadius: 4, border: 'none', background: '#3b82f6', color: '#fff', cursor: 'pointer' }}>
+        <button style={{ padding: '6px 12px', borderRadius: 4, border: 'none', background: 'var(--rel-color-primary, #3b82f6)', color: 'var(--rel-color-text-inverse, #fff)', cursor: 'pointer' }}>
           Kaydet
         </button>
       </div>
@@ -129,7 +129,7 @@ export const Controlled: Story = {
     const [open, setOpen] = useState(false);
     return (
       <div>
-        <p style={{ marginBottom: 8, fontSize: 14, color: '#6b7280' }}>
+        <p style={{ marginBottom: 8, fontSize: 14, color: 'var(--rel-color-text-muted, #6b7280)' }}>
           Durum: <strong>{open ? 'Acik' : 'Kapali'}</strong>
         </p>
         <Flyout
@@ -141,7 +141,7 @@ export const Controlled: Story = {
           <p>Bu flyout dis state ile kontrol edilir.</p>
           <button
             onClick={() => setOpen(false)}
-            style={{ marginTop: 8, padding: '6px 12px', borderRadius: 4, border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer' }}
+            style={{ marginTop: 8, padding: '6px 12px', borderRadius: 4, border: '1px solid var(--rel-color-border, #d1d5db)', background: 'var(--rel-color-bg, #fff)', cursor: 'pointer' }}
           >
             Kapat
           </button>
@@ -162,7 +162,7 @@ export const CustomSlotStyles: Story = {
     styles: {
       panel: {
         borderRadius: 16,
-        boxShadow: '0 12px 40px rgba(0,0,0,0.18)',
+        boxShadow: '0 12px 40px var(--rel-color-overlay, rgba(0,0,0,0.18))',
       },
       header: {
         padding: '16px 20px',
@@ -192,9 +192,9 @@ export const Compound: Story = {
             style={{
               padding: '8px 16px',
               borderRadius: 6,
-              border: '1px solid #8b5cf6',
-              background: '#8b5cf6',
-              color: '#fff',
+              border: '1px solid var(--rel-color-info, #8b5cf6)',
+              background: 'var(--rel-color-info, #8b5cf6)',
+              color: 'var(--rel-color-text-inverse, #fff)',
               cursor: 'pointer',
               fontFamily: 'system-ui, sans-serif',
               fontSize: 14,
@@ -208,7 +208,7 @@ export const Compound: Story = {
             <h3 style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>Compound Baslik</h3>
           </Flyout.Header>
           <Flyout.Body>
-            <p style={{ margin: 0, fontSize: 13, color: '#6b7280' }}>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--rel-color-text-muted, #6b7280)' }}>
               Bu bir compound API ornegi. Header ve Body ayri sub-component olarak verilir.
             </p>
           </Flyout.Body>

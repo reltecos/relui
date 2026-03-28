@@ -56,7 +56,7 @@ const basicPanels = [
     children: (
       <div>
         <h3 style={{ margin: '0 0 8px' }}>Genel Bakış</h3>
-        <p style={{ margin: 0, color: '#666' }}>
+        <p style={{ margin: 0, color: 'var(--rel-color-text-muted, #666)' }}>
           RelUI, dünyanın en güçlü web UI toolkit&apos;idir. Qt/WPF/GTK seviyesinde bileşen derinliği sunar.
         </p>
       </div>
@@ -67,7 +67,7 @@ const basicPanels = [
     children: (
       <div>
         <h3 style={{ margin: '0 0 8px' }}>Özellikler</h3>
-        <ul style={{ margin: 0, paddingLeft: '20px', color: '#666' }}>
+        <ul style={{ margin: 0, paddingLeft: '20px', color: 'var(--rel-color-text-muted, #666)' }}>
           <li>200+ bileşen</li>
           <li>Framework-agnostic core</li>
           <li>Headless + styled iki katman</li>
@@ -81,7 +81,7 @@ const basicPanels = [
     children: (
       <div>
         <h3 style={{ margin: '0 0 8px' }}>Fiyatlandırma</h3>
-        <p style={{ margin: 0, color: '#666' }}>
+        <p style={{ margin: 0, color: 'var(--rel-color-text-muted, #666)' }}>
           Core + Tokens: MIT (ücretsiz). Framework paketleri: BSL lisansı.
         </p>
       </div>
@@ -92,7 +92,7 @@ const basicPanels = [
     children: (
       <div>
         <h3 style={{ margin: '0 0 8px' }}>Sıkça Sorulan Sorular</h3>
-        <p style={{ margin: 0, color: '#666' }}>
+        <p style={{ margin: 0, color: 'var(--rel-color-text-muted, #666)' }}>
           <strong>Hangi framework&apos;leri destekliyor?</strong> React, Vue, Svelte, Angular, Solid.
         </p>
       </div>
@@ -206,7 +206,7 @@ function ClosableTabsDemo() {
 
   return (
     <div>
-      <p style={{ margin: '0 0 12px', fontFamily: 'sans-serif', color: '#666', fontSize: '14px' }}>
+      <p style={{ margin: '0 0 12px', fontFamily: 'sans-serif', color: 'var(--rel-color-text-muted, #666)', fontSize: '14px' }}>
         Tab&apos;ların yanındaki × ile kapatılabilir. &quot;config.json&quot; kapatılamaz.
       </p>
       <Tabs
@@ -216,7 +216,7 @@ function ClosableTabsDemo() {
         onClose={handleClose}
         variant="enclosed"
         renderPanel={(v) => (
-          <div style={{ fontFamily: 'monospace', color: '#666' }}>
+          <div style={{ fontFamily: 'monospace', color: 'var(--rel-color-text-muted, #666)' }}>
             Dosya içeriği: {v}
           </div>
         )}
@@ -234,7 +234,7 @@ export const ClosableTabs: Story = {
 export const ManualActivation: Story = {
   render: () => (
     <div>
-      <p style={{ margin: '0 0 12px', fontFamily: 'sans-serif', color: '#666', fontSize: '14px' }}>
+      <p style={{ margin: '0 0 12px', fontFamily: 'sans-serif', color: 'var(--rel-color-text-muted, #666)', fontSize: '14px' }}>
         Manual mod: Arrow tuşları sadece focus verir, Enter/Space ile seçilir.
       </p>
       <Tabs
@@ -282,7 +282,7 @@ export const Disabled: Story = {
 export const Grow: Story = {
   render: () => (
     <div>
-      <p style={{ margin: '0 0 12px', fontFamily: 'sans-serif', color: '#666', fontSize: '14px' }}>
+      <p style={{ margin: '0 0 12px', fontFamily: 'sans-serif', color: 'var(--rel-color-text-muted, #666)', fontSize: '14px' }}>
         grow prop ile tab&apos;lar eşit genişlikte büyür.
       </p>
       <Tabs

@@ -121,7 +121,7 @@ export const Controlled: Story = {
           value={value}
           onValueChange={setValue}
         />
-        <div style={{ fontSize: '0.875rem', color: '#666' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #666)' }}>
           Seçili: {value !== undefined ? String(value) : '(yok)'}
         </div>
         <button onClick={() => setValue(undefined)} style={{ alignSelf: 'start' }}>
@@ -144,7 +144,7 @@ export const FixedDropdownWidth: Story = {
 
 export const NarrowContainer: Story = {
   render: () => (
-    <div style={{ width: '200px', border: '1px dashed #ccc', padding: '0.5rem' }}>
+    <div style={{ width: '200px', border: '1px dashed var(--rel-color-border, #ccc)', padding: '0.5rem' }}>
       <MultiColumnCombobox
         columns={employeeColumns}
         items={employeeItems}

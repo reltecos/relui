@@ -198,6 +198,7 @@ const ResizableBase = forwardRef<HTMLDivElement, ResizableComponentProps>(
           style={rootSlot.style}
           data-resizing={isResizing || undefined}
           data-disabled={disabled || undefined}
+          data-testid="resizable-root"
         >
           {children}
 
@@ -217,6 +218,7 @@ const ResizableBase = forwardRef<HTMLDivElement, ResizableComponentProps>(
                 style={{ ...handleSlot.style, ...hProps.style }}
                 onPointerDown={hProps.onPointerDown}
                 data-direction={direction}
+                data-testid={`resizable-handle-${direction}`}
                 aria-hidden="true"
               />
             );

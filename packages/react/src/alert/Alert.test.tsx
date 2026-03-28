@@ -190,6 +190,43 @@ describe('Alert slot API', () => {
     render(<Alert styles={{ root: { fontSize: '20px' } }}>Mesaj</Alert>);
     expect(screen.getByTestId('alert').style.fontSize).toBe('20px');
   });
+
+  it('styles.icon icon elemana eklenir', () => {
+    render(<Alert styles={{ icon: { padding: '20px' } }}>Mesaj</Alert>);
+    expect(screen.getByTestId('alert-icon')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.content content elemana eklenir', () => {
+    render(<Alert styles={{ content: { letterSpacing: '0.05em' } }}>Mesaj</Alert>);
+    expect(screen.getByTestId('alert-content')).toHaveStyle({ letterSpacing: '0.05em' });
+  });
+
+  it('styles.title title elemana eklenir', () => {
+    render(<Alert title="Baslik" styles={{ title: { fontSize: '18px' } }}>Mesaj</Alert>);
+    expect(screen.getByTestId('alert-title')).toHaveStyle({ fontSize: '18px' });
+  });
+
+  it('styles.description description elemana eklenir', () => {
+    render(<Alert styles={{ description: { opacity: '0.8' } }}>Mesaj</Alert>);
+    expect(screen.getByTestId('alert-description')).toHaveStyle({ opacity: '0.8' });
+  });
+
+  it('styles.closeButton closeButton elemana eklenir', () => {
+    render(<Alert closable styles={{ closeButton: { padding: '20px' } }}>Mesaj</Alert>);
+    expect(screen.getByTestId('alert-close')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.action action elemana eklenir', () => {
+    render(
+      <Alert
+        action={<button>Yeniden dene</button>}
+        styles={{ action: { fontWeight: '700' } }}
+      >
+        Mesaj
+      </Alert>,
+    );
+    expect(screen.getByTestId('alert-action')).toHaveStyle({ fontWeight: '700' });
+  });
 });
 
 // ── Compound API ────────────────────────────────────────

@@ -26,8 +26,8 @@ type Story = StoryObj<typeof DropdownMenu>;
 const buttonStyle: React.CSSProperties = {
   padding: '8px 16px',
   borderRadius: 6,
-  border: '1px solid #d1d5db',
-  background: '#fff',
+  border: '1px solid var(--rel-color-border, #d1d5db)',
+  background: 'var(--rel-color-bg, #fff)',
   cursor: 'pointer',
   fontFamily: 'system-ui, sans-serif',
   fontSize: 14,
@@ -105,7 +105,7 @@ export const CustomSlotStyles: Story = {
     <div style={{ padding: 40 }}>
       <DropdownMenu
         trigger={
-          <button style={{ ...buttonStyle, background: '#6366f1', color: '#fff', border: 'none' }}>
+          <button style={{ ...buttonStyle, background: 'var(--rel-color-info, #6366f1)', color: 'var(--rel-color-text-inverse, #fff)', border: 'none' }}>
             Tema
           </button>
         }
@@ -113,15 +113,15 @@ export const CustomSlotStyles: Story = {
         onSelect={(id) => alert(`Secilen: ${id}`)}
         styles={{
           menu: {
-            backgroundColor: '#1f2937',
-            borderColor: '#374151',
+            backgroundColor: 'var(--rel-color-bg-inverse, #1f2937)',
+            borderColor: 'var(--rel-color-bg-inverse-subtle, #374151)',
             borderRadius: 12,
           },
           item: {
-            color: '#e5e7eb',
+            color: 'var(--rel-color-text-secondary, #e5e7eb)',
           },
           separator: {
-            backgroundColor: '#374151',
+            backgroundColor: 'var(--rel-color-bg-inverse-subtle, #374151)',
           },
         }}
       />

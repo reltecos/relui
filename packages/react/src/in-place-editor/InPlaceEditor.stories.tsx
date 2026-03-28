@@ -172,7 +172,7 @@ export const CustomSlotStyles: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
       <InPlaceEditor
         defaultValue="Root styled"
-        styles={{ root: { border: '2px dashed hotpink', padding: '4px' } }}
+        styles={{ root: { border: '2px dashed var(--rel-color-accent, #ec4899)', padding: '4px' } }}
       />
       <InPlaceEditor
         defaultValue="Display styled"

@@ -26,14 +26,14 @@ type Story = StoryObj<typeof ContextMenu>;
 const triggerStyle: React.CSSProperties = {
   width: 400,
   height: 200,
-  border: '2px dashed #d1d5db',
+  border: '2px dashed var(--rel-color-border, #d1d5db)',
   borderRadius: 8,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   fontFamily: 'system-ui, sans-serif',
   fontSize: 14,
-  color: '#6b7280',
+  color: 'var(--rel-color-text-muted, #6b7280)',
   cursor: 'context-menu',
 };
 
@@ -109,19 +109,19 @@ export const CustomSlotStyles: Story = {
       onSelect={(id) => alert(`Secilen: ${id}`)}
       styles={{
         menu: {
-          backgroundColor: '#1f2937',
-          borderColor: '#374151',
+          backgroundColor: 'var(--rel-color-bg-inverse, #1f2937)',
+          borderColor: 'var(--rel-color-bg-inverse-subtle, #374151)',
           borderRadius: 12,
         },
         item: {
-          color: '#e5e7eb',
+          color: 'var(--rel-color-border, #e5e7eb)',
         },
         separator: {
-          backgroundColor: '#374151',
+          backgroundColor: 'var(--rel-color-bg-inverse-subtle, #374151)',
         },
       }}
     >
-      <div style={{ ...triggerStyle, border: '2px dashed #4b5563', color: '#9ca3af' }}>
+      <div style={{ ...triggerStyle, border: '2px dashed var(--rel-color-bg-inverse-subtle, #4b5563)', color: 'var(--rel-color-text-muted, #9ca3af)' }}>
         Sag tikla — koyu tema
       </div>
     </ContextMenu>

@@ -27,10 +27,10 @@ const meta: Meta<typeof LoadPanel> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ position: 'relative', height: 300, border: '1px solid #e2e8f0', borderRadius: 8, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', height: 300, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 8, overflow: 'hidden' }}>
         <div style={{ padding: 16, fontFamily: 'system-ui' }}>
           <h3 style={{ margin: '0 0 8px' }}>Icerik Alani</h3>
-          <p style={{ margin: 0, color: '#64748b' }}>Bu alan LoadPanel tarafindan kaplanir.</p>
+          <p style={{ margin: 0, color: 'var(--rel-color-text-muted, #64748b)' }}>Bu alan LoadPanel tarafindan kaplanir.</p>
         </div>
         <Story />
       </div>
@@ -60,13 +60,13 @@ export const NoBackdrop: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 16 }}>
-      <div style={{ position: 'relative', width: 200, height: 150, border: '1px solid #e2e8f0', borderRadius: 8, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', width: 200, height: 150, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 8, overflow: 'hidden' }}>
         <LoadPanel size="sm" message="SM" />
       </div>
-      <div style={{ position: 'relative', width: 200, height: 150, border: '1px solid #e2e8f0', borderRadius: 8, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', width: 200, height: 150, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 8, overflow: 'hidden' }}>
         <LoadPanel size="md" message="MD" />
       </div>
-      <div style={{ position: 'relative', width: 200, height: 150, border: '1px solid #e2e8f0', borderRadius: 8, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', width: 200, height: 150, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 8, overflow: 'hidden' }}>
         <LoadPanel size="lg" message="LG" />
       </div>
     </div>
@@ -75,7 +75,7 @@ export const Sizes: Story = {
 
 export const CustomColor: Story = {
   args: {
-    spinnerColor: '#e11d48',
+    spinnerColor: 'var(--rel-color-error, #e11d48)',
     message: 'Ozel renk spinner',
   },
 };
@@ -101,13 +101,13 @@ export const CustomIndicator: Story = {
 
 export const Compound: Story = {
   render: () => (
-    <div style={{ position: 'relative', height: 300, border: '1px solid #e2e8f0', borderRadius: 8, overflow: 'hidden' }}>
+    <div style={{ position: 'relative', height: 300, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 8, overflow: 'hidden' }}>
       <div style={{ padding: 16, fontFamily: 'system-ui' }}>
         <h3 style={{ margin: '0 0 8px' }}>Compound LoadPanel</h3>
-        <p style={{ margin: 0, color: '#64748b' }}>Sub-component API ile olusturulmus.</p>
+        <p style={{ margin: 0, color: 'var(--rel-color-text-muted, #64748b)' }}>Sub-component API ile olusturulmus.</p>
       </div>
       <LoadPanel>
-        <LoadPanel.Spinner color="#8b5cf6" />
+        <LoadPanel.Spinner color="var(--rel-color-info, #8b5cf6)" />
         <LoadPanel.Message>Compound yukleniyor...</LoadPanel.Message>
       </LoadPanel>
     </div>

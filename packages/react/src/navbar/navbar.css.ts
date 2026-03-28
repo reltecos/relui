@@ -28,6 +28,7 @@ export const navbarRootRecipe = recipe({
     width: '100%',
     boxSizing: 'border-box',
     fontFamily: 'var(--rel-font-sans)',
+    color: 'var(--rel-color-text, #374151)',
     transition: 'background-color 200ms ease, box-shadow 200ms ease',
   },
 
@@ -49,7 +50,7 @@ export const navbarRootRecipe = recipe({
         borderBottom: 'none',
       },
       blur: {
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'var(--rel-color-bg-translucent, rgba(255, 255, 255, 0.8))',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${cssVar.borderDefault}`,

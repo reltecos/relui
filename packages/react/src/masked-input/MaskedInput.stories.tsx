@@ -232,7 +232,7 @@ export const Controlled: Story = {
           onValueChange={setValue}
           aria-label="Telefon"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Ham deger: {value || '(bos)'}
         </div>
       </div>
@@ -254,7 +254,7 @@ export const CustomMask: Story = {
           aria-label="Kod"
           placeholder="AA-0000-xx"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Ham deger: {value || '(bos)'} | Mask: AA-####-**
         </div>
       </div>
@@ -281,7 +281,7 @@ export const CustomSlotStyles: Story = {
         mask="(###) ### ## ##"
         aria-label="Custom"
         classNames={{ root: 'my-masked-input' }}
-        styles={{ root: { borderColor: 'orange', fontStyle: 'italic' } }}
+        styles={{ root: { borderColor: 'var(--rel-color-warning, #f59e0b)', fontStyle: 'italic' } }}
       />
       <MaskedInput
         mask="(###) ### ## ##"
@@ -305,7 +305,7 @@ export const Compound: Story = {
         <MaskedInput mask="(###) ### ## ##" value={value} onValueChange={setValue}>
           <MaskedInput.Field />
         </MaskedInput>
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Ham deger: {value || '(bos)'}
         </div>
       </div>

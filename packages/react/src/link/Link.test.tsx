@@ -170,6 +170,21 @@ describe('Link slot API', () => {
     render(<Link href="#" styles={{ root: { fontSize: '20px' } }}>Link</Link>);
     expect(screen.getByRole('link').style.fontSize).toBe('20px');
   });
+
+  it('styles.externalIcon externalIcon elemana padding eklenir', () => {
+    render(<Link href="https://example.com" external styles={{ externalIcon: { padding: '20px' } }}>Link</Link>);
+    expect(screen.getByTestId('link-externalicon')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.icon icon elemana fontSize eklenir', () => {
+    render(
+      <Link href="#" styles={{ icon: { fontSize: '20px' } }}>
+        <Link.Icon><span>*</span></Link.Icon>
+        Text
+      </Link>,
+    );
+    expect(screen.getByTestId('link-icon')).toHaveStyle({ fontSize: '20px' });
+  });
 });
 
 // ── NavLink render ──────────────────────────────────────────

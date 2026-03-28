@@ -107,6 +107,15 @@ describe('Blockquote', () => {
     expect(screen.getByTestId('blockquote-cite')).toHaveStyle({ letterSpacing: '0.05em' });
   });
 
+  it('styles.icon icon elemana eklenir', () => {
+    render(
+      <Blockquote icon={<span>Q</span>} cite="K" styles={{ icon: { padding: '20px' } }}>
+        Metin
+      </Blockquote>,
+    );
+    expect(screen.getByTestId('blockquote-icon')).toHaveStyle({ padding: '20px' });
+  });
+
   // ── Ref ──
 
   it('ref forward edilir', () => {

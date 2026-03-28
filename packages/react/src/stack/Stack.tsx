@@ -101,6 +101,7 @@ const StackBase = forwardRef<HTMLElement, StackProps>(function Stack(props, ref)
       <Flex
         ref={ref}
         direction={flexDirection as FlexProps['direction']}
+        data-testid="stack-root"
         classNames={classNames ? { root: classNames.root } : undefined}
         styles={styles ? { root: styles.root } : undefined}
         {...(spacing !== undefined ? { gap: spacing } : {})}

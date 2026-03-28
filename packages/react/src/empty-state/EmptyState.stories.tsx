@@ -38,8 +38,8 @@ export const WithAction: Story = {
           padding: '8px 16px',
           borderRadius: 6,
           border: 'none',
-          backgroundColor: '#3b82f6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           fontWeight: 600,
           fontSize: 13,
           cursor: 'pointer',
@@ -76,13 +76,13 @@ export const NoIcon: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      <div style={{ border: '1px dashed #e2e8f0', borderRadius: 8 }}>
+      <div style={{ border: '1px dashed var(--rel-color-border, #e2e8f0)', borderRadius: 8 }}>
         <EmptyState size="sm" title="Kucuk" description="SM boyut ornegi." />
       </div>
-      <div style={{ border: '1px dashed #e2e8f0', borderRadius: 8 }}>
+      <div style={{ border: '1px dashed var(--rel-color-border, #e2e8f0)', borderRadius: 8 }}>
         <EmptyState size="md" title="Orta" description="MD boyut ornegi." />
       </div>
-      <div style={{ border: '1px dashed #e2e8f0', borderRadius: 8 }}>
+      <div style={{ border: '1px dashed var(--rel-color-border, #e2e8f0)', borderRadius: 8 }}>
         <EmptyState size="lg" title="Buyuk" description="LG boyut ornegi." />
       </div>
     </div>
@@ -91,7 +91,7 @@ export const Sizes: Story = {
 
 export const Compound: Story = {
   render: () => (
-    <div style={{ border: '1px dashed #e2e8f0', borderRadius: 8 }}>
+    <div style={{ border: '1px dashed var(--rel-color-border, #e2e8f0)', borderRadius: 8 }}>
       <EmptyState>
         <EmptyState.Icon>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} width="100%" height="100%">
@@ -107,8 +107,8 @@ export const Compound: Story = {
               padding: '8px 16px',
               borderRadius: 6,
               border: 'none',
-              backgroundColor: '#3b82f6',
-              color: '#fff',
+              backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+              color: 'var(--rel-color-text-inverse, #fff)',
               fontWeight: 600,
               fontSize: 13,
               cursor: 'pointer',
@@ -132,8 +132,8 @@ export const MultipleActions: Story = {
           style={{
             padding: '8px 16px',
             borderRadius: 6,
-            border: '1px solid #e2e8f0',
-            backgroundColor: '#fff',
+            border: '1px solid var(--rel-color-border, #e2e8f0)',
+            backgroundColor: 'var(--rel-color-bg, #fff)',
             fontSize: 13,
             cursor: 'pointer',
           }}
@@ -145,8 +145,8 @@ export const MultipleActions: Story = {
             padding: '8px 16px',
             borderRadius: 6,
             border: 'none',
-            backgroundColor: '#3b82f6',
-            color: '#fff',
+            backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             fontWeight: 600,
             fontSize: 13,
             cursor: 'pointer',

@@ -22,7 +22,7 @@ type Story = StoryObj<typeof FloatingWindow>;
 
 export const Default: Story = {
   render: () => (
-    <div style={{ position: 'relative', width: '100%', height: 600, background: '#f1f5f9' }}>
+    <div style={{ position: 'relative', width: '100%', height: 600, background: 'var(--rel-color-bg-subtle, #f1f5f9)' }}>
       <FloatingWindow
         title="Floating Window"
         defaultPosition={{ x: 100, y: 50 }}
@@ -30,7 +30,7 @@ export const Default: Story = {
       >
         <div style={{ padding: 16 }}>
           <p>Bu bir taşınabilir pencere.</p>
-          <p style={{ color: '#64748b', fontSize: 13 }}>
+          <p style={{ color: 'var(--rel-color-text-muted, #64748b)', fontSize: 13 }}>
             Title bar'dan sürükleyerek taşıyabilirsin.
           </p>
         </div>
@@ -41,7 +41,7 @@ export const Default: Story = {
 
 export const MultipleWindows: Story = {
   render: () => (
-    <div style={{ position: 'relative', width: '100%', height: 600, background: '#f1f5f9' }}>
+    <div style={{ position: 'relative', width: '100%', height: 600, background: 'var(--rel-color-bg-subtle, #f1f5f9)' }}>
       <FloatingWindow
         title="Window 1"
         defaultPosition={{ x: 50, y: 30 }}
@@ -72,7 +72,7 @@ export const MultipleWindows: Story = {
 
 export const WithMinMax: Story = {
   render: () => (
-    <div style={{ position: 'relative', width: '100%', height: 600, background: '#f1f5f9' }}>
+    <div style={{ position: 'relative', width: '100%', height: 600, background: 'var(--rel-color-bg-subtle, #f1f5f9)' }}>
       <FloatingWindow
         title="Min/Max Kısıtlı"
         defaultPosition={{ x: 100, y: 50 }}
@@ -93,7 +93,7 @@ export const Closable: Story = {
     const Comp = () => {
       const [open, setOpen] = useState(true);
       return (
-        <div style={{ position: 'relative', width: '100%', height: 600, background: '#f1f5f9' }}>
+        <div style={{ position: 'relative', width: '100%', height: 600, background: 'var(--rel-color-bg-subtle, #f1f5f9)' }}>
           {open ? (
             <FloatingWindow
               title="Kapatılabilir Pencere"
@@ -120,7 +120,7 @@ export const Closable: Story = {
 
 export const NoControls: Story = {
   render: () => (
-    <div style={{ position: 'relative', width: '100%', height: 600, background: '#f1f5f9' }}>
+    <div style={{ position: 'relative', width: '100%', height: 600, background: 'var(--rel-color-bg-subtle, #f1f5f9)' }}>
       <FloatingWindow
         title="Sadece Sürükle"
         defaultPosition={{ x: 100, y: 50 }}
@@ -138,16 +138,16 @@ export const NoControls: Story = {
 
 export const CustomSlotStyles: Story = {
   render: () => (
-    <div style={{ position: 'relative', width: '100%', height: 600, background: '#f1f5f9' }}>
+    <div style={{ position: 'relative', width: '100%', height: 600, background: 'var(--rel-color-bg-subtle, #f1f5f9)' }}>
       <FloatingWindow
         title="Custom Styled"
         defaultPosition={{ x: 100, y: 50 }}
         classNames={{ root: 'custom-window' }}
         styles={{
           root: { borderRadius: 16 },
-          titleBar: { background: '#4f46e5', color: '#fff' },
-          title: { color: '#fff' },
-          content: { padding: 24, background: '#eef2ff' },
+          titleBar: { background: 'var(--rel-color-primary, #4f46e5)', color: 'var(--rel-color-text-inverse, #fff)' },
+          title: { color: 'var(--rel-color-text-inverse, #fff)' },
+          content: { padding: 24, background: 'var(--rel-color-bg-subtle, #eef2ff)' },
         }}
       >
         <p>Custom slot styled window</p>
@@ -158,13 +158,13 @@ export const CustomSlotStyles: Story = {
 
 export const Compound: Story = {
   render: () => (
-    <div style={{ position: 'relative', width: '100%', height: 600, background: '#f1f5f9' }}>
+    <div style={{ position: 'relative', width: '100%', height: 600, background: 'var(--rel-color-bg-subtle, #f1f5f9)' }}>
       <FloatingWindow defaultPosition={{ x: 100, y: 50 }} defaultSize={{ width: 400, height: 300 }}>
         <FloatingWindow.Header title="Compound Window" />
         <FloatingWindow.Body>
           <div style={{ padding: 16 }}>
             <p>Bu pencere Compound API ile olusturuldu.</p>
-            <p style={{ color: '#64748b', fontSize: 13 }}>
+            <p style={{ color: 'var(--rel-color-text-muted, #64748b)', fontSize: 13 }}>
               Header ve Body ayri sub-component olarak kullanildi.
             </p>
           </div>

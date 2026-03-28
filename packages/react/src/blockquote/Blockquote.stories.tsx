@@ -102,13 +102,13 @@ export const WithColor: Story = {
   name: 'Renkli / With Color',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 480 }}>
-      <Blockquote variant="bordered" cite="Kirmizi kaynak" styles={{ root: { borderLeftColor: '#ef4444' } }}>
+      <Blockquote variant="bordered" cite="Kirmizi kaynak" styles={{ root: { borderLeftColor: 'var(--rel-color-error, #ef4444)' } }}>
         Kirmizi kenarlıkli alinti.
       </Blockquote>
-      <Blockquote variant="bordered" cite="Yesil kaynak" styles={{ root: { borderLeftColor: '#22c55e' } }}>
+      <Blockquote variant="bordered" cite="Yesil kaynak" styles={{ root: { borderLeftColor: 'var(--rel-color-success, #22c55e)' } }}>
         Yesil kenarlikli alinti.
       </Blockquote>
-      <Blockquote cite="Mavi kaynak" styles={{ root: { backgroundColor: 'rgba(59, 130, 246, 0.1)' } }}>
+      <Blockquote cite="Mavi kaynak" styles={{ root: { backgroundColor: 'var(--rel-color-primary-subtle, rgba(59, 130, 246, 0.1))' } }}>
         Mavi arka planli alinti.
       </Blockquote>
     </div>

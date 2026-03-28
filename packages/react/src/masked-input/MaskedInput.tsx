@@ -190,6 +190,7 @@ const MaskedInputBase = forwardRef<HTMLInputElement, MaskedInputComponentProps>(
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
+        data-testid="masked-input-field"
       />
     );
   },

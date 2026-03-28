@@ -39,8 +39,8 @@ export const Success: Story = {
           padding: '10px 24px',
           borderRadius: 6,
           border: 'none',
-          backgroundColor: '#16a34a',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-success, #16a34a)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           fontWeight: 600,
           fontSize: 14,
           cursor: 'pointer',
@@ -63,8 +63,8 @@ export const Error: Story = {
           style={{
             padding: '10px 24px',
             borderRadius: 6,
-            border: '1px solid #e2e8f0',
-            backgroundColor: '#fff',
+            border: '1px solid var(--rel-color-border, #e2e8f0)',
+            backgroundColor: 'var(--rel-color-bg, #fff)',
             fontSize: 14,
             cursor: 'pointer',
           }}
@@ -76,8 +76,8 @@ export const Error: Story = {
             padding: '10px 24px',
             borderRadius: 6,
             border: 'none',
-            backgroundColor: '#dc2626',
-            color: '#fff',
+            backgroundColor: 'var(--rel-color-error, #dc2626)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             fontWeight: 600,
             fontSize: 14,
             cursor: 'pointer',
@@ -117,8 +117,8 @@ export const NotFound: Story = {
           padding: '10px 24px',
           borderRadius: 6,
           border: 'none',
-          backgroundColor: '#3b82f6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           fontWeight: 600,
           fontSize: 14,
           cursor: 'pointer',
@@ -139,10 +139,10 @@ export const WithExtra: Story = {
       <div
         style={{
           padding: 16,
-          backgroundColor: '#f8fafc',
+          backgroundColor: 'var(--rel-color-bg-subtle, #f8fafc)',
           borderRadius: 8,
           fontSize: 13,
-          color: '#64748b',
+          color: 'var(--rel-color-text-muted, #64748b)',
           maxWidth: 360,
         }}
       >
@@ -159,8 +159,8 @@ export const WithExtra: Story = {
           padding: '10px 24px',
           borderRadius: 6,
           border: 'none',
-          backgroundColor: '#16a34a',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-success, #16a34a)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           fontWeight: 600,
           fontSize: 14,
           cursor: 'pointer',
@@ -183,7 +183,7 @@ export const Compound: Story = {
       <Result.Title>Siparis Onaylandi</Result.Title>
       <Result.Description>Siparisiniiz basariyla olusturuldu ve kargoya verilecektir.</Result.Description>
       <Result.Extra>
-        <div style={{ padding: 16, backgroundColor: '#f8fafc', borderRadius: 8, fontSize: 13, color: '#64748b', maxWidth: 360 }}>
+        <div style={{ padding: 16, backgroundColor: 'var(--rel-color-bg-subtle, #f8fafc)', borderRadius: 8, fontSize: 13, color: 'var(--rel-color-text-muted, #64748b)', maxWidth: 360 }}>
           <strong>Siparis No:</strong> #12345678
         </div>
       </Result.Extra>
@@ -194,13 +194,13 @@ export const Compound: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      <div style={{ border: '1px dashed #e2e8f0', borderRadius: 8 }}>
+      <div style={{ border: '1px dashed var(--rel-color-border, #e2e8f0)', borderRadius: 8 }}>
         <Result size="sm" status="success" title="SM Boyut" subtitle="Kucuk sonuc sayfasi." />
       </div>
-      <div style={{ border: '1px dashed #e2e8f0', borderRadius: 8 }}>
+      <div style={{ border: '1px dashed var(--rel-color-border, #e2e8f0)', borderRadius: 8 }}>
         <Result size="md" status="info" title="MD Boyut" subtitle="Orta sonuc sayfasi." />
       </div>
-      <div style={{ border: '1px dashed #e2e8f0', borderRadius: 8 }}>
+      <div style={{ border: '1px dashed var(--rel-color-border, #e2e8f0)', borderRadius: 8 }}>
         <Result size="lg" status="error" title="LG Boyut" subtitle="Buyuk sonuc sayfasi." />
       </div>
     </div>

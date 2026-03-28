@@ -92,7 +92,9 @@ describe('Timeline', () => {
 
   it('color ile dot rengi degisir', () => {
     render(<Timeline items={[{ id: '1', title: 'T', color: '#ff0000' }]} />);
-    expect(screen.getByTestId('timeline-dot')).toHaveStyle({ backgroundColor: '#ff0000' });
+    const dot = screen.getByTestId('timeline-dot');
+    const bg = dot.style.backgroundColor;
+    expect(bg === '#ff0000' || bg === 'rgb(255, 0, 0)').toBe(true);
   });
 
   it('icon dot icinde render edilir', () => {
@@ -202,6 +204,46 @@ describe('Timeline', () => {
       <Timeline items={[{ id: '1', title: 'T' }]} styles={{ dot: { opacity: '0.5' } }} />,
     );
     expect(screen.getByTestId('timeline-dot')).toHaveStyle({ opacity: '0.5' });
+  });
+
+  it('styles.item item elemana eklenir', () => {
+    render(
+      <Timeline items={[{ id: '1', title: 'T' }]} styles={{ item: { padding: '20px' } }} />,
+    );
+    expect(screen.getByTestId('timeline-item')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.connector connector elemana eklenir', () => {
+    render(
+      <Timeline
+        items={[
+          { id: '1', title: 'A' },
+          { id: '2', title: 'B' },
+        ]}
+        styles={{ connector: { opacity: '0.3' } }}
+      />,
+    );
+    expect(screen.getByTestId('timeline-connector')).toHaveStyle({ opacity: '0.3' });
+  });
+
+  it('styles.description description elemana eklenir', () => {
+    render(
+      <Timeline
+        items={[{ id: '1', title: 'T', description: 'Desc' }]}
+        styles={{ description: { letterSpacing: '1px' } }}
+      />,
+    );
+    expect(screen.getByTestId('timeline-description')).toHaveStyle({ letterSpacing: '1px' });
+  });
+
+  it('styles.date date elemana eklenir', () => {
+    render(
+      <Timeline
+        items={[{ id: '1', title: 'T', date: '2025-01-01' }]}
+        styles={{ date: { fontSize: '12px' } }}
+      />,
+    );
+    expect(screen.getByTestId('timeline-date')).toHaveStyle({ fontSize: '12px' });
   });
 
   it('ref forward edilir', () => {

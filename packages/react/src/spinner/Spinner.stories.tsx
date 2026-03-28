@@ -43,10 +43,10 @@ export const WithLabel: Story = {
 export const CustomColor: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-      <Spinner color="#3b82f6" />
-      <Spinner color="#22c55e" />
-      <Spinner color="#f59e0b" />
-      <Spinner color="#ef4444" />
+      <Spinner color="var(--rel-color-primary, #3b82f6)" />
+      <Spinner color="var(--rel-color-success, #22c55e)" />
+      <Spinner color="var(--rel-color-warning, #f59e0b)" />
+      <Spinner color="var(--rel-color-error, #ef4444)" />
       <Spinner color="#8b5cf6" />
     </div>
   ),
@@ -89,7 +89,7 @@ export const Compound: Story = {
       <Spinner size="md">
         <Spinner.Label>Yukleniyor...</Spinner.Label>
       </Spinner>
-      <Spinner size="lg" color="#22c55e">
+      <Spinner size="lg" color="var(--rel-color-success, #22c55e)">
         <Spinner.Label>Kaydediliyor...</Spinner.Label>
       </Spinner>
     </div>

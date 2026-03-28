@@ -51,7 +51,7 @@ export const modalContentRecipe = recipe({
     position: 'relative',
     backgroundColor: 'var(--rel-color-bg, #fff)',
     borderRadius: 12,
-    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(0, 0, 0, 0.1)',
+    boxShadow: 'var(--rel-shadow-xl, 0 20px 60px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(0, 0, 0, 0.1))',
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
     width: '100%',
     maxHeight: '90vh',

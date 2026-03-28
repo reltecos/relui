@@ -71,7 +71,7 @@ const SplitPanelPane = forwardRef<HTMLDivElement, SplitPanelPaneProps>(
         ref={ref}
         className={cls || undefined}
         style={slot.style}
-        data-testid="split-panel-pane"
+        data-testid="split-panel-panel"
       >
         {children}
       </div>
@@ -101,7 +101,7 @@ const SplitPanelHandle = forwardRef<HTMLDivElement, SplitPanelHandleProps>(
         style={slot.style}
         role="separator"
         tabIndex={0}
-        data-testid="split-panel-handle"
+        data-testid="split-panel-gutter"
       >
       </div>
     );
@@ -277,6 +277,7 @@ const SplitPanelBase = forwardRef<HTMLDivElement, SplitPanelComponentProps>(
           style={{ ...panelSlotResult.style, ...panelStyleOverride }}
           data-panel-index={i}
           data-collapsed={collapsed || undefined}
+          data-testid="split-panel-panel"
         >
           {child}
         </div>,
@@ -297,6 +298,7 @@ const SplitPanelBase = forwardRef<HTMLDivElement, SplitPanelComponentProps>(
             className={gutterSlotResult.className || undefined}
             style={{ ...gutterSlotResult.style, ...gutterStyleOverride }}
             data-gutter-index={i}
+            data-testid="split-panel-gutter"
             role="separator"
             aria-orientation={isH ? 'vertical' : 'horizontal'}
             tabIndex={0}
@@ -325,6 +327,7 @@ const SplitPanelBase = forwardRef<HTMLDivElement, SplitPanelComponentProps>(
           style={rootSlot.style}
           data-orientation={currentOrientation}
           data-dragging={api.isDragging() || undefined}
+          data-testid="split-panel-root"
         >
           {items}
         </div>

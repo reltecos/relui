@@ -299,6 +299,39 @@ describe('Toast', () => {
     expect(screen.getByTestId('toast-progress')).toHaveStyle({ opacity: '0.5' });
   });
 
+  it('styles.title title elemana uygulanir', () => {
+    renderToast({
+      toasts: [makeToast({ title: 'Bilgi' })],
+      styles: { title: { fontSize: '18px' } },
+    });
+    expect(screen.getByTestId('toast-title')).toHaveStyle({ fontSize: '18px' });
+  });
+
+  it('styles.message message elemana uygulanir', () => {
+    renderToast({
+      styles: { message: { letterSpacing: '1px' } },
+    });
+    expect(screen.getByTestId('toast-message')).toHaveStyle({ letterSpacing: '1px' });
+  });
+
+  it('styles.icon icon elemana uygulanir', () => {
+    renderToast({
+      styles: { icon: { padding: '20px' } },
+    });
+    const item = screen.getByTestId('toast-item');
+    const iconSpan = item.querySelector('span') as HTMLElement;
+    expect(iconSpan).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.content content elemana uygulanir', () => {
+    renderToast({
+      styles: { content: { letterSpacing: '2px' } },
+    });
+    const item = screen.getByTestId('toast-item');
+    const contentDiv = item.querySelector('div') as HTMLElement;
+    expect(contentDiv).toHaveStyle({ letterSpacing: '2px' });
+  });
+
   // ── Default position ──
 
   it('varsayilan position top-right olarak render eder', () => {

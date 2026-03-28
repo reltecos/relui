@@ -65,7 +65,7 @@ export const WithSpans: Story = {
         { id: 'footer', row: 3, col: 0, colSpan: 4 },
       ]}
       renderTile={(tile) => (
-        <div style={{ ...tileStyle, background: '#e0f2fe' }}>
+        <div style={{ ...tileStyle, background: 'var(--rel-color-bg-subtle, #e0f2fe)' }}>
           {tile.id}
           {tile.colSpan && tile.colSpan > 1 ? ` (${tile.colSpan} cols)` : ''}
           {tile.rowSpan && tile.rowSpan > 1 ? ` (${tile.rowSpan} rows)` : ''}
@@ -108,11 +108,11 @@ export const Dashboard: Story = {
       ]}
       renderTile={(tile) => {
         const colors: Record<string, string> = {
-          kpi1: '#dbeafe', kpi2: '#dcfce7', kpi3: '#fef9c3', kpi4: '#fce7f3',
-          chart: '#f0f9ff', activity: '#f0fdf4', table: '#fafafa',
+          kpi1: 'var(--rel-color-bg-subtle, #dbeafe)', kpi2: 'var(--rel-color-bg-subtle, #dcfce7)', kpi3: 'var(--rel-color-bg-subtle, #fef9c3)', kpi4: 'var(--rel-color-bg-subtle, #fce7f3)',
+          chart: 'var(--rel-color-bg-subtle, #f0f9ff)', activity: 'var(--rel-color-bg-subtle, #f0fdf4)', table: 'var(--rel-color-bg-subtle, #fafafa)',
         };
         return (
-          <div style={{ ...tileStyle, background: colors[tile.id] ?? '#fff' }}>
+          <div style={{ ...tileStyle, background: colors[tile.id] ?? 'var(--rel-color-bg, #fff)' }}>
             {tile.id}
           </div>
         );
@@ -150,8 +150,8 @@ export const CustomSlotStyles: Story = {
       ]}
       classNames={{ root: 'custom-grid' }}
       styles={{
-        root: { padding: 16, background: '#f8fafc', borderRadius: 12 },
-        tile: { borderRadius: 8, background: '#e0f2fe', padding: 16 },
+        root: { padding: 16, background: 'var(--rel-color-bg-subtle, #f8fafc)', borderRadius: 12 },
+        tile: { borderRadius: 8, background: 'var(--rel-color-bg-subtle, #e0f2fe)', padding: 16 },
       }}
       renderTile={(tile) => <div style={{ fontWeight: 600 }}>{tile.id.toUpperCase()}</div>}
     />

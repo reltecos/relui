@@ -22,7 +22,7 @@ export const flyoutPanelStyle = style({
   zIndex: 9999,
   backgroundColor: 'var(--rel-color-bg, #fff)',
   borderRadius: 8,
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08)',
+  boxShadow: 'var(--rel-shadow-lg, 0 8px 32px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08))',
   border: '1px solid var(--rel-color-border, #e5e7eb)',
   fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
   fontSize: 'var(--rel-text-sm, 14px)',

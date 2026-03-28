@@ -158,6 +158,7 @@ const BookLayoutNavigation = forwardRef<HTMLDivElement, BookLayoutNavigationProp
           className={prevBtnSlot.className || undefined}
           style={prevBtnSlot.style}
           data-book-prev
+          data-testid="book-layout-prev-button"
         >
           {prevLabel}
         </button>
@@ -167,6 +168,7 @@ const BookLayoutNavigation = forwardRef<HTMLDivElement, BookLayoutNavigationProp
             className={indicatorSlot.className || undefined}
             style={indicatorSlot.style}
             data-book-indicator
+            data-testid="book-layout-page-indicator"
           >
             {page + 1} / {total}
           </span>
@@ -180,6 +182,7 @@ const BookLayoutNavigation = forwardRef<HTMLDivElement, BookLayoutNavigationProp
           className={nextBtnSlot.className || undefined}
           style={nextBtnSlot.style}
           data-book-next
+          data-testid="book-layout-next-button"
         >
           {nextLabel}
         </button>
@@ -318,11 +321,13 @@ const BookLayoutBase = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
         data-book-layout
         data-current-page={page}
         data-total-pages={total}
+        data-testid="book-layout-root"
       >
         <div
           className={pageSlot.className || undefined}
           style={pageSlot.style}
           data-book-page
+          data-testid="book-layout-page"
         >
           {total > 0 && renderPage ? renderPage(page) : null}
         </div>
@@ -332,6 +337,7 @@ const BookLayoutBase = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
             className={controlsSlotResult.className || undefined}
             style={controlsSlotResult.style}
             data-book-controls
+            data-testid="book-layout-controls"
           >
             <button
               type="button"
@@ -341,6 +347,7 @@ const BookLayoutBase = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
               className={prevBtnSlot.className || undefined}
               style={prevBtnSlot.style}
               data-book-prev
+              data-testid="book-layout-prev-button"
             >
               {prevLabel}
             </button>
@@ -350,6 +357,7 @@ const BookLayoutBase = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
                 className={indicatorSlot.className || undefined}
                 style={indicatorSlot.style}
                 data-book-indicator
+                data-testid="book-layout-page-indicator"
               >
                 {page + 1} / {total}
               </span>
@@ -363,6 +371,7 @@ const BookLayoutBase = forwardRef<HTMLDivElement, BookLayoutComponentProps>(
               className={nextBtnSlot.className || undefined}
               style={nextBtnSlot.style}
               data-book-next
+              data-testid="book-layout-next-button"
             >
               {nextLabel}
             </button>

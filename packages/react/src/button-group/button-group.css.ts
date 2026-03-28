@@ -24,6 +24,7 @@ export const baseStyle = style({
   display: 'inline-flex',
   alignItems: 'center',
   flexWrap: 'nowrap',
+  color: 'var(--rel-color-text, #374151)',
 });
 
 // ── Orientation ──────────────────────────────────────────────────────

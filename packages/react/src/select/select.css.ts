@@ -27,6 +27,7 @@ export const selectRootStyle = style({
   display: 'inline-flex',
   flexDirection: 'column',
   width: '100%',
+  color: 'var(--rel-color-text, #374151)',
 });
 
 // ── Select Trigger ──────────────────────────────────────────────────
@@ -239,7 +240,7 @@ export const selectListboxStyle = style({
   background: cssVar.surfaceRaised,
   border: `1px solid ${cssVar.borderDefault}`,
   borderRadius: 'var(--rel-radius-md)',
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)',
+  boxShadow: 'var(--rel-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.12))',
 
   // Scroll
   maxHeight: '15rem',

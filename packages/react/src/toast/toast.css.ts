@@ -85,9 +85,10 @@ export const toastItemRecipe = recipe({
     padding: '12px 16px',
     borderRadius: 8,
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
+    color: 'var(--rel-color-text, #374151)',
     fontSize: 'var(--rel-text-sm, 13px)',
     lineHeight: 1.4,
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08)',
+    boxShadow: 'var(--rel-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08))',
     pointerEvents: 'auto',
     maxWidth: 380,
     minWidth: 280,
@@ -178,7 +179,7 @@ export const toastCloseButtonStyle = style({
   marginTop: 1,
   ':hover': {
     opacity: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.06)',
+    backgroundColor: 'var(--rel-color-bg-hover, rgba(0, 0, 0, 0.06))',
   },
 });
 

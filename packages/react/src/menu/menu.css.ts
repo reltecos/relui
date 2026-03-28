@@ -96,7 +96,7 @@ export const menuDropdownStyle = style({
   borderRadius: '8px',
   backgroundColor: cssVar.bgDefault,
   border: `1px solid ${cssVar.borderDefault}`,
-  boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+  boxShadow: 'var(--rel-shadow-md, 0 4px 16px rgba(0,0,0,0.12))',
   zIndex: 1000,
   boxSizing: 'border-box',
 });
@@ -113,7 +113,7 @@ export const menuSubmenuStyle = style({
   borderRadius: '8px',
   backgroundColor: cssVar.bgDefault,
   border: `1px solid ${cssVar.borderDefault}`,
-  boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+  boxShadow: 'var(--rel-shadow-md, 0 4px 16px rgba(0,0,0,0.12))',
   zIndex: 1001,
   boxSizing: 'border-box',
 });

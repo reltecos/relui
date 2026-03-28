@@ -39,6 +39,7 @@ export const sliderRootRecipe = recipe({
     position: 'relative',
     touchAction: 'none',
     userSelect: 'none',
+    color: 'var(--rel-color-text, #374151)',
 
     vars: {
       [slFill]: cssVar.accentDefault,
@@ -210,7 +211,7 @@ export const sliderThumbRecipe = recipe({
     background: 'var(--rel-color-bg, #ffffff)',
     border: '2px solid',
     borderColor: slFill,
-    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
+    boxShadow: 'var(--rel-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.2))',
     cursor: 'grab',
     outline: 'none',
 

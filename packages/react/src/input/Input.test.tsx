@@ -313,6 +313,39 @@ describe('Input', () => {
     expect(hiddenSpans[0]).toHaveClass('my-left');
     expect(hiddenSpans[1]).toHaveClass('my-right');
   });
+
+  it('styles.wrapper wrapper elemana padding eklenir', () => {
+    render(
+      <Input
+        aria-label="Test"
+        leftElement={<span>L</span>}
+        styles={{ wrapper: { padding: '20px' } }}
+      />,
+    );
+    expect(screen.getByTestId('input-wrapper')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.leftElement leftElement elemana fontSize eklenir', () => {
+    render(
+      <Input
+        aria-label="Test"
+        leftElement={<span>L</span>}
+        styles={{ leftElement: { fontSize: '20px' } }}
+      />,
+    );
+    expect(screen.getByTestId('input-left-element')).toHaveStyle({ fontSize: '20px' });
+  });
+
+  it('styles.rightElement rightElement elemana letterSpacing eklenir', () => {
+    render(
+      <Input
+        aria-label="Test"
+        rightElement={<span>R</span>}
+        styles={{ rightElement: { letterSpacing: '2px' } }}
+      />,
+    );
+    expect(screen.getByTestId('input-right-element')).toHaveStyle({ letterSpacing: '2px' });
+  });
 });
 
 // ── Compound API ──
@@ -324,7 +357,7 @@ describe('Input (Compound)', () => {
         <Input.LeftAddon><span data-testid="left-icon">L</span></Input.LeftAddon>
       </Input>,
     );
-    expect(screen.getByTestId('input-leftaddon')).toBeInTheDocument();
+    expect(screen.getByTestId('input-left-element')).toBeInTheDocument();
     expect(screen.getByTestId('left-icon')).toBeInTheDocument();
   });
 
@@ -334,7 +367,7 @@ describe('Input (Compound)', () => {
         <Input.RightAddon><span data-testid="right-icon">R</span></Input.RightAddon>
       </Input>,
     );
-    expect(screen.getByTestId('input-rightaddon')).toBeInTheDocument();
+    expect(screen.getByTestId('input-right-element')).toBeInTheDocument();
     expect(screen.getByTestId('right-icon')).toBeInTheDocument();
   });
 
@@ -345,8 +378,8 @@ describe('Input (Compound)', () => {
         <Input.RightAddon><span>R</span></Input.RightAddon>
       </Input>,
     );
-    expect(screen.getByTestId('input-leftaddon')).toBeInTheDocument();
-    expect(screen.getByTestId('input-rightaddon')).toBeInTheDocument();
+    expect(screen.getByTestId('input-left-element')).toBeInTheDocument();
+    expect(screen.getByTestId('input-right-element')).toBeInTheDocument();
   });
 
   it('compound: classNames context ile sub-component lara aktarilir', () => {
@@ -355,7 +388,7 @@ describe('Input (Compound)', () => {
         <Input.LeftAddon><span>L</span></Input.LeftAddon>
       </Input>,
     );
-    expect(screen.getByTestId('input-leftaddon').className).toContain('cmp-left');
+    expect(screen.getByTestId('input-left-element').className).toContain('cmp-left');
   });
 
   it('compound: context disinda kullanim hata firlatir', () => {

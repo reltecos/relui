@@ -113,7 +113,7 @@ export const Controlled: Story = {
     const [expanded, setExpanded] = useState<string[]>(['features']);
     return (
       <div style={{ width: 480 }}>
-        <p style={{ marginBottom: 8, fontSize: 14, color: '#6b7280' }}>
+        <p style={{ marginBottom: 8, fontSize: 14, color: 'var(--rel-color-text-muted, #6b7280)' }}>
           Acik: <strong>{expanded.length > 0 ? expanded.join(', ') : 'Yok'}</strong>
         </p>
         <Accordion

@@ -35,15 +35,15 @@ const panelStyle = (bg: string) => ({
   justifyContent: 'center',
   fontSize: 14,
   fontWeight: 500,
-  color: '#475569',
+  color: 'var(--rel-color-text, #475569)',
 });
 
 export const Default: Story = {
   render: (args) => (
-    <div style={{ height: 400, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ height: 400, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}>
       <SplitPanel {...args}>
-        <div style={panelStyle('#f8fafc')}>Sol Panel</div>
-        <div style={panelStyle('#fff')}>Sağ Panel</div>
+        <div style={panelStyle('var(--rel-color-bg-subtle, #f8fafc)')}>Sol Panel</div>
+        <div style={panelStyle('var(--rel-color-bg, #fff)')}>Sağ Panel</div>
       </SplitPanel>
     </div>
   ),
@@ -55,10 +55,10 @@ export const Default: Story = {
 
 export const Vertical: Story = {
   render: () => (
-    <div style={{ height: 500, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ height: 500, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}>
       <SplitPanel orientation="vertical">
-        <div style={panelStyle('#f8fafc')}>Üst Panel</div>
-        <div style={panelStyle('#fff')}>Alt Panel</div>
+        <div style={panelStyle('var(--rel-color-bg-subtle, #f8fafc)')}>Üst Panel</div>
+        <div style={panelStyle('var(--rel-color-bg, #fff)')}>Alt Panel</div>
       </SplitPanel>
     </div>
   ),
@@ -66,11 +66,11 @@ export const Vertical: Story = {
 
 export const ThreePanels: Story = {
   render: () => (
-    <div style={{ height: 400, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ height: 400, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}>
       <SplitPanel>
-        <div style={panelStyle('#eff6ff')}>Sol</div>
-        <div style={panelStyle('#fff')}>Orta</div>
-        <div style={panelStyle('#f0fdf4')}>Sağ</div>
+        <div style={panelStyle('var(--rel-color-bg-subtle, #eff6ff)')}>Sol</div>
+        <div style={panelStyle('var(--rel-color-bg, #fff)')}>Orta</div>
+        <div style={panelStyle('var(--rel-color-bg-subtle, #f0fdf4)')}>Sağ</div>
       </SplitPanel>
     </div>
   ),
@@ -78,20 +78,20 @@ export const ThreePanels: Story = {
 
 export const WithMinSizes: Story = {
   render: () => (
-    <div style={{ height: 400, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ height: 400, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}>
       <SplitPanel minSizes={[200, 200]}>
-        <div style={panelStyle('#fef2f2')}>
+        <div style={panelStyle('var(--rel-color-bg-subtle, #fef2f2)')}>
           <div style={{ textAlign: 'center' }}>
             <strong>Min: 200px</strong>
             <br />
-            <span style={{ fontSize: 12, color: '#94a3b8' }}>Sürükleyerek dene</span>
+            <span style={{ fontSize: 12, color: 'var(--rel-color-text-muted, #94a3b8)' }}>Sürükleyerek dene</span>
           </div>
         </div>
-        <div style={panelStyle('#fff')}>
+        <div style={panelStyle('var(--rel-color-bg, #fff)')}>
           <div style={{ textAlign: 'center' }}>
             <strong>Min: 200px</strong>
             <br />
-            <span style={{ fontSize: 12, color: '#94a3b8' }}>Sürükleyerek dene</span>
+            <span style={{ fontSize: 12, color: 'var(--rel-color-text-muted, #94a3b8)' }}>Sürükleyerek dene</span>
           </div>
         </div>
       </SplitPanel>
@@ -101,16 +101,16 @@ export const WithMinSizes: Story = {
 
 export const Collapsible: Story = {
   render: () => (
-    <div style={{ height: 400, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ height: 400, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}>
       <SplitPanel collapsible={[true, false]}>
-        <div style={panelStyle('#eef2ff')}>
+        <div style={panelStyle('var(--rel-color-bg-subtle, #eef2ff)')}>
           <div style={{ textAlign: 'center' }}>
             <strong>Daraltılabilir</strong>
             <br />
-            <span style={{ fontSize: 12, color: '#94a3b8' }}>Gutter'a çift tıkla</span>
+            <span style={{ fontSize: 12, color: 'var(--rel-color-text-muted, #94a3b8)' }}>Gutter'a çift tıkla</span>
           </div>
         </div>
-        <div style={panelStyle('#fff')}>Sağ Panel</div>
+        <div style={panelStyle('var(--rel-color-bg, #fff)')}>Sağ Panel</div>
       </SplitPanel>
     </div>
   ),
@@ -118,12 +118,12 @@ export const Collapsible: Story = {
 
 export const NestedSplit: Story = {
   render: () => (
-    <div style={{ height: 500, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ height: 500, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}>
       <SplitPanel>
-        <div style={panelStyle('#f8fafc')}>Sidebar</div>
+        <div style={panelStyle('var(--rel-color-bg-subtle, #f8fafc)')}>Sidebar</div>
         <SplitPanel orientation="vertical">
-          <div style={panelStyle('#fff')}>Editor</div>
-          <div style={panelStyle('#fafafa')}>Terminal</div>
+          <div style={panelStyle('var(--rel-color-bg, #fff)')}>Editor</div>
+          <div style={panelStyle('var(--rel-color-bg-subtle, #fafafa)')}>Terminal</div>
         </SplitPanel>
       </SplitPanel>
     </div>
@@ -132,12 +132,12 @@ export const NestedSplit: Story = {
 
 export const CustomSlotStyles: Story = {
   render: () => (
-    <div style={{ height: 400, border: '2px dashed #6366f1', borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ height: 400, border: '2px dashed var(--rel-color-info, #6366f1)', borderRadius: 12, overflow: 'hidden' }}>
       <SplitPanel
         classNames={{ root: 'custom-split' }}
         styles={{
-          root: { background: '#faf5ff' },
-          gutter: { background: '#6366f1', opacity: 0.3 },
+          root: { background: 'var(--rel-color-bg-subtle, #faf5ff)' },
+          gutter: { background: 'var(--rel-color-info, #6366f1)', opacity: 0.3 },
           panel: { padding: 16 },
         }}
       >
@@ -150,14 +150,14 @@ export const CustomSlotStyles: Story = {
 
 export const Compound: Story = {
   render: () => (
-    <div style={{ height: 400, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ height: 400, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}>
       <SplitPanel>
         <SplitPanel.Pane>
-          <div style={panelStyle('#eff6ff')}>Sol Pane (Compound API)</div>
+          <div style={panelStyle('var(--rel-color-bg-subtle, #eff6ff)')}>Sol Pane (Compound API)</div>
         </SplitPanel.Pane>
         <SplitPanel.Handle />
         <SplitPanel.Pane>
-          <div style={panelStyle('#fff')}>Sag Pane (Compound API)</div>
+          <div style={panelStyle('var(--rel-color-bg, #fff)')}>Sag Pane (Compound API)</div>
         </SplitPanel.Pane>
       </SplitPanel>
     </div>

@@ -16,6 +16,11 @@
 import { style } from '@vanilla-extract/css';
 import { cssVar } from '@relteco/relui-tokens';
 
+// ── Root wrapper — color token for TagInput ──────────────────────────
+export const tagInputRootStyle = style({
+  color: 'var(--rel-color-text, #374151)',
+});
+
 // ── Wrapper — input + tag'ları saran konteyner ───────────────────────
 
 export const tagInputWrapperStyle = style({

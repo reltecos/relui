@@ -352,6 +352,30 @@ describe('RangeSlider', () => {
 
     expect(sliders[1]).toHaveStyle({ boxShadow: '0 0 5px blue' });
   });
+
+  it('styles.track track elemana eklenir', () => {
+    render(
+      <RangeSlider aria-label="Test" styles={{ track: { padding: '20px' } }} />,
+    );
+
+    expect(screen.getByTestId('range-slider-track')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.fill fill elemana eklenir', () => {
+    render(
+      <RangeSlider aria-label="Test" styles={{ fill: { opacity: '0.8' } }} />,
+    );
+
+    expect(screen.getByTestId('range-slider-fill')).toHaveStyle({ opacity: '0.8' });
+  });
+
+  it('styles.startThumb startThumb elemana eklenir', () => {
+    render(
+      <RangeSlider aria-label="Test" styles={{ startThumb: { padding: '20px' } }} />,
+    );
+
+    expect(screen.getByTestId('range-slider-start-thumb')).toHaveStyle({ padding: '20px' });
+  });
 });
 
 // ── Compound API ──

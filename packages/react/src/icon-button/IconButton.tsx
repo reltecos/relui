@@ -207,6 +207,7 @@ const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonComponentProps>(
             className={spinnerSlot.className}
             style={spinnerSlot.style}
             aria-hidden="true"
+            data-testid="iconbutton-spinner"
           />
         );
       }
@@ -220,6 +221,7 @@ const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonComponentProps>(
           className={iconSlot.className || undefined}
           style={iconSlot.style}
           aria-hidden="true"
+          data-testid="iconbutton-icon"
         >
           {icon}
         </span>

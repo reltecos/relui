@@ -87,6 +87,7 @@ const RadioIndicator = forwardRef<HTMLDivElement, RadioIndicatorProps>(
           <span
             className={dotSlot.className}
             style={dotSlot.style}
+            data-testid="radio-dot"
           />
         )}
       </div>
@@ -303,11 +304,13 @@ const RadioBase = forwardRef<HTMLDivElement, RadioComponentProps>(function Radio
       aria-label={!children ? ariaLabel : undefined}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
+      data-testid="radio-control"
     >
       {checked && (
         <span
           className={dotSlot.className}
           style={dotSlot.style}
+          data-testid="radio-dot"
         />
       )}
     </div>
@@ -356,7 +359,7 @@ const RadioBase = forwardRef<HTMLDivElement, RadioComponentProps>(function Radio
     >
       {hiddenInput}
       {control}
-      <span className={labelSlot.className || undefined} style={labelSlot.style}>{children}</span>
+      <span className={labelSlot.className || undefined} style={labelSlot.style} data-testid="radio-label">{children}</span>
     </label>
   );
 });

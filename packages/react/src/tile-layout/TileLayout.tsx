@@ -179,6 +179,7 @@ const TileLayoutBase = forwardRef<HTMLDivElement, TileLayoutComponentProps>(
             data-columns={currentColumns}
             data-total-rows={totalRows}
             data-tile-layout
+            data-testid="tile-layout-root"
           >
             {children}
           </div>
@@ -196,6 +197,7 @@ const TileLayoutBase = forwardRef<HTMLDivElement, TileLayoutComponentProps>(
         data-columns={currentColumns}
         data-total-rows={totalRows}
         data-tile-layout
+        data-testid="tile-layout-root"
       >
         {currentTiles.map((tile) => {
           const tileSlotResult = getSlotProps('tile', tileStyle, classNames, slotStyles, {
@@ -209,6 +211,7 @@ const TileLayoutBase = forwardRef<HTMLDivElement, TileLayoutComponentProps>(
               className={tileSlotResult.className || undefined}
               style={tileSlotResult.style}
               data-tile-id={tile.id}
+              data-testid="tile-layout-tile"
             >
               {renderTile ? renderTile(tile) : null}
             </div>

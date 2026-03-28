@@ -85,7 +85,7 @@ function SpotlightDemo(
         style={{
           padding: '12px 24px',
           borderRadius: '12px',
-          border: '1px solid #e0e0e0',
+          border: '1px solid var(--rel-color-border, #e0e0e0)',
           backgroundColor: 'transparent',
           cursor: 'pointer',
           fontSize: '14px',
@@ -101,8 +101,8 @@ function SpotlightDemo(
         <kbd style={{
           padding: '2px 6px',
           borderRadius: '4px',
-          backgroundColor: 'rgba(128,128,128,0.12)',
-          border: '1px solid rgba(128,128,128,0.2)',
+          backgroundColor: 'var(--rel-color-bg-subtle, rgba(128,128,128,0.12))',
+          border: '1px solid var(--rel-color-border, rgba(128,128,128,0.2))',
           fontSize: '11px',
           marginLeft: 'auto',
         }}>
@@ -186,7 +186,7 @@ function AsyncSpotlightDemo() {
         style={{
           padding: '12px 24px',
           borderRadius: '12px',
-          border: '1px solid #e0e0e0',
+          border: '1px solid var(--rel-color-border, #e0e0e0)',
           backgroundColor: 'transparent',
           cursor: 'pointer',
           fontSize: '14px',
@@ -314,7 +314,7 @@ export const Compound: Story = {
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 40 }}>
-        <button onClick={() => setIsOpen(true)} style={{ padding: '12px 24px', borderRadius: 12, border: '1px solid #e0e0e0', background: 'transparent', cursor: 'pointer', fontSize: 14 }}>
+        <button onClick={() => setIsOpen(true)} style={{ padding: '12px 24px', borderRadius: 12, border: '1px solid var(--rel-color-border, #e0e0e0)', background: 'transparent', cursor: 'pointer', fontSize: 14 }}>
           Open Compound Spotlight
         </button>
         <Spotlight open={isOpen} onOpenChange={setIsOpen} items={[]}>
@@ -338,17 +338,17 @@ export const CustomSlotStyles: Story = {
       searchIcon={<SearchIcon size={18} />}
       styles={{
         root: {
-          backgroundColor: '#1a1a2e',
-          borderColor: '#16213e',
+          backgroundColor: 'var(--rel-color-bg-inverse, #1a1a2e)',
+          borderColor: 'var(--rel-color-border, #16213e)',
         },
         overlay: {
-          backgroundColor: 'rgba(0,0,0,0.6)',
+          backgroundColor: 'var(--rel-color-overlay, rgba(0,0,0,0.6))',
         },
         input: {
-          color: '#e0e0e0',
+          color: 'var(--rel-color-text-inverse, #e0e0e0)',
         },
         item: {
-          color: '#e0e0e0',
+          color: 'var(--rel-color-text-inverse, #e0e0e0)',
         },
       }}
     />

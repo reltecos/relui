@@ -33,7 +33,7 @@ export const Default: Story = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 360, border: '1px solid #e5e7eb', borderRadius: 8 }}>
+      <div style={{ width: 360, border: '1px solid var(--rel-color-border, #e5e7eb)', borderRadius: 8 }}>
         <Story />
       </div>
     ),
@@ -67,7 +67,7 @@ export const WithIcons: Story = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 360, border: '1px solid #e5e7eb', borderRadius: 8 }}>
+      <div style={{ width: 360, border: '1px solid var(--rel-color-border, #e5e7eb)', borderRadius: 8 }}>
         <Story />
       </div>
     ),
@@ -88,8 +88,8 @@ export const WithActions: Story = {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #d1d5db',
-              background: '#fff',
+              border: '1px solid var(--rel-color-border, #d1d5db)',
+              background: 'var(--rel-color-bg, #fff)',
               fontSize: 12,
               cursor: 'pointer',
             }}
@@ -107,8 +107,8 @@ export const WithActions: Story = {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #d1d5db',
-              background: '#fff',
+              border: '1px solid var(--rel-color-border, #d1d5db)',
+              background: 'var(--rel-color-bg, #fff)',
               fontSize: 12,
               cursor: 'pointer',
             }}
@@ -121,7 +121,7 @@ export const WithActions: Story = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 400, border: '1px solid #e5e7eb', borderRadius: 8 }}>
+      <div style={{ width: 400, border: '1px solid var(--rel-color-border, #e5e7eb)', borderRadius: 8 }}>
         <Story />
       </div>
     ),
@@ -132,7 +132,7 @@ export const WithActions: Story = {
 
 export const Compound: Story = {
   render: () => (
-    <div style={{ width: 360, border: '1px solid #e5e7eb', borderRadius: 8 }}>
+    <div style={{ width: 360, border: '1px solid var(--rel-color-border, #e5e7eb)', borderRadius: 8 }}>
       <List>
         <List.Item primary="Birinci item" secondary="Compound kullanim" />
         <List.Item primary="Ikinci item" secondary="Tam kontrol" />
@@ -159,7 +159,7 @@ export const CustomSlotStyles: Story = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 360, border: '1px solid #e5e7eb', borderRadius: 8 }}>
+      <div style={{ width: 360, border: '1px solid var(--rel-color-border, #e5e7eb)', borderRadius: 8 }}>
         <Story />
       </div>
     ),
@@ -181,8 +181,8 @@ export const Playground: Story = {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #d1d5db',
-              background: '#fff',
+              border: '1px solid var(--rel-color-border, #d1d5db)',
+              background: 'var(--rel-color-bg, #fff)',
               fontSize: 12,
               cursor: 'pointer',
             }}
@@ -201,8 +201,8 @@ export const Playground: Story = {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #d1d5db',
-              background: '#fff',
+              border: '1px solid var(--rel-color-border, #d1d5db)',
+              background: 'var(--rel-color-bg, #fff)',
               fontSize: 12,
               cursor: 'pointer',
             }}
@@ -221,8 +221,8 @@ export const Playground: Story = {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #d1d5db',
-              background: '#fff',
+              border: '1px solid var(--rel-color-border, #d1d5db)',
+              background: 'var(--rel-color-bg, #fff)',
               fontSize: 12,
               cursor: 'pointer',
             }}
@@ -241,8 +241,8 @@ export const Playground: Story = {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #d1d5db',
-              background: '#fff',
+              border: '1px solid var(--rel-color-border, #d1d5db)',
+              background: 'var(--rel-color-bg, #fff)',
               fontSize: 12,
               cursor: 'pointer',
             }}
@@ -254,7 +254,7 @@ export const Playground: Story = {
     ];
 
     return (
-      <div style={{ width: 400, border: '1px solid #e5e7eb', borderRadius: 8 }}>
+      <div style={{ width: 400, border: '1px solid var(--rel-color-border, #e5e7eb)', borderRadius: 8 }}>
         <List items={items} />
       </div>
     );

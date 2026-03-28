@@ -210,13 +210,14 @@ const LinkBase = forwardRef<HTMLAnchorElement, LinkComponentProps>(
           style={combinedRootStyle}
           aria-disabled={disabled || undefined}
           data-disabled={disabled ? '' : undefined}
+          data-testid="link-root"
           tabIndex={disabled ? -1 : undefined}
           {...externalProps}
           {...htmlProps}
         >
           {children}
           {external && showExternalIcon && (
-            <span className={extIconSlot.className} style={extIconSlot.style} aria-hidden="true">
+            <span className={extIconSlot.className} style={extIconSlot.style} aria-hidden="true" data-testid="link-externalicon">
               <ExternalLinkIcon />
             </span>
           )}

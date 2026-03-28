@@ -18,6 +18,11 @@ import { cssVar } from '@relteco/relui-tokens';
 
 // ── Temizle butonu / Clear button ───────────────────────────────────
 
+// ── Root wrapper — Combobox reuses Select trigger; color token set here ────
+export const comboboxRootStyle = style({
+  color: 'var(--rel-color-text, #374151)',
+});
+
 export const comboboxClearStyle = style({
   display: 'inline-flex',
   alignItems: 'center',

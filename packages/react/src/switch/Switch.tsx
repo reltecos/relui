@@ -311,10 +311,12 @@ const SwitchBase = forwardRef<HTMLDivElement, SwitchComponentProps>(function Swi
       aria-label={!children ? ariaLabel : undefined}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
+      data-testid="switch-track"
     >
       <span
         className={knobSlot.className}
         style={knobSlot.style}
+        data-testid="switch-knob"
       />
     </div>
   );
@@ -362,7 +364,7 @@ const SwitchBase = forwardRef<HTMLDivElement, SwitchComponentProps>(function Swi
     >
       {hiddenInput}
       {track}
-      <span className={labelSlot.className || undefined} style={labelSlot.style}>{children}</span>
+      <span className={labelSlot.className || undefined} style={labelSlot.style} data-testid="switch-label">{children}</span>
     </label>
   );
 });

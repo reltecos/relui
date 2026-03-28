@@ -22,7 +22,7 @@ export const popoverContentStyle = style({
   zIndex: 9999,
   backgroundColor: 'var(--rel-color-bg, #fff)',
   borderRadius: 8,
-  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08)',
+  boxShadow: 'var(--rel-shadow-md, 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08))',
   border: '1px solid var(--rel-color-border, #e5e7eb)',
   fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
   fontSize: 'var(--rel-text-sm, 14px)',

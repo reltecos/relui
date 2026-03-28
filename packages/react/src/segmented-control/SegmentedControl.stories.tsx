@@ -64,7 +64,7 @@ export const Controlled: Story = {
           onValueChange={setValue}
           aria-label="Periyot"
         />
-        <span style={{ fontSize: '13px', color: '#666' }}>Seçili: {value}</span>
+        <span style={{ fontSize: '13px', color: 'var(--rel-color-text-muted, #666)' }}>Seçili: {value}</span>
       </div>
     );
   },
@@ -77,7 +77,7 @@ export const AllSizes: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'start' }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <div key={size} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '12px', width: '24px', color: '#666' }}>{size}</span>
+          <span style={{ fontSize: '12px', width: '24px', color: 'var(--rel-color-text-muted, #666)' }}>{size}</span>
           <SegmentedControl
             options={viewOptions}
             defaultValue="list"

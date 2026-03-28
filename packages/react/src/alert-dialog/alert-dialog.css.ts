@@ -42,7 +42,7 @@ export const alertDialogContentRecipe = recipe({
     zIndex: 501,
     backgroundColor: 'var(--rel-color-text-inverse, #fff)',
     borderRadius: 12,
-    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1)',
+    boxShadow: 'var(--rel-shadow-xl, 0 20px 60px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1))',
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
     maxWidth: 440,
     width: '90vw',

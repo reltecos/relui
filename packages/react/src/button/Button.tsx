@@ -240,6 +240,7 @@ const ButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
             className={spinnerSlot.className}
             style={spinnerSlot.style}
             aria-hidden="true"
+            data-testid="button-spinner"
           />
           {loadingText ?? children}
         </>
@@ -260,6 +261,7 @@ const ButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
             className={leftIconSlot.className}
             style={leftIconSlot.style}
             aria-hidden="true"
+            data-testid="button-lefticon"
           >
             {leftIcon}
           </span>
@@ -270,6 +272,7 @@ const ButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
             className={rightIconSlot.className}
             style={rightIconSlot.style}
             aria-hidden="true"
+            data-testid="button-righticon"
           >
             {rightIcon}
           </span>

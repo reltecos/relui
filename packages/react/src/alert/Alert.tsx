@@ -337,25 +337,25 @@ const AlertBase = forwardRef<HTMLDivElement, AlertComponentProps>(
       >
         {/* Icon */}
         {resolvedIcon !== null && (
-          <span className={iconSlot.className} style={iconSlot.style}>
+          <span className={iconSlot.className} style={iconSlot.style} data-testid="alert-icon">
             {resolvedIcon}
           </span>
         )}
 
         {/* Content */}
-        <div className={contentSlot.className} style={contentSlot.style}>
+        <div className={contentSlot.className} style={contentSlot.style} data-testid="alert-content">
           {title && (
-            <div className={titleSlot.className} style={titleSlot.style}>
+            <div className={titleSlot.className} style={titleSlot.style} data-testid="alert-title">
               {title}
             </div>
           )}
           {children && (
-            <div className={descSlot.className} style={descSlot.style}>
+            <div className={descSlot.className} style={descSlot.style} data-testid="alert-description">
               {children}
             </div>
           )}
           {action && (
-            <div className={actionSlot.className} style={actionSlot.style}>
+            <div className={actionSlot.className} style={actionSlot.style} data-testid="alert-action">
               {action}
             </div>
           )}

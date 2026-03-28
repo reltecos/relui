@@ -31,7 +31,7 @@ export const tooltipContentStyle = style({
   wordWrap: 'break-word',
   pointerEvents: 'none',
   animation: `${fadeIn} 150ms ease-out`,
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+  boxShadow: 'var(--rel-shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.15))',
 });
 
 // ── Arrow ───────────────────────────────────────────

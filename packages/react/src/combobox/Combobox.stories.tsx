@@ -209,7 +209,7 @@ export const Controlled: Story = {
           placeholder="Ulke arayin"
           aria-label="Ulke"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Secili: {value !== undefined ? String(value) : '(bos)'}
         </div>
         <button
@@ -239,7 +239,7 @@ export const AllowCustomValue: Story = {
           placeholder="Yazip secebilirsiniz"
           aria-label="Ulke"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Secili: {value !== undefined ? String(value) : '(bos)'}
         </div>
       </div>

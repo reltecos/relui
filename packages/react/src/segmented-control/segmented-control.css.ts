@@ -37,6 +37,7 @@ export const segmentedControlRootRecipe = recipe({
     boxSizing: 'border-box',
     borderRadius: scBorderRadius,
     fontFamily: 'var(--rel-font-sans)',
+    color: 'var(--rel-color-text, #374151)',
     userSelect: 'none',
     gap: '2px',
     padding: '2px',
@@ -138,7 +139,7 @@ export const segmentedControlItemStyle = style({
       color: scActiveFg,
       backgroundColor: scActiveBg,
       fontWeight: '600',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06)',
+      boxShadow: 'var(--rel-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06))',
     },
     '&[data-disabled]': {
       cursor: 'not-allowed',

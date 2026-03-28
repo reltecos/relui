@@ -178,7 +178,7 @@ export const MinMax: Story = {
           max={1000}
           aria-label="Fiyat"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Değer: {value ?? '(boş)'} | Min: 0 | Max: 1.000
         </div>
       </div>
@@ -209,7 +209,7 @@ export const Controlled: Story = {
           aria-label="Fiyat"
           placeholder="0,00"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Ham değer: {value !== null ? value : '(null)'}
         </div>
       </div>
@@ -254,13 +254,13 @@ export const CustomSlotStyles: Story = {
         aria-label="Custom root"
         value={1234.56}
         classNames={{ root: 'my-currency-root' }}
-        styles={{ root: { border: '2px dashed orange' } }}
+        styles={{ root: { border: '2px dashed var(--rel-color-warning, #f59e0b)' } }}
       />
       <CurrencyInput
         aria-label="Custom input"
         value={1234.56}
         classNames={{ input: 'my-currency-input' }}
-        styles={{ input: { fontWeight: 'bold', color: 'blue' } }}
+        styles={{ input: { fontWeight: 'bold', color: 'var(--rel-color-primary, #3b82f6)' } }}
       />
       <CurrencyInput
         aria-label="Custom prefix"
@@ -268,7 +268,7 @@ export const CustomSlotStyles: Story = {
         locale="en-US"
         currency="USD"
         classNames={{ adornPrefix: 'my-prefix' }}
-        styles={{ adornPrefix: { color: 'green', fontWeight: 'bold' } }}
+        styles={{ adornPrefix: { color: 'var(--rel-color-success, #22c55e)', fontWeight: 'bold' } }}
       />
       <CurrencyInput
         aria-label="Legacy + slot merge"

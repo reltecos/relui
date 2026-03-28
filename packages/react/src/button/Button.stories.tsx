@@ -267,25 +267,25 @@ export const CustomSlotStyles: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <Button
         classNames={{ root: 'custom-root' }}
-        styles={{ root: { border: '2px dashed hotpink' } }}
+        styles={{ root: { border: '2px dashed var(--rel-color-accent, #ec4899)' } }}
       >
         Root slot styled
       </Button>
       <Button
         loading
-        styles={{ spinner: { borderColor: 'hotpink' } }}
+        styles={{ spinner: { borderColor: 'var(--rel-color-accent, #ec4899)' } }}
       >
         Spinner slot styled
       </Button>
       <Button
         leftIcon={<PlusIcon />}
-        styles={{ leftIcon: { color: 'hotpink' } }}
+        styles={{ leftIcon: { color: 'var(--rel-color-accent, #ec4899)' } }}
       >
         LeftIcon slot styled
       </Button>
       <Button
         rightIcon={<ArrowRightIcon />}
-        styles={{ rightIcon: { color: 'limegreen' } }}
+        styles={{ rightIcon: { color: 'var(--rel-color-success, #16a34a)' } }}
       >
         RightIcon slot styled
       </Button>
@@ -293,9 +293,9 @@ export const CustomSlotStyles: Story = {
         leftIcon={<PlusIcon />}
         rightIcon={<ArrowRightIcon />}
         styles={{
-          root: { border: '2px dashed royalblue' },
-          leftIcon: { color: 'hotpink' },
-          rightIcon: { color: 'limegreen' },
+          root: { border: '2px dashed var(--rel-color-primary, #3b82f6)' },
+          leftIcon: { color: 'var(--rel-color-accent, #ec4899)' },
+          rightIcon: { color: 'var(--rel-color-success, #16a34a)' },
         }}
       >
         Tum slotlar / All slots

@@ -273,7 +273,7 @@ const BackToTopBase = forwardRef<HTMLButtonElement, BackToTopComponentProps>(
         aria-label={ariaLabel}
         data-testid="back-to-top"
       >
-        <span className={iconSlot.className} style={iconSlot.style}>
+        <span className={iconSlot.className} style={iconSlot.style} data-testid="back-to-top-icon">
           {icon ?? <DefaultArrowUpIcon />}
         </span>
       </button>

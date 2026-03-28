@@ -28,8 +28,8 @@ function DefaultDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#3b82f6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -48,9 +48,9 @@ function DefaultDemo() {
               onClick={() => setOpen(false)}
               style={{
                 padding: '8px 16px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
-                backgroundColor: '#fff',
+                backgroundColor: 'var(--rel-color-bg, #fff)',
                 cursor: 'pointer',
               }}
             >
@@ -62,8 +62,8 @@ function DefaultDemo() {
                 padding: '8px 16px',
                 border: 'none',
                 borderRadius: 6,
-                backgroundColor: '#3b82f6',
-                color: '#fff',
+                backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+                color: 'var(--rel-color-text-inverse, #fff)',
                 cursor: 'pointer',
               }}
             >
@@ -100,8 +100,8 @@ function AllSizesDemo() {
             padding: '8px 16px',
             fontSize: 13,
             fontWeight: 500,
-            backgroundColor: '#3b82f6',
-            color: '#fff',
+            backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             border: 'none',
             borderRadius: 6,
             cursor: 'pointer',
@@ -144,8 +144,8 @@ function WithLongContentDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#8b5cf6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-info, #8b5cf6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -165,8 +165,8 @@ function WithLongContentDemo() {
               padding: '8px 16px',
               border: 'none',
               borderRadius: 6,
-              backgroundColor: '#3b82f6',
-              color: '#fff',
+              backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+              color: 'var(--rel-color-text-inverse, #fff)',
               cursor: 'pointer',
             }}
           >
@@ -201,8 +201,8 @@ function CustomSlotStylesDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#059669',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-success, #059669)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -222,8 +222,8 @@ function CustomSlotStylesDemo() {
               padding: '8px 16px',
               border: 'none',
               borderRadius: 6,
-              backgroundColor: '#10b981',
-              color: '#fff',
+              backgroundColor: 'var(--rel-color-success, #10b981)',
+              color: 'var(--rel-color-text-inverse, #fff)',
               cursor: 'pointer',
             }}
           >
@@ -231,13 +231,13 @@ function CustomSlotStylesDemo() {
           </button>
         }
         styles={{
-          overlay: { backgroundColor: 'rgba(0, 0, 0, 0.7)' },
-          content: { backgroundColor: '#1e293b', borderRadius: '16px' },
-          header: { borderBottomColor: '#334155' },
-          title: { color: '#e2e8f0' },
-          body: { color: '#94a3b8' },
-          footer: { borderTopColor: '#334155' },
-          closeButton: { color: '#94a3b8' },
+          overlay: { backgroundColor: 'var(--rel-color-overlay, rgba(0, 0, 0, 0.7))' },
+          content: { backgroundColor: 'var(--rel-color-bg-inverse, #1e293b)', borderRadius: '16px' },
+          header: { borderBottomColor: 'var(--rel-color-bg-inverse-subtle, #334155)' },
+          title: { color: 'var(--rel-color-border, #e2e8f0)' },
+          body: { color: 'var(--rel-color-text-muted, #94a3b8)' },
+          footer: { borderTopColor: 'var(--rel-color-bg-inverse-subtle, #334155)' },
+          closeButton: { color: 'var(--rel-color-text-muted, #94a3b8)' },
         }}
       >
         <p style={{ margin: 0 }}>
@@ -264,8 +264,8 @@ function CompoundDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#8b5cf6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-info, #8b5cf6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -290,9 +290,9 @@ function CompoundDemo() {
               onClick={() => setOpen(false)}
               style={{
                 padding: '8px 16px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
-                backgroundColor: '#fff',
+                backgroundColor: 'var(--rel-color-bg, #fff)',
                 cursor: 'pointer',
               }}
             >
@@ -304,8 +304,8 @@ function CompoundDemo() {
                 padding: '8px 16px',
                 border: 'none',
                 borderRadius: 6,
-                backgroundColor: '#8b5cf6',
-                color: '#fff',
+                backgroundColor: 'var(--rel-color-info, #8b5cf6)',
+                color: 'var(--rel-color-text-inverse, #fff)',
                 cursor: 'pointer',
               }}
             >
@@ -333,8 +333,8 @@ function WithFormDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#0ea5e9',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-info, #0ea5e9)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -353,9 +353,9 @@ function WithFormDemo() {
               onClick={() => setOpen(false)}
               style={{
                 padding: '8px 16px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
-                backgroundColor: '#fff',
+                backgroundColor: 'var(--rel-color-bg, #fff)',
                 cursor: 'pointer',
               }}
             >
@@ -367,8 +367,8 @@ function WithFormDemo() {
                 padding: '8px 16px',
                 border: 'none',
                 borderRadius: 6,
-                backgroundColor: '#0ea5e9',
-                color: '#fff',
+                backgroundColor: 'var(--rel-color-info, #0ea5e9)',
+                color: 'var(--rel-color-text-inverse, #fff)',
                 cursor: 'pointer',
               }}
             >
@@ -386,7 +386,7 @@ function WithFormDemo() {
             <input
               style={{
                 padding: '8px 12px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
                 outline: 'none',
               }}
@@ -399,7 +399,7 @@ function WithFormDemo() {
               type="email"
               style={{
                 padding: '8px 12px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
                 outline: 'none',
               }}
@@ -412,7 +412,7 @@ function WithFormDemo() {
               type="password"
               style={{
                 padding: '8px 12px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
                 outline: 'none',
               }}

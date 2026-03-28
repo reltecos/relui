@@ -249,6 +249,46 @@ describe('FAB slot API', () => {
     render(<FAB styles={{ root: { fontSize: '20px' } }} />);
     expect(screen.getByTestId('fab').style.fontSize).toBe('20px');
   });
+
+  // ── Slot API: styles ──
+
+  it('styles.root root elemana padding eklenir', () => {
+    render(<FAB styles={{ root: { padding: '24px' } }} />);
+    expect(screen.getByTestId('fab')).toHaveStyle({ padding: '24px' });
+  });
+
+  it('styles.button button elemana letterSpacing eklenir', () => {
+    render(<FAB styles={{ button: { letterSpacing: '2px' } }} />);
+    expect(screen.getByTestId('fab-button')).toHaveStyle({ letterSpacing: '2px' });
+  });
+
+  it('styles.icon icon elemana fontSize eklenir', () => {
+    render(<FAB styles={{ icon: { fontSize: '20px' } }} />);
+    const btn = screen.getByTestId('fab-button');
+    const iconSpan = btn.querySelector('span');
+    expect(iconSpan).toHaveStyle({ fontSize: '20px' });
+  });
+
+  it('styles.overlay overlay elemana opacity eklenir', () => {
+    render(<FAB actions={makeActions()} open={true} showOverlay styles={{ overlay: { opacity: '0.8' } }} />);
+    expect(screen.getByTestId('fab-overlay')).toHaveStyle({ opacity: '0.8' });
+  });
+
+  it('styles.action action elemana padding eklenir', () => {
+    render(<FAB actions={makeActions()} open={true} styles={{ action: { padding: '20px' } }} />);
+    expect(screen.getByTestId('fab-action-add')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.actionButton actionButton elemana fontSize eklenir', () => {
+    render(<FAB actions={makeActions()} open={true} styles={{ actionButton: { fontSize: '14px' } }} />);
+    const menuItems = screen.getAllByRole('menuitem');
+    expect(menuItems[0]).toHaveStyle({ fontSize: '14px' });
+  });
+
+  it('styles.actionLabel actionLabel elemana letterSpacing eklenir', () => {
+    render(<FAB actions={makeActions()} open={true} styles={{ actionLabel: { letterSpacing: '1px' } }} />);
+    expect(screen.getByText('Add item')).toHaveStyle({ letterSpacing: '1px' });
+  });
 });
 
 // ── Custom renderActionIcon ─────────────────────────────

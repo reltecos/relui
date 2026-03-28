@@ -27,7 +27,7 @@ export const ncOverlayStyle = style({
   position: 'fixed',
   inset: 0,
   zIndex: 499,
-  backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  backgroundColor: 'var(--rel-color-overlay, rgba(0, 0, 0, 0.3))',
   animation: `${fadeIn} 150ms ease-out`,
 });
 
@@ -42,7 +42,7 @@ export const ncPanelStyle = style({
   maxWidth: '100vw',
   zIndex: 500,
   backgroundColor: 'var(--rel-color-bg, #fff)',
-  boxShadow: '-4px 0 24px rgba(0, 0, 0, 0.12)',
+  boxShadow: 'var(--rel-shadow-lg, -4px 0 24px rgba(0, 0, 0, 0.12))',
   display: 'flex',
   flexDirection: 'column',
   fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
@@ -224,7 +224,7 @@ export const ncItemCloseButtonStyle = style({
   transition: 'opacity 150ms ease',
   ':hover': {
     opacity: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.06)',
+    backgroundColor: 'var(--rel-color-bg-hover, rgba(0, 0, 0, 0.06))',
   },
   selectors: {
     '*:hover > &': {

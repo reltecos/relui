@@ -33,14 +33,14 @@ const cardStyle = (height: number, bg: string) => ({
   justifyContent: 'center',
   fontWeight: 600,
   fontSize: 14,
-  color: '#475569',
+  color: 'var(--rel-color-text, #475569)',
 });
 
 const heights = [120, 180, 90, 200, 140, 160, 100, 220, 130, 170, 110, 150];
 const colors = [
-  '#e2e8f0', '#bfdbfe', '#bbf7d0', '#fef08a',
-  '#fecaca', '#ddd6fe', '#fbcfe8', '#fed7aa',
-  '#ccfbf1', '#e0e7ff', '#fce7f3', '#d9f99d',
+  'var(--rel-color-border, #e2e8f0)', 'var(--rel-color-bg-subtle, #bfdbfe)', 'var(--rel-color-bg-subtle, #bbf7d0)', 'var(--rel-color-bg-subtle, #fef08a)',
+  'var(--rel-color-bg-subtle, #fecaca)', 'var(--rel-color-bg-subtle, #ddd6fe)', 'var(--rel-color-bg-subtle, #fbcfe8)', 'var(--rel-color-bg-subtle, #fed7aa)',
+  'var(--rel-color-bg-subtle, #ccfbf1)', 'var(--rel-color-bg-subtle, #e0e7ff)', 'var(--rel-color-bg-subtle, #fce7f3)', 'var(--rel-color-bg-subtle, #d9f99d)',
 ];
 
 export const Default: Story = {
@@ -103,10 +103,10 @@ export const ImageCards: Story = {
           borderRadius: 12,
           overflow: 'hidden',
           background: colors[i],
-          boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+          boxShadow: '0 1px 3px var(--rel-color-shadow, rgba(0,0,0,0.12))',
         }}>
           <div style={{ height: h, background: colors[i] }} />
-          <div style={{ padding: '12px 16px', fontSize: 13, color: '#334155' }}>
+          <div style={{ padding: '12px 16px', fontSize: 13, color: 'var(--rel-color-text, #334155)' }}>
             Image #{i + 1} — {h}px yüksekliğinde
           </div>
         </div>
@@ -122,7 +122,7 @@ export const CustomSlotStyles: Story = {
       gap={16}
       classNames={{ root: 'custom-masonry' }}
       styles={{
-        root: { border: '2px dashed #6366f1', borderRadius: 12, padding: 16 },
+        root: { border: '2px dashed var(--rel-color-info, #6366f1)', borderRadius: 12, padding: 16 },
         item: { transition: 'transform 0.2s ease' },
       }}
     >

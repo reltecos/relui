@@ -55,15 +55,15 @@ export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '48px' }}>
       <div>
-        <h4 style={{ marginBottom: 8, fontSize: 12, color: '#64748b' }}>Default</h4>
+        <h4 style={{ marginBottom: 8, fontSize: 12, color: 'var(--rel-color-text-muted, #64748b)' }}>Default</h4>
         <TableOfContents items={demoItems} activeId="usage" variant="default" />
       </div>
       <div>
-        <h4 style={{ marginBottom: 8, fontSize: 12, color: '#64748b' }}>Filled</h4>
+        <h4 style={{ marginBottom: 8, fontSize: 12, color: 'var(--rel-color-text-muted, #64748b)' }}>Filled</h4>
         <TableOfContents items={demoItems} activeId="usage" variant="filled" />
       </div>
       <div>
-        <h4 style={{ marginBottom: 8, fontSize: 12, color: '#64748b' }}>Dots</h4>
+        <h4 style={{ marginBottom: 8, fontSize: 12, color: 'var(--rel-color-text-muted, #64748b)' }}>Dots</h4>
         <TableOfContents items={demoItems} activeId="usage" variant="dots" />
       </div>
     </div>
@@ -77,7 +77,7 @@ export const AllSizes: Story = {
     <div style={{ display: 'flex', gap: '32px' }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <div key={size}>
-          <h4 style={{ marginBottom: 8, fontSize: 12, color: '#64748b' }}>{size}</h4>
+          <h4 style={{ marginBottom: 8, fontSize: 12, color: 'var(--rel-color-text-muted, #64748b)' }}>{size}</h4>
           <TableOfContents items={demoItems.slice(0, 5)} activeId="getting-started" size={size} />
         </div>
       ))}
@@ -110,7 +110,7 @@ export const Controlled: Story = {
           activeId={active}
           onChange={setActive}
         />
-        <div style={{ fontSize: 14, color: '#64748b' }}>
+        <div style={{ fontSize: 14, color: 'var(--rel-color-text-muted, #64748b)' }}>
           Active: <strong>{active ?? 'none'}</strong>
         </div>
       </div>
@@ -143,13 +143,13 @@ export const CustomSlotStyles: Story = {
     activeId: 'api',
     styles: {
       root: {
-        backgroundColor: '#1a1a2e',
+        backgroundColor: 'var(--rel-color-bg-inverse, #1a1a2e)',
         padding: '12px',
         borderRadius: '8px',
-        borderLeft: '2px solid #334155',
+        borderLeft: '2px solid var(--rel-color-border, #334155)',
       },
       link: {
-        color: '#94a3b8',
+        color: 'var(--rel-color-text-muted, #94a3b8)',
       },
     },
   },
@@ -188,10 +188,10 @@ export const CompoundCustomSlotStyles: Story = {
       activeId="api"
       styles={{
         root: {
-          backgroundColor: '#1a1a2e',
+          backgroundColor: 'var(--rel-color-bg-inverse, #1a1a2e)',
           padding: '12px',
           borderRadius: '8px',
-          borderLeft: '2px solid #334155',
+          borderLeft: '2px solid var(--rel-color-border, #334155)',
         },
       }}
     >

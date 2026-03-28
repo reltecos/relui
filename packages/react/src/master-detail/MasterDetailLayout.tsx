@@ -314,6 +314,7 @@ const MasterDetailBase = forwardRef<HTMLDivElement, MasterDetailComponentProps>(
         aria-label={currentCollapsed ? 'Expand panel' : 'Collapse panel'}
         aria-expanded={!currentCollapsed}
         data-collapse-button
+        data-testid="master-detail-collapse-button"
       />
     ) : null;
 
@@ -356,6 +357,7 @@ const MasterDetailBase = forwardRef<HTMLDivElement, MasterDetailComponentProps>(
         style={masterSlot.style}
         data-panel="master"
         data-collapsed={currentCollapsed || undefined}
+        data-testid="master-detail-master"
       >
         {master}
       </div>
@@ -366,6 +368,7 @@ const MasterDetailBase = forwardRef<HTMLDivElement, MasterDetailComponentProps>(
         className={detailSlot.className || undefined}
         style={detailSlot.style}
         data-panel="detail"
+        data-testid="master-detail-detail"
       >
         {detail}
       </div>
@@ -379,6 +382,7 @@ const MasterDetailBase = forwardRef<HTMLDivElement, MasterDetailComponentProps>(
         style={rootSlot.style}
         data-position={currentPosition}
         data-collapsed={currentCollapsed || undefined}
+        data-testid="master-detail-root"
       >
         {masterPanel}
         {collapseButton}

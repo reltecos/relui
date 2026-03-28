@@ -332,6 +332,18 @@ describe('NotificationCenter', () => {
     renderNC({ notifications: [], unreadCount: 0, styles: { emptyState: { fontSize: '18px' } } });
     expect(screen.getByTestId('nc-empty')).toHaveStyle({ fontSize: '18px' });
   });
+
+  // ── Slot API: styles ──
+
+  it('styles.overlay overlay a padding uygulanir', () => {
+    renderNC({ styles: { overlay: { padding: '24px' } } });
+    expect(screen.getByTestId('nc-overlay')).toHaveStyle({ padding: '24px' });
+  });
+
+  it('styles.list list e letterSpacing uygulanir', () => {
+    renderNC({ styles: { list: { letterSpacing: '1px' } } });
+    expect(screen.getByTestId('nc-list')).toHaveStyle({ letterSpacing: '1px' });
+  });
 });
 
 // ── Compound API ──

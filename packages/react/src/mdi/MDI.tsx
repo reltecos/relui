@@ -91,10 +91,10 @@ const MDIWindow = forwardRef<HTMLDivElement, MDIWindowProps>(
         data-mdi-window={id}
         data-testid="mdi-window"
       >
-        <div className={`${titleBarStyle} ${titleBarInactiveStyle}`} data-mdi-title-bar>
-          <div className={titleStyle}>{title}</div>
+        <div className={`${titleBarStyle} ${titleBarInactiveStyle}`} data-mdi-title-bar data-testid="mdi-title-bar">
+          <div className={titleStyle} data-testid="mdi-title">{title}</div>
         </div>
-        <div className={contentStyle} data-mdi-content>
+        <div className={contentStyle} data-mdi-content data-testid="mdi-content">
           {children}
         </div>
       </div>
@@ -125,7 +125,7 @@ const MDIToolbar = forwardRef<HTMLDivElement, MDIToolbarProps>(
         className={cls || undefined}
         style={slot.style}
         data-mdi-taskbar
-        data-testid="mdi-toolbar"
+        data-testid="mdi-taskbar"
       >
         {children}
       </div>
@@ -320,6 +320,7 @@ const MDIBase = forwardRef<HTMLDivElement, MDIComponentProps>(
             className={finalClass}
             style={rootSlot.style}
             data-mdi
+            data-testid="mdi-root"
           >
             {children}
           </div>
@@ -335,6 +336,7 @@ const MDIBase = forwardRef<HTMLDivElement, MDIComponentProps>(
         className={finalClass}
         style={rootSlot.style}
         data-mdi
+        data-testid="mdi-root"
       >
         {/* Windows */}
         {allWindows.map((win) => {
@@ -375,22 +377,26 @@ const MDIBase = forwardRef<HTMLDivElement, MDIComponentProps>(
               data-mdi-state={win.state}
               data-mdi-active={win.active || undefined}
               onClick={() => handleActivate(win.id)}
+              data-testid="mdi-window"
             >
               <div
                 className={titleBarSlot.className || undefined}
                 style={titleBarSlot.style}
                 onPointerDown={(e) => handleTitleBarPointerDown(e, win.id)}
                 data-mdi-title-bar
+                data-testid="mdi-title-bar"
               >
                 <div
                   className={titleSlot.className || undefined}
                   style={titleSlot.style}
+                  data-testid="mdi-title"
                 >
                   {win.title}
                 </div>
                 <div
                   className={controlsSlot.className || undefined}
                   style={controlsSlot.style}
+                  data-testid="mdi-controls"
                 >
                   <button
                     type="button"
@@ -428,6 +434,7 @@ const MDIBase = forwardRef<HTMLDivElement, MDIComponentProps>(
                 className={contentSlot.className || undefined}
                 style={contentSlot.style}
                 data-mdi-content
+                data-testid="mdi-content"
               >
                 {renderWindow ? renderWindow(win.id, win.title) : null}
               </div>
@@ -441,6 +448,7 @@ const MDIBase = forwardRef<HTMLDivElement, MDIComponentProps>(
             className={getSlotProps('taskbar', taskbarStyle, classNames, slotStyles).className || undefined}
             style={getSlotProps('taskbar', taskbarStyle, classNames, slotStyles).style}
             data-mdi-taskbar
+            data-testid="mdi-taskbar"
           >
             {allWindows.map((win) => {
               const itemSlot = getSlotProps('taskbarItem', taskbarItemStyle, classNames, slotStyles, {
@@ -458,6 +466,7 @@ const MDIBase = forwardRef<HTMLDivElement, MDIComponentProps>(
                   onClick={() => handleActivate(win.id)}
                   data-mdi-taskbar-item={win.id}
                   data-mdi-taskbar-active={win.active || undefined}
+                  data-testid="mdi-taskbar-item"
                 >
                   {win.title}
                 </button>

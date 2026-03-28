@@ -34,23 +34,23 @@ describe('MasterDetailLayout', () => {
     render(
       <MasterDetailLayout
         ref={(el) => { refValue = el; }}
-        data-testid="root"
+        data-testid="master-detail-root"
         {...defaultProps}
       />,
     );
-    expect(refValue).toBe(screen.getByTestId('root'));
+    expect(refValue).toBe(screen.getByTestId('master-detail-root'));
   });
 
   it('passes through HTML attributes', () => {
     render(
       <MasterDetailLayout
-        data-testid="root"
+        data-testid="master-detail-root"
         id="layout"
         aria-label="Master detail"
         {...defaultProps}
       />,
     );
-    const el = screen.getByTestId('root');
+    const el = screen.getByTestId('master-detail-root');
     expect(el).toHaveAttribute('id', 'layout');
     expect(el).toHaveAttribute('aria-label', 'Master detail');
   });
@@ -59,31 +59,31 @@ describe('MasterDetailLayout', () => {
 
   describe('position', () => {
     it('defaults to left position (flex-direction: row)', () => {
-      render(<MasterDetailLayout data-testid="root" {...defaultProps} />);
-      const root = screen.getByTestId('root');
+      render(<MasterDetailLayout data-testid="master-detail-root" {...defaultProps} />);
+      const root = screen.getByTestId('master-detail-root');
       expect(root).toHaveStyle({ flexDirection: 'row' });
       expect(root).toHaveAttribute('data-position', 'left');
     });
 
     it('right position uses row-reverse', () => {
-      render(<MasterDetailLayout data-testid="root" masterPosition="right" {...defaultProps} />);
-      const root = screen.getByTestId('root');
+      render(<MasterDetailLayout data-testid="master-detail-root" masterPosition="right" {...defaultProps} />);
+      const root = screen.getByTestId('master-detail-root');
       expect(root).toHaveStyle({ flexDirection: 'row-reverse' });
       expect(root).toHaveAttribute('data-position', 'right');
     });
 
     it('top position uses column', () => {
-      render(<MasterDetailLayout data-testid="root" masterPosition="top" {...defaultProps} />);
-      const root = screen.getByTestId('root');
+      render(<MasterDetailLayout data-testid="master-detail-root" masterPosition="top" {...defaultProps} />);
+      const root = screen.getByTestId('master-detail-root');
       expect(root).toHaveStyle({ flexDirection: 'column' });
       expect(root).toHaveAttribute('data-position', 'top');
     });
 
     it('bottom position uses column-reverse', () => {
       render(
-        <MasterDetailLayout data-testid="root" masterPosition="bottom" {...defaultProps} />,
+        <MasterDetailLayout data-testid="master-detail-root" masterPosition="bottom" {...defaultProps} />,
       );
-      const root = screen.getByTestId('root');
+      const root = screen.getByTestId('master-detail-root');
       expect(root).toHaveStyle({ flexDirection: 'column-reverse' });
       expect(root).toHaveAttribute('data-position', 'bottom');
     });
@@ -168,13 +168,13 @@ describe('MasterDetailLayout', () => {
     it('sets data-collapsed on root when collapsed', () => {
       render(
         <MasterDetailLayout
-          data-testid="root"
+          data-testid="master-detail-root"
           collapsible
           collapsed
           {...defaultProps}
         />,
       );
-      expect(screen.getByTestId('root')).toHaveAttribute('data-collapsed');
+      expect(screen.getByTestId('master-detail-root')).toHaveAttribute('data-collapsed');
     });
   });
 
@@ -222,35 +222,35 @@ describe('MasterDetailLayout', () => {
     it('applies classNames.root', () => {
       render(
         <MasterDetailLayout
-          data-testid="root"
+          data-testid="master-detail-root"
           classNames={{ root: 'slot-root' }}
           {...defaultProps}
         />,
       );
-      expect(screen.getByTestId('root')).toHaveClass('slot-root');
+      expect(screen.getByTestId('master-detail-root')).toHaveClass('slot-root');
     });
 
     it('applies styles.root', () => {
       render(
         <MasterDetailLayout
-          data-testid="root"
+          data-testid="master-detail-root"
           styles={{ root: { opacity: '0.5' } }}
           {...defaultProps}
         />,
       );
-      expect(screen.getByTestId('root')).toHaveStyle({ opacity: '0.5' });
+      expect(screen.getByTestId('master-detail-root')).toHaveStyle({ opacity: '0.5' });
     });
 
     it('merges className + classNames.root', () => {
       render(
         <MasterDetailLayout
-          data-testid="root"
+          data-testid="master-detail-root"
           className="outer"
           classNames={{ root: 'inner' }}
           {...defaultProps}
         />,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('master-detail-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
@@ -258,13 +258,13 @@ describe('MasterDetailLayout', () => {
     it('merges style + styles.root', () => {
       render(
         <MasterDetailLayout
-          data-testid="root"
+          data-testid="master-detail-root"
           style={{ margin: 4 }}
           styles={{ root: { padding: 8 } }}
           {...defaultProps}
         />,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('master-detail-root');
       expect(el).toHaveStyle({ margin: '4px', padding: '8px' });
     });
 
@@ -282,12 +282,12 @@ describe('MasterDetailLayout', () => {
     it('applies styles.master to master panel', () => {
       const { container } = render(
         <MasterDetailLayout
-          styles={{ master: { background: 'red' } }}
+          styles={{ master: { padding: '20px' } }}
           {...defaultProps}
         />,
       );
       const master = container.querySelector('[data-panel="master"]') as HTMLElement;
-      expect(master).toHaveStyle({ background: 'red' });
+      expect(master).toHaveStyle({ padding: '20px' });
     });
 
     it('applies classNames.detail to detail panel', () => {
@@ -304,12 +304,12 @@ describe('MasterDetailLayout', () => {
     it('applies styles.detail to detail panel', () => {
       const { container } = render(
         <MasterDetailLayout
-          styles={{ detail: { background: 'blue' } }}
+          styles={{ detail: { fontSize: '16px' } }}
           {...defaultProps}
         />,
       );
       const detail = container.querySelector('[data-panel="detail"]') as HTMLElement;
-      expect(detail).toHaveStyle({ background: 'blue' });
+      expect(detail).toHaveStyle({ fontSize: '16px' });
     });
 
     it('applies classNames.collapseButton to collapse button', () => {
@@ -393,12 +393,12 @@ describe('MasterDetailLayout (Compound)', () => {
 
   it('compound: styles context ile Detail panele aktarilir', () => {
     render(
-      <MasterDetailLayout styles={{ detail: { background: 'blue' } }}>
+      <MasterDetailLayout styles={{ detail: { fontSize: '16px' } }}>
         <MasterDetailLayout.Master>Liste</MasterDetailLayout.Master>
         <MasterDetailLayout.Detail>Detay</MasterDetailLayout.Detail>
       </MasterDetailLayout>,
     );
-    expect(screen.getByTestId('master-detail-detail')).toHaveStyle({ background: 'blue' });
+    expect(screen.getByTestId('master-detail-detail')).toHaveStyle({ fontSize: '16px' });
   });
 
   it('MasterDetailLayout.Master context disinda hata firlatir', () => {

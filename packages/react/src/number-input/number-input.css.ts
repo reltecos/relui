@@ -42,6 +42,7 @@ export const numberInputRootRecipe = recipe({
     position: 'relative',
     width: '100%',
     boxSizing: 'border-box',
+    color: 'var(--rel-color-text, #374151)',
 
     vars: {
       [niBg]: cssVar.bgSubtle,

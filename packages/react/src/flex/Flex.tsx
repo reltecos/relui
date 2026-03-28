@@ -103,6 +103,7 @@ const FlexBase = forwardRef<HTMLElement, FlexProps>(function Flex(props, ref) {
       <Box
         ref={ref}
         display="flex"
+        data-testid="flex-root"
         classNames={classNames ? { root: classNames.root } : undefined}
         styles={styles ? { root: styles.root } : undefined}
         {...(direction !== undefined ? { flexDirection: direction } : {})}

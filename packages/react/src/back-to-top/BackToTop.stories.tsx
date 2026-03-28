@@ -31,9 +31,9 @@ function LongPage({ children }: { children: React.ReactNode }) {
         padding: '24px',
         position: 'sticky',
         top: 0,
-        backgroundColor: 'rgba(255,255,255,0.9)',
+        backgroundColor: 'var(--rel-color-bg-translucent, rgba(255,255,255,0.9))',
         backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid #eee',
+        borderBottom: '1px solid var(--rel-color-border, #eee)',
         zIndex: 10,
       }}>
         Scroll down to see the BackToTop button
@@ -111,8 +111,8 @@ export const CustomSlotStyles: Story = {
       <BackToTop
         styles={{
           root: {
-            backgroundColor: '#1a1a2e',
-            boxShadow: '0 4px 16px rgba(26,26,46,0.4)',
+            backgroundColor: 'var(--rel-color-bg-inverse, #1a1a2e)',
+            boxShadow: 'var(--rel-shadow-md, 0 4px 16px rgba(26,26,46,0.4))',
           },
         }}
       />

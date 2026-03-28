@@ -13,5 +13,12 @@
  * @packageDocumentation
  */
 
+import { style } from '@vanilla-extract/css';
+
+// ── Root — color token for CopyButton ────────────────────────────────
+export const copyButtonRootStyle = style({
+  color: 'var(--rel-color-text, #374151)',
+});
+
 export { buttonRecipe } from '../button/button.css';
 export { iconButtonSizeRecipe } from '../icon-button/icon-button.css';

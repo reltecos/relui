@@ -99,6 +99,7 @@ const GridBase = forwardRef<HTMLElement, GridProps>(function Grid(props, ref) {
       <Box
         ref={ref}
         display="grid"
+        data-testid="grid-root"
         classNames={classNames ? { root: classNames.root } : undefined}
         styles={styles ? { root: styles.root } : undefined}
         {...(columns !== undefined ? { gridTemplateColumns: columns } : {})}

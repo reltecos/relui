@@ -231,6 +231,25 @@ describe('ContextMenu', () => {
     expect(screen.getByTestId('context-menu')).toHaveStyle({ padding: '16px' });
   });
 
+  // ── Slot API: styles ──
+
+  it('styles.menu menu elemana fontSize eklenir', () => {
+    render(
+      <TestContextMenu styles={{ menu: { fontSize: '14px' } }} />,
+    );
+    fireEvent.contextMenu(screen.getByTestId('trigger'));
+    expect(screen.getByTestId('context-menu')).toHaveStyle({ fontSize: '14px' });
+  });
+
+  it('styles.item item elemana letterSpacing eklenir', () => {
+    render(
+      <TestContextMenu styles={{ item: { letterSpacing: '1px' } }} />,
+    );
+    fireEvent.contextMenu(screen.getByTestId('trigger'));
+    const items = screen.getAllByTestId('context-menu-item');
+    expect(items[0]).toHaveStyle({ letterSpacing: '1px' });
+  });
+
   // ── Trigger onContextMenu korunur ──
 
   it('trigger orijinal onContextMenu korunur', () => {

@@ -27,7 +27,7 @@ export const tourOverlayStyle = style({
   position: 'fixed',
   inset: 0,
   zIndex: 9998,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: 'var(--rel-color-overlay, rgba(0, 0, 0, 0.5))',
   animation: `${fadeIn} 200ms ease-out`,
 });
 
@@ -50,7 +50,7 @@ export const tourPopoverRecipe = recipe({
     zIndex: 9999,
     backgroundColor: 'var(--rel-color-text-inverse, #fff)',
     borderRadius: 12,
-    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
+    boxShadow: 'var(--rel-shadow-xl, 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1))',
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
     maxWidth: 340,
     width: 'max-content',

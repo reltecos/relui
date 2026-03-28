@@ -314,6 +314,7 @@ const CheckboxBase = forwardRef<HTMLDivElement, CheckboxComponentProps>(function
       aria-label={!children ? ariaLabel : undefined}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
+      data-testid="checkbox-control"
     >
       {renderIcon(checked, size, iconSlot.className, iconSlot.style)}
     </div>
@@ -363,7 +364,7 @@ const CheckboxBase = forwardRef<HTMLDivElement, CheckboxComponentProps>(function
     >
       {hiddenInput}
       {control}
-      <span className={labelSlot.className || undefined} style={labelSlot.style}>
+      <span className={labelSlot.className || undefined} style={labelSlot.style} data-testid="checkbox-label">
         {children}
       </span>
     </label>

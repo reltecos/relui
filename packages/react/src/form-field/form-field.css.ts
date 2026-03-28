@@ -25,6 +25,7 @@ export const formFieldRecipe = recipe({
   base: {
     display: 'flex',
     flexDirection: 'column',
+    color: 'var(--rel-color-text, #374151)',
     width: '100%',
   },
 

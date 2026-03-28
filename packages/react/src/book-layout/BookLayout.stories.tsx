@@ -20,7 +20,7 @@ const meta: Meta<typeof BookLayout> = {
 export default meta;
 type Story = StoryObj<typeof BookLayout>;
 
-const pageColors = ['#dbeafe', '#dcfce7', '#fef9c3', '#fce7f3', '#e0e7ff'];
+const pageColors = ['var(--rel-color-primary-subtle, #dbeafe)', 'var(--rel-color-success-subtle, #dcfce7)', 'var(--rel-color-warning-subtle, #fef9c3)', 'var(--rel-color-accent-subtle, #fce7f3)', 'var(--rel-color-info-subtle, #e0e7ff)'];
 
 const pageStyle = (color: string) => ({
   height: 300,
@@ -38,7 +38,7 @@ export const Default: Story = {
     <BookLayout
       totalPages={5}
       renderPage={(i) => (
-        <div style={pageStyle(pageColors[i] ?? '#f1f5f9')}>
+        <div style={pageStyle(pageColors[i] ?? 'var(--rel-color-bg-subtle, #f1f5f9)')}>
           Sayfa {i + 1}
         </div>
       )}
@@ -52,7 +52,7 @@ export const WithLoop: Story = {
       totalPages={5}
       loop
       renderPage={(i) => (
-        <div style={pageStyle(pageColors[i] ?? '#f1f5f9')}>
+        <div style={pageStyle(pageColors[i] ?? 'var(--rel-color-bg-subtle, #f1f5f9)')}>
           Sayfa {i + 1} (Döngüsel)
         </div>
       )}
@@ -67,7 +67,7 @@ export const CustomLabels: Story = {
       prevLabel="← Önceki"
       nextLabel="Sonraki →"
       renderPage={(i) => (
-        <div style={pageStyle(pageColors[i] ?? '#f1f5f9')}>
+        <div style={pageStyle(pageColors[i] ?? 'var(--rel-color-bg-subtle, #f1f5f9)')}>
           Sayfa {i + 1}
         </div>
       )}
@@ -81,7 +81,7 @@ export const NoIndicator: Story = {
       totalPages={5}
       showPageIndicator={false}
       renderPage={(i) => (
-        <div style={pageStyle(pageColors[i] ?? '#f1f5f9')}>
+        <div style={pageStyle(pageColors[i] ?? 'var(--rel-color-bg-subtle, #f1f5f9)')}>
           Sayfa {i + 1}
         </div>
       )}
@@ -102,8 +102,8 @@ export const Controlled: Story = {
                 onClick={() => setPage(i)}
                 style={{
                   padding: '4px 12px',
-                  background: i === page ? '#4f46e5' : '#e2e8f0',
-                  color: i === page ? '#fff' : '#1e293b',
+                  background: i === page ? 'var(--rel-color-primary, #4f46e5)' : 'var(--rel-color-bg-subtle, #e2e8f0)',
+                  color: i === page ? 'var(--rel-color-text-inverse, #fff)' : 'var(--rel-color-text, #1e293b)',
                   border: 'none',
                   borderRadius: 4,
                   cursor: 'pointer',
@@ -119,7 +119,7 @@ export const Controlled: Story = {
             onPageChange={setPage}
             showControls={false}
             renderPage={(i) => (
-              <div style={pageStyle(pageColors[i] ?? '#f1f5f9')}>
+              <div style={pageStyle(pageColors[i] ?? 'var(--rel-color-bg-subtle, #f1f5f9)')}>
                 Sayfa {i + 1}
               </div>
             )}
@@ -137,13 +137,13 @@ export const CustomSlotStyles: Story = {
       totalPages={5}
       classNames={{ root: 'custom-book' }}
       styles={{
-        root: { background: '#f8fafc', padding: 16, borderRadius: 12 },
-        page: { borderRadius: 8, border: '2px solid #e0e7ff' },
+        root: { background: 'var(--rel-color-bg-subtle, #f8fafc)', padding: 16, borderRadius: 12 },
+        page: { borderRadius: 8, border: '2px solid var(--rel-color-border, #e0e7ff)' },
         controls: { padding: '12px 0' },
-        pageIndicator: { fontWeight: 700, color: '#4f46e5' },
+        pageIndicator: { fontWeight: 700, color: 'var(--rel-color-primary, #4f46e5)' },
       }}
       renderPage={(i) => (
-        <div style={pageStyle(pageColors[i] ?? '#f1f5f9')}>
+        <div style={pageStyle(pageColors[i] ?? 'var(--rel-color-bg-subtle, #f1f5f9)')}>
           Sayfa {i + 1}
         </div>
       )}
@@ -155,7 +155,7 @@ export const Compound: Story = {
   render: () => (
     <BookLayout totalPages={5}>
       <BookLayout.Page>
-        <div style={pageStyle(pageColors[0] ?? '#f1f5f9')}>
+        <div style={pageStyle(pageColors[0] ?? 'var(--rel-color-bg-subtle, #f1f5f9)')}>
           Compound API ile Sayfa 1
         </div>
       </BookLayout.Page>

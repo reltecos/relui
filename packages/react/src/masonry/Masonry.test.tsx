@@ -68,11 +68,11 @@ describe('Masonry', () => {
 
   it('root has position: relative', () => {
     render(
-      <Masonry data-testid="root">
+      <Masonry data-testid="masonry-root">
         <div>Card</div>
       </Masonry>,
     );
-    expect(screen.getByTestId('root')).toHaveStyle({ position: 'relative' });
+    expect(screen.getByTestId('masonry-root')).toHaveStyle({ position: 'relative' });
   });
 
   it('item divs have position: absolute or visibility: hidden', () => {
@@ -92,33 +92,33 @@ describe('Masonry', () => {
   it('forwards ref', () => {
     let refValue: HTMLDivElement | null = null;
     render(
-      <Masonry ref={(el) => { refValue = el; }} data-testid="root">
+      <Masonry ref={(el) => { refValue = el; }} data-testid="masonry-root">
         <div>Card</div>
       </Masonry>,
     );
-    expect(refValue).toBe(screen.getByTestId('root'));
+    expect(refValue).toBe(screen.getByTestId('masonry-root'));
   });
 
   it('passes through HTML attributes', () => {
     render(
-      <Masonry data-testid="root" id="masonry" aria-label="Masonry grid">
+      <Masonry data-testid="masonry-root" id="masonry" aria-label="Masonry grid">
         <div>Card</div>
       </Masonry>,
     );
-    const el = screen.getByTestId('root');
+    const el = screen.getByTestId('masonry-root');
     expect(el).toHaveAttribute('id', 'masonry');
     expect(el).toHaveAttribute('aria-label', 'Masonry grid');
   });
 
   it('sets data-masonry-column attribute on items', () => {
     const { container } = render(
-      <Masonry data-testid="root">
+      <Masonry data-testid="masonry-root">
         <div>Card 1</div>
         <div>Card 2</div>
         <div>Card 3</div>
       </Masonry>,
     );
-    const root = screen.getByTestId('root');
+    const root = screen.getByTestId('masonry-root');
     simulateResize(root, 900);
 
     const items = container.querySelectorAll('[data-masonry-column]');
@@ -129,69 +129,69 @@ describe('Masonry', () => {
 
   it('accepts columns prop', () => {
     render(
-      <Masonry columns={4} data-testid="root">
+      <Masonry columns={4} data-testid="masonry-root">
         <div>Card 1</div>
         <div>Card 2</div>
       </Masonry>,
     );
-    expect(screen.getByTestId('root')).toBeInTheDocument();
+    expect(screen.getByTestId('masonry-root')).toBeInTheDocument();
   });
 
   it('accepts gap prop', () => {
     render(
-      <Masonry gap={24} data-testid="root">
+      <Masonry gap={24} data-testid="masonry-root">
         <div>Card 1</div>
       </Masonry>,
     );
-    expect(screen.getByTestId('root')).toBeInTheDocument();
+    expect(screen.getByTestId('masonry-root')).toBeInTheDocument();
   });
 
   it('accepts rowGap prop', () => {
     render(
-      <Masonry gap={16} rowGap={32} data-testid="root">
+      <Masonry gap={16} rowGap={32} data-testid="masonry-root">
         <div>Card 1</div>
       </Masonry>,
     );
-    expect(screen.getByTestId('root')).toBeInTheDocument();
+    expect(screen.getByTestId('masonry-root')).toBeInTheDocument();
   });
 
   describe('classNames & styles', () => {
     it('applies classNames.root', () => {
       render(
-        <Masonry data-testid="root" classNames={{ root: 'slot-root' }}>
+        <Masonry data-testid="masonry-root" classNames={{ root: 'slot-root' }}>
           <div>Card</div>
         </Masonry>,
       );
-      expect(screen.getByTestId('root')).toHaveClass('slot-root');
+      expect(screen.getByTestId('masonry-root')).toHaveClass('slot-root');
     });
 
     it('applies styles.root', () => {
       render(
-        <Masonry data-testid="root" styles={{ root: { opacity: '0.5' } }}>
+        <Masonry data-testid="masonry-root" styles={{ root: { opacity: '0.5' } }}>
           <div>Card</div>
         </Masonry>,
       );
-      expect(screen.getByTestId('root')).toHaveStyle({ opacity: '0.5' });
+      expect(screen.getByTestId('masonry-root')).toHaveStyle({ opacity: '0.5' });
     });
 
     it('merges className + classNames.root', () => {
       render(
-        <Masonry data-testid="root" className="outer" classNames={{ root: 'inner' }}>
+        <Masonry data-testid="masonry-root" className="outer" classNames={{ root: 'inner' }}>
           <div>Card</div>
         </Masonry>,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('masonry-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
 
     it('merges style + styles.root', () => {
       render(
-        <Masonry data-testid="root" style={{ margin: 4 }} styles={{ root: { padding: 8 } }}>
+        <Masonry data-testid="masonry-root" style={{ margin: 4 }} styles={{ root: { padding: 8 } }}>
           <div>Card</div>
         </Masonry>,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('masonry-root');
       expect(el).toHaveStyle({ margin: '4px', padding: '8px' });
     });
 
@@ -224,7 +224,7 @@ describe('Masonry', () => {
 describe('Masonry (Compound)', () => {
   it('compound: Masonry.Item sub-component render edilir', () => {
     render(
-      <Masonry data-testid="root">
+      <Masonry data-testid="masonry-root">
         <Masonry.Item>Card 1</Masonry.Item>
         <Masonry.Item>Card 2</Masonry.Item>
       </Masonry>,
@@ -235,7 +235,7 @@ describe('Masonry (Compound)', () => {
 
   it('compound: Item data-testid masonry-item tasir', () => {
     render(
-      <Masonry data-testid="root">
+      <Masonry data-testid="masonry-root">
         <Masonry.Item>Card</Masonry.Item>
       </Masonry>,
     );
@@ -246,7 +246,7 @@ describe('Masonry (Compound)', () => {
 
   it('compound: classNames.item context ile Masonry.Item a aktarilir', () => {
     const { container } = render(
-      <Masonry data-testid="root" classNames={{ item: 'cmp-item' }}>
+      <Masonry data-testid="masonry-root" classNames={{ item: 'cmp-item' }}>
         <Masonry.Item>Card</Masonry.Item>
       </Masonry>,
     );
@@ -257,7 +257,7 @@ describe('Masonry (Compound)', () => {
 
   it('compound: styles.item context ile Masonry.Item a aktarilir', () => {
     const { container } = render(
-      <Masonry data-testid="root" styles={{ item: { opacity: '0.7' } }}>
+      <Masonry data-testid="masonry-root" styles={{ item: { opacity: '0.7' } }}>
         <Masonry.Item>Card</Masonry.Item>
       </Masonry>,
     );
@@ -268,7 +268,7 @@ describe('Masonry (Compound)', () => {
 
   it('compound: Masonry.Item className prop uygulanir', () => {
     const { container } = render(
-      <Masonry data-testid="root">
+      <Masonry data-testid="masonry-root">
         <Masonry.Item className="extra-class">Card</Masonry.Item>
       </Masonry>,
     );

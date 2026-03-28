@@ -128,10 +128,10 @@ export const Alternate: Story = {
 export const WithColors: Story = {
   args: {
     items: [
-      { id: '1', title: 'Basarili', description: 'Islem tamamlandi.', color: '#16a34a' },
-      { id: '2', title: 'Devam Ediyor', description: 'Islem suruyor.', color: '#3b82f6' },
-      { id: '3', title: 'Beklemede', description: 'Onay bekleniyor.', color: '#f59e0b' },
-      { id: '4', title: 'Basarisiz', description: 'Islem basarisiz oldu.', color: '#dc2626' },
+      { id: '1', title: 'Basarili', description: 'Islem tamamlandi.', color: 'var(--rel-color-success, #16a34a)' },
+      { id: '2', title: 'Devam Ediyor', description: 'Islem suruyor.', color: 'var(--rel-color-primary, #3b82f6)' },
+      { id: '3', title: 'Beklemede', description: 'Onay bekleniyor.', color: 'var(--rel-color-warning, #f59e0b)' },
+      { id: '4', title: 'Basarisiz', description: 'Islem basarisiz oldu.', color: 'var(--rel-color-error, #dc2626)' },
     ],
   },
   decorators: [

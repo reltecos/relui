@@ -14,4 +14,5 @@ import { style } from '@vanilla-extract/css';
 export const itemStyle = style({
   boxSizing: 'border-box',
   minWidth: 0,
+  color: 'var(--rel-color-text, #374151)',
 });

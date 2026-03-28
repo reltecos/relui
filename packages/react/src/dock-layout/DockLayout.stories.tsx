@@ -27,8 +27,8 @@ type Story = StoryObj<typeof DockLayout>;
 const panelContent = (id: string, title: string) => (
   <div style={{ padding: 16, height: '100%', boxSizing: 'border-box' }}>
     <h3 style={{ margin: '0 0 8px', fontSize: 14, fontWeight: 600 }}>{title}</h3>
-    <p style={{ color: '#64748b', fontSize: 13, margin: 0 }}>
-      Panel ID: <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: 3 }}>{id}</code>
+    <p style={{ color: 'var(--rel-color-text-muted, #64748b)', fontSize: 13, margin: 0 }}>
+      Panel ID: <code style={{ background: 'var(--rel-color-bg-subtle, #f1f5f9)', padding: '2px 6px', borderRadius: 3 }}>{id}</code>
     </p>
   </div>
 );
@@ -54,8 +54,8 @@ function DefaultStory() {
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{
         padding: '8px 16px',
-        borderBottom: '1px solid #e2e8f0',
-        background: '#f8fafc',
+        borderBottom: '1px solid var(--rel-color-border, #e2e8f0)',
+        background: 'var(--rel-color-bg-subtle, #f8fafc)',
         display: 'flex',
         gap: 8,
         alignItems: 'center',
@@ -66,8 +66,8 @@ function DefaultStory() {
           onClick={addPanel}
           style={{
             padding: '4px 12px',
-            background: '#3b82f6',
-            color: '#fff',
+            background: 'var(--rel-color-primary, #3b82f6)',
+            color: 'var(--rel-color-bg, #fff)',
             border: 'none',
             borderRadius: 4,
             cursor: 'pointer',
@@ -77,7 +77,7 @@ function DefaultStory() {
         >
           + Add Panel
         </button>
-        <span style={{ color: '#94a3b8', fontSize: 11 }}>
+        <span style={{ color: 'var(--rel-color-text-muted, #94a3b8)', fontSize: 11 }}>
           Drag tabs to split, float, or reorder. Right-click for context menu.
         </span>
       </div>
@@ -170,34 +170,34 @@ function VisualStudioLayoutStory() {
       case 'toolbox':
         return (
           <div style={{ padding: 8, fontSize: 12 }}>
-            <div style={{ fontWeight: 600, marginBottom: 8, color: '#475569' }}>Common Controls</div>
+            <div style={{ fontWeight: 600, marginBottom: 8, color: 'var(--rel-color-text-muted, #475569)' }}>Common Controls</div>
             {['Button', 'Label', 'TextBox', 'ComboBox', 'ListBox', 'CheckBox', 'RadioButton', 'DataGridView', 'PictureBox', 'Panel'].map((ctrl) => (
-              <div key={ctrl} style={{ padding: '3px 8px', cursor: 'default', borderBottom: '1px solid #f1f5f9' }}>{ctrl}</div>
+              <div key={ctrl} style={{ padding: '3px 8px', cursor: 'default', borderBottom: '1px solid var(--rel-color-bg-subtle, #f1f5f9)' }}>{ctrl}</div>
             ))}
           </div>
         );
       case 'solution-explorer':
         return (
           <div style={{ padding: 8, fontSize: 12 }}>
-            <div style={{ fontWeight: 600, marginBottom: 8, color: '#475569' }}>Solution 'MyApp' (2 projects)</div>
+            <div style={{ fontWeight: 600, marginBottom: 8, color: 'var(--rel-color-text-muted, #475569)' }}>Solution 'MyApp' (2 projects)</div>
             <div style={{ paddingLeft: 8 }}>
               <div style={{ fontWeight: 500 }}>MyApp</div>
-              <div style={{ paddingLeft: 16, color: '#64748b' }}>Properties</div>
-              <div style={{ paddingLeft: 16, color: '#64748b' }}>References</div>
+              <div style={{ paddingLeft: 16, color: 'var(--rel-color-text-muted, #64748b)' }}>Properties</div>
+              <div style={{ paddingLeft: 16, color: 'var(--rel-color-text-muted, #64748b)' }}>References</div>
               <div style={{ paddingLeft: 16 }}>index.cs</div>
               <div style={{ paddingLeft: 16 }}>app.cs</div>
               <div style={{ paddingLeft: 16 }}>Program.cs</div>
             </div>
             <div style={{ paddingLeft: 8, marginTop: 4 }}>
               <div style={{ fontWeight: 500 }}>MyApp.Tests</div>
-              <div style={{ paddingLeft: 16, color: '#64748b' }}>UnitTest1.cs</div>
+              <div style={{ paddingLeft: 16, color: 'var(--rel-color-text-muted, #64748b)' }}>UnitTest1.cs</div>
             </div>
           </div>
         );
       case 'properties':
         return (
           <div style={{ padding: 8, fontSize: 12 }}>
-            <div style={{ fontWeight: 600, marginBottom: 8, color: '#475569' }}>Button1 Properties</div>
+            <div style={{ fontWeight: 600, marginBottom: 8, color: 'var(--rel-color-text-muted, #475569)' }}>Button1 Properties</div>
             {[
               ['Name', 'Button1'],
               ['Text', 'Click Me'],
@@ -208,8 +208,8 @@ function VisualStudioLayoutStory() {
               ['Enabled', 'True'],
               ['Visible', 'True'],
             ].map(([key, val]) => (
-              <div key={key} style={{ display: 'flex', borderBottom: '1px solid #f1f5f9', padding: '2px 0' }}>
-                <span style={{ flex: 1, color: '#64748b' }}>{key}</span>
+              <div key={key} style={{ display: 'flex', borderBottom: '1px solid var(--rel-color-bg-subtle, #f1f5f9)', padding: '2px 0' }}>
+                <span style={{ flex: 1, color: 'var(--rel-color-text-muted, #64748b)' }}>{key}</span>
                 <span>{val}</span>
               </div>
             ))}
@@ -217,15 +217,15 @@ function VisualStudioLayoutStory() {
         );
       case 'index-cs':
         return (
-          <div style={{ padding: 12, fontFamily: 'monospace', fontSize: 12, lineHeight: 1.6, background: '#fafafa' }}>
-            <div><span style={{ color: '#7c3aed' }}>using</span> System;</div>
-            <div><span style={{ color: '#7c3aed' }}>using</span> System.Windows.Forms;</div>
+          <div style={{ padding: 12, fontFamily: 'monospace', fontSize: 12, lineHeight: 1.6, background: 'var(--rel-color-bg-secondary, #fafafa)' }}>
+            <div><span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>using</span> System;</div>
+            <div><span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>using</span> System.Windows.Forms;</div>
             <div />
-            <div><span style={{ color: '#7c3aed' }}>namespace</span> <span style={{ color: '#2563eb' }}>MyApp</span></div>
+            <div><span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>namespace</span> <span style={{ color: 'var(--rel-color-primary, #2563eb)' }}>MyApp</span></div>
             <div>{'{'}</div>
-            <div>{'  '}<span style={{ color: '#7c3aed' }}>public partial class</span> <span style={{ color: '#2563eb' }}>MainForm</span> : <span style={{ color: '#2563eb' }}>Form</span></div>
+            <div>{'  '}<span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>public partial class</span> <span style={{ color: 'var(--rel-color-primary, #2563eb)' }}>MainForm</span> : <span style={{ color: 'var(--rel-color-primary, #2563eb)' }}>Form</span></div>
             <div>{'  {'}</div>
-            <div>{'    '}<span style={{ color: '#7c3aed' }}>public</span> <span style={{ color: '#2563eb' }}>MainForm</span>()</div>
+            <div>{'    '}<span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>public</span> <span style={{ color: 'var(--rel-color-primary, #2563eb)' }}>MainForm</span>()</div>
             <div>{'    {'}</div>
             <div>{'      '}InitializeComponent();</div>
             <div>{'    }'}</div>
@@ -235,17 +235,17 @@ function VisualStudioLayoutStory() {
         );
       case 'app-cs':
         return (
-          <div style={{ padding: 12, fontFamily: 'monospace', fontSize: 12, lineHeight: 1.6, background: '#fafafa' }}>
-            <div><span style={{ color: '#7c3aed' }}>using</span> System;</div>
+          <div style={{ padding: 12, fontFamily: 'monospace', fontSize: 12, lineHeight: 1.6, background: 'var(--rel-color-bg-secondary, #fafafa)' }}>
+            <div><span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>using</span> System;</div>
             <div />
-            <div><span style={{ color: '#7c3aed' }}>namespace</span> <span style={{ color: '#2563eb' }}>MyApp</span></div>
+            <div><span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>namespace</span> <span style={{ color: 'var(--rel-color-primary, #2563eb)' }}>MyApp</span></div>
             <div>{'{'}</div>
-            <div>{'  '}<span style={{ color: '#7c3aed' }}>static class</span> <span style={{ color: '#2563eb' }}>Program</span></div>
+            <div>{'  '}<span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>static class</span> <span style={{ color: 'var(--rel-color-primary, #2563eb)' }}>Program</span></div>
             <div>{'  {'}</div>
             <div>{'    ['}STAThread{']'}</div>
-            <div>{'    '}<span style={{ color: '#7c3aed' }}>static void</span> Main()</div>
+            <div>{'    '}<span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>static void</span> Main()</div>
             <div>{'    {'}</div>
-            <div>{'      '}Application.Run(<span style={{ color: '#7c3aed' }}>new</span> MainForm());</div>
+            <div>{'      '}Application.Run(<span style={{ color: 'var(--rel-color-info, #7c3aed)' }}>new</span> MainForm());</div>
             <div>{'    }'}</div>
             <div>{'  }'}</div>
             <div>{'}'}</div>
@@ -254,7 +254,7 @@ function VisualStudioLayoutStory() {
       case 'error-list':
         return (
           <div style={{ padding: 8, fontSize: 12 }}>
-            <div style={{ display: 'flex', gap: 16, padding: '4px 0', borderBottom: '1px solid #e2e8f0', fontWeight: 600, color: '#475569' }}>
+            <div style={{ display: 'flex', gap: 16, padding: '4px 0', borderBottom: '1px solid var(--rel-color-border, #e2e8f0)', fontWeight: 600, color: 'var(--rel-color-text-muted, #475569)' }}>
               <span style={{ width: 60 }}>Code</span>
               <span style={{ flex: 1 }}>Description</span>
               <span style={{ width: 80 }}>File</span>
@@ -265,39 +265,39 @@ function VisualStudioLayoutStory() {
               ['CS0042', 'Missing assembly reference', 'app.cs', '3'],
               ['CS0103', "The name 'foo' does not exist", 'index.cs', '22'],
             ].map(([code, desc, file, line], i) => (
-              <div key={i} style={{ display: 'flex', gap: 16, padding: '3px 0', borderBottom: '1px solid #f8fafc', color: '#ef4444' }}>
+              <div key={i} style={{ display: 'flex', gap: 16, padding: '3px 0', borderBottom: '1px solid var(--rel-color-bg-subtle, #f8fafc)', color: 'var(--rel-color-error, #ef4444)' }}>
                 <span style={{ width: 60, fontFamily: 'monospace' }}>{code}</span>
                 <span style={{ flex: 1 }}>{desc}</span>
-                <span style={{ width: 80, color: '#64748b' }}>{file}</span>
-                <span style={{ width: 40, color: '#64748b' }}>{line}</span>
+                <span style={{ width: 80, color: 'var(--rel-color-text-muted, #64748b)' }}>{file}</span>
+                <span style={{ width: 40, color: 'var(--rel-color-text-muted, #64748b)' }}>{line}</span>
               </div>
             ))}
           </div>
         );
       case 'output':
         return (
-          <div style={{ padding: 8, fontFamily: 'monospace', fontSize: 11, lineHeight: 1.5, color: '#475569' }}>
+          <div style={{ padding: 8, fontFamily: 'monospace', fontSize: 11, lineHeight: 1.5, color: 'var(--rel-color-text-muted, #475569)' }}>
             <div>Build started...</div>
             <div>1&gt;------ Build started: Project: MyApp ------</div>
-            <div style={{ color: '#22c55e' }}>1&gt;MyApp -&gt; bin\Debug\MyApp.exe</div>
+            <div style={{ color: 'var(--rel-color-success, #22c55e)' }}>1&gt;MyApp -&gt; bin\Debug\MyApp.exe</div>
             <div>========== Build: 1 succeeded, 0 failed ==========</div>
           </div>
         );
       case 'server-explorer':
         return (
           <div style={{ padding: 8, fontSize: 12 }}>
-            <div style={{ fontWeight: 600, marginBottom: 8, color: '#475569' }}>Data Connections</div>
+            <div style={{ fontWeight: 600, marginBottom: 8, color: 'var(--rel-color-text-muted, #475569)' }}>Data Connections</div>
             <div style={{ paddingLeft: 8 }}>
               <div>localhost.MyDatabase</div>
-              <div style={{ paddingLeft: 16, color: '#64748b' }}>Tables</div>
-              <div style={{ paddingLeft: 16, color: '#64748b' }}>Views</div>
-              <div style={{ paddingLeft: 16, color: '#64748b' }}>Stored Procedures</div>
+              <div style={{ paddingLeft: 16, color: 'var(--rel-color-text-muted, #64748b)' }}>Tables</div>
+              <div style={{ paddingLeft: 16, color: 'var(--rel-color-text-muted, #64748b)' }}>Views</div>
+              <div style={{ paddingLeft: 16, color: 'var(--rel-color-text-muted, #64748b)' }}>Stored Procedures</div>
             </div>
           </div>
         );
       case 'find-results':
         return (
-          <div style={{ padding: 8, fontFamily: 'monospace', fontSize: 11, lineHeight: 1.5, color: '#475569' }}>
+          <div style={{ padding: 8, fontFamily: 'monospace', fontSize: 11, lineHeight: 1.5, color: 'var(--rel-color-text-muted, #475569)' }}>
             <div>Find all "Button", Entire Solution, 3 result(s)</div>
             <div style={{ paddingLeft: 8 }}>index.cs(5): Button button1 = new Button();</div>
             <div style={{ paddingLeft: 8 }}>index.cs(12): button1.Text = "Click";</div>
@@ -313,10 +313,10 @@ function VisualStudioLayoutStory() {
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{
         padding: '6px 16px',
-        background: '#1e293b',
-        color: '#94a3b8',
+        background: 'var(--rel-color-bg-inverse, #1e293b)',
+        color: 'var(--rel-color-text-muted, #94a3b8)',
         fontSize: 11,
-        borderBottom: '1px solid #334155',
+        borderBottom: '1px solid var(--rel-color-border, #334155)',
         flexShrink: 0,
       }}>
         Visual Studio Layout Simulation — Drag tabs to rearrange, right-click for options, double-click to maximize
@@ -360,11 +360,11 @@ function DragAndDropStory() {
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{
         padding: '8px 16px',
-        background: '#fef3c7',
-        borderBottom: '1px solid #fbbf24',
+        background: 'var(--rel-color-warning-light, #fef3c7)',
+        borderBottom: '1px solid var(--rel-color-warning, #fbbf24)',
         fontSize: 12,
         fontWeight: 500,
-        color: '#92400e',
+        color: 'var(--rel-color-warning-dark, #92400e)',
         flexShrink: 0,
       }}>
         Tutorial: Drag a tab to the edge of a group to split. Drag to center to add as tab.
@@ -389,11 +389,11 @@ function DragAndDropStory() {
         {log.length > 0 && (
           <div style={{
             padding: 8,
-            background: '#0f172a',
-            borderTop: '1px solid #334155',
+            background: 'var(--rel-color-bg-inverse, #0f172a)',
+            borderTop: '1px solid var(--rel-color-border, #334155)',
             fontSize: 11,
             fontFamily: 'monospace',
-            color: '#94a3b8',
+            color: 'var(--rel-color-text-muted, #94a3b8)',
             maxHeight: 120,
             overflow: 'auto',
             flexShrink: 0,
@@ -431,10 +431,10 @@ export const FloatingPanels: Story = {
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
         <div style={{
           padding: '8px 16px',
-          background: '#f8fafc',
-          borderBottom: '1px solid #e2e8f0',
+          background: 'var(--rel-color-bg-subtle, #f8fafc)',
+          borderBottom: '1px solid var(--rel-color-border, #e2e8f0)',
           fontSize: 12,
-          color: '#64748b',
+          color: 'var(--rel-color-text-muted, #64748b)',
           flexShrink: 0,
         }}>
           Right-click any tab and select "Float" to create a floating panel. Drag title bar to move. Use edges to resize.
@@ -462,10 +462,10 @@ export const ContextMenu: Story = {
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{
         padding: '8px 16px',
-        background: '#f8fafc',
-        borderBottom: '1px solid #e2e8f0',
+        background: 'var(--rel-color-bg-subtle, #f8fafc)',
+        borderBottom: '1px solid var(--rel-color-border, #e2e8f0)',
         fontSize: 12,
-        color: '#64748b',
+        color: 'var(--rel-color-text-muted, #64748b)',
         flexShrink: 0,
       }}>
         Right-click any tab to see context menu: Float, Auto-hide (4 sides), Maximize, Close
@@ -510,16 +510,16 @@ export const CustomSlotStyles: Story = {
     };
 
     const darkStyles: DockLayoutComponentProps['styles'] = {
-      root: { background: '#0f172a' },
-      group: { background: '#0f172a' },
-      tabBar: { background: '#1e293b', borderBottom: '1px solid #334155' },
-      tab: { color: '#94a3b8' },
-      panelContent: { background: '#0f172a', color: '#e2e8f0', padding: '12px' },
-      resizeHandle: { background: '#334155' },
-      floatingPanel: { background: '#1e293b' },
-      floatingTitleBar: { background: '#0f172a', borderBottom: '1px solid #334155' },
-      autoHideBar: { background: '#1e293b' },
-      autoHideTab: { color: '#94a3b8' },
+      root: { background: 'var(--rel-color-bg-inverse, #0f172a)' },
+      group: { background: 'var(--rel-color-bg-inverse, #0f172a)' },
+      tabBar: { background: 'var(--rel-color-bg-inverse, #1e293b)', borderBottom: '1px solid var(--rel-color-border, #334155)' },
+      tab: { color: 'var(--rel-color-text-muted, #94a3b8)' },
+      panelContent: { background: 'var(--rel-color-bg-inverse, #0f172a)', color: 'var(--rel-color-text-inverse, #e2e8f0)', padding: '12px' },
+      resizeHandle: { background: 'var(--rel-color-border, #334155)' },
+      floatingPanel: { background: 'var(--rel-color-bg-inverse, #1e293b)' },
+      floatingTitleBar: { background: 'var(--rel-color-bg-inverse, #0f172a)', borderBottom: '1px solid var(--rel-color-border, #334155)' },
+      autoHideBar: { background: 'var(--rel-color-bg-inverse, #1e293b)' },
+      autoHideTab: { color: 'var(--rel-color-text-muted, #94a3b8)' },
     };
 
     return (
@@ -536,16 +536,16 @@ export const CustomSlotStyles: Story = {
           classNames={{ root: 'dark-dock' }}
           renderPanel={(id, title) => (
             <div style={{ fontFamily: 'monospace', fontSize: 13 }}>
-              <h3 style={{ margin: '0 0 12px', fontSize: 14, color: '#e2e8f0' }}>{title}</h3>
+              <h3 style={{ margin: '0 0 12px', fontSize: 14, color: 'var(--rel-color-text-inverse, #e2e8f0)' }}>{title}</h3>
               {id === 'terminal' && (
                 <div>
-                  <div style={{ color: '#22c55e' }}>$ pnpm build</div>
-                  <div style={{ color: '#94a3b8' }}>Building packages...</div>
-                  <div style={{ color: '#22c55e' }}>Build completed in 2.3s</div>
+                  <div style={{ color: 'var(--rel-color-success, #22c55e)' }}>$ pnpm build</div>
+                  <div style={{ color: 'var(--rel-color-text-muted, #94a3b8)' }}>Building packages...</div>
+                  <div style={{ color: 'var(--rel-color-success, #22c55e)' }}>Build completed in 2.3s</div>
                 </div>
               )}
               {id === 'editor' && (
-                <pre style={{ margin: 0, color: '#e2e8f0' }}>
+                <pre style={{ margin: 0, color: 'var(--rel-color-text-inverse, #e2e8f0)' }}>
 {`import { DockLayout } from '@relteco/relui-react';
 
 export function App() {
@@ -559,7 +559,7 @@ export function App() {
                 </pre>
               )}
               {id !== 'terminal' && id !== 'editor' && (
-                <p style={{ color: '#64748b', margin: 0 }}>{title} content — ID: {id}</p>
+                <p style={{ color: 'var(--rel-color-text-muted, #64748b)', margin: 0 }}>{title} content — ID: {id}</p>
               )}
             </div>
           )}

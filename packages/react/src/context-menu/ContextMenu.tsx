@@ -325,7 +325,7 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuComponentProps>
               className={shortcutSlot.className}
               style={{
                 ...shortcutSlot.style,
-                ...(isHighlighted ? { color: 'rgba(255,255,255,0.7)' } : {}),
+                ...(isHighlighted ? { color: 'var(--rel-color-text-inverse-muted, rgba(255,255,255,0.7))' } : {}),
               }}
               data-testid="context-menu-shortcut"
             >

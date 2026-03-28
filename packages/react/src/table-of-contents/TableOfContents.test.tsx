@@ -56,8 +56,8 @@ afterEach(() => {
 describe('TableOfContents render', () => {
   it('nav element render eder', () => {
     render(<TableOfContents items={makeItems()} />);
-    expect(screen.getByTestId('table-of-contents')).toBeInTheDocument();
-    expect(screen.getByTestId('table-of-contents').tagName).toBe('NAV');
+    expect(screen.getByTestId('table-of-contents-root')).toBeInTheDocument();
+    expect(screen.getByTestId('table-of-contents-root').tagName).toBe('NAV');
   });
 
   it('tum basliklari render eder', () => {
@@ -72,7 +72,7 @@ describe('TableOfContents render', () => {
 
   it('bos items ile render eder', () => {
     render(<TableOfContents items={[]} />);
-    expect(screen.getByTestId('table-of-contents')).toBeInTheDocument();
+    expect(screen.getByTestId('table-of-contents-root')).toBeInTheDocument();
   });
 
   it('ref destekler', () => {
@@ -168,22 +168,22 @@ describe('TableOfContents active state', () => {
 describe('TableOfContents variants', () => {
   it('default variant render eder', () => {
     render(<TableOfContents items={makeItems()} variant="default" />);
-    expect(screen.getByTestId('table-of-contents')).toBeInTheDocument();
+    expect(screen.getByTestId('table-of-contents-root')).toBeInTheDocument();
   });
 
   it('filled variant render eder', () => {
     render(<TableOfContents items={makeItems()} variant="filled" />);
-    expect(screen.getByTestId('table-of-contents')).toBeInTheDocument();
+    expect(screen.getByTestId('table-of-contents-root')).toBeInTheDocument();
   });
 
   it('dots variant render eder', () => {
     render(<TableOfContents items={makeItems()} variant="dots" />);
-    expect(screen.getByTestId('table-of-contents')).toBeInTheDocument();
+    expect(screen.getByTestId('table-of-contents-root')).toBeInTheDocument();
   });
 
   it('dots variant indicator render eder', () => {
     render(<TableOfContents items={makeItems()} variant="dots" />);
-    const nav = screen.getByTestId('table-of-contents');
+    const nav = screen.getByTestId('table-of-contents-root');
     const indicators = nav.querySelectorAll('[aria-hidden="true"]');
     expect(indicators.length).toBe(makeItems().length);
   });
@@ -194,7 +194,7 @@ describe('TableOfContents variants', () => {
 describe('TableOfContents sizes', () => {
   it.each(['xs', 'sm', 'md', 'lg', 'xl'] as const)('%s boyutu render eder', (size) => {
     render(<TableOfContents items={makeItems()} size={size} />);
-    expect(screen.getByTestId('table-of-contents')).toBeInTheDocument();
+    expect(screen.getByTestId('table-of-contents-root')).toBeInTheDocument();
   });
 });
 
@@ -218,13 +218,13 @@ describe('TableOfContents a11y', () => {
 
   it('link listesi ul element render eder', () => {
     render(<TableOfContents items={makeItems()} />);
-    const nav = screen.getByTestId('table-of-contents');
+    const nav = screen.getByTestId('table-of-contents-root');
     expect(nav.querySelector('ul')).toBeInTheDocument();
   });
 
   it('her item li element render eder', () => {
     render(<TableOfContents items={makeItems()} />);
-    const nav = screen.getByTestId('table-of-contents');
+    const nav = screen.getByTestId('table-of-contents-root');
     const lis = nav.querySelectorAll('li');
     expect(lis.length).toBe(makeItems().length);
   });
@@ -241,22 +241,50 @@ describe('TableOfContents a11y', () => {
 describe('TableOfContents slot API', () => {
   it('className root slot', () => {
     render(<TableOfContents items={makeItems()} className="custom-toc" />);
-    expect(screen.getByTestId('table-of-contents').className).toContain('custom-toc');
+    expect(screen.getByTestId('table-of-contents-root').className).toContain('custom-toc');
   });
 
   it('style root slot', () => {
     render(<TableOfContents items={makeItems()} style={{ opacity: 0.5 }} />);
-    expect(screen.getByTestId('table-of-contents').style.opacity).toBe('0.5');
+    expect(screen.getByTestId('table-of-contents-root').style.opacity).toBe('0.5');
   });
 
   it('classNames.root slot', () => {
     render(<TableOfContents items={makeItems()} classNames={{ root: 'my-toc' }} />);
-    expect(screen.getByTestId('table-of-contents').className).toContain('my-toc');
+    expect(screen.getByTestId('table-of-contents-root').className).toContain('my-toc');
   });
 
   it('styles.root slot', () => {
     render(<TableOfContents items={makeItems()} styles={{ root: { fontSize: '20px' } }} />);
-    expect(screen.getByTestId('table-of-contents').style.fontSize).toBe('20px');
+    expect(screen.getByTestId('table-of-contents-root').style.fontSize).toBe('20px');
+  });
+
+  // ── Slot API: styles ──
+
+  it('styles.list list elemana eklenir', () => {
+    render(<TableOfContents items={makeItems()} styles={{ list: { padding: '24px' } }} />);
+    const nav = screen.getByTestId('table-of-contents-root');
+    const ul = nav.querySelector('ul') as HTMLElement;
+    expect(ul).toHaveStyle({ padding: '24px' });
+  });
+
+  it('styles.item item elemana eklenir', () => {
+    render(<TableOfContents items={makeItems()} styles={{ item: { fontSize: '14px' } }} />);
+    const nav = screen.getByTestId('table-of-contents-root');
+    const li = nav.querySelector('li') as HTMLElement;
+    expect(li).toHaveStyle({ fontSize: '14px' });
+  });
+
+  it('styles.link link elemana eklenir', () => {
+    render(<TableOfContents items={makeItems()} styles={{ link: { letterSpacing: '1px' } }} />);
+    expect(screen.getAllByTestId('table-of-contents-link')[0]).toHaveStyle({ letterSpacing: '1px' });
+  });
+
+  it('styles.indicator indicator elemana eklenir', () => {
+    render(
+      <TableOfContents items={makeItems()} variant="dots" styles={{ indicator: { opacity: '0.5' } }} />,
+    );
+    expect(screen.getAllByTestId('table-of-contents-indicator')[0]).toHaveStyle({ opacity: '0.5' });
   });
 });
 

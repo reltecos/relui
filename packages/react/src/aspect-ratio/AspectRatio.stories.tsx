@@ -34,7 +34,7 @@ export const Default: Story = {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'white',
+            color: 'var(--rel-color-text-inverse, #fff)',
             fontSize: '1.5rem',
           }}
         >
@@ -58,7 +58,7 @@ export const Widescreen: Story = {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'white',
+            color: 'var(--rel-color-text-inverse, #fff)',
             fontSize: '1.5rem',
           }}
         >
@@ -82,7 +82,7 @@ export const Portrait: Story = {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'white',
+            color: 'var(--rel-color-text-inverse, #fff)',
           }}
         >
           3:4

@@ -23,9 +23,9 @@ const defaultRender = (id: string, title: string) => <div data-testid={`win-${id
 describe('MDI', () => {
   it('renders with data-mdi', () => {
     render(
-      <MDI data-testid="root" renderWindow={defaultRender} />,
+      <MDI data-testid="mdi-root" renderWindow={defaultRender} />,
     );
-    expect(screen.getByTestId('root')).toHaveAttribute('data-mdi');
+    expect(screen.getByTestId('mdi-root')).toHaveAttribute('data-mdi');
   });
 
   it('renders empty without windows', () => {
@@ -204,23 +204,23 @@ describe('MDI', () => {
     render(
       <MDI
         ref={(el) => { refValue = el; }}
-        data-testid="root"
+        data-testid="mdi-root"
         renderWindow={defaultRender}
       />,
     );
-    expect(refValue).toBe(screen.getByTestId('root'));
+    expect(refValue).toBe(screen.getByTestId('mdi-root'));
   });
 
   it('passes through HTML attributes', () => {
     render(
       <MDI
-        data-testid="root"
+        data-testid="mdi-root"
         id="mdi"
         aria-label="MDI"
         renderWindow={defaultRender}
       />,
     );
-    const el = screen.getByTestId('root');
+    const el = screen.getByTestId('mdi-root');
     expect(el).toHaveAttribute('id', 'mdi');
     expect(el).toHaveAttribute('aria-label', 'MDI');
   });
@@ -231,35 +231,35 @@ describe('MDI', () => {
     it('applies classNames.root', () => {
       render(
         <MDI
-          data-testid="root"
+          data-testid="mdi-root"
           classNames={{ root: 'slot-root' }}
           renderWindow={defaultRender}
         />,
       );
-      expect(screen.getByTestId('root')).toHaveClass('slot-root');
+      expect(screen.getByTestId('mdi-root')).toHaveClass('slot-root');
     });
 
     it('applies styles.root', () => {
       render(
         <MDI
-          data-testid="root"
+          data-testid="mdi-root"
           styles={{ root: { opacity: '0.9' } }}
           renderWindow={defaultRender}
         />,
       );
-      expect(screen.getByTestId('root')).toHaveStyle({ opacity: '0.9' });
+      expect(screen.getByTestId('mdi-root')).toHaveStyle({ opacity: '0.9' });
     });
 
     it('merges className + classNames.root', () => {
       render(
         <MDI
-          data-testid="root"
+          data-testid="mdi-root"
           className="outer"
           classNames={{ root: 'inner' }}
           renderWindow={defaultRender}
         />,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('mdi-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
@@ -267,13 +267,13 @@ describe('MDI', () => {
     it('merges style + styles.root', () => {
       render(
         <MDI
-          data-testid="root"
+          data-testid="mdi-root"
           style={{ margin: 4 }}
           styles={{ root: { padding: 8 } }}
           renderWindow={defaultRender}
         />,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('mdi-root');
       expect(el).toHaveStyle({ margin: '4px', padding: '8px' });
     });
 
@@ -299,6 +299,83 @@ describe('MDI', () => {
       );
       const taskbar = container.querySelector('[data-mdi-taskbar]');
       expect(taskbar).toHaveClass('custom-taskbar');
+    });
+
+    it('styles.window window elemana padding eklenir', () => {
+      render(
+        <MDI
+          windows={[{ id: 'a', title: 'A' }]}
+          styles={{ window: { padding: '20px' } }}
+          renderWindow={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('mdi-window')).toHaveStyle({ padding: '20px' });
+    });
+
+    it('styles.titleBar titleBar elemana fontSize eklenir', () => {
+      render(
+        <MDI
+          windows={[{ id: 'a', title: 'A' }]}
+          styles={{ titleBar: { fontSize: '18px' } }}
+          renderWindow={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('mdi-title-bar')).toHaveStyle({ fontSize: '18px' });
+    });
+
+    it('styles.title title elemana letterSpacing eklenir', () => {
+      render(
+        <MDI
+          windows={[{ id: 'a', title: 'A' }]}
+          styles={{ title: { letterSpacing: '2px' } }}
+          renderWindow={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('mdi-title')).toHaveStyle({ letterSpacing: '2px' });
+    });
+
+    it('styles.controls controls elemana padding eklenir', () => {
+      render(
+        <MDI
+          windows={[{ id: 'a', title: 'A' }]}
+          styles={{ controls: { padding: '8px' } }}
+          renderWindow={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('mdi-controls')).toHaveStyle({ padding: '8px' });
+    });
+
+    it('styles.content content elemana fontSize eklenir', () => {
+      render(
+        <MDI
+          windows={[{ id: 'a', title: 'A' }]}
+          styles={{ content: { fontSize: '14px' } }}
+          renderWindow={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('mdi-content')).toHaveStyle({ fontSize: '14px' });
+    });
+
+    it('styles.taskbar taskbar elemana padding eklenir', () => {
+      render(
+        <MDI
+          windows={[{ id: 'a', title: 'A' }]}
+          styles={{ taskbar: { padding: '20px' } }}
+          renderWindow={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('mdi-taskbar')).toHaveStyle({ padding: '20px' });
+    });
+
+    it('styles.taskbarItem taskbarItem elemana letterSpacing eklenir', () => {
+      render(
+        <MDI
+          windows={[{ id: 'a', title: 'A' }]}
+          styles={{ taskbarItem: { letterSpacing: '1px' } }}
+          renderWindow={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('mdi-taskbar-item')).toHaveStyle({ letterSpacing: '1px' });
     });
   });
 
@@ -342,11 +419,11 @@ describe('MDI', () => {
 
     it('compound MDI root has data-mdi attribute', () => {
       render(
-        <MDI data-testid="root">
+        <MDI data-testid="mdi-root">
           <MDI.Window id="a" title="A"><div>Content</div></MDI.Window>
         </MDI>,
       );
-      expect(screen.getByTestId('root')).toHaveAttribute('data-mdi');
+      expect(screen.getByTestId('mdi-root')).toHaveAttribute('data-mdi');
     });
 
     it('renders multiple MDI.Window elements', () => {

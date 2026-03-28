@@ -176,9 +176,10 @@ const FormGroupBase = forwardRef<HTMLFieldSetElement, FormGroupComponentProps>(
           style={rootSlot.style}
           disabled={disabled}
           data-orientation={orientation}
+          data-testid="form-group-root"
         >
           {legend && (
-            <legend className={legendSlot.className} style={legendSlot.style}>
+            <legend className={legendSlot.className} style={legendSlot.style} data-testid="form-group-legend">
               {legend}
             </legend>
           )}

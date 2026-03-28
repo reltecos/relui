@@ -126,6 +126,7 @@ const ResponsiveBoxBase = forwardRef<HTMLElement, ResponsiveBoxProps>(
           {...boxProps}
           className={finalClass}
           style={rootSlot.style}
+          data-testid="responsive-box-root"
         />
       </ResponsiveBoxContext.Provider>
     );

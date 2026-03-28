@@ -113,7 +113,7 @@ export const CustomSlotStyles: Story = {
     name: 'Relteco',
     size: 'xl',
     styles: {
-      root: { boxShadow: '0 4px 12px rgba(0,0,0,0.15)' },
+      root: { boxShadow: 'var(--rel-shadow-md, 0 4px 12px rgba(0,0,0,0.15))' },
       fallback: { letterSpacing: '0.1em' },
     },
   },

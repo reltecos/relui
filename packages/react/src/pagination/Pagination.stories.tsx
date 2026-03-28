@@ -50,7 +50,7 @@ export const AllVariants: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {(['outline', 'filled', 'subtle'] as const).map((variant) => (
         <div key={variant}>
-          <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block', textTransform: 'capitalize' }}>
+          <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block', textTransform: 'capitalize' }}>
             {variant}
           </span>
           <Pagination totalItems={100} pageSize={10} defaultPage={5} variant={variant} />
@@ -67,7 +67,7 @@ export const AllSizes: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <div key={size}>
-          <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+          <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
             {size}
           </span>
           <Pagination totalItems={100} pageSize={10} defaultPage={5} size={size} />
@@ -110,19 +110,19 @@ export const FewPages: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           1 sayfa
         </span>
         <Pagination totalItems={5} pageSize={10} />
       </div>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           3 sayfa
         </span>
         <Pagination totalItems={30} pageSize={10} />
       </div>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           5 sayfa
         </span>
         <Pagination totalItems={50} pageSize={10} />
@@ -137,7 +137,7 @@ export const CustomLabels: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           Metin etiketler
         </span>
         <Pagination
@@ -152,7 +152,7 @@ export const CustomLabels: Story = {
         />
       </div>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           Ok ikonlari
         </span>
         <Pagination
@@ -176,7 +176,7 @@ function ControlledDemo() {
   const [page, setPage] = useState(1);
   return (
     <div>
-      <p style={{ fontFamily: 'sans-serif', fontSize: '14px', color: '#666', margin: '0 0 12px' }}>
+      <p style={{ fontFamily: 'sans-serif', fontSize: '14px', color: 'var(--rel-color-text-muted, #666)', margin: '0 0 12px' }}>
         Mevcut sayfa: <strong>{page}</strong>
       </p>
       <Pagination
@@ -201,7 +201,7 @@ export const CustomSiblings: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           siblingCount=2, boundaryCount=2
         </span>
         <Pagination
@@ -213,7 +213,7 @@ export const CustomSiblings: Story = {
         />
       </div>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           siblingCount=0, boundaryCount=1
         </span>
         <Pagination

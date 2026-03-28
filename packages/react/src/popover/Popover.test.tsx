@@ -258,6 +258,20 @@ describe('Popover', () => {
     expect(screen.getByTestId('popover-content')).toHaveStyle({ padding: '24px' });
   });
 
+  it('styles.content content elemana fontSize eklenir', () => {
+    render(
+      <TestPopover defaultOpen styles={{ content: { fontSize: '16px' } }} />,
+    );
+    expect(screen.getByTestId('popover-content')).toHaveStyle({ fontSize: '16px' });
+  });
+
+  it('styles.content content elemana letterSpacing eklenir', () => {
+    render(
+      <TestPopover defaultOpen styles={{ content: { letterSpacing: '1px' } }} />,
+    );
+    expect(screen.getByTestId('popover-content')).toHaveStyle({ letterSpacing: '1px' });
+  });
+
   // ── Trigger onClick preserved ──
 
   it('trigger orijinal onClick korunur', () => {
@@ -287,7 +301,7 @@ describe('Popover', () => {
 
   it('anchor span render edilir', () => {
     render(<TestPopover />);
-    expect(screen.getByTestId('popover-anchor')).toBeInTheDocument();
+    expect(screen.getByTestId('popover-root')).toBeInTheDocument();
   });
 });
 

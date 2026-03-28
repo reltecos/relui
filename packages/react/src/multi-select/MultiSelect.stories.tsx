@@ -251,7 +251,7 @@ export const Controlled: Story = {
           placeholder="Ulke secin"
           aria-label="Ulke"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Secili ({values.length}): {values.length > 0 ? values.map(String).join(', ') : '(bos)'}
         </div>
         <button
@@ -281,7 +281,7 @@ export const MaxSelections: Story = {
           placeholder="En fazla 3 ulke secin"
           aria-label="Ulke"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Secili: {values.length}/3
         </div>
       </div>
@@ -317,9 +317,9 @@ export const CustomSlotStyles: Story = {
           tag: 'my-tag',
         }}
         styles={{
-          trigger: { borderColor: 'orange', borderWidth: '2px' },
-          tag: { background: '#fef3c7', borderRadius: '9999px' },
-          tagRemoveButton: { color: 'red' },
+          trigger: { borderColor: 'var(--rel-color-warning, #f59e0b)', borderWidth: '2px' },
+          tag: { background: 'var(--rel-color-warning-subtle, #fef3c7)', borderRadius: '9999px' },
+          tagRemoveButton: { color: 'var(--rel-color-error, #ef4444)' },
         }}
         aria-label="Ulke"
       />
@@ -329,8 +329,8 @@ export const CustomSlotStyles: Story = {
         className="legacy-class"
         classNames={{ root: 'slot-root' }}
         styles={{
-          root: { boxShadow: '0 0 0 2px orange' },
-          listbox: { border: '2px solid orange' },
+          root: { boxShadow: '0 0 0 2px var(--rel-color-warning, #f59e0b)' },
+          listbox: { border: '2px solid var(--rel-color-warning, #f59e0b)' },
           option: { fontStyle: 'italic' },
         }}
         aria-label="Ulke2"

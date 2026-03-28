@@ -240,6 +240,7 @@ const ChipBase = forwardRef<HTMLButtonElement, ChipComponentProps>(function Chip
                 handleRemoveClick(e as unknown as React.MouseEvent);
             }}
             aria-label="Kaldır"
+            data-testid="chip-removebutton"
           >
             <CloseIcon size="0.75em" />
           </span>

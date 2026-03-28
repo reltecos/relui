@@ -315,6 +315,24 @@ describe('CurrencyInput', () => {
       const adorn = container.querySelector('[aria-hidden="true"]');
       expect(adorn).toHaveStyle({ fontSize: '18px' });
     });
+
+    // ── Slot API: styles ──────────────────────────────────────────────
+
+    it('styles.input input elemana uygulanir', () => {
+      renderCI({ styles: { input: { letterSpacing: '1px' } } });
+      expect(getInput()).toHaveStyle({ letterSpacing: '1px' });
+    });
+
+    it('styles.adornPrefix prefix elemana uygulanir', () => {
+      const { container } = renderCI({
+        value: 0,
+        locale: 'en-US',
+        currency: 'USD',
+        styles: { adornPrefix: { opacity: '0.7' } },
+      });
+      const adorn = container.querySelector('[aria-hidden="true"]');
+      expect(adorn).toHaveStyle({ opacity: '0.7' });
+    });
   });
 });
 
@@ -327,8 +345,8 @@ describe('CurrencyInput (Compound)', () => {
         <CurrencyInput.Symbol />
       </CurrencyInput>,
     );
-    expect(screen.getByTestId('currencyinput-symbol')).toBeInTheDocument();
-    expect(screen.getByTestId('currencyinput-symbol')).toHaveTextContent('$');
+    expect(screen.getByTestId('currency-input-adorn-prefix')).toBeInTheDocument();
+    expect(screen.getByTestId('currency-input-adorn-prefix')).toHaveTextContent('$');
   });
 
   it('compound: Symbol custom children ile render edilir', () => {
@@ -337,7 +355,7 @@ describe('CurrencyInput (Compound)', () => {
         <CurrencyInput.Symbol>TL</CurrencyInput.Symbol>
       </CurrencyInput>,
     );
-    expect(screen.getByTestId('currencyinput-symbol')).toHaveTextContent('TL');
+    expect(screen.getByTestId('currency-input-adorn-prefix')).toHaveTextContent('TL');
   });
 
   it('compound: root data-testid eklenir', () => {
@@ -346,7 +364,7 @@ describe('CurrencyInput (Compound)', () => {
         <CurrencyInput.Symbol />
       </CurrencyInput>,
     );
-    expect(screen.getByTestId('currencyinput-root')).toBeInTheDocument();
+    expect(screen.getByTestId('currency-input-root')).toBeInTheDocument();
   });
 
   it('compound: Field render edilir', () => {
@@ -355,7 +373,7 @@ describe('CurrencyInput (Compound)', () => {
         <CurrencyInput.Field placeholder="0,00" />
       </CurrencyInput>,
     );
-    expect(screen.getByTestId('currencyinput-field')).toBeInTheDocument();
+    expect(screen.getByTestId('currency-input-input')).toBeInTheDocument();
   });
 
   it('compound: context disinda kullanim hata firlatir', () => {

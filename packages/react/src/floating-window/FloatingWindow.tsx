@@ -125,14 +125,14 @@ const FloatingWindowHeader = forwardRef<HTMLDivElement, FloatingWindowHeaderProp
         style={{ ...slot.style, cursor: ctx.draggable ? 'grab' : 'default' }}
         onPointerDown={handleTitleBarPointerDown}
         data-title-bar
-        data-testid="floating-window-titleBar"
+        data-testid="floating-window-title-bar"
       >
         {children ?? (
           <>
-            <div className={titleSlot.className || undefined} style={titleSlot.style}>
+            <div className={titleSlot.className || undefined} style={titleSlot.style} data-testid="floating-window-title">
               {title}
             </div>
-            <div className={ctrlSlot.className || undefined} style={ctrlSlot.style}>
+            <div className={ctrlSlot.className || undefined} style={ctrlSlot.style} data-testid="floating-window-controls">
               {ctx.showMinimize && (
                 <button
                   type="button"
@@ -229,7 +229,7 @@ const FloatingWindowCloseButton = forwardRef<HTMLButtonElement, FloatingWindowCl
         className={cls}
         aria-label="Close"
         data-window-control="close"
-        data-testid="floating-window-closeButton"
+        data-testid="floating-window-close-button"
       >
         {children ?? '\u2715'}
       </button>
@@ -438,6 +438,7 @@ const FloatingWindowBase = forwardRef<HTMLDivElement, FloatingWindowComponentPro
             style={rootSlot.style}
             data-window-state={windowState}
             data-dragging={api.isDragging() || undefined}
+            data-testid="floating-window-root"
           >
             {children}
           </div>
@@ -459,22 +460,26 @@ const FloatingWindowBase = forwardRef<HTMLDivElement, FloatingWindowComponentPro
         style={rootSlot.style}
         data-window-state={windowState}
         data-dragging={api.isDragging() || undefined}
+        data-testid="floating-window-root"
       >
         <div
           className={titleBarSlot.className || undefined}
           style={{ ...titleBarSlot.style, cursor: draggable ? 'grab' : 'default' }}
           onPointerDown={handleTitleBarPointerDown}
           data-title-bar
+          data-testid="floating-window-title-bar"
         >
           <div
             className={titleSlotResult.className || undefined}
             style={titleSlotResult.style}
+            data-testid="floating-window-title"
           >
             {title}
           </div>
           <div
             className={ctrlSlot.className || undefined}
             style={ctrlSlot.style}
+            data-testid="floating-window-controls"
           >
             {showMinimize && (
               <button
@@ -515,6 +520,7 @@ const FloatingWindowBase = forwardRef<HTMLDivElement, FloatingWindowComponentPro
           className={contentSlot.className || undefined}
           style={contentSlot.style}
           data-window-content
+          data-testid="floating-window-content"
         >
           {children}
         </div>

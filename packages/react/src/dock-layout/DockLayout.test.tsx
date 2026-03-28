@@ -1027,12 +1027,12 @@ describe('DockLayout', () => {
       const { container } = render(
         <DockLayout
           panels={[{ id: 'a', title: 'A' }]}
-          styles={{ group: { background: '#000' } }}
+          styles={{ group: { padding: '12px' } }}
           renderPanel={defaultRender}
         />,
       );
       const group = container.querySelector('[data-dock-group]');
-      expect(group).toHaveStyle({ background: '#000' });
+      expect(group).toHaveStyle({ padding: '12px' });
     });
 
     it('applies styles.tabBar', () => {

@@ -383,13 +383,14 @@ const MultiSelectBase = forwardRef<HTMLDivElement, MultiSelectComponentProps>(
     const checkboxSlot = getSlotProps('checkboxIndicator', multiSelectCheckboxStyle, classNames, styles);
 
     return (
-      <div ref={ref} className={rootClassName} style={rootSlot.style} id={id}>
+      <div ref={ref} className={rootClassName} style={rootSlot.style} id={id} data-testid="multiselect-root">
         {/* Trigger — div kullanilir cunku icinde tag remove button'lari var */}
         <div
           className={triggerSlot.className}
           style={triggerSlot.style}
           aria-label={ariaLabel}
           aria-describedby={ariaDescribedBy}
+          data-testid="multiselect-trigger"
           {...triggerProps}
         >
           {selectionCount > 0 ? (

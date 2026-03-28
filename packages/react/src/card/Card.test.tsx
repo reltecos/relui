@@ -188,6 +188,32 @@ describe('Card', () => {
     expect(screen.getByTestId('card-footer')).toHaveStyle({ padding: '16px' });
   });
 
+  it('styles.title title elemana eklenir', () => {
+    render(<Card title="Test" styles={{ title: { fontSize: '24px' } }} />);
+    expect(screen.getByTestId('card-title')).toHaveStyle({ fontSize: '24px' });
+  });
+
+  it('styles.subtitle subtitle elemana eklenir', () => {
+    render(<Card title="T" subtitle="Alt" styles={{ subtitle: { letterSpacing: '0.05em' } }} />);
+    expect(screen.getByTestId('card-subtitle')).toHaveStyle({ letterSpacing: '0.05em' });
+  });
+
+  it('styles.media media elemana eklenir', () => {
+    render(
+      <Card media={{ src: 'test.jpg', alt: 'Test' }} styles={{ media: { opacity: '0.8' } }}>
+        Content
+      </Card>,
+    );
+    expect(screen.getByTestId('card-media')).toHaveStyle({ opacity: '0.8' });
+  });
+
+  it('styles.action action elemana eklenir', () => {
+    render(
+      <Card title="T" action={<button>Act</button>} styles={{ action: { padding: '20px' } }} />,
+    );
+    expect(screen.getByTestId('card-action')).toHaveStyle({ padding: '20px' });
+  });
+
   // ── ReactNode title ──
 
   it('title ReactNode olabilir', () => {

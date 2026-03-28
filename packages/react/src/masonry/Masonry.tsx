@@ -202,6 +202,7 @@ const MasonryBase = forwardRef<HTMLDivElement, MasonryComponentProps>(
           {...rest}
           className={finalClass}
           style={{ ...rootSlot.style, height: totalHeight > 0 ? totalHeight : undefined }}
+          data-testid="masonry-root"
         >
           {childArray.map((child, i) => {
             const pos = positions[i];
@@ -223,6 +224,7 @@ const MasonryBase = forwardRef<HTMLDivElement, MasonryComponentProps>(
                 className={itemSlot.className || undefined}
                 style={{ ...itemSlot.style, ...itemStyle }}
                 data-masonry-column={pos?.column}
+                data-testid="masonry-item"
               >
                 {child}
               </div>

@@ -519,6 +519,7 @@ const PopoverBase = forwardRef<HTMLDivElement, PopoverComponentProps>(
           },
           'aria-expanded': ctx.open,
           'aria-haspopup': 'true',
+          'data-testid': 'popover-trigger',
         })
       : effectiveTrigger;
 
@@ -539,7 +540,7 @@ const PopoverBase = forwardRef<HTMLDivElement, PopoverComponentProps>(
     };
 
     // ── Render ──
-    const anchor = <span ref={anchorRef} style={{ display: 'none' }} data-testid="popover-anchor" />;
+    const anchor = <span ref={anchorRef} style={{ display: 'none' }} data-testid="popover-root" />;
 
     const contentElement = ctx.open && portalTarget ? createPortal(
       <div

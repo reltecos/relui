@@ -35,10 +35,10 @@ export const Default: Story = {
     subtitle: 'Alt aciklama',
     footer: (
       <div style={{ display: 'flex', gap: 8 }}>
-        <button style={{ padding: '6px 16px', borderRadius: 4, border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer' }}>
+        <button style={{ padding: '6px 16px', borderRadius: 4, border: '1px solid var(--rel-color-border, #d1d5db)', background: 'var(--rel-color-bg, #fff)', cursor: 'pointer' }}>
           Iptal
         </button>
-        <button style={{ padding: '6px 16px', borderRadius: 4, border: 'none', background: '#3b82f6', color: '#fff', cursor: 'pointer' }}>
+        <button style={{ padding: '6px 16px', borderRadius: 4, border: 'none', background: 'var(--rel-color-primary, #3b82f6)', color: 'var(--rel-color-bg, #fff)', cursor: 'pointer' }}>
           Kaydet
         </button>
       </div>
@@ -92,7 +92,7 @@ export const WithMedia: Story = {
     title: 'Doga Fotograflari',
     subtitle: 'Koleksiyondan bir kare',
     footer: (
-      <button style={{ padding: '6px 16px', borderRadius: 4, border: 'none', background: '#3b82f6', color: '#fff', cursor: 'pointer' }}>
+      <button style={{ padding: '6px 16px', borderRadius: 4, border: 'none', background: 'var(--rel-color-primary, #3b82f6)', color: 'var(--rel-color-bg, #fff)', cursor: 'pointer' }}>
         Kesfet
       </button>
     ),
@@ -118,7 +118,7 @@ export const WithAction: Story = {
     title: 'Bildirimler',
     subtitle: '3 okunmamis bildirim',
     action: (
-      <button style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #d1d5db', background: '#fff', fontSize: 12, cursor: 'pointer' }}>
+      <button style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid var(--rel-color-border, #d1d5db)', background: 'var(--rel-color-bg, #fff)', fontSize: 12, cursor: 'pointer' }}>
         Tumunu oku
       </button>
     ),
@@ -152,7 +152,7 @@ export const Compound: Story = {
           </p>
         </Card.Body>
         <Card.Footer>
-          <button style={{ padding: '6px 16px', borderRadius: 4, border: 'none', background: '#3b82f6', color: '#fff', cursor: 'pointer' }}>
+          <button style={{ padding: '6px 16px', borderRadius: 4, border: 'none', background: 'var(--rel-color-primary, #3b82f6)', color: 'var(--rel-color-bg, #fff)', cursor: 'pointer' }}>
             Tamam
           </button>
         </Card.Footer>
@@ -168,7 +168,7 @@ export const CustomSlotStyles: Story = {
     title: 'Ozel Stil',
     subtitle: 'Slot API ile ozellestirilmis',
     footer: (
-      <button style={{ padding: '8px 20px', borderRadius: 8, border: 'none', background: '#3b82f6', color: '#fff', cursor: 'pointer' }}>
+      <button style={{ padding: '8px 20px', borderRadius: 8, border: 'none', background: 'var(--rel-color-primary, #3b82f6)', color: 'var(--rel-color-bg, #fff)', cursor: 'pointer' }}>
         Tamam
       </button>
     ),

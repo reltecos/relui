@@ -145,7 +145,7 @@ export const Controlled: Story = {
           onVisibleChange={setVisible}
           placeholder="Kontrollü şifre"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Değer: {value || '(boş)'} | Görünür: {visible ? 'evet' : 'hayır'}
         </div>
       </div>

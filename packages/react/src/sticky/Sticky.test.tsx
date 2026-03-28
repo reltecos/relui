@@ -36,76 +36,76 @@ describe('Sticky', () => {
 
   it('applies position: sticky style', () => {
     render(
-      <Sticky data-testid="sticky">
+      <Sticky data-testid="sticky-root">
         <span>Content</span>
       </Sticky>,
     );
-    const el = screen.getByTestId('sticky');
+    const el = screen.getByTestId('sticky-root');
     expect(el).toHaveStyle({ position: 'sticky' });
   });
 
   it('applies top offset for position=top', () => {
     render(
-      <Sticky data-testid="sticky" offset={20}>
+      <Sticky data-testid="sticky-root" offset={20}>
         <span>Content</span>
       </Sticky>,
     );
-    expect(screen.getByTestId('sticky')).toHaveStyle({ top: '20px' });
+    expect(screen.getByTestId('sticky-root')).toHaveStyle({ top: '20px' });
   });
 
   it('applies bottom offset for position=bottom', () => {
     render(
-      <Sticky data-testid="sticky" position="bottom" offset={30}>
+      <Sticky data-testid="sticky-root" position="bottom" offset={30}>
         <span>Content</span>
       </Sticky>,
     );
-    expect(screen.getByTestId('sticky')).toHaveStyle({ bottom: '30px' });
+    expect(screen.getByTestId('sticky-root')).toHaveStyle({ bottom: '30px' });
   });
 
   it('applies z-index', () => {
     render(
-      <Sticky data-testid="sticky" zIndex={200}>
+      <Sticky data-testid="sticky-root" zIndex={200}>
         <span>Content</span>
       </Sticky>,
     );
-    expect(screen.getByTestId('sticky')).toHaveStyle({ zIndex: 200 });
+    expect(screen.getByTestId('sticky-root')).toHaveStyle({ zIndex: 200 });
   });
 
   it('defaults z-index to 100', () => {
     render(
-      <Sticky data-testid="sticky">
+      <Sticky data-testid="sticky-root">
         <span>Content</span>
       </Sticky>,
     );
-    expect(screen.getByTestId('sticky')).toHaveStyle({ zIndex: 100 });
+    expect(screen.getByTestId('sticky-root')).toHaveStyle({ zIndex: 100 });
   });
 
   it('sets data-position attribute', () => {
     render(
-      <Sticky data-testid="sticky" position="bottom">
+      <Sticky data-testid="sticky-root" position="bottom">
         <span>Content</span>
       </Sticky>,
     );
-    expect(screen.getByTestId('sticky')).toHaveAttribute('data-position', 'bottom');
+    expect(screen.getByTestId('sticky-root')).toHaveAttribute('data-position', 'bottom');
   });
 
   it('forwards ref', () => {
     let refValue: HTMLDivElement | null = null;
     render(
-      <Sticky ref={(el) => { refValue = el; }} data-testid="sticky">
+      <Sticky ref={(el) => { refValue = el; }} data-testid="sticky-root">
         <span>Content</span>
       </Sticky>,
     );
-    expect(refValue).toBe(screen.getByTestId('sticky'));
+    expect(refValue).toBe(screen.getByTestId('sticky-root'));
   });
 
   it('passes through HTML attributes', () => {
     render(
-      <Sticky data-testid="sticky" id="nav-sticky" aria-label="Sticky nav">
+      <Sticky data-testid="sticky-root" id="nav-sticky" aria-label="Sticky nav">
         <span>Content</span>
       </Sticky>,
     );
-    const el = screen.getByTestId('sticky');
+    const el = screen.getByTestId('sticky-root');
     expect(el).toHaveAttribute('id', 'nav-sticky');
   });
 
@@ -122,13 +122,13 @@ describe('Sticky', () => {
 
   it('sentinel is before sticky for position=top', () => {
     const { container } = render(
-      <Sticky data-testid="sticky" position="top">
+      <Sticky data-testid="sticky-root" position="top">
         <span>Content</span>
       </Sticky>,
     );
     const allDivs = container.querySelectorAll('div');
     const sentinelEl = Array.from(allDivs).find(el => el.getAttribute('aria-hidden') === 'true');
-    const stickyEl = screen.getByTestId('sticky');
+    const stickyEl = screen.getByTestId('sticky-root');
     // Sentinel should appear before sticky in DOM
     expect(sentinelEl).toBeInTheDocument();
     if (sentinelEl) {
@@ -140,41 +140,59 @@ describe('Sticky', () => {
   describe('classNames & styles', () => {
     it('applies classNames.root', () => {
       render(
-        <Sticky data-testid="sticky" classNames={{ root: 'slot-root' }}>
+        <Sticky data-testid="sticky-root" classNames={{ root: 'slot-root' }}>
           <span>Content</span>
         </Sticky>,
       );
-      expect(screen.getByTestId('sticky')).toHaveClass('slot-root');
+      expect(screen.getByTestId('sticky-root')).toHaveClass('slot-root');
     });
 
     it('applies styles.root', () => {
       render(
-        <Sticky data-testid="sticky" styles={{ root: { opacity: '0.5' } }}>
+        <Sticky data-testid="sticky-root" styles={{ root: { opacity: '0.5' } }}>
           <span>Content</span>
         </Sticky>,
       );
-      expect(screen.getByTestId('sticky')).toHaveStyle({ opacity: '0.5' });
+      expect(screen.getByTestId('sticky-root')).toHaveStyle({ opacity: '0.5' });
     });
 
     it('merges className + classNames.root', () => {
       render(
-        <Sticky data-testid="sticky" className="outer" classNames={{ root: 'inner' }}>
+        <Sticky data-testid="sticky-root" className="outer" classNames={{ root: 'inner' }}>
           <span>Content</span>
         </Sticky>,
       );
-      const el = screen.getByTestId('sticky');
+      const el = screen.getByTestId('sticky-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
 
     it('merges style + styles.root', () => {
       render(
-        <Sticky data-testid="sticky" style={{ margin: 4 }} styles={{ root: { padding: 8 } }}>
+        <Sticky data-testid="sticky-root" style={{ margin: 4 }} styles={{ root: { padding: 8 } }}>
           <span>Content</span>
         </Sticky>,
       );
-      const el = screen.getByTestId('sticky');
+      const el = screen.getByTestId('sticky-root');
       expect(el).toHaveStyle({ margin: '4px', padding: '8px' });
+    });
+
+    it('styles.sentinel sentinel elemana eklenir', () => {
+      render(
+        <Sticky styles={{ sentinel: { opacity: '0.5' } }}>
+          <span>Content</span>
+        </Sticky>,
+      );
+      expect(screen.getByTestId('sticky-sentinel')).toHaveStyle({ opacity: '0.5' });
+    });
+
+    it('styles.content content elemana eklenir', () => {
+      render(
+        <Sticky styles={{ content: { padding: '20px' } }}>
+          <Sticky.Content>Navigation</Sticky.Content>
+        </Sticky>,
+      );
+      expect(screen.getByTestId('sticky-content')).toHaveStyle({ padding: '20px' });
     });
   });
 });
@@ -184,7 +202,7 @@ describe('Sticky', () => {
 describe('Sticky (Compound)', () => {
   it('compound: Sticky.Content render edilir', () => {
     render(
-      <Sticky data-testid="sticky">
+      <Sticky data-testid="sticky-root">
         <Sticky.Content>Navigation</Sticky.Content>
       </Sticky>,
     );
@@ -204,10 +222,10 @@ describe('Sticky (Compound)', () => {
 
   it('compound: position sticky uygulanir', () => {
     render(
-      <Sticky data-testid="sticky" offset={10}>
+      <Sticky data-testid="sticky-root" offset={10}>
         <Sticky.Content>Nav</Sticky.Content>
       </Sticky>,
     );
-    expect(screen.getByTestId('sticky')).toHaveStyle({ position: 'sticky', top: '10px' });
+    expect(screen.getByTestId('sticky-root')).toHaveStyle({ position: 'sticky', top: '10px' });
   });
 });

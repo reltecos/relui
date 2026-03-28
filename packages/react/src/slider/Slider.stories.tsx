@@ -166,9 +166,9 @@ export const CustomSlotStyles: Story = {
         value={50}
         classNames={{ track: 'my-track' }}
         styles={{
-          track: { backgroundColor: '#e0e0e0', borderRadius: '8px' },
-          fill: { backgroundColor: 'tomato' },
-          thumb: { border: '2px solid tomato' },
+          track: { backgroundColor: 'var(--rel-color-border, #e0e0e0)', borderRadius: '8px' },
+          fill: { backgroundColor: 'var(--rel-color-error, #ef4444)' },
+          thumb: { border: '2px solid var(--rel-color-error, #ef4444)' },
         }}
       />
       <Slider
@@ -178,7 +178,7 @@ export const CustomSlotStyles: Story = {
         classNames={{ root: 'slot-root' }}
         styles={{
           root: { padding: '8px' },
-          thumb: { boxShadow: '0 0 8px rgba(0,0,0,0.3)' },
+          thumb: { boxShadow: '0 0 8px var(--rel-color-shadow, rgba(0,0,0,0.3))' },
         }}
       />
     </div>
@@ -217,9 +217,9 @@ export const CompoundCustomSlotStyles: Story = {
         value={60}
         aria-label="Ozel stilli slider"
         styles={{
-          track: { backgroundColor: '#e0e0e0', borderRadius: '8px' },
-          fill: { backgroundColor: 'tomato' },
-          thumb: { border: '2px solid tomato' },
+          track: { backgroundColor: 'var(--rel-color-border, #e0e0e0)', borderRadius: '8px' },
+          fill: { backgroundColor: 'var(--rel-color-error, #ef4444)' },
+          thumb: { border: '2px solid var(--rel-color-error, #ef4444)' },
         }}
       >
         <Slider.Track />

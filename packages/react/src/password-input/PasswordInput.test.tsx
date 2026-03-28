@@ -293,6 +293,13 @@ describe('PasswordInput', () => {
       renderPw({ styles: { toggleButton: { opacity: 0.5 } } });
       expect(getToggle()).toHaveStyle({ opacity: '0.5' });
     });
+
+    // ── Slot API: styles ──────────────────────────────────────────────
+
+    it('styles.input input elemana uygulanir', () => {
+      renderPw({ styles: { input: { fontSize: '18px' } } });
+      expect(getInput()).toHaveStyle({ fontSize: '18px' });
+    });
   });
 });
 
@@ -348,5 +355,24 @@ describe('PasswordInput (Compound)', () => {
     expect(() => {
       render(<PasswordInput.ToggleButton />);
     }).toThrow('PasswordInput compound sub-components must be used within <PasswordInput>.');
+  });
+});
+
+// ── Slot API: styles ──
+
+describe('PasswordInput (Slot Styles)', () => {
+  it('styles.root root elemana eklenir', () => {
+    render(<PasswordInput styles={{ root: { padding: '20px' } }} aria-label="Sifre" />);
+    expect(screen.getByTestId('passwordinput-root')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.input input elemana eklenir', () => {
+    render(<PasswordInput styles={{ input: { fontSize: '18px' } }} aria-label="Sifre" />);
+    expect(screen.getByTestId('passwordinput-input')).toHaveStyle({ fontSize: '18px' });
+  });
+
+  it('styles.toggleButton toggle elemana eklenir', () => {
+    render(<PasswordInput styles={{ toggleButton: { opacity: '0.5' } }} aria-label="Sifre" />);
+    expect(screen.getByTestId('passwordinput-togglebutton')).toHaveStyle({ opacity: '0.5' });
   });
 });

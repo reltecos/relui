@@ -59,8 +59,8 @@ function DefaultDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#3b82f6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -113,12 +113,12 @@ function WithLogoDemo() {
 
   const logoSvg = (
     <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-      <rect width="80" height="80" rx="16" fill="#3b82f6" />
+      <rect width="80" height="80" rx="16" fill="var(--rel-color-primary, #3b82f6)" />
       <text
         x="40"
         y="50"
         textAnchor="middle"
-        fill="#fff"
+        fill="var(--rel-color-text-inverse, #fff)"
         fontWeight="700"
         fontSize="28"
         fontFamily="system-ui, sans-serif"
@@ -136,8 +136,8 @@ function WithLogoDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#8b5cf6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-accent, #8b5cf6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -197,8 +197,8 @@ function CustomSlotStylesDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#059669',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-success, #059669)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -215,12 +215,12 @@ function CustomSlotStylesDemo() {
         version="v3.1.0"
         onComplete={() => setVisible(false)}
         styles={{
-          root: { backgroundColor: '#0f172a' },
-          title: { color: '#e2e8f0' },
-          message: { color: '#64748b' },
-          progressTrack: { backgroundColor: '#1e293b' },
-          progressFill: { backgroundColor: '#10b981' },
-          version: { color: '#475569' },
+          root: { backgroundColor: 'var(--rel-color-bg-inverse, #0f172a)' },
+          title: { color: 'var(--rel-color-text-secondary, #e2e8f0)' },
+          message: { color: 'var(--rel-color-text-muted, #64748b)' },
+          progressTrack: { backgroundColor: 'var(--rel-color-bg-inverse, #1e293b)' },
+          progressFill: { backgroundColor: 'var(--rel-color-success, #10b981)' },
+          version: { color: 'var(--rel-color-text-muted, #475569)' },
         }}
       />
     </div>
@@ -266,8 +266,8 @@ function CompoundDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#6366f1',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-info, #6366f1)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -279,8 +279,8 @@ function CompoundDemo() {
       <SplashScreen visible={visible}>
         <SplashScreen.Logo>
           <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-            <rect width="60" height="60" rx="12" fill="#6366f1" />
-            <text x="30" y="38" textAnchor="middle" fill="#fff" fontWeight="700" fontSize="22" fontFamily="system-ui">C</text>
+            <rect width="60" height="60" rx="12" fill="var(--rel-color-info, #6366f1)" />
+            <text x="30" y="38" textAnchor="middle" fill="var(--rel-color-text-inverse, #fff)" fontWeight="700" fontSize="22" fontFamily="system-ui">C</text>
           </svg>
         </SplashScreen.Logo>
         <SplashScreen.Title>CompoundApp</SplashScreen.Title>
@@ -344,8 +344,8 @@ function WithMessageDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#f59e0b',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-warning, #f59e0b)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -419,8 +419,8 @@ function PlaygroundDemo() {
             padding: '10px 20px',
             fontSize: 14,
             fontWeight: 600,
-            backgroundColor: '#3b82f6',
-            color: '#fff',
+            backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             border: 'none',
             borderRadius: 8,
             cursor: 'pointer',

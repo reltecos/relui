@@ -21,6 +21,7 @@ export const avatarRootRecipe = recipe({
     flexShrink: 0,
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
     fontWeight: 500,
+    color: 'var(--rel-color-text, #374151)',
     verticalAlign: 'middle',
     lineHeight: 1,
   },

@@ -30,6 +30,7 @@ export const iconButtonSizeRecipe = recipe({
     padding: 0,
     aspectRatio: '1',
     flexShrink: 0,
+    color: 'var(--rel-color-text, #374151)',
   },
 
   variants: {

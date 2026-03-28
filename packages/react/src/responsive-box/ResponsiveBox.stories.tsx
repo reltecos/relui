@@ -27,19 +27,19 @@ export const Default: Story = {
       flexDirection={{ base: 'column', lg: 'row' }}
       gap={{ base: 4, md: 6 }}
       p={{ base: 4, md: 8 }}
-      style={{ background: '#f8fafc', borderRadius: 12 }}
+      style={{ background: 'var(--rel-color-bg-subtle, #f8fafc)', borderRadius: 12 }}
     >
       <Box
         p={4}
         width={{ base: 'full', md: '1/2' }}
-        style={{ background: '#e2e8f0', borderRadius: 8 }}
+        style={{ background: 'var(--rel-color-border, #e2e8f0)', borderRadius: 8 }}
       >
         Sol Panel
       </Box>
       <Box
         p={4}
         width={{ base: 'full', md: '1/2' }}
-        style={{ background: '#e2e8f0', borderRadius: 8 }}
+        style={{ background: 'var(--rel-color-border, #e2e8f0)', borderRadius: 8 }}
       >
         Sag Panel
       </Box>
@@ -54,15 +54,15 @@ export const ThreeColumns: Story = {
       flexDirection={{ base: 'column', md: 'row' }}
       gap={{ base: 3, md: 5 }}
       p={4}
-      style={{ background: '#eff6ff', borderRadius: 12 }}
+      style={{ background: 'var(--rel-color-bg-subtle, #eff6ff)', borderRadius: 12 }}
     >
-      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: '#dbeafe', borderRadius: 8 }}>
+      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: 'var(--rel-color-bg-subtle, #dbeafe)', borderRadius: 8 }}>
         Kolon 1
       </Box>
-      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: '#dbeafe', borderRadius: 8 }}>
+      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: 'var(--rel-color-bg-subtle, #dbeafe)', borderRadius: 8 }}>
         Kolon 2
       </Box>
-      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: '#dbeafe', borderRadius: 8 }}>
+      <Box p={4} width={{ base: 'full', md: '1/3' }} style={{ background: 'var(--rel-color-bg-subtle, #dbeafe)', borderRadius: 8 }}>
         Kolon 3
       </Box>
     </ResponsiveBox>
@@ -76,13 +76,13 @@ export const GridLayout: Story = {
       gridTemplateColumns={{ base: 1, md: 2, lg: 3 }}
       gap={{ base: 3, md: 4 }}
       p={4}
-      style={{ background: '#f0fdf4', borderRadius: 12 }}
+      style={{ background: 'var(--rel-color-bg-subtle, #f0fdf4)', borderRadius: 12 }}
     >
       {Array.from({ length: 6 }, (_, i) => (
         <Box
           key={i}
           p={4}
-          style={{ background: '#dcfce7', borderRadius: 8, textAlign: 'center' }}
+          style={{ background: 'var(--rel-color-bg-subtle, #dcfce7)', borderRadius: 8, textAlign: 'center' }}
         >
           Kart {i + 1}
         </Box>
@@ -97,10 +97,10 @@ export const CustomSlotStyles: Story = {
       display="flex"
       gap={4}
       classNames={{ root: 'custom-responsive' }}
-      styles={{ root: { border: '2px dashed #6366f1', borderRadius: 12, padding: 16 } }}
+      styles={{ root: { border: '2px dashed var(--rel-color-info, #6366f1)', borderRadius: 12, padding: 16 } }}
     >
-      <Box p={4} style={{ background: '#e0e7ff', borderRadius: 8, flex: 1 }}>Sol</Box>
-      <Box p={4} style={{ background: '#e0e7ff', borderRadius: 8, flex: 1 }}>Sag</Box>
+      <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #e0e7ff)', borderRadius: 8, flex: 1 }}>Sol</Box>
+      <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #e0e7ff)', borderRadius: 8, flex: 1 }}>Sag</Box>
     </ResponsiveBox>
   ),
 };
@@ -108,14 +108,14 @@ export const CustomSlotStyles: Story = {
 export const Compound: Story = {
   name: 'Compound API',
   render: () => (
-    <ResponsiveBox display="flex" gap={4} p={4} style={{ background: '#f0fdf4', borderRadius: 12 }}>
-      <ResponsiveBox.Item p={4} style={{ background: '#dcfce7', borderRadius: 8, flex: 1 }}>
+    <ResponsiveBox display="flex" gap={4} p={4} style={{ background: 'var(--rel-color-bg-subtle, #f0fdf4)', borderRadius: 12 }}>
+      <ResponsiveBox.Item p={4} style={{ background: 'var(--rel-color-bg-subtle, #dcfce7)', borderRadius: 8, flex: 1 }}>
         Oge 1
       </ResponsiveBox.Item>
-      <ResponsiveBox.Item p={4} style={{ background: '#dcfce7', borderRadius: 8, flex: 1 }}>
+      <ResponsiveBox.Item p={4} style={{ background: 'var(--rel-color-bg-subtle, #dcfce7)', borderRadius: 8, flex: 1 }}>
         Oge 2
       </ResponsiveBox.Item>
-      <ResponsiveBox.Item p={4} style={{ background: '#dcfce7', borderRadius: 8, flex: 1 }}>
+      <ResponsiveBox.Item p={4} style={{ background: 'var(--rel-color-bg-subtle, #dcfce7)', borderRadius: 8, flex: 1 }}>
         Oge 3
       </ResponsiveBox.Item>
     </ResponsiveBox>
@@ -128,10 +128,10 @@ export const Playground: Story = {
       display={{ base: 'block', md: 'flex' }}
       gap={{ base: 3, md: 5 }}
       p={{ base: 3, md: 6 }}
-      style={{ background: '#fef3c7', borderRadius: 12 }}
+      style={{ background: 'var(--rel-color-bg-subtle, #fef3c7)', borderRadius: 12 }}
     >
-      <Box p={4} style={{ background: '#fde68a', borderRadius: 8, flex: 1 }}>A</Box>
-      <Box p={4} style={{ background: '#fde68a', borderRadius: 8, flex: 1 }}>B</Box>
+      <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #fde68a)', borderRadius: 8, flex: 1 }}>A</Box>
+      <Box p={4} style={{ background: 'var(--rel-color-bg-subtle, #fde68a)', borderRadius: 8, flex: 1 }}>B</Box>
     </ResponsiveBox>
   ),
 };

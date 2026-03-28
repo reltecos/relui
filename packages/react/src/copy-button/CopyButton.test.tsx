@@ -272,6 +272,17 @@ describe('CopyButton — classNames & styles', () => {
 
     expect(container.querySelector('span')).toHaveStyle({ fontSize: '20px' });
   });
+
+  it('styles.label compound label elemana uygulanir', () => {
+    render(
+      <CopyButton value="test" aria-label="Kopyala" styles={{ label: { letterSpacing: '0.05em' } }}>
+        <CopyButton.Icon />
+        <CopyButton.Label>Kopyala</CopyButton.Label>
+      </CopyButton>,
+    );
+
+    expect(screen.getByTestId('copy-button-label')).toHaveStyle({ letterSpacing: '0.05em' });
+  });
 });
 
 // ── Compound API ──

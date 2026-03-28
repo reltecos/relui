@@ -43,7 +43,7 @@ export const Default: Story = {
             key={i}
             style={{
               padding: '12px 16px',
-              background: i % 2 === 0 ? '#f8fafc' : '#f1f5f9',
+              background: i % 2 === 0 ? 'var(--rel-color-bg-subtle, #f8fafc)' : 'var(--rel-color-bg-subtle, #f1f5f9)',
               borderRadius: 6,
             }}
           >

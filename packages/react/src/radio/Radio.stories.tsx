@@ -249,7 +249,7 @@ export const CustomSlotStyles: Story = {
           value="a"
           classNames={{ control: 'my-control' }}
           styles={{
-            root: { padding: '4px 8px', borderRadius: '4px', background: 'rgba(0,0,0,0.03)' },
+            root: { padding: '4px 8px', borderRadius: '4px', background: 'var(--rel-color-bg-subtle, rgba(0,0,0,0.03))' },
             control: { boxShadow: '0 0 0 2px currentColor' },
             label: { fontWeight: 600 },
           }}

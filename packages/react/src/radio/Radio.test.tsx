@@ -270,6 +270,22 @@ describe('Radio — classNames & styles', () => {
     const labelSpan = screen.getByText('Label text');
     expect(labelSpan).toHaveClass('my-label');
   });
+
+  it('styles.dot dot elemana eklenir', () => {
+    render(
+      <Radio styles={{ dot: { padding: '20px' } }} aria-label="Test" value="a" checked />,
+    );
+
+    expect(screen.getByTestId('radio-dot')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.label label elemana eklenir', () => {
+    render(
+      <Radio styles={{ label: { letterSpacing: '2px' } }} value="a">Label</Radio>,
+    );
+
+    expect(screen.getByTestId('radio-label')).toHaveStyle({ letterSpacing: '2px' });
+  });
 });
 
 // ── Compound API ──

@@ -35,8 +35,8 @@ export const loadPanelOverlayRecipe = recipe({
   },
   variants: {
     backdrop: {
-      light: { backgroundColor: 'rgba(255, 255, 255, 0.75)' },
-      dark: { backgroundColor: 'rgba(0, 0, 0, 0.5)' },
+      light: { backgroundColor: 'var(--rel-color-overlay-light, rgba(255, 255, 255, 0.75))' },
+      dark: { backgroundColor: 'var(--rel-color-overlay, rgba(0, 0, 0, 0.5))' },
       none: { backgroundColor: 'transparent' },
     },
     fullscreen: {

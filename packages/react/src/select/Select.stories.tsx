@@ -245,7 +245,7 @@ export const Controlled: Story = {
           placeholder="Ulke secin"
           aria-label="Ulke"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Secili: {value !== undefined ? String(value) : '(bos)'}
         </div>
         <button
@@ -285,7 +285,7 @@ export const CustomSlotStyles: Story = {
         aria-label="Custom"
         classNames={{ root: 'my-select', trigger: 'my-trigger' }}
         styles={{
-          root: { border: '2px solid orange' },
+          root: { border: '2px solid var(--rel-color-warning, #f59e0b)' },
           trigger: { fontStyle: 'italic' },
           listbox: { maxHeight: '150px' },
           option: { padding: '8px 12px' },
@@ -299,7 +299,7 @@ export const CustomSlotStyles: Story = {
         classNames={{ root: 'slot-cls', trigger: 'slot-trigger' }}
         styles={{
           trigger: { fontWeight: 'bold' },
-          groupLabel: { color: 'orange', fontWeight: 'bold' },
+          groupLabel: { color: 'var(--rel-color-warning, #f59e0b)', fontWeight: 'bold' },
         }}
       />
     </div>

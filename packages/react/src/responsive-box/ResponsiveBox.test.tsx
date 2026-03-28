@@ -14,7 +14,7 @@ import { ResponsiveBox } from './ResponsiveBox';
 describe('ResponsiveBox', () => {
   it('renders children', () => {
     render(
-      <ResponsiveBox data-testid="box">
+      <ResponsiveBox data-testid="responsive-box-root">
         <p>Content</p>
       </ResponsiveBox>,
     );
@@ -22,70 +22,70 @@ describe('ResponsiveBox', () => {
   });
 
   it('renders as div by default', () => {
-    render(<ResponsiveBox data-testid="box">Content</ResponsiveBox>);
-    expect(screen.getByTestId('box').tagName).toBe('DIV');
+    render(<ResponsiveBox data-testid="responsive-box-root">Content</ResponsiveBox>);
+    expect(screen.getByTestId('responsive-box-root').tagName).toBe('DIV');
   });
 
   it('applies sprinkles props', () => {
-    render(<ResponsiveBox data-testid="box" display="flex" gap={4} />);
-    expect(screen.getByTestId('box').className).toBeTruthy();
+    render(<ResponsiveBox data-testid="responsive-box-root" display="flex" gap={4} />);
+    expect(screen.getByTestId('responsive-box-root').className).toBeTruthy();
   });
 
   it('forwards ref', () => {
     let refValue: HTMLElement | null = null;
     render(
-      <ResponsiveBox ref={(el) => { refValue = el; }} data-testid="box">
+      <ResponsiveBox ref={(el) => { refValue = el; }} data-testid="responsive-box-root">
         Content
       </ResponsiveBox>,
     );
-    expect(refValue).toBe(screen.getByTestId('box'));
+    expect(refValue).toBe(screen.getByTestId('responsive-box-root'));
   });
 
   it('passes through HTML attributes', () => {
     render(
-      <ResponsiveBox data-testid="box" id="responsive" aria-label="layout">
+      <ResponsiveBox data-testid="responsive-box-root" id="responsive" aria-label="layout">
         Content
       </ResponsiveBox>,
     );
-    const el = screen.getByTestId('box');
+    const el = screen.getByTestId('responsive-box-root');
     expect(el).toHaveAttribute('id', 'responsive');
   });
 
   it('supports polymorphic as prop', () => {
     render(
-      <ResponsiveBox data-testid="box" as="section">
+      <ResponsiveBox data-testid="responsive-box-root" as="section">
         Content
       </ResponsiveBox>,
     );
-    expect(screen.getByTestId('box').tagName).toBe('SECTION');
+    expect(screen.getByTestId('responsive-box-root').tagName).toBe('SECTION');
   });
 
   describe('classNames & styles', () => {
     it('applies classNames.root', () => {
       render(
-        <ResponsiveBox data-testid="box" classNames={{ root: 'slot-root' }}>
+        <ResponsiveBox data-testid="responsive-box-root" classNames={{ root: 'slot-root' }}>
           Content
         </ResponsiveBox>,
       );
-      expect(screen.getByTestId('box')).toHaveClass('slot-root');
+      expect(screen.getByTestId('responsive-box-root')).toHaveClass('slot-root');
     });
 
     it('applies styles.root', () => {
       render(
-        <ResponsiveBox data-testid="box" styles={{ root: { opacity: '0.5' } }}>
+        <ResponsiveBox data-testid="responsive-box-root" styles={{ root: { opacity: '0.5' } }}>
           Content
         </ResponsiveBox>,
       );
-      expect(screen.getByTestId('box')).toHaveStyle({ opacity: '0.5' });
+      expect(screen.getByTestId('responsive-box-root')).toHaveStyle({ opacity: '0.5' });
     });
 
     it('merges className + classNames.root', () => {
       render(
-        <ResponsiveBox data-testid="box" className="outer" classNames={{ root: 'inner' }}>
+        <ResponsiveBox data-testid="responsive-box-root" className="outer" classNames={{ root: 'inner' }}>
           Content
         </ResponsiveBox>,
       );
-      const el = screen.getByTestId('box');
+      const el = screen.getByTestId('responsive-box-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
@@ -97,7 +97,7 @@ describe('ResponsiveBox', () => {
 describe('ResponsiveBox (Compound)', () => {
   it('compound: ResponsiveBox.Item render edilir', () => {
     render(
-      <ResponsiveBox data-testid="box" display="flex">
+      <ResponsiveBox data-testid="responsive-box-root" display="flex">
         <ResponsiveBox.Item>Oge 1</ResponsiveBox.Item>
       </ResponsiveBox>,
     );
@@ -107,7 +107,7 @@ describe('ResponsiveBox (Compound)', () => {
 
   it('compound: birden fazla Item render edilir', () => {
     render(
-      <ResponsiveBox data-testid="box" display="flex">
+      <ResponsiveBox data-testid="responsive-box-root" display="flex">
         <ResponsiveBox.Item>A</ResponsiveBox.Item>
         <ResponsiveBox.Item>B</ResponsiveBox.Item>
       </ResponsiveBox>,
@@ -161,11 +161,11 @@ describe('ResponsiveBox (Compound)', () => {
 
   it('compound: styles.root uygulanir', () => {
     render(
-      <ResponsiveBox data-testid="box" styles={{ root: { padding: '20px' } }}>
+      <ResponsiveBox data-testid="responsive-box-root" styles={{ root: { padding: '20px' } }}>
         Content
       </ResponsiveBox>,
     );
-    expect(screen.getByTestId('box')).toHaveStyle({ padding: '20px' });
+    expect(screen.getByTestId('responsive-box-root')).toHaveStyle({ padding: '20px' });
   });
 
   it('compound: birden fazla Item farkli icerikle render edilir', () => {
@@ -185,13 +185,13 @@ describe('ResponsiveBox (Compound)', () => {
   it('compound: rules prop kabul edilir', () => {
     render(
       <ResponsiveBox
-        data-testid="box"
+        data-testid="responsive-box-root"
         display="flex"
         rules={[{ minWidth: 640, props: { gap: 8 } }]}
       >
         <ResponsiveBox.Item>Oge</ResponsiveBox.Item>
       </ResponsiveBox>,
     );
-    expect(screen.getByTestId('box')).toBeInTheDocument();
+    expect(screen.getByTestId('responsive-box-root')).toBeInTheDocument();
   });
 });

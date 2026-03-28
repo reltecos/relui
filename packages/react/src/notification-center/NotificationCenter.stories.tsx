@@ -65,7 +65,7 @@ function NotificationCenterDemo() {
             style={{
               padding: '8px 16px',
               borderRadius: 6,
-              border: '1px solid #ddd',
+              border: '1px solid var(--rel-color-border, #ddd)',
               cursor: 'pointer',
               textTransform: 'capitalize',
             }}
@@ -80,9 +80,9 @@ function NotificationCenterDemo() {
         style={{
           padding: '10px 20px',
           borderRadius: 8,
-          border: '1px solid #3b82f6',
-          backgroundColor: '#3b82f6',
-          color: '#fff',
+          border: '1px solid var(--rel-color-primary, #3b82f6)',
+          backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           cursor: 'pointer',
           fontSize: 14,
           position: 'relative',
@@ -98,8 +98,8 @@ function NotificationCenterDemo() {
               width: 20,
               height: 20,
               borderRadius: '50%',
-              backgroundColor: '#dc2626',
-              color: '#fff',
+              backgroundColor: 'var(--rel-color-error, #dc2626)',
+              color: 'var(--rel-color-text-inverse, #fff)',
               fontSize: 11,
               fontWeight: 700,
               display: 'flex',
@@ -142,26 +142,26 @@ function GroupedDemo() {
       <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
         <button
           onClick={() => add({ severity: 'info', title: 'Sistem', message: 'Yeni versiyon mevcut.', group: 'Sistem' })}
-          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-border, #ddd)', cursor: 'pointer' }}
         >
           Sistem Bildirimi
         </button>
         <button
           onClick={() => add({ severity: 'success', title: 'Siparis', message: 'Siparis onaylandi.', group: 'Siparisler' })}
-          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-border, #ddd)', cursor: 'pointer' }}
         >
           Siparis Bildirimi
         </button>
         <button
           onClick={() => add({ severity: 'warning', message: 'Genel uyari mesaji.' })}
-          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-border, #ddd)', cursor: 'pointer' }}
         >
           Grupsuz
         </button>
       </div>
       <button
         onClick={toggle}
-        style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid #3b82f6', color: '#3b82f6', cursor: 'pointer' }}
+        style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid var(--rel-color-primary, #3b82f6)', color: 'var(--rel-color-primary, #3b82f6)', cursor: 'pointer' }}
       >
         Ac ({unreadCount})
       </button>
@@ -195,14 +195,14 @@ function CompoundDemo() {
       <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
         <button
           onClick={() => add({ severity: 'info', title: 'Bilgi', message: 'Compound bildirim.' })}
-          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-border, #ddd)', cursor: 'pointer' }}
         >
           Bildirim Ekle
         </button>
       </div>
       <button
         onClick={toggle}
-        style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid #3b82f6', backgroundColor: '#3b82f6', color: '#fff', cursor: 'pointer' }}
+        style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid var(--rel-color-primary, #3b82f6)', backgroundColor: 'var(--rel-color-primary, #3b82f6)', color: 'var(--rel-color-text-inverse, #fff)', cursor: 'pointer' }}
       >
         Ac ({unreadCount})
       </button>
@@ -245,9 +245,9 @@ function EmptyStateDemo() {
         style={{
           padding: '10px 20px',
           borderRadius: 8,
-          border: '1px solid #3b82f6',
-          backgroundColor: '#3b82f6',
-          color: '#fff',
+          border: '1px solid var(--rel-color-primary, #3b82f6)',
+          backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           cursor: 'pointer',
           fontSize: 14,
         }}
@@ -295,7 +295,7 @@ function AllReadDemo() {
           style={{
             padding: '8px 16px',
             borderRadius: 6,
-            border: '1px solid #ddd',
+            border: '1px solid var(--rel-color-border, #ddd)',
             cursor: 'pointer',
           }}
         >
@@ -307,9 +307,9 @@ function AllReadDemo() {
         style={{
           padding: '10px 20px',
           borderRadius: 8,
-          border: '1px solid #3b82f6',
-          backgroundColor: '#3b82f6',
-          color: '#fff',
+          border: '1px solid var(--rel-color-primary, #3b82f6)',
+          backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           cursor: 'pointer',
           fontSize: 14,
         }}
@@ -347,7 +347,7 @@ function CustomSlotStylesDemo() {
       <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
         <button
           onClick={() => add({ severity: 'info', title: 'Bilgi', message: 'Koyu tema bildirimi.' })}
-          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-border, #ddd)', cursor: 'pointer' }}
         >
           Bildirim Ekle
         </button>
@@ -357,9 +357,9 @@ function CustomSlotStylesDemo() {
         style={{
           padding: '10px 20px',
           borderRadius: 8,
-          border: '1px solid #8b5cf6',
-          backgroundColor: '#8b5cf6',
-          color: '#fff',
+          border: '1px solid var(--rel-color-info, #8b5cf6)',
+          backgroundColor: 'var(--rel-color-info, #8b5cf6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           cursor: 'pointer',
           fontSize: 14,
         }}
@@ -377,13 +377,13 @@ function CustomSlotStylesDemo() {
         onMarkAllRead={markAllRead}
         onClearAll={removeAll}
         styles={{
-          panel: { backgroundColor: '#1e293b', borderColor: '#334155' },
-          header: { borderBottomColor: '#334155' },
-          headerTitle: { color: '#e2e8f0' },
-          item: { borderBottomColor: '#334155' },
-          itemTitle: { color: '#f1f5f9' },
-          itemMessage: { color: '#94a3b8' },
-          emptyState: { color: '#64748b' },
+          panel: { backgroundColor: 'var(--rel-color-bg-inverse, #1e293b)', borderColor: 'var(--rel-color-border, #334155)' },
+          header: { borderBottomColor: 'var(--rel-color-border, #334155)' },
+          headerTitle: { color: 'var(--rel-color-text-inverse, #e2e8f0)' },
+          item: { borderBottomColor: 'var(--rel-color-border, #334155)' },
+          itemTitle: { color: 'var(--rel-color-bg-subtle, #f1f5f9)' },
+          itemMessage: { color: 'var(--rel-color-text-muted, #94a3b8)' },
+          emptyState: { color: 'var(--rel-color-text-muted, #64748b)' },
         }}
       />
     </div>

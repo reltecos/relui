@@ -109,7 +109,7 @@ function RadialMenuDemo(
       style={{
         width: '100%',
         height: '400px',
-        border: '2px dashed #ccc',
+        border: '2px dashed var(--rel-color-border, #ccc)',
         borderRadius: '12px',
         display: 'flex',
         alignItems: 'center',
@@ -119,7 +119,7 @@ function RadialMenuDemo(
         userSelect: 'none',
         cursor: 'context-menu',
         fontFamily: 'var(--rel-font-sans, system-ui)',
-        color: '#666',
+        color: 'var(--rel-color-text-muted, #666)',
       }}
     >
       <div style={{ fontSize: '14px', fontWeight: 600 }}>
@@ -242,7 +242,7 @@ export const Controlled: Story = {
               style={{
                 padding: '8px 16px',
                 borderRadius: '6px',
-                border: '1px solid #ccc',
+                border: '1px solid var(--rel-color-border, #ccc)',
                 cursor: 'pointer',
                 fontSize: '13px',
               }}
@@ -254,7 +254,7 @@ export const Controlled: Story = {
               style={{
                 padding: '8px 16px',
                 borderRadius: '6px',
-                border: '1px solid #ccc',
+                border: '1px solid var(--rel-color-border, #ccc)',
                 cursor: 'pointer',
                 fontSize: '13px',
               }}
@@ -273,7 +273,7 @@ export const Controlled: Story = {
             position: 'relative',
             width: '100%',
             height: '400px',
-            border: '2px dashed #ccc',
+            border: '2px dashed var(--rel-color-border, #ccc)',
             borderRadius: '12px',
           }}>
             <RadialMenu
@@ -303,19 +303,19 @@ export const CustomSlotStyles: Story = {
       renderIcon={renderIcon}
       styles={{
         root: {
-          backgroundColor: '#1a1a2e',
-          borderColor: '#16213e',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          backgroundColor: 'var(--rel-color-bg-inverse, #1a1a2e)',
+          borderColor: 'var(--rel-color-border, #16213e)',
+          boxShadow: '0 8px 32px var(--rel-color-shadow, rgba(0,0,0,0.4))',
         },
         overlay: {
-          backgroundColor: 'rgba(0,0,0,0.3)',
+          backgroundColor: 'var(--rel-color-overlay, rgba(0,0,0,0.3))',
         },
         label: {
-          color: '#e0e0e0',
+          color: 'var(--rel-color-text-secondary, #e0e0e0)',
         },
         center: {
-          backgroundColor: '#1a1a2e',
-          borderColor: '#16213e',
+          backgroundColor: 'var(--rel-color-bg-inverse, #1a1a2e)',
+          borderColor: 'var(--rel-color-border, #16213e)',
         },
       }}
     />
@@ -327,7 +327,7 @@ export const Compound: Story = {
   render: () => (
     <RadialMenuDemo items={iconItems} renderIcon={renderIcon}>
       <RadialMenu.Center>
-        <span style={{ fontSize: 16, fontWeight: 700, color: '#3b82f6' }}>R</span>
+        <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--rel-color-primary, #3b82f6)' }}>R</span>
       </RadialMenu.Center>
     </RadialMenuDemo>
   ),
@@ -341,13 +341,13 @@ export const CompoundCustomSlotStyles: Story = {
       renderIcon={renderIcon}
       styles={{
         center: {
-          backgroundColor: '#1a1a2e',
-          borderColor: '#3b82f6',
+          backgroundColor: 'var(--rel-color-bg-inverse, #1a1a2e)',
+          borderColor: 'var(--rel-color-primary, #3b82f6)',
         },
       }}
     >
       <RadialMenu.Center>
-        <span style={{ fontSize: 14, fontWeight: 700, color: '#60a5fa' }}>+</span>
+        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--rel-color-primary, #60a5fa)' }}>+</span>
       </RadialMenu.Center>
     </RadialMenuDemo>
   ),

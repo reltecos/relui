@@ -137,9 +137,9 @@ export const WithColor: Story = {
   name: 'Renkli / With Color',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <Typography variant="h3" style={{ color: '#3b82f6' }}>Mavi baslik</Typography>
-      <Typography variant="body1" style={{ color: '#ef4444' }}>Kirmizi metin</Typography>
-      <Typography variant="caption" style={{ color: '#22c55e' }}>Yesil aciklama</Typography>
+      <Typography variant="h3" style={{ color: 'var(--rel-color-primary, #3b82f6)' }}>Mavi baslik</Typography>
+      <Typography variant="body1" style={{ color: 'var(--rel-color-error, #ef4444)' }}>Kirmizi metin</Typography>
+      <Typography variant="caption" style={{ color: 'var(--rel-color-success, #22c55e)' }}>Yesil aciklama</Typography>
     </div>
   ),
 };
@@ -155,7 +155,7 @@ export const CompoundAPI: Story = {
         Bu metin compound API ile render edilmistir. Alt bilesenler context uzerinden
         slot stillerini paylasmaktadir.
       </Typography.Text>
-      <Typography.Text variant="caption" style={{ color: '#6b7280' }}>
+      <Typography.Text variant="caption" style={{ color: 'var(--rel-color-text-muted, #6b7280)' }}>
         Kucuk aciklama metni
       </Typography.Text>
     </Typography>

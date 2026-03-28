@@ -14,7 +14,7 @@ export const rootStyle = style({
   position: 'absolute',
   display: 'flex',
   flexDirection: 'column',
-  boxShadow: '0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1)',
+  boxShadow: 'var(--rel-shadow-lg, 0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1))',
   borderRadius: 8,
   overflow: 'hidden',
   background: 'var(--rel-color-bg, #fff)',

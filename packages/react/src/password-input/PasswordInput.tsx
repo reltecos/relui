@@ -274,6 +274,7 @@ const PasswordInputBase = forwardRef<HTMLInputElement, PasswordInputComponentPro
               aria-label={ariaLabel}
               aria-labelledby={ariaLabelledBy}
               aria-describedby={ariaDescribedBy}
+              data-testid="passwordinput-input"
             />
             {children}
           </div>
@@ -293,7 +294,7 @@ const PasswordInputBase = forwardRef<HTMLInputElement, PasswordInputComponentPro
     const currentHideIcon = hideIcon ?? <EyeOffIcon />;
 
     return (
-      <div className={rootSlot.className} style={rootSlot.style}>
+      <div className={rootSlot.className} style={rootSlot.style} data-testid="passwordinput-root">
         <input
           {...inputProps}
           ref={forwardedRef}
@@ -309,6 +310,7 @@ const PasswordInputBase = forwardRef<HTMLInputElement, PasswordInputComponentPro
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
           aria-describedby={ariaDescribedBy}
+          data-testid="passwordinput-input"
         />
 
         <button
@@ -319,6 +321,7 @@ const PasswordInputBase = forwardRef<HTMLInputElement, PasswordInputComponentPro
           data-disabled={isDisabled ? '' : undefined}
           tabIndex={isDisabled ? -1 : 0}
           aria-label={isVisible ? '\u015Eifreyi gizle' : '\u015Eifreyi g\u00F6ster'}
+          data-testid="passwordinput-togglebutton"
         >
           {isVisible ? currentHideIcon : currentShowIcon}
         </button>

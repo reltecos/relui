@@ -249,6 +249,36 @@ describe('Textarea', () => {
     expect(el).toHaveStyle({ margin: '4px' });
     expect(el).toHaveStyle({ padding: '10px' });
   });
+
+  it('styles.label label elemana eklenir', () => {
+    render(
+      <Textarea aria-label="Test" styles={{ label: { fontSize: '14px' } }}>
+        <Textarea.Label>Aciklama</Textarea.Label>
+      </Textarea>,
+    );
+
+    expect(screen.getByTestId('textarea-label')).toHaveStyle({ fontSize: '14px' });
+  });
+
+  it('styles.counter counter elemana eklenir', () => {
+    render(
+      <Textarea aria-label="Test" styles={{ counter: { letterSpacing: '1px' } }}>
+        <Textarea.Counter count={10} max={100} />
+      </Textarea>,
+    );
+
+    expect(screen.getByTestId('textarea-counter')).toHaveStyle({ letterSpacing: '1px' });
+  });
+
+  it('styles.wrapper wrapper elemana eklenir', () => {
+    render(
+      <Textarea aria-label="Test" styles={{ wrapper: { padding: '20px' } }}>
+        <Textarea.Label>Aciklama</Textarea.Label>
+      </Textarea>,
+    );
+
+    expect(screen.getByTestId('textarea-wrapper')).toHaveStyle({ padding: '20px' });
+  });
 });
 
 // ── Compound API ──

@@ -13,6 +13,7 @@ import { style, styleVariants } from '@vanilla-extract/css';
 export const rootBaseStyle = style({
   display: 'flex',
   fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
+  color: 'var(--rel-color-text, #374151)',
 });
 
 export const directionStyles = styleVariants({

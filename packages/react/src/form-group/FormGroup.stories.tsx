@@ -123,7 +123,7 @@ export const CustomSlotStyles: Story = {
       <FormGroup
         legend="Slot Root"
         classNames={{ root: 'my-fieldset' }}
-        styles={{ root: { border: '2px dashed orange', padding: '1rem' } }}
+        styles={{ root: { border: '2px dashed var(--rel-color-warning, #f59e0b)', padding: '1rem' } }}
       >
         <FormField label="Ad">
           <Input placeholder="classNames.root" />
@@ -132,7 +132,7 @@ export const CustomSlotStyles: Story = {
       <FormGroup
         legend="Slot Legend"
         classNames={{ legend: 'my-legend' }}
-        styles={{ legend: { color: 'blue', fontStyle: 'italic', letterSpacing: '0.1em' } }}
+        styles={{ legend: { color: 'var(--rel-color-primary, #3b82f6)', fontStyle: 'italic', letterSpacing: '0.1em' } }}
       >
         <FormField label="Soyad">
           <Input placeholder="styles.legend" />

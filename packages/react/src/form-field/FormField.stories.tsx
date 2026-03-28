@@ -139,7 +139,7 @@ export const CustomSlotStyles: Story = {
       <FormField
         label="Sifre"
         helperText="En az 8 karakter"
-        styles={{ helperText: { fontStyle: 'italic', color: 'blue' } }}
+        styles={{ helperText: { fontStyle: 'italic', color: 'var(--rel-color-primary, #3b82f6)' } }}
       >
         <Input placeholder="styles.helperText" />
       </FormField>

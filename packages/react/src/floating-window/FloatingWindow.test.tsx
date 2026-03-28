@@ -51,38 +51,38 @@ describe('FloatingWindow', () => {
   it('forwards ref', () => {
     let refValue: HTMLDivElement | null = null;
     render(
-      <FloatingWindow ref={(el) => { refValue = el; }} data-testid="root" title="Test">
+      <FloatingWindow ref={(el) => { refValue = el; }} data-testid="floating-window-root" title="Test">
         <div>Content</div>
       </FloatingWindow>,
     );
-    expect(refValue).toBe(screen.getByTestId('root'));
+    expect(refValue).toBe(screen.getByTestId('floating-window-root'));
   });
 
   it('passes through HTML attributes', () => {
     render(
-      <FloatingWindow data-testid="root" id="window" aria-label="Window" title="Test">
+      <FloatingWindow data-testid="floating-window-root" id="window" aria-label="Window" title="Test">
         <div>Content</div>
       </FloatingWindow>,
     );
-    const el = screen.getByTestId('root');
+    const el = screen.getByTestId('floating-window-root');
     expect(el).toHaveAttribute('id', 'window');
     expect(el).toHaveAttribute('aria-label', 'Window');
   });
 
   it('has position: absolute style', () => {
     render(
-      <FloatingWindow data-testid="root" title="Test">
+      <FloatingWindow data-testid="floating-window-root" title="Test">
         <div>Content</div>
       </FloatingWindow>,
     );
     // position: absolute CSS class'indan gelir (rootStyle), inline style degil
-    expect(screen.getByTestId('root')).toHaveAttribute('data-window-state', 'normal');
+    expect(screen.getByTestId('floating-window-root')).toHaveAttribute('data-window-state', 'normal');
   });
 
   it('applies default position and size', () => {
     render(
       <FloatingWindow
-        data-testid="root"
+        data-testid="floating-window-root"
         title="Test"
         defaultPosition={{ x: 200, y: 150 }}
         defaultSize={{ width: 500, height: 400 }}
@@ -90,7 +90,7 @@ describe('FloatingWindow', () => {
         <div>Content</div>
       </FloatingWindow>,
     );
-    const root = screen.getByTestId('root');
+    const root = screen.getByTestId('floating-window-root');
     expect(root).toHaveStyle({ left: '200px', top: '150px', width: '500px', height: '400px' });
   });
 
@@ -149,14 +149,14 @@ describe('FloatingWindow', () => {
 
     it('minimize button hides window', () => {
       const { container } = render(
-        <FloatingWindow data-testid="root" title="Test">
+        <FloatingWindow data-testid="floating-window-root" title="Test">
           <div>Content</div>
         </FloatingWindow>,
       );
       const minimizeBtn = container.querySelector('[data-window-control="minimize"]') as HTMLElement;
       fireEvent.click(minimizeBtn);
-      expect(screen.getByTestId('root')).toHaveStyle({ display: 'none' });
-      expect(screen.getByTestId('root')).toHaveAttribute('data-window-state', 'minimized');
+      expect(screen.getByTestId('floating-window-root')).toHaveStyle({ display: 'none' });
+      expect(screen.getByTestId('floating-window-root')).toHaveAttribute('data-window-state', 'minimized');
     });
 
     it('control buttons have aria-labels', () => {
@@ -176,11 +176,11 @@ describe('FloatingWindow', () => {
   describe('window state', () => {
     it('defaults to normal state', () => {
       render(
-        <FloatingWindow data-testid="root" title="Test">
+        <FloatingWindow data-testid="floating-window-root" title="Test">
           <div>Content</div>
         </FloatingWindow>,
       );
-      expect(screen.getByTestId('root')).toHaveAttribute('data-window-state', 'normal');
+      expect(screen.getByTestId('floating-window-root')).toHaveAttribute('data-window-state', 'normal');
     });
   });
 
@@ -189,40 +189,40 @@ describe('FloatingWindow', () => {
   describe('classNames & styles', () => {
     it('applies classNames.root', () => {
       render(
-        <FloatingWindow data-testid="root" classNames={{ root: 'slot-root' }} title="Test">
+        <FloatingWindow data-testid="floating-window-root" classNames={{ root: 'slot-root' }} title="Test">
           <div>Content</div>
         </FloatingWindow>,
       );
-      expect(screen.getByTestId('root')).toHaveClass('slot-root');
+      expect(screen.getByTestId('floating-window-root')).toHaveClass('slot-root');
     });
 
     it('applies styles.root', () => {
       render(
-        <FloatingWindow data-testid="root" styles={{ root: { opacity: '0.9' } }} title="Test">
+        <FloatingWindow data-testid="floating-window-root" styles={{ root: { opacity: '0.9' } }} title="Test">
           <div>Content</div>
         </FloatingWindow>,
       );
-      expect(screen.getByTestId('root')).toHaveStyle({ opacity: '0.9' });
+      expect(screen.getByTestId('floating-window-root')).toHaveStyle({ opacity: '0.9' });
     });
 
     it('merges className + classNames.root', () => {
       render(
-        <FloatingWindow data-testid="root" className="outer" classNames={{ root: 'inner' }} title="Test">
+        <FloatingWindow data-testid="floating-window-root" className="outer" classNames={{ root: 'inner' }} title="Test">
           <div>Content</div>
         </FloatingWindow>,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('floating-window-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
 
     it('merges style + styles.root', () => {
       render(
-        <FloatingWindow data-testid="root" style={{ margin: 4 }} styles={{ root: { padding: 8 } }} title="Test">
+        <FloatingWindow data-testid="floating-window-root" style={{ margin: 4 }} styles={{ root: { padding: 8 } }} title="Test">
           <div>Content</div>
         </FloatingWindow>,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('floating-window-root');
       expect(el).toHaveStyle({ margin: '4px', padding: '8px' });
     });
 
@@ -254,6 +254,33 @@ describe('FloatingWindow', () => {
       );
       const content = container.querySelector('[data-window-content]') as HTMLElement;
       expect(content).toHaveStyle({ padding: '24px' });
+    });
+
+    it('styles.titleBar titleBar elemana padding eklenir', () => {
+      render(
+        <FloatingWindow styles={{ titleBar: { padding: '20px' } }} title="Test">
+          <div>Content</div>
+        </FloatingWindow>,
+      );
+      expect(screen.getByTestId('floating-window-title-bar')).toHaveStyle({ padding: '20px' });
+    });
+
+    it('styles.title title elemana fontSize eklenir', () => {
+      render(
+        <FloatingWindow styles={{ title: { fontSize: '18px' } }} title="Test">
+          <div>Content</div>
+        </FloatingWindow>,
+      );
+      expect(screen.getByTestId('floating-window-title')).toHaveStyle({ fontSize: '18px' });
+    });
+
+    it('styles.controls controls elemana letterSpacing eklenir', () => {
+      render(
+        <FloatingWindow styles={{ controls: { letterSpacing: '2px' } }} title="Test">
+          <div>Content</div>
+        </FloatingWindow>,
+      );
+      expect(screen.getByTestId('floating-window-controls')).toHaveStyle({ letterSpacing: '2px' });
     });
   });
 
@@ -296,12 +323,12 @@ describe('FloatingWindow', () => {
 
     it('compound FloatingWindow has data-window-state', () => {
       render(
-        <FloatingWindow data-testid="root">
+        <FloatingWindow data-testid="floating-window-root">
           <FloatingWindow.Header title="Test" />
           <FloatingWindow.Body><p>Content</p></FloatingWindow.Body>
         </FloatingWindow>,
       );
-      expect(screen.getByTestId('root')).toHaveAttribute('data-window-state', 'normal');
+      expect(screen.getByTestId('floating-window-root')).toHaveAttribute('data-window-state', 'normal');
     });
 
     it('compound FloatingWindow renders window controls in header', () => {

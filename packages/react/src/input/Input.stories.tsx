@@ -197,13 +197,13 @@ export const CustomSlotStyles: Story = {
       <Input
         placeholder="classNames ile root slot"
         classNames={{ root: 'my-input' }}
-        styles={{ root: { borderColor: 'orange', fontStyle: 'italic' } }}
+        styles={{ root: { borderColor: 'var(--rel-color-warning, #f59e0b)', fontStyle: 'italic' } }}
       />
       <Input
         placeholder="Wrapper + element slot"
         leftElement={<SearchIcon />}
         classNames={{ wrapper: 'my-wrapper', leftElement: 'my-left' }}
-        styles={{ wrapper: { background: 'rgba(0,0,0,0.02)' } }}
+        styles={{ wrapper: { background: 'var(--rel-color-bg-subtle, rgba(0,0,0,0.02))' } }}
       />
       <Input
         placeholder="className + classNames merge"

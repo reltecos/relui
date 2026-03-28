@@ -36,6 +36,7 @@ export const breadcrumbListRecipe = recipe({
     margin: 0,
     padding: 0,
     fontFamily: 'var(--rel-font-sans)',
+    color: 'var(--rel-color-text, #374151)',
     gap: '4px',
   },
 

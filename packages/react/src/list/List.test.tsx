@@ -169,6 +169,36 @@ describe('List', () => {
     expect(screen.getByTestId('list-item-primary')).toHaveStyle({ fontSize: '18px' });
   });
 
+  it('styles.itemSecondary secondary elemana eklenir', () => {
+    render(
+      <List
+        styles={{ itemSecondary: { fontSize: '14px' } }}
+        items={[{ id: '1', primary: 'Test', secondary: 'Alt metin' }]}
+      />,
+    );
+    expect(screen.getByTestId('list-item-secondary')).toHaveStyle({ fontSize: '14px' });
+  });
+
+  it('styles.itemIcon icon elemana eklenir', () => {
+    render(
+      <List
+        styles={{ itemIcon: { padding: '20px' } }}
+        items={[{ id: '1', primary: 'Test', icon: <span>I</span> }]}
+      />,
+    );
+    expect(screen.getByTestId('list-item-icon')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.itemAction action elemana eklenir', () => {
+    render(
+      <List
+        styles={{ itemAction: { opacity: '0.5' } }}
+        items={[{ id: '1', primary: 'Test', action: <button>Sil</button> }]}
+      />,
+    );
+    expect(screen.getByTestId('list-item-action')).toHaveStyle({ opacity: '0.5' });
+  });
+
   // ── Compound + Slot API ──
 
   it('compound kullanim slot API destekler', () => {

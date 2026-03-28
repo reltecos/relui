@@ -382,6 +382,30 @@ describe('Select', () => {
     expect(screen.getByText('Avrupa')).toHaveStyle({ fontWeight: 'bold' });
     expect(screen.getByText('Asya')).toHaveStyle({ fontWeight: 'bold' });
   });
+
+  // ── Slot API: styles ──────────────────────────────────────────────
+
+  it('styles.placeholder placeholder elemana uygulanir', () => {
+    renderSelect({
+      placeholder: 'Ulke secin',
+      styles: { placeholder: { opacity: '0.5' } },
+    });
+    const trigger = getTrigger();
+    const placeholder = trigger.querySelector('span');
+
+    expect(placeholder).toHaveStyle({ opacity: '0.5' });
+  });
+
+  it('styles.value value elemana uygulanir', () => {
+    renderSelect({
+      value: 'tr',
+      styles: { value: { fontWeight: '600' } },
+    });
+    const trigger = getTrigger();
+    const valueSpan = trigger.querySelector('span');
+
+    expect(valueSpan).toHaveStyle({ fontWeight: '600' });
+  });
 });
 
 // ── Compound API ──

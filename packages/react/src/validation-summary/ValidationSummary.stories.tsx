@@ -44,7 +44,7 @@ export const Default = () => (
         placeholder="Ad"
         style={{
           padding: '8px 12px',
-          border: '1px solid #ef4444',
+          border: '1px solid var(--rel-color-error, #ef4444)',
           borderRadius: 6,
           outline: 'none',
         }}
@@ -54,7 +54,7 @@ export const Default = () => (
         placeholder="E-posta"
         style={{
           padding: '8px 12px',
-          border: '1px solid #ef4444',
+          border: '1px solid var(--rel-color-error, #ef4444)',
           borderRadius: 6,
           outline: 'none',
         }}
@@ -65,7 +65,7 @@ export const Default = () => (
         placeholder="Sifre"
         style={{
           padding: '8px 12px',
-          border: '1px solid #ef4444',
+          border: '1px solid var(--rel-color-error, #ef4444)',
           borderRadius: 6,
           outline: 'none',
         }}
@@ -76,7 +76,7 @@ export const Default = () => (
         placeholder="Yas"
         style={{
           padding: '8px 12px',
-          border: '1px solid #d97706',
+          border: '1px solid var(--rel-color-warning, #d97706)',
           borderRadius: 6,
           outline: 'none',
         }}
@@ -127,7 +127,7 @@ function InteractiveDemo() {
           onChange={(e) => setName(e.target.value)}
           style={{
             padding: '8px 12px',
-            border: '1px solid #d1d5db',
+            border: '1px solid var(--rel-color-border, #d1d5db)',
             borderRadius: 6,
             outline: 'none',
           }}
@@ -139,7 +139,7 @@ function InteractiveDemo() {
           onChange={(e) => setEmail(e.target.value)}
           style={{
             padding: '8px 12px',
-            border: '1px solid #d1d5db',
+            border: '1px solid var(--rel-color-border, #d1d5db)',
             borderRadius: 6,
             outline: 'none',
           }}
@@ -150,8 +150,8 @@ function InteractiveDemo() {
             padding: '10px 20px',
             fontSize: 14,
             fontWeight: 600,
-            backgroundColor: '#3b82f6',
-            color: '#fff',
+            backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             border: 'none',
             borderRadius: 8,
             cursor: 'pointer',
@@ -175,13 +175,13 @@ export const CustomSlotStyles = () => (
       title="Form Errors"
       styles={{
         root: {
-          backgroundColor: '#1e293b',
-          borderColor: '#f87171',
+          backgroundColor: 'var(--rel-color-bg-inverse, #1e293b)',
+          borderColor: 'var(--rel-color-error, #f87171)',
           borderRadius: '12px',
         },
-        title: { color: '#fca5a5' },
+        title: { color: 'var(--rel-color-error, #fca5a5)' },
         list: { gap: '8px' },
-        itemMessage: { color: '#e2e8f0' },
+        itemMessage: { color: 'var(--rel-color-text-secondary, #e2e8f0)' },
       }}
     />
   </div>

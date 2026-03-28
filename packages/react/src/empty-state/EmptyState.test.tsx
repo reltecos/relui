@@ -169,6 +169,17 @@ describe('EmptyState', () => {
     expect(screen.getByTestId('empty-state-action').className).toContain('my-action');
   });
 
+  it('styles.action action elemana eklenir', () => {
+    render(
+      <EmptyState
+        title="Bos"
+        action={<button>Ekle</button>}
+        styles={{ action: { padding: '20px' } }}
+      />
+    );
+    expect(screen.getByTestId('empty-state-action')).toHaveStyle({ padding: '20px' });
+  });
+
   // ── ReactNode title & description ─────────────────
   it('title ReactNode olarak calisir', () => {
     render(

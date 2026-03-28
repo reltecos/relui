@@ -262,6 +262,7 @@ const CopyButtonBase = forwardRef<HTMLButtonElement, CopyButtonComponentProps>(
             className={iconSlot.className || undefined}
             style={iconSlot.style}
             aria-hidden="true"
+            data-testid="copybutton-icon"
           >
             {copied ? currentCopiedIcon : currentCopyIcon}
           </span>

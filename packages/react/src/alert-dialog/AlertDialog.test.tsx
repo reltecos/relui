@@ -247,6 +247,26 @@ describe('AlertDialog', () => {
     expect(screen.getByTestId('alert-dialog-confirm')).toHaveStyle({ fontSize: '16px' });
   });
 
+  it('styles.title title elemana uygulanir', () => {
+    renderDialog({ styles: { title: { letterSpacing: '0.5px' } } });
+    expect(screen.getByTestId('alert-dialog-title')).toHaveStyle({ letterSpacing: '0.5px' });
+  });
+
+  it('styles.description description elemana uygulanir', () => {
+    renderDialog({ description: 'Test aciklama', styles: { description: { fontSize: '14px' } } });
+    expect(screen.getByTestId('alert-dialog-description')).toHaveStyle({ fontSize: '14px' });
+  });
+
+  it('styles.cancelButton cancel butonuna uygulanir', () => {
+    renderDialog({ styles: { cancelButton: { fontWeight: '600' } } });
+    expect(screen.getByTestId('alert-dialog-cancel')).toHaveStyle({ fontWeight: '600' });
+  });
+
+  it('styles.icon icon elemana uygulanir', () => {
+    renderDialog({ severity: 'warning', styles: { icon: { opacity: '0.8' } } });
+    expect(screen.getByTestId('alert-dialog-icon')).toHaveStyle({ opacity: '0.8' });
+  });
+
   // ── ref ──
 
   it('ref iletir', () => {

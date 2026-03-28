@@ -63,11 +63,11 @@ export const fabButtonRecipe = recipe({
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
     fontWeight: 600,
     transition: 'background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1)',
+    boxShadow: 'var(--rel-shadow-md, 0 4px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1))',
     color: 'var(--rel-color-text-inverse, #fff)',
     ':hover': {
       transform: 'scale(1.05)',
-      boxShadow: '0 6px 20px rgba(0,0,0,0.2), 0 2px 6px rgba(0,0,0,0.12)',
+      boxShadow: 'var(--rel-shadow-lg, 0 6px 20px rgba(0,0,0,0.2), 0 2px 6px rgba(0,0,0,0.12))',
     },
     ':active': {
       transform: 'scale(0.95)',
@@ -168,12 +168,12 @@ export const fabActionButtonRecipe = recipe({
     borderRadius: '50%',
     backgroundColor: 'var(--rel-color-bg, #fff)',
     color: 'var(--rel-color-text, #1e293b)',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
+    boxShadow: 'var(--rel-shadow-sm, 0 2px 8px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08))',
     transition: 'background-color 150ms ease, transform 150ms ease, box-shadow 150ms ease',
     ':hover': {
       backgroundColor: 'var(--rel-color-bg-subtle, #f1f5f9)',
       transform: 'scale(1.08)',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+      boxShadow: 'var(--rel-shadow-md, 0 4px 12px rgba(0,0,0,0.15))',
     },
     ':active': {
       transform: 'scale(0.95)',
@@ -210,7 +210,7 @@ export const fabActionLabelStyle = style({
   backgroundColor: 'var(--rel-color-bg, #fff)',
   padding: '4px 10px',
   borderRadius: 4,
-  boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+  boxShadow: 'var(--rel-shadow-xs, 0 1px 4px rgba(0,0,0,0.1))',
   whiteSpace: 'nowrap',
   pointerEvents: 'none',
 });

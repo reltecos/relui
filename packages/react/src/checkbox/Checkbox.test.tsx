@@ -302,6 +302,30 @@ describe('Checkbox', () => {
     expect(screen.getByText('Metin')).toHaveClass('my-label');
   });
 
+  // ── Slot API: styles ──────────────────────────────────────────────
+
+  it('styles.control control elemana uygulanir', () => {
+    render(<Checkbox aria-label="Test" styles={{ control: { padding: '4px' } }} />);
+
+    expect(screen.getByRole('checkbox')).toHaveStyle({ padding: '4px' });
+  });
+
+  it('styles.label label elemana uygulanir', () => {
+    render(
+      <Checkbox styles={{ label: { letterSpacing: '0.5px' } }}>Metin</Checkbox>,
+    );
+
+    expect(screen.getByText('Metin')).toHaveStyle({ letterSpacing: '0.5px' });
+  });
+
+  it('styles.icon icon elemana uygulanir', () => {
+    render(<Checkbox aria-label="Test" checked styles={{ icon: { opacity: '0.7' } }} />);
+    const checkbox = screen.getByRole('checkbox');
+    const svg = checkbox.querySelector('svg');
+
+    expect(svg).toHaveStyle({ opacity: '0.7' });
+  });
+
   it('ref forward edilir', () => {
     const ref = vi.fn();
     render(<Checkbox ref={ref} aria-label="Test" />);

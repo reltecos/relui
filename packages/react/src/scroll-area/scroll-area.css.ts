@@ -34,6 +34,7 @@ const fadeOut = keyframes({
 export const rootStyle = style({
   position: 'relative',
   overflow: 'hidden',
+  color: 'var(--rel-color-text, #374151)',
 });
 
 // ── Viewport ──────────────────────────────────────────

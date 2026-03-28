@@ -133,6 +133,14 @@ describe('DescriptionList', () => {
     expect(descs[0]).toHaveStyle({ letterSpacing: '0.05em' });
   });
 
+  it('styles.item item elemana eklenir', () => {
+    render(
+      <DescriptionList items={sampleItems} styles={{ item: { padding: '20px' } }} />,
+    );
+    const items = screen.getAllByTestId('dl-item');
+    expect(items[0]).toHaveStyle({ padding: '20px' });
+  });
+
   // ── Ref ──
 
   it('ref forward edilir', () => {

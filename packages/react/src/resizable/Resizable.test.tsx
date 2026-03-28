@@ -23,11 +23,11 @@ describe('Resizable', () => {
 
   it('applies default size', () => {
     render(
-      <Resizable data-testid="root" defaultWidth={300} defaultHeight={250}>
+      <Resizable data-testid="resizable-root" defaultWidth={300} defaultHeight={250}>
         <div>Content</div>
       </Resizable>,
     );
-    const el = screen.getByTestId('root');
+    const el = screen.getByTestId('resizable-root');
     expect(el).toHaveStyle({ width: '300px', height: '250px' });
   });
 
@@ -66,30 +66,30 @@ describe('Resizable', () => {
 
   it('sets data-disabled attribute when disabled', () => {
     render(
-      <Resizable data-testid="root" disabled>
+      <Resizable data-testid="resizable-root" disabled>
         <div>Content</div>
       </Resizable>,
     );
-    expect(screen.getByTestId('root')).toHaveAttribute('data-disabled');
+    expect(screen.getByTestId('resizable-root')).toHaveAttribute('data-disabled');
   });
 
   it('forwards ref', () => {
     let refValue: HTMLDivElement | null = null;
     render(
-      <Resizable ref={(el) => { refValue = el; }} data-testid="root">
+      <Resizable ref={(el) => { refValue = el; }} data-testid="resizable-root">
         <div>Content</div>
       </Resizable>,
     );
-    expect(refValue).toBe(screen.getByTestId('root'));
+    expect(refValue).toBe(screen.getByTestId('resizable-root'));
   });
 
   it('passes through HTML attributes', () => {
     render(
-      <Resizable data-testid="root" id="panel" aria-label="Resizable panel">
+      <Resizable data-testid="resizable-root" id="panel" aria-label="Resizable panel">
         <div>Content</div>
       </Resizable>,
     );
-    const el = screen.getByTestId('root');
+    const el = screen.getByTestId('resizable-root');
     expect(el).toHaveAttribute('id', 'panel');
   });
 
@@ -108,7 +108,7 @@ describe('Resizable', () => {
   describe('pointer interaction', () => {
     it('starts resize on pointer down on handle', () => {
       const { container } = render(
-        <Resizable data-testid="root" defaultWidth={200} defaultHeight={200}>
+        <Resizable data-testid="resizable-root" defaultWidth={200} defaultHeight={200}>
           <div>Content</div>
         </Resizable>,
       );
@@ -116,47 +116,47 @@ describe('Resizable', () => {
       expect(rightHandle).toBeInTheDocument();
 
       fireEvent.pointerDown(rightHandle as HTMLElement, { clientX: 200, clientY: 100 });
-      expect(screen.getByTestId('root')).toHaveAttribute('data-resizing');
+      expect(screen.getByTestId('resizable-root')).toHaveAttribute('data-resizing');
     });
   });
 
   describe('classNames & styles', () => {
     it('applies classNames.root', () => {
       render(
-        <Resizable data-testid="root" classNames={{ root: 'slot-root' }}>
+        <Resizable data-testid="resizable-root" classNames={{ root: 'slot-root' }}>
           <div>Content</div>
         </Resizable>,
       );
-      expect(screen.getByTestId('root')).toHaveClass('slot-root');
+      expect(screen.getByTestId('resizable-root')).toHaveClass('slot-root');
     });
 
     it('applies styles.root', () => {
       render(
-        <Resizable data-testid="root" styles={{ root: { opacity: '0.5' } }}>
+        <Resizable data-testid="resizable-root" styles={{ root: { opacity: '0.5' } }}>
           <div>Content</div>
         </Resizable>,
       );
-      expect(screen.getByTestId('root')).toHaveStyle({ opacity: '0.5' });
+      expect(screen.getByTestId('resizable-root')).toHaveStyle({ opacity: '0.5' });
     });
 
     it('merges className + classNames.root', () => {
       render(
-        <Resizable data-testid="root" className="outer" classNames={{ root: 'inner' }}>
+        <Resizable data-testid="resizable-root" className="outer" classNames={{ root: 'inner' }}>
           <div>Content</div>
         </Resizable>,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('resizable-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
 
     it('merges style + styles.root', () => {
       render(
-        <Resizable data-testid="root" style={{ margin: 4 }} styles={{ root: { padding: 8 } }}>
+        <Resizable data-testid="resizable-root" style={{ margin: 4 }} styles={{ root: { padding: 8 } }}>
           <div>Content</div>
         </Resizable>,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('resizable-root');
       expect(el).toHaveStyle({ margin: '4px', padding: '8px' });
     });
 
@@ -177,7 +177,7 @@ describe('Resizable', () => {
 describe('Resizable (Compound)', () => {
   it('compound: Handle sub-component render edilir', () => {
     render(
-      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]}>
+      <Resizable data-testid="resizable-root" defaultWidth={200} defaultHeight={200} directions={[]}>
         <div>Content</div>
         <Resizable.Handle direction="right" />
       </Resizable>,
@@ -187,7 +187,7 @@ describe('Resizable (Compound)', () => {
 
   it('compound: Handle data-direction attribute set edilir', () => {
     render(
-      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]}>
+      <Resizable data-testid="resizable-root" defaultWidth={200} defaultHeight={200} directions={[]}>
         <div>Content</div>
         <Resizable.Handle direction="bottom" />
       </Resizable>,
@@ -197,7 +197,7 @@ describe('Resizable (Compound)', () => {
 
   it('compound: Handle aria-hidden="true" tasir', () => {
     render(
-      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]}>
+      <Resizable data-testid="resizable-root" defaultWidth={200} defaultHeight={200} directions={[]}>
         <div>Content</div>
         <Resizable.Handle direction="right" />
       </Resizable>,
@@ -207,7 +207,7 @@ describe('Resizable (Compound)', () => {
 
   it('compound: classNames context ile Handle a aktarilir', () => {
     render(
-      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]} classNames={{ handle: 'cmp-handle' }}>
+      <Resizable data-testid="resizable-root" defaultWidth={200} defaultHeight={200} directions={[]} classNames={{ handle: 'cmp-handle' }}>
         <div>Content</div>
         <Resizable.Handle direction="right" />
       </Resizable>,
@@ -217,7 +217,7 @@ describe('Resizable (Compound)', () => {
 
   it('compound: birden fazla Handle render edilir', () => {
     render(
-      <Resizable data-testid="root" defaultWidth={200} defaultHeight={200} directions={[]}>
+      <Resizable data-testid="resizable-root" defaultWidth={200} defaultHeight={200} directions={[]}>
         <div>Content</div>
         <Resizable.Handle direction="right" />
         <Resizable.Handle direction="bottom" />

@@ -57,8 +57,8 @@ function DefaultDemo() {
             padding: '10px 20px',
             fontSize: 14,
             fontWeight: 600,
-            backgroundColor: '#3b82f6',
-            color: '#fff',
+            backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             border: 'none',
             borderRadius: 8,
             cursor: 'pointer',
@@ -74,7 +74,7 @@ function DefaultDemo() {
           display: 'flex',
           gap: 8,
           padding: '12px 16px',
-          backgroundColor: '#f3f4f6',
+          backgroundColor: 'var(--rel-color-bg-subtle, #f3f4f6)',
           borderRadius: 8,
           marginBottom: 16,
         }}
@@ -83,9 +83,9 @@ function DefaultDemo() {
           id="tour-btn-new"
           style={{
             padding: '8px 16px',
-            border: '1px solid #d1d5db',
+            border: '1px solid var(--rel-color-border, #d1d5db)',
             borderRadius: 6,
-            backgroundColor: '#fff',
+            backgroundColor: 'var(--rel-color-bg, #fff)',
             cursor: 'pointer',
           }}
         >
@@ -95,9 +95,9 @@ function DefaultDemo() {
           id="tour-btn-save"
           style={{
             padding: '8px 16px',
-            border: '1px solid #d1d5db',
+            border: '1px solid var(--rel-color-border, #d1d5db)',
             borderRadius: 6,
-            backgroundColor: '#fff',
+            backgroundColor: 'var(--rel-color-bg, #fff)',
             cursor: 'pointer',
           }}
         >
@@ -112,24 +112,24 @@ function DefaultDemo() {
           style={{
             width: 200,
             padding: 16,
-            backgroundColor: '#f9fafb',
+            backgroundColor: 'var(--rel-color-bg-subtle, #f9fafb)',
             borderRadius: 8,
-            border: '1px solid #e5e7eb',
+            border: '1px solid var(--rel-color-border, #e5e7eb)',
           }}
         >
           <div style={{ fontWeight: 600, marginBottom: 8, fontSize: 13 }}>Dosyalar</div>
-          <div style={{ fontSize: 13, color: '#6b7280' }}>index.ts</div>
-          <div style={{ fontSize: 13, color: '#6b7280' }}>app.tsx</div>
-          <div style={{ fontSize: 13, color: '#6b7280' }}>styles.css</div>
+          <div style={{ fontSize: 13, color: 'var(--rel-color-text-muted, #6b7280)' }}>index.ts</div>
+          <div style={{ fontSize: 13, color: 'var(--rel-color-text-muted, #6b7280)' }}>app.tsx</div>
+          <div style={{ fontSize: 13, color: 'var(--rel-color-text-muted, #6b7280)' }}>styles.css</div>
         </div>
         <div
           id="tour-editor"
           style={{
             flex: 1,
             padding: 16,
-            backgroundColor: '#1e293b',
+            backgroundColor: 'var(--rel-color-bg-inverse, #1e293b)',
             borderRadius: 8,
-            color: '#e2e8f0',
+            color: 'var(--rel-color-text-inverse, #e2e8f0)',
             fontFamily: 'monospace',
             fontSize: 13,
           }}
@@ -188,8 +188,8 @@ function CustomLabelsDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#3b82f6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -204,9 +204,9 @@ function CustomLabelsDemo() {
           id="en-step1"
           style={{
             padding: 24,
-            backgroundColor: '#f0f9ff',
+            backgroundColor: 'var(--rel-color-bg-subtle, #f0f9ff)',
             borderRadius: 8,
-            border: '1px solid #bae6fd',
+            border: '1px solid var(--rel-color-border, #bae6fd)',
             flex: 1,
           }}
         >
@@ -216,9 +216,9 @@ function CustomLabelsDemo() {
           id="en-step2"
           style={{
             padding: 24,
-            backgroundColor: '#f0fdf4',
+            backgroundColor: 'var(--rel-color-bg-subtle, #f0fdf4)',
             borderRadius: 8,
-            border: '1px solid #bbf7d0',
+            border: '1px solid var(--rel-color-border, #bbf7d0)',
             flex: 1,
           }}
         >
@@ -228,9 +228,9 @@ function CustomLabelsDemo() {
           id="en-step3"
           style={{
             padding: 24,
-            backgroundColor: '#fdf4ff',
+            backgroundColor: 'var(--rel-color-bg-subtle, #fdf4ff)',
             borderRadius: 8,
-            border: '1px solid #f0abfc',
+            border: '1px solid var(--rel-color-border, #f0abfc)',
             flex: 1,
           }}
         >
@@ -284,8 +284,8 @@ function CustomSlotStylesDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#8b5cf6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-info, #8b5cf6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -300,9 +300,9 @@ function CustomSlotStylesDemo() {
           id="styled-card1"
           style={{
             padding: 24,
-            backgroundColor: '#faf5ff',
+            backgroundColor: 'var(--rel-color-bg-subtle, #faf5ff)',
             borderRadius: 8,
-            border: '1px solid #e9d5ff',
+            border: '1px solid var(--rel-color-border, #e9d5ff)',
             flex: 1,
           }}
         >
@@ -312,9 +312,9 @@ function CustomSlotStylesDemo() {
           id="styled-card2"
           style={{
             padding: 24,
-            backgroundColor: '#faf5ff',
+            backgroundColor: 'var(--rel-color-bg-subtle, #faf5ff)',
             borderRadius: 8,
-            border: '1px solid #e9d5ff',
+            border: '1px solid var(--rel-color-border, #e9d5ff)',
             flex: 1,
           }}
         >
@@ -329,14 +329,14 @@ function CustomSlotStylesDemo() {
         onStop={() => setActive(false)}
         portalContainer={containerRef.current ?? undefined}
         styles={{
-          overlay: { backgroundColor: 'rgba(30, 0, 60, 0.7)' },
-          popover: { backgroundColor: '#1e1b4b', borderRadius: '16px' },
-          title: { color: '#c4b5fd' },
-          description: { color: '#a5b4fc' },
-          stepIndicator: { color: '#818cf8' },
-          nextButton: { backgroundColor: '#7c3aed' },
-          prevButton: { backgroundColor: '#312e81', color: '#c4b5fd', borderColor: '#4c1d95' },
-          skipButton: { color: '#818cf8' },
+          overlay: { backgroundColor: 'var(--rel-color-overlay, rgba(30, 0, 60, 0.7))' },
+          popover: { backgroundColor: 'var(--rel-color-bg-inverse, #1e1b4b)', borderRadius: '16px' },
+          title: { color: 'var(--rel-color-text-inverse, #c4b5fd)' },
+          description: { color: 'var(--rel-color-text-inverse, #a5b4fc)' },
+          stepIndicator: { color: 'var(--rel-color-info, #818cf8)' },
+          nextButton: { backgroundColor: 'var(--rel-color-info, #7c3aed)' },
+          prevButton: { backgroundColor: 'var(--rel-color-bg-inverse, #312e81)', color: 'var(--rel-color-text-inverse, #c4b5fd)', borderColor: 'var(--rel-color-border, #4c1d95)' },
+          skipButton: { color: 'var(--rel-color-info, #818cf8)' },
         }}
       />
     </div>
@@ -357,7 +357,7 @@ function CompoundDemo() {
           <Tour.StepContent>Bu bir compound tour adimi.</Tour.StepContent>
         </Tour.Step>
         <Tour.Navigation>
-          <button type="button" style={{ padding: '6px 14px', borderRadius: 6, border: 'none', backgroundColor: '#3b82f6', color: '#fff', cursor: 'pointer' }}>
+          <button type="button" style={{ padding: '6px 14px', borderRadius: 6, border: 'none', backgroundColor: 'var(--rel-color-primary, #3b82f6)', color: 'var(--rel-color-text-inverse, #fff)', cursor: 'pointer' }}>
             Ileri
           </button>
         </Tour.Navigation>
@@ -403,8 +403,8 @@ function WithSkipDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#f59e0b',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-warning, #f59e0b)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -419,9 +419,9 @@ function WithSkipDemo() {
           id="skip-step1"
           style={{
             padding: 24,
-            backgroundColor: '#fffbeb',
+            backgroundColor: 'var(--rel-color-bg-subtle, #fffbeb)',
             borderRadius: 8,
-            border: '1px solid #fde68a',
+            border: '1px solid var(--rel-color-border, #fde68a)',
             flex: 1,
           }}
         >
@@ -431,9 +431,9 @@ function WithSkipDemo() {
           id="skip-step2"
           style={{
             padding: 24,
-            backgroundColor: '#fef3c7',
+            backgroundColor: 'var(--rel-color-warning-light, #fef3c7)',
             borderRadius: 8,
-            border: '1px solid #fcd34d',
+            border: '1px solid var(--rel-color-border, #fcd34d)',
             flex: 1,
           }}
         >
@@ -443,9 +443,9 @@ function WithSkipDemo() {
           id="skip-step3"
           style={{
             padding: 24,
-            backgroundColor: '#fde68a',
+            backgroundColor: 'var(--rel-color-warning-light, #fde68a)',
             borderRadius: 8,
-            border: '1px solid #f59e0b',
+            border: '1px solid var(--rel-color-warning, #f59e0b)',
             flex: 1,
           }}
         >
@@ -505,8 +505,8 @@ function PlaygroundDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#10b981',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-success, #10b981)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -521,9 +521,9 @@ function PlaygroundDemo() {
           id="pg-card1"
           style={{
             padding: 24,
-            backgroundColor: '#ecfdf5',
+            backgroundColor: 'var(--rel-color-bg-subtle, #ecfdf5)',
             borderRadius: 8,
-            border: '1px solid #a7f3d0',
+            border: '1px solid var(--rel-color-border, #a7f3d0)',
             flex: 1,
             textAlign: 'center',
             fontWeight: 600,
@@ -535,9 +535,9 @@ function PlaygroundDemo() {
           id="pg-card2"
           style={{
             padding: 24,
-            backgroundColor: '#f0fdf4',
+            backgroundColor: 'var(--rel-color-bg-subtle, #f0fdf4)',
             borderRadius: 8,
-            border: '1px solid #bbf7d0',
+            border: '1px solid var(--rel-color-border, #bbf7d0)',
             flex: 1,
             textAlign: 'center',
             fontWeight: 600,
@@ -549,9 +549,9 @@ function PlaygroundDemo() {
           id="pg-card3"
           style={{
             padding: 24,
-            backgroundColor: '#dcfce7',
+            backgroundColor: 'var(--rel-color-bg-subtle, #dcfce7)',
             borderRadius: 8,
-            border: '1px solid #86efac',
+            border: '1px solid var(--rel-color-border, #86efac)',
             flex: 1,
             textAlign: 'center',
             fontWeight: 600,

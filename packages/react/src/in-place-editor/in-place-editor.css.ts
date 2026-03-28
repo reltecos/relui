@@ -21,6 +21,7 @@ import { cssVar } from '@relteco/relui-tokens';
 export const inPlaceEditorRootStyle = style({
   display: 'inline-flex',
   alignItems: 'center',
+  color: 'var(--rel-color-text, #374151)',
   gap: 'var(--rel-spacing-1)',
   width: '100%',
 });

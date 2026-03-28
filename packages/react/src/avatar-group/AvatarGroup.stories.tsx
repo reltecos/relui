@@ -68,7 +68,7 @@ export const AllSizes: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <div key={size} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ width: 30, fontSize: 12, color: '#6b7280' }}>{size}</span>
+          <span style={{ width: 30, fontSize: 12, color: 'var(--rel-color-text-muted, #6b7280)' }}>{size}</span>
           <AvatarGroup items={ITEMS} size={size} max={3} />
         </div>
       ))}

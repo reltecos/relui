@@ -134,6 +134,18 @@ describe('Spinner slot API', () => {
     render(<Spinner styles={{ root: { fontSize: '20px' } }} />);
     expect(screen.getByTestId('spinner').style.fontSize).toBe('20px');
   });
+
+  it('styles.svg svg elemana eklenir', () => {
+    render(<Spinner styles={{ svg: { opacity: '0.5' } }} />);
+    const spinner = screen.getByTestId('spinner');
+    const svg = spinner.querySelector('svg') as SVGElement;
+    expect(svg).toHaveStyle({ opacity: '0.5' });
+  });
+
+  it('styles.label label elemana eklenir', () => {
+    render(<Spinner label="Loading" styles={{ label: { fontSize: '14px' } }} />);
+    expect(screen.getByText('Loading')).toHaveStyle({ fontSize: '14px' });
+  });
 });
 
 // ── Compound API ──

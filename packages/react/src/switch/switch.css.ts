@@ -187,7 +187,7 @@ export const switchKnobStyle = style({
   display: 'block',
   borderRadius: '50%',
   background: swKnobColor,
-  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
+  boxShadow: 'var(--rel-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.2))',
 
   // Transition
   transitionProperty: 'transform',

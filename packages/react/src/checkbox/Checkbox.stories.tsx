@@ -166,7 +166,7 @@ export const CustomSlotStyles: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
       <Checkbox
         classNames={{ root: 'my-root', control: 'my-control' }}
-        styles={{ root: { padding: '4px' }, control: { borderColor: 'orange' } }}
+        styles={{ root: { padding: '4px' }, control: { borderColor: 'var(--rel-color-warning, #f59e0b)' } }}
       >
         Root + Control slot
       </Checkbox>

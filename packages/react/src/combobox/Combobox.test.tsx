@@ -341,6 +341,31 @@ describe('Combobox', () => {
 
     expect(screen.getByRole('listbox')).toHaveStyle({ maxHeight: '200px' });
   });
+
+  // ── Slot API: styles ──────────────────────────────────────────────
+
+  it('styles.input input elemana uygulanir', () => {
+    renderCombobox({ styles: { input: { fontSize: '18px' } } });
+
+    expect(getInput()).toHaveStyle({ fontSize: '18px' });
+  });
+
+  it('styles.option option elemana uygulanir', () => {
+    renderCombobox({ styles: { option: { padding: '12px' } } });
+    fireEvent.focus(getInput());
+
+    const options = screen.getAllByRole('option');
+    for (const opt of options) {
+      expect(opt).toHaveStyle({ padding: '12px' });
+    }
+  });
+
+  it('styles.noResult noResult elemana uygulanir', () => {
+    renderCombobox({ styles: { noResult: { fontWeight: '600' } } });
+    fireEvent.change(getInput(), { target: { value: 'xyz' } });
+
+    expect(screen.getByText('Sonuc bulunamadi')).toHaveStyle({ fontWeight: '600' });
+  });
 });
 
 // ── Compound API ──
@@ -402,5 +427,26 @@ describe('Combobox (Compound)', () => {
     const input = screen.getByTestId('combobox-input');
     fireEvent.change(input, { target: { value: 'xyz' } });
     expect(screen.getByTestId('combobox-empty')).toBeInTheDocument();
+  });
+});
+
+// ── Slot API: styles ──
+
+describe('Combobox (Slot Styles)', () => {
+  it('styles.root root elemana eklenir', () => {
+    render(<Combobox options={basicOptions} styles={{ root: { padding: '20px' } }} aria-label="Test" />);
+    expect(screen.getByTestId('combobox-root')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.input input elemana eklenir', () => {
+    render(<Combobox options={basicOptions} styles={{ input: { fontSize: '18px' } }} aria-label="Test" />);
+    expect(screen.getByTestId('combobox-input')).toHaveStyle({ fontSize: '18px' });
+  });
+
+  it('styles.noResult empty elemana eklenir', () => {
+    render(<Combobox options={basicOptions} styles={{ noResult: { fontWeight: '600' } }} aria-label="Test" />);
+    const input = screen.getByTestId('combobox-input');
+    fireEvent.change(input, { target: { value: 'xyz' } });
+    expect(screen.getByTestId('combobox-empty')).toHaveStyle({ fontWeight: '600' });
   });
 });

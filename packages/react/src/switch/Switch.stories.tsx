@@ -188,7 +188,7 @@ export const CustomSlotStyles: Story = {
       <Switch
         classNames={{ track: 'my-track' }}
         styles={{
-          root: { padding: '4px 8px', borderRadius: '4px', background: 'rgba(0,0,0,0.03)' },
+          root: { padding: '4px 8px', borderRadius: '4px', background: 'var(--rel-color-bg-subtle, rgba(0,0,0,0.03))' },
           track: { boxShadow: '0 0 0 2px currentColor' },
           label: { fontWeight: 600 },
         }}

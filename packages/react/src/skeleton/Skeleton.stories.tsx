@@ -78,7 +78,7 @@ export const CardSkeleton: Story = {
       style={{
         width: 320,
         padding: 16,
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--rel-color-border, #e2e8f0)',
         borderRadius: 12,
         display: 'flex',
         flexDirection: 'column',
@@ -132,7 +132,7 @@ export const Compound: Story = {
       style={{
         width: 320,
         padding: 16,
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--rel-color-border, #e2e8f0)',
         borderRadius: 12,
         display: 'flex',
         flexDirection: 'column',
@@ -158,7 +158,7 @@ export const LoadedState: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 300 }}>
       <div>
-        <p style={{ margin: '0 0 4px', fontFamily: 'system-ui', fontSize: 12, color: '#888' }}>
+        <p style={{ margin: '0 0 4px', fontFamily: 'system-ui', fontSize: 12, color: 'var(--rel-color-text-muted, #888)' }}>
           loaded=false (skeleton)
         </p>
         <Skeleton loaded={false} height={16}>
@@ -166,7 +166,7 @@ export const LoadedState: Story = {
         </Skeleton>
       </div>
       <div>
-        <p style={{ margin: '0 0 4px', fontFamily: 'system-ui', fontSize: 12, color: '#888' }}>
+        <p style={{ margin: '0 0 4px', fontFamily: 'system-ui', fontSize: 12, color: 'var(--rel-color-text-muted, #888)' }}>
           loaded=true (icerik)
         </p>
         <Skeleton loaded={true} height={16}>

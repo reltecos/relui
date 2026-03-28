@@ -18,6 +18,7 @@ import { style } from '@vanilla-extract/css';
 export const rootStyle = style({
   position: 'relative',
   overflow: 'hidden',
+  color: 'var(--rel-color-text, #374151)',
 });
 
 const handleBase = style({

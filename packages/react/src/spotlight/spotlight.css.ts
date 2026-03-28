@@ -55,7 +55,7 @@ export const spotRootRecipe = recipe({
     backgroundColor: cssVar.bgDefault,
     border: `1px solid ${cssVar.borderDefault}`,
     borderRadius: 'var(--rel-radius-xl, 16px)',
-    boxShadow: '0 20px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.05)',
+    boxShadow: 'var(--rel-shadow-2xl, 0 20px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.05))',
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
@@ -63,6 +63,7 @@ export const spotRootRecipe = recipe({
     animation: `${slideDown} 180ms ease-out`,
     boxSizing: 'border-box',
     maxHeight: '65vh',
+    color: 'var(--rel-color-text, #374151)',
   },
 
   variants: {

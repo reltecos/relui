@@ -20,7 +20,7 @@ const meta: Meta<typeof Sidebar> = {
     (Story) => (
       <div style={{ height: 500, display: 'flex' }}>
         <Story />
-        <div style={{ flex: 1, padding: 24, background: '#f5f5f5' }}>
+        <div style={{ flex: 1, padding: 24, background: 'var(--rel-color-bg-subtle, #f5f5f5)' }}>
           <p>Ana icerik alani / Main content area</p>
         </div>
       </div>
@@ -139,7 +139,7 @@ export const PositionRight: Story = {
   decorators: [
     (Story) => (
       <div style={{ height: 500, display: 'flex' }}>
-        <div style={{ flex: 1, padding: 24, background: '#f5f5f5' }}>
+        <div style={{ flex: 1, padding: 24, background: 'var(--rel-color-bg-subtle, #f5f5f5)' }}>
           <p>Ana icerik alani / Main content area</p>
         </div>
         <Story />
@@ -189,8 +189,8 @@ export const WithRenderIcon: Story = {
           width: 18,
           height: 18,
           borderRadius: '50%',
-          background: '#3b82f6',
-          color: '#fff',
+          background: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -228,7 +228,7 @@ export const Controlled: Story = {
             </div>
           }
         />
-        <div style={{ flex: 1, padding: 24, background: '#f5f5f5' }}>
+        <div style={{ flex: 1, padding: 24, background: 'var(--rel-color-bg-subtle, #f5f5f5)' }}>
           <p>
             <strong>Aktif oge:</strong> {activeKey}
           </p>
@@ -270,33 +270,33 @@ export const CustomSlotStyles: Story = {
     items: groupedItems,
     defaultActiveKey: 'home',
     defaultExpandedKeys: ['products'],
-    header: <div style={{ fontWeight: 700, color: '#fff' }}>Dark Panel</div>,
+    header: <div style={{ fontWeight: 700, color: 'var(--rel-color-text-inverse, #fff)' }}>Dark Panel</div>,
     classNames: {
       root: 'dark-sidebar',
     },
     styles: {
       root: {
-        background: '#1e1e2e',
-        borderColor: '#313244',
-        color: '#cdd6f4',
+        background: 'var(--rel-color-bg-inverse, #1e1e2e)',
+        borderColor: 'var(--rel-color-border, #313244)',
+        color: 'var(--rel-color-text-secondary, #cdd6f4)',
       },
       header: {
-        borderColor: '#313244',
+        borderColor: 'var(--rel-color-border, #313244)',
       },
       item: {
-        color: '#a6adc8',
+        color: 'var(--rel-color-text-muted, #a6adc8)',
       },
       groupTrigger: {
-        color: '#a6adc8',
+        color: 'var(--rel-color-text-muted, #a6adc8)',
       },
       sectionHeader: {
-        color: '#585b70',
+        color: 'var(--rel-color-border, #585b70)',
       },
       divider: {
-        background: '#313244',
+        background: 'var(--rel-color-border, #313244)',
       },
       collapseButton: {
-        color: '#a6adc8',
+        color: 'var(--rel-color-text-muted, #a6adc8)',
       },
     },
   },

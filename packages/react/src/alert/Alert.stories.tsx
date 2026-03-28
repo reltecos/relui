@@ -137,7 +137,7 @@ export const CustomSlotStyles: Story = {
       title="Dark Alert"
       styles={{
         root: {
-          backgroundColor: '#1a1a2e',
+          backgroundColor: 'var(--rel-color-bg-inverse, #1a1a2e)',
           padding: '16px 20px',
         },
         title: { letterSpacing: '0.5px' },

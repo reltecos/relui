@@ -46,6 +46,7 @@ export const progressRootRecipe = recipe({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
+    color: 'var(--rel-color-text, #374151)',
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
   },
   variants: {

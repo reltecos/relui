@@ -80,7 +80,7 @@ export const Sizes: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size}>
-          <p style={{ fontSize: 12, marginBottom: 8, color: '#64748b' }}>size={size}</p>
+          <p style={{ fontSize: 12, marginBottom: 8, color: 'var(--rel-color-text-muted, #64748b)' }}>size={size}</p>
           <RadioGroup size={size} aria-label={`Boyut ${size}`}>
             <Radio value="a">Secenek A</Radio>
             <Radio value="b">Secenek B</Radio>
@@ -98,7 +98,7 @@ export const Variants: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {(['accent', 'neutral', 'destructive', 'success', 'warning'] as const).map((color) => (
         <div key={color}>
-          <p style={{ fontSize: 12, marginBottom: 8, color: '#64748b' }}>color={color}</p>
+          <p style={{ fontSize: 12, marginBottom: 8, color: 'var(--rel-color-text-muted, #64748b)' }}>color={color}</p>
           <RadioGroup color={color} aria-label={`Renk ${color}`} orientation="horizontal">
             <Radio value="evet">Evet</Radio>
             <Radio value="hayir">Hayir</Radio>
@@ -130,7 +130,7 @@ export const Compound: Story = {
               <Radio.Label>Enterprise Plan</Radio.Label>
             </Radio>
           </RadioGroup>
-          <p style={{ fontSize: 12, color: '#64748b' }}>Secili: {value || '(yok)'}</p>
+          <p style={{ fontSize: 12, color: 'var(--rel-color-text-muted, #64748b)' }}>Secili: {value || '(yok)'}</p>
         </div>
       );
     };
@@ -150,7 +150,7 @@ export const CustomSlotStyles: Story = {
           onValueChange={setValue}
           aria-label="Custom"
           classNames={{ root: 'custom-radio-group' }}
-          styles={{ root: { border: '2px dashed #6366f1', borderRadius: 12, padding: 16 } }}
+          styles={{ root: { border: '2px dashed var(--rel-color-info, #6366f1)', borderRadius: 12, padding: 16 } }}
         >
           <Radio value="a">Secenek A</Radio>
           <Radio value="b">Secenek B</Radio>

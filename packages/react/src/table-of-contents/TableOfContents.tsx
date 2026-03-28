@@ -165,6 +165,7 @@ const TableOfContentsLink = forwardRef<HTMLAnchorElement, TableOfContentsLinkPro
             className={indicatorSlot.className}
             style={indicatorSlot.style}
             aria-hidden="true"
+            data-testid="table-of-contents-indicator"
           />
         )}
         {children}
@@ -274,9 +275,9 @@ const TableOfContentsBase = forwardRef<HTMLElement, TableOfContentsComponentProp
             id={id}
             role="navigation"
             aria-label={ariaLabel}
-            data-testid="table-of-contents"
+            data-testid="table-of-contents-root"
           >
-            <ul className={listSlot.className} style={listSlot.style}>
+            <ul className={listSlot.className} style={listSlot.style} data-testid="table-of-contents-list">
               {children}
             </ul>
           </nav>
@@ -325,6 +326,7 @@ const TableOfContentsBase = forwardRef<HTMLElement, TableOfContentsComponentProp
           aria-disabled={isDisabled || undefined}
           data-active={isActive || undefined}
           data-depth={item.depth}
+          data-testid="table-of-contents-link"
           onClick={(e) => {
             e.preventDefault();
             if (!isDisabled) {
@@ -337,6 +339,7 @@ const TableOfContentsBase = forwardRef<HTMLElement, TableOfContentsComponentProp
               className={indicatorSlot.className}
               style={indicatorSlot.style}
               aria-hidden="true"
+              data-testid="table-of-contents-indicator"
             />
           )}
           {item.label}
@@ -352,14 +355,15 @@ const TableOfContentsBase = forwardRef<HTMLElement, TableOfContentsComponentProp
         id={id}
         role="navigation"
         aria-label={ariaLabel}
-        data-testid="table-of-contents"
+        data-testid="table-of-contents-root"
       >
-        <ul className={listSlot.className} style={listSlot.style}>
+        <ul className={listSlot.className} style={listSlot.style} data-testid="table-of-contents-list">
           {context.items.map((item) => (
             <li
               key={item.id}
               className={itemSlot.className}
               style={itemSlot.style}
+              data-testid="table-of-contents-item"
             >
               {renderTocLink(item)}
             </li>

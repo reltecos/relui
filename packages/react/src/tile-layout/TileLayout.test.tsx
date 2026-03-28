@@ -16,9 +16,9 @@ const defaultRender = (tile: { id: string }) => <div>{tile.id}</div>;
 describe('TileLayout', () => {
   it('renders empty with no tiles', () => {
     const { container } = render(
-      <TileLayout renderTile={defaultRender} data-testid="root" />,
+      <TileLayout renderTile={defaultRender} data-testid="tile-layout-root" />,
     );
-    expect(screen.getByTestId('root')).toBeInTheDocument();
+    expect(screen.getByTestId('tile-layout-root')).toBeInTheDocument();
     expect(container.querySelectorAll('[data-tile-id]')).toHaveLength(0);
   });
 
@@ -39,7 +39,7 @@ describe('TileLayout', () => {
   it('applies grid layout styles', () => {
     render(
       <TileLayout
-        data-testid="root"
+        data-testid="tile-layout-root"
         columns={4}
         rowHeight={150}
         gap={12}
@@ -47,7 +47,7 @@ describe('TileLayout', () => {
         renderTile={defaultRender}
       />,
     );
-    const root = screen.getByTestId('root');
+    const root = screen.getByTestId('tile-layout-root');
     // display: grid CSS class'indan gelir (rootStyle), inline style degil
     expect(root).toHaveStyle({ gap: '12px' });
   });
@@ -55,19 +55,19 @@ describe('TileLayout', () => {
   it('sets data-columns attribute', () => {
     render(
       <TileLayout
-        data-testid="root"
+        data-testid="tile-layout-root"
         columns={5}
         tiles={[]}
         renderTile={defaultRender}
       />,
     );
-    expect(screen.getByTestId('root')).toHaveAttribute('data-columns', '5');
+    expect(screen.getByTestId('tile-layout-root')).toHaveAttribute('data-columns', '5');
   });
 
   it('sets data-total-rows attribute', () => {
     render(
       <TileLayout
-        data-testid="root"
+        data-testid="tile-layout-root"
         tiles={[
           { id: 'a', row: 0, col: 0 },
           { id: 'b', row: 1, col: 0, rowSpan: 2 },
@@ -75,7 +75,7 @@ describe('TileLayout', () => {
         renderTile={defaultRender}
       />,
     );
-    expect(screen.getByTestId('root')).toHaveAttribute('data-total-rows', '3');
+    expect(screen.getByTestId('tile-layout-root')).toHaveAttribute('data-total-rows', '3');
   });
 
   it('sets data-tile-id on each tile', () => {
@@ -109,32 +109,32 @@ describe('TileLayout', () => {
     render(
       <TileLayout
         ref={(el) => { refValue = el; }}
-        data-testid="root"
+        data-testid="tile-layout-root"
         renderTile={defaultRender}
       />,
     );
-    expect(refValue).toBe(screen.getByTestId('root'));
+    expect(refValue).toBe(screen.getByTestId('tile-layout-root'));
   });
 
   it('passes through HTML attributes', () => {
     render(
       <TileLayout
-        data-testid="root"
+        data-testid="tile-layout-root"
         id="my-grid"
         aria-label="Tiles"
         renderTile={defaultRender}
       />,
     );
-    const el = screen.getByTestId('root');
+    const el = screen.getByTestId('tile-layout-root');
     expect(el).toHaveAttribute('id', 'my-grid');
     expect(el).toHaveAttribute('aria-label', 'Tiles');
   });
 
   it('has data-tile-layout attribute', () => {
     render(
-      <TileLayout data-testid="root" renderTile={defaultRender} />,
+      <TileLayout data-testid="tile-layout-root" renderTile={defaultRender} />,
     );
-    expect(screen.getByTestId('root')).toHaveAttribute('data-tile-layout');
+    expect(screen.getByTestId('tile-layout-root')).toHaveAttribute('data-tile-layout');
   });
 
   // ── Custom renderTile ───────────────────────────────────
@@ -159,35 +159,35 @@ describe('TileLayout', () => {
     it('applies classNames.root', () => {
       render(
         <TileLayout
-          data-testid="root"
+          data-testid="tile-layout-root"
           classNames={{ root: 'slot-root' }}
           renderTile={defaultRender}
         />,
       );
-      expect(screen.getByTestId('root')).toHaveClass('slot-root');
+      expect(screen.getByTestId('tile-layout-root')).toHaveClass('slot-root');
     });
 
     it('applies styles.root', () => {
       render(
         <TileLayout
-          data-testid="root"
+          data-testid="tile-layout-root"
           styles={{ root: { opacity: '0.9' } }}
           renderTile={defaultRender}
         />,
       );
-      expect(screen.getByTestId('root')).toHaveStyle({ opacity: '0.9' });
+      expect(screen.getByTestId('tile-layout-root')).toHaveStyle({ opacity: '0.9' });
     });
 
     it('merges className + classNames.root', () => {
       render(
         <TileLayout
-          data-testid="root"
+          data-testid="tile-layout-root"
           className="outer"
           classNames={{ root: 'inner' }}
           renderTile={defaultRender}
         />,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('tile-layout-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
@@ -195,13 +195,13 @@ describe('TileLayout', () => {
     it('merges style + styles.root', () => {
       render(
         <TileLayout
-          data-testid="root"
+          data-testid="tile-layout-root"
           style={{ margin: 4 }}
           styles={{ root: { padding: 8 } }}
           renderTile={defaultRender}
         />,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('tile-layout-root');
       expect(el).toHaveStyle({ margin: '4px', padding: '8px' });
     });
 
@@ -221,12 +221,12 @@ describe('TileLayout', () => {
       const { container } = render(
         <TileLayout
           tiles={[{ id: 'a', row: 0, col: 0 }]}
-          styles={{ tile: { background: 'red' } }}
+          styles={{ tile: { padding: '20px' } }}
           renderTile={defaultRender}
         />,
       );
       const tile = container.querySelector('[data-tile-id="a"]') as HTMLElement;
-      expect(tile).toHaveStyle({ background: 'red' });
+      expect(tile).toHaveStyle({ padding: '20px' });
     });
   });
 
@@ -266,11 +266,11 @@ describe('TileLayout', () => {
 
     it('compound root has data-tile-layout attribute', () => {
       render(
-        <TileLayout data-testid="root" columns={2}>
+        <TileLayout data-testid="tile-layout-root" columns={2}>
           <TileLayout.Tile row={0} col={0}>Content</TileLayout.Tile>
         </TileLayout>,
       );
-      expect(screen.getByTestId('root')).toHaveAttribute('data-tile-layout');
+      expect(screen.getByTestId('tile-layout-root')).toHaveAttribute('data-tile-layout');
     });
 
     it('TileLayout.Tile applies grid placement', () => {

@@ -193,7 +193,8 @@ describe('Progress', () => {
   it('color prop ile fill rengi ayarlanir', () => {
     render(<Progress value={50} color="#e11d48" />);
     const fill = screen.getByTestId('progress-fill');
-    expect(fill).toHaveStyle({ backgroundColor: '#e11d48' });
+    const bg = fill.style.backgroundColor;
+    expect(bg === '#e11d48' || bg === 'rgb(225, 29, 72)').toBe(true);
   });
 
   it('color prop chunk turunde calisir', () => {
@@ -202,7 +203,8 @@ describe('Progress', () => {
     const filledChunk = chunkEls.find(
       (el) => el.getAttribute('data-filled') === 'true'
     );
-    expect(filledChunk).toHaveStyle({ backgroundColor: '#e11d48' });
+    const bg = filledChunk?.style.backgroundColor ?? '';
+    expect(bg === '#e11d48' || bg === 'rgb(225, 29, 72)').toBe(true);
   });
 
   // ── ID & className ────────────────────────────────
@@ -262,6 +264,27 @@ describe('Progress', () => {
     const el = screen.getByTestId('progress');
     expect(el.className).toContain('root-cls');
     expect(el).toHaveStyle({ padding: '8px' });
+  });
+
+  it('styles.track track elemana padding eklenir', () => {
+    render(<Progress value={50} styles={{ track: { padding: '20px' } }} />);
+    expect(screen.getByTestId('progress-track')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.fill fill elemana opacity eklenir', () => {
+    render(<Progress value={50} styles={{ fill: { opacity: '0.5' } }} />);
+    expect(screen.getByTestId('progress-fill')).toHaveStyle({ opacity: '0.5' });
+  });
+
+  it('styles.circle circle elemana opacity eklenir', () => {
+    render(<Progress type="circular" value={50} styles={{ circle: { opacity: '0.8' } }} />);
+    expect(screen.getByTestId('progress-circular')).toHaveStyle({ opacity: '0.8' });
+  });
+
+  it('styles.chunk chunk elemana padding eklenir', () => {
+    render(<Progress type="chunk" value={100} chunks={3} styles={{ chunk: { padding: '4px' } }} />);
+    const chunks = screen.getAllByTestId('progress-chunk');
+    expect(chunks[0]).toHaveStyle({ padding: '4px' });
   });
 
   // ── Striped ───────────────────────────────────────

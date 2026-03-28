@@ -19,6 +19,7 @@ import { style } from '@vanilla-extract/css';
 export const stickyRootStyle = style({
   position: 'sticky',
   zIndex: 100,
+  color: 'var(--rel-color-text, #374151)',
 });
 
 /** Sentinel stil — gorunmez takip elemani. */

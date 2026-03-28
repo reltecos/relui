@@ -279,6 +279,21 @@ describe('SegmentedControl', () => {
       expect(tab).toHaveStyle({ fontWeight: 'bold' });
     });
   });
+
+  // ── Slot API: styles ──
+
+  it('styles.root root elemana letterSpacing eklenir', () => {
+    renderControl({ styles: { root: { letterSpacing: '2px' } } });
+    expect(getTablist()).toHaveStyle({ letterSpacing: '2px' });
+  });
+
+  it('styles.item item elemana fontSize eklenir', () => {
+    renderControl({ styles: { item: { fontSize: '18px' } } });
+    const tabs = getTabs();
+    tabs.forEach((tab) => {
+      expect(tab).toHaveStyle({ fontSize: '18px' });
+    });
+  });
 });
 
 // ── Compound API ──
@@ -292,7 +307,7 @@ describe('SegmentedControl (Compound)', () => {
         <SegmentedControl.Option value="kanban">Kanban</SegmentedControl.Option>
       </SegmentedControl>,
     );
-    expect(screen.getAllByTestId('segmented-control-option')).toHaveLength(3);
+    expect(screen.getAllByTestId('segmented-control-item')).toHaveLength(3);
   });
 
   it('compound: tiklaninca secer', () => {
@@ -316,7 +331,7 @@ describe('SegmentedControl (Compound)', () => {
         <SegmentedControl.Option value="kanban">Kanban</SegmentedControl.Option>
       </SegmentedControl>,
     );
-    const options = screen.getAllByTestId('segmented-control-option');
+    const options = screen.getAllByTestId('segmented-control-item');
     expect(options[1]).toHaveAttribute('aria-selected', 'true');
     expect(options[0]).toHaveAttribute('aria-selected', 'false');
   });
@@ -327,7 +342,7 @@ describe('SegmentedControl (Compound)', () => {
         <SegmentedControl.Option value="list">Liste</SegmentedControl.Option>
       </SegmentedControl>,
     );
-    expect(screen.getByTestId('segmented-control-option').className).toContain('cmp-item');
+    expect(screen.getByTestId('segmented-control-item').className).toContain('cmp-item');
   });
 
   it('compound: styles context ile sub-component lara aktarilir', () => {
@@ -336,7 +351,7 @@ describe('SegmentedControl (Compound)', () => {
         <SegmentedControl.Option value="list">Liste</SegmentedControl.Option>
       </SegmentedControl>,
     );
-    expect(screen.getByTestId('segmented-control-option')).toHaveStyle({ fontWeight: 'bold' });
+    expect(screen.getByTestId('segmented-control-item')).toHaveStyle({ fontWeight: 'bold' });
   });
 
   it('SegmentedControl.Option context disinda hata firlatir', () => {

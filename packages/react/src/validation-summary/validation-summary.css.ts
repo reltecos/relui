@@ -13,6 +13,7 @@ import { recipe } from '@vanilla-extract/recipes';
 
 export const validationSummaryRootStyle = style({
   fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
+  color: 'var(--rel-color-text, #374151)',
   borderRadius: 8,
   border: '1px solid var(--rel-color-danger, #ef4444)',
   backgroundColor: 'var(--rel-color-error-subtle, #fef2f2)',
@@ -55,7 +56,7 @@ export const validationSummaryItemRecipe = recipe({
     cursor: 'pointer',
     transition: 'background-color 150ms ease',
     ':hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+      backgroundColor: 'var(--rel-color-bg-hover, rgba(0, 0, 0, 0.04))',
     },
   },
   variants: {

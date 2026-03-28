@@ -246,6 +246,14 @@ describe('MaskedInput', () => {
     expect(el).toHaveStyle({ margin: '4px' });
     expect(el).toHaveStyle({ padding: '10px' });
   });
+
+  // ── Slot API: styles ──────────────────────────────────────────────
+
+  it('styles.root fontSize uygulanir', () => {
+    renderMI({ styles: { root: { fontSize: '16px' } } });
+
+    expect(getInput()).toHaveStyle({ fontSize: '16px' });
+  });
 });
 
 // ── Compound API ──
@@ -280,5 +288,19 @@ describe('MaskedInput (Compound)', () => {
 
   it('MaskedInput.Field context disinda hata firlatir', () => {
     expect(() => render(<MaskedInput.Field />)).toThrow();
+  });
+});
+
+// ── Slot API: styles ──
+
+describe('MaskedInput (Slot Styles)', () => {
+  it('styles.root root elemana eklenir', () => {
+    render(<MaskedInput mask="###" styles={{ root: { padding: '20px' } }} aria-label="Test" />);
+    expect(screen.getByTestId('masked-input-field')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.root fontSize eklenir', () => {
+    render(<MaskedInput mask="###" styles={{ root: { fontSize: '18px' } }} aria-label="Test" />);
+    expect(screen.getByTestId('masked-input-field')).toHaveStyle({ fontSize: '18px' });
   });
 });

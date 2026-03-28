@@ -13,6 +13,7 @@ import { style } from '@vanilla-extract/css';
 export const rootStyle = style({
   display: 'grid',
   fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
+  color: 'var(--rel-color-text, #374151)',
 });
 
 // ── Tile ────────────────────────────────────────────

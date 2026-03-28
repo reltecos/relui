@@ -170,9 +170,9 @@ export const CustomSlotStyles: Story = {
         value={[20, 80]}
         classNames={{ track: 'my-track' }}
         styles={{
-          track: { backgroundColor: '#e0e0e0', borderRadius: '8px' },
-          fill: { backgroundColor: 'tomato' },
-          startThumb: { border: '2px solid tomato' },
+          track: { backgroundColor: 'var(--rel-color-border, #e0e0e0)', borderRadius: '8px' },
+          fill: { backgroundColor: 'var(--rel-color-error, #ef4444)' },
+          startThumb: { border: '2px solid var(--rel-color-error, #ef4444)' },
           endThumb: { border: '2px solid orange' },
         }}
       />
@@ -183,8 +183,8 @@ export const CustomSlotStyles: Story = {
         classNames={{ root: 'slot-root' }}
         styles={{
           root: { padding: '8px' },
-          startThumb: { boxShadow: '0 0 8px rgba(0,0,0,0.3)' },
-          endThumb: { boxShadow: '0 0 8px rgba(0,0,0,0.3)' },
+          startThumb: { boxShadow: '0 0 8px var(--rel-color-shadow, rgba(0,0,0,0.3))' },
+          endThumb: { boxShadow: '0 0 8px var(--rel-color-shadow, rgba(0,0,0,0.3))' },
         }}
       />
     </div>

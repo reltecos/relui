@@ -407,7 +407,7 @@ const ComboboxBase = forwardRef<HTMLDivElement, ComboboxComponentProps>(
     const optionSlot = getSlotProps('option', selectOptionStyle, classNames, styles);
 
     return (
-      <div ref={ref} className={rootClassName} style={rootSlot.style} id={id}>
+      <div ref={ref} className={rootClassName} style={rootSlot.style} id={id} data-testid="combobox-root">
         {/* Input trigger */}
         <div className={inputWrapperSlot.className || undefined} style={inputWrapperSlot.style}>
           <input
@@ -418,6 +418,7 @@ const ComboboxBase = forwardRef<HTMLDivElement, ComboboxComponentProps>(
             readOnly={comboboxProps.readOnly}
             {...inputProps}
             style={inputSlot.style}
+            data-testid="combobox-input"
           />
           {selectedValue !== undefined && (
             <button
@@ -460,7 +461,7 @@ const ComboboxBase = forwardRef<HTMLDivElement, ComboboxComponentProps>(
             onMouseDown={preventBlur}
           >
             {filteredOptions.length === 0 ? (
-              <li className={noResultSlot.className} style={noResultSlot.style}>
+              <li className={noResultSlot.className} style={noResultSlot.style} data-testid="combobox-empty">
                 Sonuc bulunamadi
               </li>
             ) : (

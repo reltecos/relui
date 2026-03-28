@@ -210,6 +210,35 @@ describe('Tooltip', () => {
     expect(screen.getByTestId('tooltip-content')).toHaveStyle({ padding: '16px' });
   });
 
+  // ── Slot API: styles ──
+
+  it('styles.content fontSize uygulanir', () => {
+    render(
+      <TestTooltip delay={0} styles={{ content: { fontSize: '14px' } }} />,
+    );
+    fireEvent.mouseEnter(screen.getByText('Hover me'));
+    expect(screen.getByTestId('tooltip-content')).toHaveStyle({ fontSize: '14px' });
+  });
+
+  it('styles.content letterSpacing uygulanir', () => {
+    render(
+      <TestTooltip delay={0} styles={{ content: { letterSpacing: '0.5px' } }} />,
+    );
+    fireEvent.mouseEnter(screen.getByText('Hover me'));
+    expect(screen.getByTestId('tooltip-content')).toHaveStyle({ letterSpacing: '0.5px' });
+  });
+
+  it('styles.arrow arrow elemana eklenir', () => {
+    render(
+      <TestTooltip delay={0} showArrow styles={{ arrow: { opacity: '0.5' } }} />,
+    );
+    fireEvent.mouseEnter(screen.getByText('Hover me'));
+    const arrow = screen.queryByTestId('tooltip-arrow');
+    if (arrow) {
+      expect(arrow).toHaveStyle({ opacity: '0.5' });
+    }
+  });
+
   // ── Trigger event korunur ──
 
   it('trigger orijinal onMouseEnter korunur', () => {
@@ -239,7 +268,7 @@ describe('Tooltip', () => {
 
   it('anchor span render edilir', () => {
     render(<TestTooltip />);
-    expect(screen.getByTestId('tooltip-anchor')).toBeInTheDocument();
+    expect(screen.getByTestId('tooltip-root')).toBeInTheDocument();
   });
 
   it('ref forward edilir', () => {

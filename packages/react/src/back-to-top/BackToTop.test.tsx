@@ -246,6 +246,26 @@ describe('BackToTop slot API', () => {
     setScrollTop(400);
     expect(screen.getByTestId('back-to-top').style.fontSize).toBe('20px');
   });
+
+  // ── Slot API: styles ──
+
+  it('styles.root root elemana padding eklenir', () => {
+    const { div, setScrollTop } = createScrollTarget(0);
+    render(<BackToTop styles={{ root: { padding: '24px' } }} scrollTarget={div} />);
+    setScrollTop(400);
+    expect(screen.getByTestId('back-to-top')).toHaveStyle({ padding: '24px' });
+  });
+
+  it('styles.icon icon elemana letterSpacing eklenir (compound)', () => {
+    const { div, setScrollTop } = createScrollTarget(0);
+    render(
+      <BackToTop scrollTarget={div} styles={{ icon: { letterSpacing: '2px' } }}>
+        <BackToTop.Icon><span>UP</span></BackToTop.Icon>
+      </BackToTop>,
+    );
+    setScrollTop(400);
+    expect(screen.getByTestId('back-to-top-icon')).toHaveStyle({ letterSpacing: '2px' });
+  });
 });
 
 // ── Compound API ────────────────────────────────────────────

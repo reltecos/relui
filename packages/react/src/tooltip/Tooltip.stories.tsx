@@ -25,8 +25,8 @@ type Story = StoryObj<typeof Tooltip>;
 const buttonStyle: React.CSSProperties = {
   padding: '8px 16px',
   borderRadius: 6,
-  border: '1px solid #d1d5db',
-  background: '#fff',
+  border: '1px solid var(--rel-color-border, #d1d5db)',
+  background: 'var(--rel-color-bg, #fff)',
   cursor: 'pointer',
   fontFamily: 'system-ui, sans-serif',
   fontSize: 14,
@@ -96,23 +96,23 @@ export const CustomSlotStyles: Story = {
         label="Ozel stil tooltip"
         styles={{
           content: {
-            backgroundColor: '#6366f1',
-            color: '#fff',
+            backgroundColor: 'var(--rel-color-info, #6366f1)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             borderRadius: 12,
             padding: '8px 14px',
             fontSize: 13,
             fontWeight: 500,
           },
           arrow: {
-            backgroundColor: '#6366f1',
+            backgroundColor: 'var(--rel-color-info, #6366f1)',
           },
         }}
       >
         <button
           style={{
             ...buttonStyle,
-            border: '1px solid #6366f1',
-            color: '#6366f1',
+            border: '1px solid var(--rel-color-info, #6366f1)',
+            color: 'var(--rel-color-info, #6366f1)',
           }}
         >
           Styled Tooltip
@@ -132,8 +132,8 @@ export const Compound: Story = {
           <button
             style={{
               ...buttonStyle,
-              border: '1px solid #8b5cf6',
-              color: '#8b5cf6',
+              border: '1px solid var(--rel-color-accent, #8b5cf6)',
+              color: 'var(--rel-color-accent, #8b5cf6)',
             }}
           >
             Compound Tooltip
@@ -162,7 +162,7 @@ export const Playground: Story = {
             <select
               value={placement}
               onChange={(e) => setPlacement(e.target.value as 'top' | 'bottom' | 'left' | 'right')}
-              style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #d1d5db' }}
+              style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid var(--rel-color-border, #d1d5db)' }}
             >
               <option value="top">top</option>
               <option value="bottom">bottom</option>

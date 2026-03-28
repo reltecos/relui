@@ -21,6 +21,7 @@ import { cssVar } from '@relteco/relui-tokens';
 export const linkRecipe = recipe({
   base: {
     fontFamily: 'var(--rel-font-sans)',
+    color: 'var(--rel-color-text, #374151)',
     cursor: 'pointer',
     transition: 'color 120ms ease, text-decoration-color 120ms ease',
     outline: 'none',

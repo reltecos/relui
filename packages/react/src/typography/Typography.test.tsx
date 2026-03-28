@@ -98,6 +98,11 @@ describe('Typography', () => {
     expect(screen.getByTestId('typography-root')).toHaveStyle({ padding: '20px' });
   });
 
+  it('styles.root letterSpacing uygulanir', () => {
+    render(<Typography styles={{ root: { letterSpacing: '2px' } }}>Text</Typography>);
+    expect(screen.getByTestId('typography-root')).toHaveStyle({ letterSpacing: '2px' });
+  });
+
   // ── Ref ──
 
   it('ref forward edilir', () => {

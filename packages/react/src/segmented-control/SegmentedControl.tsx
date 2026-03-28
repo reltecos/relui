@@ -80,7 +80,7 @@ const SegmentedControlOption = forwardRef<HTMLButtonElement, SegmentedControlOpt
         type="button"
         className={cls}
         style={slot.style}
-        data-testid="segmented-control-option"
+        data-testid="segmented-control-item"
         {...itemProps}
       >
         {children}
@@ -153,6 +153,7 @@ const SegmentedControlBase = forwardRef<HTMLDivElement, SegmentedControlComponen
             style={rootSlot.style}
             aria-label={ariaLabel}
             id={id}
+            data-testid="segmented-control-root"
             {...rootProps}
           >
             {children}
@@ -171,6 +172,7 @@ const SegmentedControlBase = forwardRef<HTMLDivElement, SegmentedControlComponen
         style={rootSlot.style}
         aria-label={ariaLabel}
         id={id}
+        data-testid="segmented-control-root"
         {...rootProps}
       >
         {options.map((opt, index) => {
@@ -181,6 +183,7 @@ const SegmentedControlBase = forwardRef<HTMLDivElement, SegmentedControlComponen
               type="button"
               className={itemSlot.className}
               style={itemSlot.style}
+              data-testid="segmented-control-item"
               {...itemProps}
             >
               {opt.label}

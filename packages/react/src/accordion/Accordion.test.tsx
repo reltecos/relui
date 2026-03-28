@@ -279,6 +279,20 @@ describe('Accordion', () => {
     expect(screen.getByTestId('accordion-content-a')).toHaveStyle({ letterSpacing: '0.05em' });
   });
 
+  it('styles.root root elemana eklenir', () => {
+    render(
+      <TestAccordion styles={{ root: { padding: '20px' } }} />,
+    );
+    expect(screen.getByTestId('accordion-root')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.icon icon elemana eklenir', () => {
+    render(
+      <TestAccordion styles={{ icon: { opacity: '0.5' } }} />,
+    );
+    expect(screen.getByTestId('accordion-icon-a')).toHaveStyle({ opacity: '0.5' });
+  });
+
   // ── ReactNode title ──
 
   it('title ReactNode olabilir', () => {

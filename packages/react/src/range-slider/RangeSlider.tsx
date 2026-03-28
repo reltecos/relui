@@ -256,6 +256,7 @@ const RangeSliderBase = forwardRef<HTMLDivElement, RangeSliderComponentProps>(
             data-disabled={isDisabled ? '' : undefined}
             data-readonly={isReadOnly ? '' : undefined}
             data-orientation={orientation}
+            data-testid="range-slider-root"
           >
             {children}
           </div>
@@ -332,13 +333,14 @@ const RangeSliderBase = forwardRef<HTMLDivElement, RangeSliderComponentProps>(
         data-disabled={isDisabled ? '' : undefined}
         data-readonly={isReadOnly ? '' : undefined}
         data-orientation={orientation}
+        data-testid="range-slider-root"
       >
         {hiddenInputs}
 
         {/* Track */}
-        <div {...trackProps} className={trackSlot.className} style={trackSlot.style} data-orientation={orientation}>
+        <div {...trackProps} className={trackSlot.className} style={trackSlot.style} data-orientation={orientation} data-testid="range-slider-track">
           {/* Fill */}
-          <div className={fillSlot.className} style={fillSlot.style} />
+          <div className={fillSlot.className} style={fillSlot.style} data-testid="range-slider-fill" />
         </div>
 
         {/* Start Thumb */}
@@ -350,6 +352,7 @@ const RangeSliderBase = forwardRef<HTMLDivElement, RangeSliderComponentProps>(
           aria-labelledby={ariaLabelledBy}
           aria-describedby={ariaDescribedBy}
           aria-valuetext={ariaValueText}
+          data-testid="range-slider-start-thumb"
         />
 
         {/* End Thumb */}
@@ -361,6 +364,7 @@ const RangeSliderBase = forwardRef<HTMLDivElement, RangeSliderComponentProps>(
           aria-labelledby={ariaLabelledBy}
           aria-describedby={ariaDescribedBy}
           aria-valuetext={ariaValueTextEnd}
+          data-testid="range-slider-end-thumb"
         />
       </div>
     );

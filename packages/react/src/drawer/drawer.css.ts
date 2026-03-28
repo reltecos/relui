@@ -40,7 +40,7 @@ export const drawerPanelRecipe = recipe({
     position: 'fixed',
     zIndex: 9999,
     backgroundColor: 'var(--rel-color-bg, #fff)',
-    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
+    boxShadow: 'var(--rel-shadow-xl, 0 20px 60px rgba(0, 0, 0, 0.15))',
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
     display: 'flex',
     flexDirection: 'column',

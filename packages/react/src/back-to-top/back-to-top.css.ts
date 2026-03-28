@@ -53,11 +53,11 @@ export const bttRootRecipe = recipe({
       filled: {
         backgroundColor: cssVar.accentDefault,
         color: 'var(--rel-color-text-inverse, #fff)',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+        boxShadow: 'var(--rel-shadow-md, 0 4px 12px rgba(0,0,0,0.15))',
         selectors: {
           '&:hover': {
             backgroundColor: cssVar.accentHover,
-            boxShadow: '0 6px 16px rgba(0,0,0,0.2)',
+            boxShadow: 'var(--rel-shadow-lg, 0 6px 16px rgba(0,0,0,0.2))',
           },
         },
       },
@@ -65,7 +65,7 @@ export const bttRootRecipe = recipe({
         backgroundColor: cssVar.bgDefault,
         color: cssVar.fgDefault,
         border: `1px solid ${cssVar.borderDefault}`,
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        boxShadow: 'var(--rel-shadow-sm, 0 2px 8px rgba(0,0,0,0.1))',
         selectors: {
           '&:hover': {
             backgroundColor: cssVar.bgComponentHover,

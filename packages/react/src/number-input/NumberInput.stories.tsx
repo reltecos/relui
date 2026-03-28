@@ -195,20 +195,20 @@ export const CustomSlotStyles: Story = {
         aria-label="Custom root"
         value={42}
         classNames={{ root: 'my-number-input' }}
-        styles={{ root: { borderColor: 'orange' } }}
+        styles={{ root: { borderColor: 'var(--rel-color-warning, #f59e0b)' } }}
       />
       <NumberInput
         aria-label="Custom input"
         value={42}
         classNames={{ input: 'my-input' }}
-        styles={{ input: { color: 'blue', fontWeight: 'bold' } }}
+        styles={{ input: { color: 'var(--rel-color-primary, #3b82f6)', fontWeight: 'bold' } }}
       />
       <NumberInput
         aria-label="Custom stepper"
         value={42}
         styles={{
-          incrementButton: { color: 'green' },
-          decrementButton: { color: 'red' },
+          incrementButton: { color: 'var(--rel-color-success, #22c55e)' },
+          decrementButton: { color: 'var(--rel-color-error, #ef4444)' },
         }}
       />
       <NumberInput

@@ -87,7 +87,7 @@ const InputLeftAddon = forwardRef<HTMLSpanElement, InputLeftAddonProps>(
         className={cls}
         style={slot.style}
         aria-hidden="true"
-        data-testid="input-leftaddon"
+        data-testid="input-left-element"
       >
         {children}
       </span>
@@ -130,7 +130,7 @@ const InputRightAddon = forwardRef<HTMLSpanElement, InputRightAddonProps>(
         className={cls}
         style={slot.style}
         aria-hidden="true"
-        data-testid="input-rightaddon"
+        data-testid="input-right-element"
       >
         {children}
       </span>
@@ -303,6 +303,7 @@ const InputBase = forwardRef<HTMLInputElement, InputComponentProps>(function Inp
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
+        data-testid="input-root"
       />
     );
 
@@ -362,6 +363,7 @@ const InputBase = forwardRef<HTMLInputElement, InputComponentProps>(function Inp
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
+      data-testid="input-root"
     />
   );
 
@@ -382,12 +384,13 @@ const InputBase = forwardRef<HTMLInputElement, InputComponentProps>(function Inp
   });
 
   return (
-    <div className={wrapperSlot.className} style={wrapperSlot.style}>
+    <div className={wrapperSlot.className} style={wrapperSlot.style} data-testid="input-wrapper">
       {leftElement ? (
         <span
           className={leftSlot.className}
           style={leftSlot.style}
           aria-hidden="true"
+          data-testid="input-left-element"
         >
           {leftElement}
         </span>
@@ -400,6 +403,7 @@ const InputBase = forwardRef<HTMLInputElement, InputComponentProps>(function Inp
           className={rightSlot.className}
           style={rightSlot.style}
           aria-hidden="true"
+          data-testid="input-right-element"
         >
           {rightElement}
         </span>

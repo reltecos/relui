@@ -28,8 +28,8 @@ function DefaultDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#3b82f6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -49,8 +49,8 @@ function DefaultDemo() {
               padding: '8px 16px',
               border: 'none',
               borderRadius: 6,
-              backgroundColor: '#3b82f6',
-              color: '#fff',
+              backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+              color: 'var(--rel-color-text-inverse, #fff)',
               cursor: 'pointer',
             }}
           >
@@ -64,7 +64,7 @@ function DefaultDemo() {
             <input
               style={{
                 padding: '8px 12px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
                 outline: 'none',
               }}
@@ -75,7 +75,7 @@ function DefaultDemo() {
             <input
               style={{
                 padding: '8px 12px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
                 outline: 'none',
               }}
@@ -106,8 +106,8 @@ function AllPlacementsDemo() {
             padding: '8px 16px',
             fontSize: 13,
             fontWeight: 500,
-            backgroundColor: '#3b82f6',
-            color: '#fff',
+            backgroundColor: 'var(--rel-color-primary, #3b82f6)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             border: 'none',
             borderRadius: 6,
             cursor: 'pointer',
@@ -149,8 +149,8 @@ function CustomSlotStylesDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#059669',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-success, #059669)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -165,12 +165,12 @@ function CustomSlotStylesDemo() {
         title="Koyu Tema"
         placement="left"
         styles={{
-          overlay: { backgroundColor: 'rgba(0, 0, 0, 0.7)' },
-          panel: { backgroundColor: '#1e293b' },
-          header: { borderBottomColor: '#334155' },
-          title: { color: '#e2e8f0' },
-          body: { color: '#94a3b8' },
-          closeButton: { color: '#94a3b8' },
+          overlay: { backgroundColor: 'var(--rel-color-overlay, rgba(0, 0, 0, 0.7))' },
+          panel: { backgroundColor: 'var(--rel-color-bg-inverse, #1e293b)' },
+          header: { borderBottomColor: 'var(--rel-color-border, #334155)' },
+          title: { color: 'var(--rel-color-text-secondary, #e2e8f0)' },
+          body: { color: 'var(--rel-color-text-secondary, #94a3b8)' },
+          closeButton: { color: 'var(--rel-color-text-secondary, #94a3b8)' },
         }}
       >
         <p style={{ margin: 0 }}>Koyu tema drawer ornegi.</p>
@@ -194,8 +194,8 @@ function CompoundDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#8b5cf6',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-accent, #8b5cf6)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -221,8 +221,8 @@ function CompoundDemo() {
               padding: '8px 16px',
               border: 'none',
               borderRadius: 6,
-              backgroundColor: '#8b5cf6',
-              color: '#fff',
+              backgroundColor: 'var(--rel-color-accent, #8b5cf6)',
+              color: 'var(--rel-color-text-inverse, #fff)',
               cursor: 'pointer',
             }}
           >
@@ -249,8 +249,8 @@ function WithFormDemo() {
           padding: '10px 20px',
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#0ea5e9',
-          color: '#fff',
+          backgroundColor: 'var(--rel-color-info, #0ea5e9)',
+          color: 'var(--rel-color-text-inverse, #fff)',
           border: 'none',
           borderRadius: 8,
           cursor: 'pointer',
@@ -269,9 +269,9 @@ function WithFormDemo() {
               onClick={() => setOpen(false)}
               style={{
                 padding: '8px 16px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
-                backgroundColor: '#fff',
+                backgroundColor: 'var(--rel-color-bg, #fff)',
                 cursor: 'pointer',
               }}
             >
@@ -283,8 +283,8 @@ function WithFormDemo() {
                 padding: '8px 16px',
                 border: 'none',
                 borderRadius: 6,
-                backgroundColor: '#0ea5e9',
-                color: '#fff',
+                backgroundColor: 'var(--rel-color-info, #0ea5e9)',
+                color: 'var(--rel-color-text-inverse, #fff)',
                 cursor: 'pointer',
               }}
             >
@@ -302,7 +302,7 @@ function WithFormDemo() {
             <input
               style={{
                 padding: '8px 12px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
                 outline: 'none',
               }}
@@ -315,7 +315,7 @@ function WithFormDemo() {
               type="email"
               style={{
                 padding: '8px 12px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
                 outline: 'none',
               }}
@@ -327,10 +327,10 @@ function WithFormDemo() {
             <select
               style={{
                 padding: '8px 12px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
                 outline: 'none',
-                backgroundColor: '#fff',
+                backgroundColor: 'var(--rel-color-bg, #fff)',
               }}
             >
               <option>Kullanici</option>
@@ -344,7 +344,7 @@ function WithFormDemo() {
               rows={3}
               style={{
                 padding: '8px 12px',
-                border: '1px solid #d1d5db',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
                 borderRadius: 6,
                 outline: 'none',
                 resize: 'vertical',
@@ -377,8 +377,8 @@ function SizesDemo() {
             padding: '8px 16px',
             fontSize: 13,
             fontWeight: 500,
-            backgroundColor: '#6366f1',
-            color: '#fff',
+            backgroundColor: 'var(--rel-color-info, #6366f1)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             border: 'none',
             borderRadius: 6,
             cursor: 'pointer',

@@ -155,6 +155,20 @@ describe('Stat', () => {
     expect(screen.getByTestId('stat-helptext')).toHaveStyle({ padding: '4px' });
   });
 
+  it('styles.icon icon elemana eklenir', () => {
+    render(
+      <Stat value="100" label="Test" icon={<span>I</span>} styles={{ icon: { padding: '20px' } }} />,
+    );
+    expect(screen.getByTestId('stat-icon')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.trend trend elemana eklenir', () => {
+    render(
+      <Stat value="100" label="Test" trend="up" trendValue="+5%" styles={{ trend: { fontSize: '14px' } }} />,
+    );
+    expect(screen.getByTestId('stat-trend')).toHaveStyle({ fontSize: '14px' });
+  });
+
   it('ref forward edilir', () => {
     const ref = vi.fn();
     render(<Stat value="100" label="Test" ref={ref} />);

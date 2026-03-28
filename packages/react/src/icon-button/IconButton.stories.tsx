@@ -241,27 +241,27 @@ export const CustomSlotStyles: Story = {
       <IconButton
         icon={<SearchIcon />}
         aria-label="Root styled"
-        styles={{ root: { border: '2px dashed hotpink' } }}
+        styles={{ root: { border: '2px dashed var(--rel-color-accent, #ec4899)' } }}
       />
       <IconButton
         icon={<SearchIcon />}
         aria-label="Spinner styled"
         loading
-        styles={{ spinner: { borderColor: 'hotpink' } }}
+        styles={{ spinner: { borderColor: 'var(--rel-color-accent, #ec4899)' } }}
       />
       <IconButton
         icon={<SettingsIcon />}
         aria-label="Icon styled"
         variant="outline"
-        styles={{ icon: { color: 'hotpink' } }}
+        styles={{ icon: { color: 'var(--rel-color-accent, #ec4899)' } }}
       />
       <IconButton
         icon={<PlusIcon />}
         aria-label="Tum slotlar"
         classNames={{ root: 'custom-root' }}
         styles={{
-          root: { border: '2px dashed royalblue' },
-          icon: { color: 'limegreen' },
+          root: { border: '2px dashed var(--rel-color-primary, #3b82f6)' },
+          icon: { color: 'var(--rel-color-success, #16a34a)' },
         }}
       />
     </div>

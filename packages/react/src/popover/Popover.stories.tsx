@@ -33,8 +33,8 @@ export const Default: Story = {
             style={{
               padding: '8px 16px',
               borderRadius: 6,
-              border: '1px solid #d1d5db',
-              background: '#fff',
+              border: '1px solid var(--rel-color-border, #d1d5db)',
+              background: 'var(--rel-color-bg, #fff)',
               cursor: 'pointer',
               fontFamily: 'system-ui, sans-serif',
               fontSize: 14,
@@ -48,7 +48,7 @@ export const Default: Story = {
       >
         <div style={{ padding: 4, minWidth: 180 }}>
           <p style={{ margin: '0 0 8px', fontWeight: 600 }}>Bilgi</p>
-          <p style={{ margin: 0, color: '#6b7280' }}>
+          <p style={{ margin: 0, color: 'var(--rel-color-text-muted, #6b7280)' }}>
             Bu bir popover bilesen ornegi.
           </p>
         </div>
@@ -80,8 +80,8 @@ export const AllPlacements: Story = {
                 style={{
                   padding: '8px 16px',
                   borderRadius: 6,
-                  border: '1px solid #d1d5db',
-                  background: '#fff',
+                  border: '1px solid var(--rel-color-border, #d1d5db)',
+                  background: 'var(--rel-color-bg, #fff)',
                   cursor: 'pointer',
                   fontFamily: 'system-ui, sans-serif',
                   fontSize: 14,
@@ -119,8 +119,8 @@ export const Controlled: Story = {
               style={{
                 padding: '8px 16px',
                 borderRadius: 6,
-                border: '1px solid #d1d5db',
-                background: '#fff',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
+                background: 'var(--rel-color-bg, #fff)',
                 cursor: 'pointer',
                 fontFamily: 'system-ui, sans-serif',
                 fontSize: 14,
@@ -136,7 +136,7 @@ export const Controlled: Story = {
         >
           <div style={{ padding: 4, minWidth: 180 }}>
             <p style={{ margin: '0 0 8px', fontWeight: 600 }}>Controlled Popover</p>
-            <p style={{ margin: 0, color: '#6b7280' }}>
+            <p style={{ margin: 0, color: 'var(--rel-color-text-muted, #6b7280)' }}>
               Bu popover disaridan kontrol ediliyor.
             </p>
             <button
@@ -144,8 +144,8 @@ export const Controlled: Story = {
                 marginTop: 8,
                 padding: '4px 12px',
                 borderRadius: 4,
-                border: '1px solid #d1d5db',
-                background: '#f3f4f6',
+                border: '1px solid var(--rel-color-border, #d1d5db)',
+                background: 'var(--rel-color-bg-subtle, #f3f4f6)',
                 cursor: 'pointer',
                 fontSize: 12,
               }}
@@ -171,9 +171,9 @@ export const CustomSlotStyles: Story = {
             style={{
               padding: '8px 16px',
               borderRadius: 6,
-              border: '1px solid #6366f1',
-              background: '#6366f1',
-              color: '#fff',
+              border: '1px solid var(--rel-color-info, #6366f1)',
+              background: 'var(--rel-color-info, #6366f1)',
+              color: 'var(--rel-color-text-inverse, #fff)',
               cursor: 'pointer',
               fontFamily: 'system-ui, sans-serif',
               fontSize: 14,
@@ -187,15 +187,15 @@ export const CustomSlotStyles: Story = {
         classNames={{ content: 'dark-popover' }}
         styles={{
           content: {
-            backgroundColor: '#1f2937',
-            color: '#f9fafb',
-            borderColor: '#374151',
+            backgroundColor: 'var(--rel-color-bg-inverse, #1f2937)',
+            color: 'var(--rel-color-bg-subtle, #f9fafb)',
+            borderColor: 'var(--rel-color-bg-inverse-subtle, #374151)',
             borderRadius: 12,
             padding: 16,
           },
           arrow: {
-            backgroundColor: '#1f2937',
-            borderColor: '#374151',
+            backgroundColor: 'var(--rel-color-bg-inverse, #1f2937)',
+            borderColor: 'var(--rel-color-bg-inverse-subtle, #374151)',
           },
         }}
       >
@@ -221,9 +221,9 @@ export const Compound: Story = {
             style={{
               padding: '8px 16px',
               borderRadius: 6,
-              border: '1px solid #8b5cf6',
-              background: '#8b5cf6',
-              color: '#fff',
+              border: '1px solid var(--rel-color-info, #8b5cf6)',
+              background: 'var(--rel-color-info, #8b5cf6)',
+              color: 'var(--rel-color-text-inverse, #fff)',
               cursor: 'pointer',
               fontFamily: 'system-ui, sans-serif',
               fontSize: 14,
@@ -235,7 +235,7 @@ export const Compound: Story = {
         <Popover.Content>
           <div style={{ padding: 4, minWidth: 180 }}>
             <p style={{ margin: '0 0 8px', fontWeight: 600 }}>Compound API</p>
-            <p style={{ margin: 0, color: '#6b7280' }}>
+            <p style={{ margin: 0, color: 'var(--rel-color-text-muted, #6b7280)' }}>
               Trigger ve Content ayri sub-component olarak verilir.
             </p>
           </div>
@@ -261,7 +261,7 @@ export const Playground: Story = {
             <select
               value={placement}
               onChange={(e) => setPlacement(e.target.value as 'top' | 'bottom' | 'left' | 'right')}
-              style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #d1d5db' }}
+              style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid var(--rel-color-border, #d1d5db)' }}
             >
               <option value="top">top</option>
               <option value="bottom">bottom</option>
@@ -284,9 +284,9 @@ export const Playground: Story = {
               style={{
                 padding: '10px 20px',
                 borderRadius: 8,
-                border: '1px solid #3b82f6',
-                background: '#3b82f6',
-                color: '#fff',
+                border: '1px solid var(--rel-color-primary, #3b82f6)',
+                background: 'var(--rel-color-primary, #3b82f6)',
+                color: 'var(--rel-color-text-inverse, #fff)',
                 cursor: 'pointer',
                 fontSize: 14,
                 fontWeight: 600,
@@ -300,7 +300,7 @@ export const Playground: Story = {
         >
           <div style={{ padding: 4, minWidth: 200 }}>
             <p style={{ margin: '0 0 8px', fontWeight: 600 }}>Playground</p>
-            <p style={{ margin: 0, color: '#6b7280', fontSize: 13 }}>
+            <p style={{ margin: 0, color: 'var(--rel-color-text-muted, #6b7280)', fontSize: 13 }}>
               Placement: <strong>{placement}</strong>, Ok: <strong>{showArrow ? 'Evet' : 'Hayir'}</strong>
             </p>
           </div>

@@ -168,6 +168,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupComponentProps>(
           id={id}
           className={combinedClassName}
           style={rootSlot.style}
+          data-testid="radio-group-root"
         >
           {children}
         </div>

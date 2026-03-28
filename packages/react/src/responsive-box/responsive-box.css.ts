@@ -21,4 +21,5 @@ import { style } from '@vanilla-extract/css';
 /** Item stil — responsive box icindeki oge. */
 export const responsiveBoxItemStyle = style({
   boxSizing: 'border-box',
+  color: 'var(--rel-color-text, #374151)',
 });

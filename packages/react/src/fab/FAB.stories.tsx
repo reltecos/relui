@@ -43,7 +43,7 @@ function PageWrapper({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ minHeight: '100vh', padding: 24, fontFamily: 'system-ui' }}>
       <h2 style={{ fontSize: 20, marginBottom: 16 }}>FAB Demo</h2>
-      <p style={{ color: '#64748b', fontSize: 14 }}>
+      <p style={{ color: 'var(--rel-color-text-muted, #64748b)', fontSize: 14 }}>
         Click the floating action button to see the speed dial menu.
       </p>
       {children}
@@ -134,8 +134,8 @@ export const CustomSlotStyles: Story = {
         actions={demoActions}
         styles={{
           button: {
-            backgroundColor: '#1a1a2e',
-            boxShadow: '0 4px 16px rgba(26,26,46,0.4)',
+            backgroundColor: 'var(--rel-color-bg-inverse, #1a1a2e)',
+            boxShadow: '0 4px 16px var(--rel-color-shadow, rgba(26,26,46,0.4))',
           },
         }}
       />

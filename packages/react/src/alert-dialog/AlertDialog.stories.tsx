@@ -31,7 +31,7 @@ function DangerDemo() {
     <div>
       <button
         onClick={() => setOpen(true)}
-        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #dc2626', color: '#dc2626', cursor: 'pointer' }}
+        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-error, #dc2626)', color: 'var(--rel-color-error, #dc2626)', cursor: 'pointer' }}
       >
         Kaydi Sil
       </button>
@@ -56,7 +56,7 @@ function WarningDemo() {
     <div>
       <button
         onClick={() => setOpen(true)}
-        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #f59e0b', color: '#92400e', cursor: 'pointer' }}
+        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-warning, #f59e0b)', color: 'var(--rel-color-warning-dark, #92400e)', cursor: 'pointer' }}
       >
         Degisiklikleri Kaydetmeden Cik
       </button>
@@ -81,7 +81,7 @@ function InfoDemo() {
     <div>
       <button
         onClick={() => setOpen(true)}
-        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #3b82f6', color: '#3b82f6', cursor: 'pointer' }}
+        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-primary, #3b82f6)', color: 'var(--rel-color-primary, #3b82f6)', cursor: 'pointer' }}
       >
         Dosyayi Indir
       </button>
@@ -106,7 +106,7 @@ function AsyncDemo() {
     <div>
       <button
         onClick={() => setOpen(true)}
-        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #dc2626', color: '#dc2626', cursor: 'pointer' }}
+        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-error, #dc2626)', color: 'var(--rel-color-error, #dc2626)', cursor: 'pointer' }}
       >
         Async Silme
       </button>
@@ -160,7 +160,7 @@ function AllSeveritiesDemo() {
             style={{
               padding: '8px 16px',
               borderRadius: 6,
-              border: '1px solid #ddd',
+              border: '1px solid var(--rel-color-border, #ddd)',
               cursor: 'pointer',
               textTransform: 'capitalize',
             }}
@@ -212,7 +212,7 @@ function CompoundDemo() {
     <div>
       <button
         onClick={() => setOpen(true)}
-        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #dc2626', color: '#dc2626', cursor: 'pointer' }}
+        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-error, #dc2626)', color: 'var(--rel-color-error, #dc2626)', cursor: 'pointer' }}
       >
         Compound Dialog Ac
       </button>
@@ -246,7 +246,7 @@ function CustomSlotDemo() {
     <div>
       <button
         onClick={() => setOpen(true)}
-        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #6366f1', color: '#6366f1', cursor: 'pointer' }}
+        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-info, #6366f1)', color: 'var(--rel-color-info, #6366f1)', cursor: 'pointer' }}
       >
         Custom Slot Dialog
       </button>

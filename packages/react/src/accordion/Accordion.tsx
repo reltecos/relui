@@ -181,6 +181,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
             transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
           }}
           aria-hidden="true"
+          data-testid={`accordion-icon-${itemCtx.itemId}`}
         >
           <ChevronDownIcon size={16} />
         </span>
@@ -416,6 +417,7 @@ const AccordionBase = forwardRef<HTMLDivElement, AccordionComponentProps>(
                     transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
                   }}
                   aria-hidden="true"
+                  data-testid={`accordion-icon-${item.id}`}
                 >
                   <ChevronDownIcon size={16} />
                 </span>

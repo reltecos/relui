@@ -110,7 +110,7 @@ const CurrencyInputSymbol = forwardRef<HTMLSpanElement, CurrencyInputSymbolProps
         className={cls}
         style={slot.style}
         aria-hidden="true"
-        data-testid="currencyinput-symbol"
+        data-testid={isPrefix ? 'currency-input-adorn-prefix' : 'currency-input-adorn-suffix'}
       >
         {children ?? ctx.currencySymbol}
       </span>
@@ -145,7 +145,7 @@ const CurrencyInputField = forwardRef<HTMLInputElement, CurrencyInputFieldProps>
         style={slot.style}
         placeholder={placeholder}
         aria-label={ariaLabel}
-        data-testid="currencyinput-field"
+        data-testid="currency-input-input"
       />
     );
   },
@@ -321,7 +321,7 @@ const CurrencyInputBase = forwardRef<HTMLInputElement, CurrencyInputComponentPro
           <div
             className={rootSlot.className}
             style={rootSlot.style}
-            data-testid="currencyinput-root"
+            data-testid="currency-input-root"
           >
             {children}
             <input
@@ -383,6 +383,7 @@ const CurrencyInputBase = forwardRef<HTMLInputElement, CurrencyInputComponentPro
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
+        data-testid="currency-input-input"
       />
     );
 
@@ -409,12 +410,13 @@ const CurrencyInputBase = forwardRef<HTMLInputElement, CurrencyInputComponentPro
     });
 
     return (
-      <div className={rootSlot.className} style={rootSlot.style}>
+      <div className={rootSlot.className} style={rootSlot.style} data-testid="currency-input-root">
         {isPrefix && (
           <span
             className={prefixSlot.className}
             style={prefixSlot.style}
             aria-hidden="true"
+            data-testid="currency-input-adorn-prefix"
           >
             {localeInfo.currencySymbol}
           </span>
@@ -427,6 +429,7 @@ const CurrencyInputBase = forwardRef<HTMLInputElement, CurrencyInputComponentPro
             className={suffixSlot.className}
             style={suffixSlot.style}
             aria-hidden="true"
+            data-testid="currency-input-adorn-suffix"
           >
             {localeInfo.currencySymbol}
           </span>

@@ -24,6 +24,7 @@ import { cssVar } from '@relteco/relui-tokens';
 export const formGroupRecipe = recipe({
   base: {
     display: 'flex',
+    color: 'var(--rel-color-text, #374151)',
     border: 'none',
     padding: 0,
     margin: 0,

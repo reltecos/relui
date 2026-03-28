@@ -275,7 +275,7 @@ export const tabsTabPillsStyle = style({
       color: 'var(--rel-color-text-inverse, #fff)',
       fontWeight: '600',
       backgroundColor: tabsActiveIndicator,
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+      boxShadow: 'var(--rel-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1))',
     },
     '[data-orientation="vertical"] &': {
       justifyContent: 'flex-start',
@@ -315,7 +315,7 @@ export const tabsCloseButtonStyle = style({
   selectors: {
     '&:hover': {
       opacity: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.1)',
+      backgroundColor: 'var(--rel-color-bg-hover, rgba(0, 0, 0, 0.1))',
     },
   },
 });

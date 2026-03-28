@@ -286,6 +286,7 @@ const TextareaBase = forwardRef<HTMLTextAreaElement, TextareaComponentProps>(fun
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
+      data-testid="textarea-root"
     />
   );
 

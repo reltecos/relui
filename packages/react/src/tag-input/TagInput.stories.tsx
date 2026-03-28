@@ -111,7 +111,7 @@ export const Controlled: Story = {
           placeholder="Teknoloji arayin"
           aria-label="Teknolojiler"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Secili: {values.length > 0 ? values.join(', ') : '(bos)'}
         </div>
         <button
@@ -236,7 +236,7 @@ export const MaxTags: Story = {
           placeholder="En fazla 3 secin"
           aria-label="Teknolojiler"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Secili: {values.length}/3
         </div>
       </div>
@@ -259,7 +259,7 @@ export const AllowCustomValue: Story = {
           placeholder="Yazip ekleyebilirsiniz"
           aria-label="Teknolojiler"
         />
-        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--rel-color-text-muted, #64748b)' }}>
           Secili: {values.length > 0 ? values.join(', ') : '(bos)'}
         </div>
       </div>
@@ -278,11 +278,11 @@ export const CustomSlotStyles: Story = {
         aria-label="Slot customization"
         classNames={{ root: 'my-tag-input-root' }}
         styles={{
-          root: { border: '2px dashed orange', padding: '4px' },
-          triggerWrapper: { backgroundColor: '#fef3c7' },
+          root: { border: '2px dashed var(--rel-color-warning, #f59e0b)', padding: '4px' },
+          triggerWrapper: { backgroundColor: 'var(--rel-color-warning-light, #fef3c7)' },
           tag: { fontWeight: 'bold' },
           input: { fontStyle: 'italic' },
-          clearButton: { color: 'red' },
+          clearButton: { color: 'var(--rel-color-error, #ef4444)' },
         }}
       />
       <TagInput

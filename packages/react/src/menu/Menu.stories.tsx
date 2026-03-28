@@ -158,7 +158,7 @@ export const AllSizes: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <div key={size}>
-          <div style={{ marginBottom: '4px', fontSize: '12px', color: '#888' }}>{size}</div>
+          <div style={{ marginBottom: '4px', fontSize: '12px', color: 'var(--rel-color-text-muted, #888)' }}>{size}</div>
           <Menu {...args} size={size} />
         </div>
       ))}
@@ -352,26 +352,26 @@ export const CustomSlotStyles: Story = {
   args: {
     items: fileItems,
     style: {
-      backgroundColor: '#1e1e2e',
-      borderBottomColor: '#313244',
+      backgroundColor: 'var(--rel-color-bg-inverse, #1e1e2e)',
+      borderBottomColor: 'var(--rel-color-bg-inverse-subtle, #313244)',
     },
     classNames: {},
     styles: {
       trigger: {
-        color: '#cdd6f4',
+        color: 'var(--rel-color-text-inverse, #cdd6f4)',
       },
       dropdown: {
-        backgroundColor: '#1e1e2e',
-        borderColor: '#313244',
+        backgroundColor: 'var(--rel-color-bg-inverse, #1e1e2e)',
+        borderColor: 'var(--rel-color-bg-inverse-subtle, #313244)',
       },
       item: {
-        color: '#cdd6f4',
+        color: 'var(--rel-color-text-inverse, #cdd6f4)',
       },
       itemShortcut: {
-        color: '#6c7086',
+        color: 'var(--rel-color-text-muted, #6c7086)',
       },
       divider: {
-        backgroundColor: '#313244',
+        backgroundColor: 'var(--rel-color-bg-inverse-subtle, #313244)',
       },
     },
   },

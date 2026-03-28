@@ -147,6 +147,17 @@ describe('LoadPanel', () => {
     );
     expect(screen.getByTestId('load-panel-message')).toHaveStyle({ fontSize: '16px' });
   });
+
+  it('styles.content content elemana padding eklenir', () => {
+    render(<LoadPanel styles={{ content: { padding: '20px' } }} />);
+    const content = screen.getByTestId('load-panel').firstElementChild as HTMLElement;
+    expect(content).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.spinner spinner elemana opacity eklenir', () => {
+    render(<LoadPanel styles={{ spinner: { opacity: '0.5' } }} />);
+    expect(screen.getByTestId('load-panel-spinner')).toHaveStyle({ opacity: '0.5' });
+  });
 });
 
 // ── Compound API ──

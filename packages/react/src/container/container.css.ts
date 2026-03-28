@@ -16,6 +16,7 @@ export const rootStyle = style({
   width: '100%',
   marginLeft: 'auto',
   marginRight: 'auto',
+  color: 'var(--rel-color-text, #374151)',
 });
 
 // ── Size ────────────────────────────────────────────

@@ -282,6 +282,22 @@ describe('Switch — classNames & styles', () => {
     const labelSpan = screen.getByText('Label text');
     expect(labelSpan).toHaveClass('my-label');
   });
+
+  it('styles.knob knob elemana eklenir', () => {
+    render(
+      <Switch styles={{ knob: { opacity: '0.8' } }} aria-label="Test" />,
+    );
+
+    expect(screen.getByTestId('switch-knob')).toHaveStyle({ opacity: '0.8' });
+  });
+
+  it('styles.label label elemana eklenir', () => {
+    render(
+      <Switch styles={{ label: { letterSpacing: '2px' } }}>Label</Switch>,
+    );
+
+    expect(screen.getByTestId('switch-label')).toHaveStyle({ letterSpacing: '2px' });
+  });
 });
 
 // ── Compound API ──

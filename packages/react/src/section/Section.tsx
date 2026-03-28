@@ -118,6 +118,7 @@ const SectionBase = forwardRef<HTMLElement, SectionProps>(
         <Box
           ref={ref}
           as="section"
+          data-testid="section-root"
           classNames={classNames ? { root: classNames.root } : undefined}
           styles={styles ? { root: styles.root } : undefined}
           {...rest}

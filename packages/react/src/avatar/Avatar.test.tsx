@@ -184,6 +184,11 @@ describe('Avatar', () => {
     expect(screen.getByTestId('avatar-fallback')).toHaveStyle({ letterSpacing: '0.1em' });
   });
 
+  it('styles.image image elemana eklenir', () => {
+    render(<Avatar src="/photo.jpg" name="Ali" styles={{ image: { opacity: '0.8' } }} />);
+    expect(screen.getByTestId('avatar-image')).toHaveStyle({ opacity: '0.8' });
+  });
+
   it('ref forward edilir', () => {
     const ref = vi.fn();
     render(<Avatar name="Ali" ref={ref} />);

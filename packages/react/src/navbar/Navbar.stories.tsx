@@ -68,7 +68,7 @@ export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {(['solid', 'transparent', 'blur'] as const).map((variant) => (
-        <div key={variant} style={{ background: variant === 'transparent' ? '#f0f0f0' : undefined }}>
+        <div key={variant} style={{ background: variant === 'transparent' ? 'var(--rel-color-bg-subtle, #f0f0f0)' : undefined }}>
           <Navbar
             items={simpleItems.slice(0, 3)}
             variant={variant}
@@ -92,8 +92,8 @@ export const WithBrand: Story = {
             width: 28,
             height: 28,
             borderRadius: 6,
-            background: '#3b82f6',
-            color: '#fff',
+            background: 'var(--rel-color-primary, #3b82f6)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -121,7 +121,7 @@ export const WithActions: Story = {
           style={{
             padding: '6px 16px',
             borderRadius: 6,
-            border: '1px solid #d1d5db',
+            border: '1px solid var(--rel-color-border, #d1d5db)',
             background: 'transparent',
             cursor: 'pointer',
             fontSize: 13,
@@ -135,8 +135,8 @@ export const WithActions: Story = {
             padding: '6px 16px',
             borderRadius: 6,
             border: 'none',
-            background: '#3b82f6',
-            color: '#fff',
+            background: 'var(--rel-color-primary, #3b82f6)',
+            color: 'var(--rel-color-text-inverse, #fff)',
             cursor: 'pointer',
             fontSize: 13,
             fontWeight: 600,
@@ -160,7 +160,7 @@ export const WithIcons: Story = {
           width: 16,
           height: 16,
           borderRadius: '50%',
-          background: '#e5e7eb',
+          background: 'var(--rel-color-bg-subtle, #e5e7eb)',
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -257,7 +257,7 @@ export const Compound: Story = {
         <Navbar.Item href="/about">Hakkinda</Navbar.Item>
       </Navbar.Items>
       <Navbar.Actions>
-        <button type="button" style={{ padding: '6px 16px', borderRadius: 6, border: '1px solid #d1d5db', background: 'transparent', cursor: 'pointer', fontSize: 13 }}>
+        <button type="button" style={{ padding: '6px 16px', borderRadius: 6, border: '1px solid var(--rel-color-border, #d1d5db)', background: 'transparent', cursor: 'pointer', fontSize: 13 }}>
           Giris Yap
         </button>
       </Navbar.Actions>
@@ -269,17 +269,17 @@ export const CustomSlotStyles: Story = {
   args: {
     items: simpleItems,
     defaultActiveKey: 'home',
-    brand: <span style={{ fontWeight: 700, color: '#fff' }}>Dark Nav</span>,
+    brand: <span style={{ fontWeight: 700, color: 'var(--rel-color-text-inverse, #fff)' }}>Dark Nav</span>,
     styles: {
       root: {
-        background: '#1e1e2e',
-        borderColor: '#313244',
+        background: 'var(--rel-color-bg-inverse, #1e1e2e)',
+        borderColor: 'var(--rel-color-border, #313244)',
       },
       item: {
-        color: '#a6adc8',
+        color: 'var(--rel-color-text-muted, #a6adc8)',
       },
       mobileToggle: {
-        color: '#a6adc8',
+        color: 'var(--rel-color-text-muted, #a6adc8)',
       },
     },
   },

@@ -47,7 +47,7 @@ const MasterPanel = ({
   onSelect: (id: string) => void;
 }) => (
   <div style={{ padding: 8 }}>
-    <div style={{ padding: '8px 12px', fontWeight: 600, fontSize: 14, borderBottom: '1px solid #e2e8f0', marginBottom: 4 }}>
+    <div style={{ padding: '8px 12px', fontWeight: 600, fontSize: 14, borderBottom: '1px solid var(--rel-color-border, #e2e8f0)', marginBottom: 4 }}>
       Öğeler
     </div>
     {listItems.map((item) => (
@@ -59,13 +59,13 @@ const MasterPanel = ({
           cursor: 'pointer',
           borderRadius: 6,
           marginBottom: 2,
-          background: selectedId === item.id ? '#eff6ff' : 'transparent',
-          borderLeft: selectedId === item.id ? '3px solid #3b82f6' : '3px solid transparent',
+          background: selectedId === item.id ? 'var(--rel-color-bg-subtle, #eff6ff)' : 'transparent',
+          borderLeft: selectedId === item.id ? '3px solid var(--rel-color-primary, #3b82f6)' : '3px solid transparent',
           fontSize: 13,
         }}
       >
         <div style={{ fontWeight: 500 }}>{item.title}</div>
-        <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 2 }}>{item.desc}</div>
+        <div style={{ fontSize: 12, color: 'var(--rel-color-text-muted, #94a3b8)', marginTop: 2 }}>{item.desc}</div>
       </div>
     ))}
   </div>
@@ -78,15 +78,15 @@ const DetailPanel = ({ selectedId }: { selectedId: string | null }) => (
         <h2 style={{ margin: 0, fontSize: 20 }}>
           {listItems.find((i) => i.id === selectedId)?.title}
         </h2>
-        <p style={{ color: '#64748b', marginTop: 8 }}>
+        <p style={{ color: 'var(--rel-color-text-muted, #64748b)', marginTop: 8 }}>
           {listItems.find((i) => i.id === selectedId)?.desc}
         </p>
-        <div style={{ marginTop: 24, padding: 16, background: '#f8fafc', borderRadius: 8 }}>
+        <div style={{ marginTop: 24, padding: 16, background: 'var(--rel-color-bg-subtle, #f8fafc)', borderRadius: 8 }}>
           Detay içeriği burada gösterilir...
         </div>
       </>
     ) : (
-      <div style={{ color: '#94a3b8', textAlign: 'center', marginTop: 64 }}>
+      <div style={{ color: 'var(--rel-color-text-muted, #94a3b8)', textAlign: 'center', marginTop: 64 }}>
         Listeden bir öğe seçin
       </div>
     )}
@@ -99,9 +99,9 @@ const InteractiveTemplate = () => {
     <MasterDetailLayout
       masterSize={280}
       selectedId={selectedId}
-      style={{ height: '100vh', background: '#fff' }}
+      style={{ height: '100vh', background: 'var(--rel-color-bg, #fff)' }}
       styles={{
-        master: { borderRight: '1px solid #e2e8f0', background: '#fafafa' },
+        master: { borderRight: '1px solid var(--rel-color-border, #e2e8f0)', background: 'var(--rel-color-bg-secondary, #fafafa)' },
       }}
       master={<MasterPanel selectedId={selectedId} onSelect={setSelectedId} />}
       detail={<DetailPanel selectedId={selectedId} />}
@@ -122,9 +122,9 @@ export const RightPosition: Story = {
           masterPosition="right"
           masterSize={300}
           selectedId={selectedId}
-          style={{ height: 500, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}
+          style={{ height: 500, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}
           styles={{
-            master: { borderLeft: '1px solid #e2e8f0', background: '#fafafa' },
+            master: { borderLeft: '1px solid var(--rel-color-border, #e2e8f0)', background: 'var(--rel-color-bg-secondary, #fafafa)' },
           }}
           master={<MasterPanel selectedId={selectedId} onSelect={setSelectedId} />}
           detail={<DetailPanel selectedId={selectedId} />}
@@ -144,9 +144,9 @@ export const TopPosition: Story = {
           masterPosition="top"
           masterSize={200}
           selectedId={selectedId}
-          style={{ height: 600, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}
+          style={{ height: 600, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}
           styles={{
-            master: { borderBottom: '1px solid #e2e8f0', background: '#fafafa', overflowY: 'auto' },
+            master: { borderBottom: '1px solid var(--rel-color-border, #e2e8f0)', background: 'var(--rel-color-bg-secondary, #fafafa)', overflowY: 'auto' },
           }}
           master={
             <div style={{ display: 'flex', gap: 8, padding: 8, flexWrap: 'wrap' }}>
@@ -158,8 +158,8 @@ export const TopPosition: Story = {
                     padding: '8px 16px',
                     borderRadius: 8,
                     cursor: 'pointer',
-                    background: selectedId === item.id ? '#3b82f6' : '#f1f5f9',
-                    color: selectedId === item.id ? '#fff' : '#334155',
+                    background: selectedId === item.id ? 'var(--rel-color-primary, #3b82f6)' : 'var(--rel-color-bg-subtle, #f1f5f9)',
+                    color: selectedId === item.id ? 'var(--rel-color-text-inverse, #fff)' : 'var(--rel-color-text, #334155)',
                     fontSize: 13,
                     fontWeight: 500,
                   }}
@@ -189,15 +189,15 @@ export const Collapsible: Story = {
           collapsed={collapsed}
           onCollapseChange={setCollapsed}
           selectedId={selectedId}
-          style={{ height: 500, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}
+          style={{ height: 500, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}
           styles={{
-            master: { borderRight: '1px solid #e2e8f0', background: '#fafafa' },
+            master: { borderRight: '1px solid var(--rel-color-border, #e2e8f0)', background: 'var(--rel-color-bg-secondary, #fafafa)' },
             collapseButton: {
               width: 24,
-              background: '#f1f5f9',
+              background: 'var(--rel-color-bg-subtle, #f1f5f9)',
               border: 'none',
-              borderLeft: '1px solid #e2e8f0',
-              borderRight: '1px solid #e2e8f0',
+              borderLeft: '1px solid var(--rel-color-border, #e2e8f0)',
+              borderRight: '1px solid var(--rel-color-border, #e2e8f0)',
               cursor: 'pointer',
               flexShrink: 0,
             },
@@ -220,9 +220,9 @@ export const OnSelectVisibility: Story = {
           masterSize={280}
           detailVisibility="onSelect"
           selectedId={selectedId}
-          style={{ height: 500, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}
+          style={{ height: 500, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}
           styles={{
-            master: { borderRight: '1px solid #e2e8f0', background: '#fafafa' },
+            master: { borderRight: '1px solid var(--rel-color-border, #e2e8f0)', background: 'var(--rel-color-bg-secondary, #fafafa)' },
           }}
           master={<MasterPanel selectedId={selectedId} onSelect={setSelectedId} />}
           detail={<DetailPanel selectedId={selectedId} />}
@@ -239,9 +239,9 @@ export const CustomSlotStyles: Story = {
       masterSize={250}
       classNames={{ root: 'custom-layout' }}
       styles={{
-        root: { border: '2px dashed #6366f1', borderRadius: 12, height: 400 },
-        master: { background: '#eef2ff', padding: 16 },
-        detail: { background: '#faf5ff', padding: 16 },
+        root: { border: '2px dashed var(--rel-color-info, #6366f1)', borderRadius: 12, height: 400 },
+        master: { background: 'var(--rel-color-bg-subtle, #eef2ff)', padding: 16 },
+        detail: { background: 'var(--rel-color-bg-subtle, #faf5ff)', padding: 16 },
       }}
       master={<div>Master panel</div>}
       detail={<div>Detail panel</div>}
@@ -258,9 +258,9 @@ export const CompoundAPI: Story = {
         <MasterDetailLayout
           masterSize={280}
           selectedId={selectedId}
-          style={{ height: 400, border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}
+          style={{ height: 400, border: '1px solid var(--rel-color-border, #e2e8f0)', borderRadius: 12, overflow: 'hidden' }}
           styles={{
-            master: { borderRight: '1px solid #e2e8f0', background: '#fafafa' },
+            master: { borderRight: '1px solid var(--rel-color-border, #e2e8f0)', background: 'var(--rel-color-bg-secondary, #fafafa)' },
           }}
         >
           <MasterDetailLayout.Master>

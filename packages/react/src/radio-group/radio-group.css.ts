@@ -20,6 +20,7 @@ import { style } from '@vanilla-extract/css';
 export const radioGroupBaseStyle = style({
   display: 'inline-flex',
   flexWrap: 'nowrap',
+  color: 'var(--rel-color-text, #374151)',
 });
 
 // ── Orientation ──────────────────────────────────────────────────────

@@ -17,6 +17,7 @@ export const alertRootRecipe = recipe({
     alignItems: 'flex-start',
     gap: 12,
     fontFamily: 'var(--rel-font-sans, system-ui, sans-serif)',
+    color: 'var(--rel-color-text, #374151)',
     borderRadius: 8,
     position: 'relative',
     lineHeight: 1.5,
@@ -45,10 +46,10 @@ export const alertRootRecipe = recipe({
   },
   compoundVariants: [
     // ── filled ──
-    { variants: { variant: 'filled', severity: 'info' }, style: { backgroundColor: 'var(--rel-color-info, #3b82f6)', color: '#fff' } },
-    { variants: { variant: 'filled', severity: 'success' }, style: { backgroundColor: 'var(--rel-color-success, #22c55e)', color: '#fff' } },
-    { variants: { variant: 'filled', severity: 'warning' }, style: { backgroundColor: 'var(--rel-color-warning, #f59e0b)', color: '#fff' } },
-    { variants: { variant: 'filled', severity: 'error' }, style: { backgroundColor: 'var(--rel-color-danger, #ef4444)', color: '#fff' } },
+    { variants: { variant: 'filled', severity: 'info' }, style: { backgroundColor: 'var(--rel-color-info, #3b82f6)', color: 'var(--rel-color-text-inverse, #fff)' } },
+    { variants: { variant: 'filled', severity: 'success' }, style: { backgroundColor: 'var(--rel-color-success, #22c55e)', color: 'var(--rel-color-text-inverse, #fff)' } },
+    { variants: { variant: 'filled', severity: 'warning' }, style: { backgroundColor: 'var(--rel-color-warning, #f59e0b)', color: 'var(--rel-color-text-inverse, #fff)' } },
+    { variants: { variant: 'filled', severity: 'error' }, style: { backgroundColor: 'var(--rel-color-danger, #ef4444)', color: 'var(--rel-color-text-inverse, #fff)' } },
     // ── outline ──
     { variants: { variant: 'outline', severity: 'info' }, style: { border: '1px solid var(--rel-color-info, #3b82f6)', color: 'var(--rel-color-info, #3b82f6)' } },
     { variants: { variant: 'outline', severity: 'success' }, style: { border: '1px solid var(--rel-color-success, #22c55e)', color: 'var(--rel-color-success, #22c55e)' } },

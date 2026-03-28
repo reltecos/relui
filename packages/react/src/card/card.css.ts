@@ -26,7 +26,7 @@ export const cardRootStyle = style({
 export const cardVariantStyles = styleVariants({
   elevated: {
     backgroundColor: 'var(--rel-color-bg, #fff)',
-    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+    boxShadow: 'var(--rel-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06))',
   },
   outlined: {
     backgroundColor: 'var(--rel-color-bg, #fff)',

@@ -341,6 +341,24 @@ describe('TagInput', () => {
       expect(opt).toHaveClass('my-option');
     });
   });
+
+  // ── Slot API: styles ──
+
+  it('styles.input uygulanir', () => {
+    renderTagInput({ styles: { input: { fontSize: '18px' } } });
+    expect(getInput()).toHaveStyle({ fontSize: '18px' });
+  });
+
+  it('styles.option uygulanir', () => {
+    renderTagInput({ styles: { option: { letterSpacing: '2px' } } });
+    fireEvent.focus(getInput());
+
+    const listbox = screen.getByRole('listbox');
+    const options = within(listbox).getAllByRole('option');
+    options.forEach((opt) => {
+      expect(opt).toHaveStyle({ letterSpacing: '2px' });
+    });
+  });
 });
 
 // ── Compound API ──────────────────────────────────────

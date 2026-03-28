@@ -17,12 +17,12 @@ describe('BookLayout', () => {
   it('renders with data-book-layout', () => {
     render(
       <BookLayout
-        data-testid="root"
+        data-testid="book-layout-root"
         totalPages={3}
         renderPage={defaultRender}
       />,
     );
-    expect(screen.getByTestId('root')).toHaveAttribute('data-book-layout');
+    expect(screen.getByTestId('book-layout-root')).toHaveAttribute('data-book-layout');
   });
 
   it('renders first page by default', () => {
@@ -50,13 +50,13 @@ describe('BookLayout', () => {
   it('sets data-current-page and data-total-pages', () => {
     render(
       <BookLayout
-        data-testid="root"
+        data-testid="book-layout-root"
         totalPages={5}
         currentPage={2}
         renderPage={defaultRender}
       />,
     );
-    const root = screen.getByTestId('root');
+    const root = screen.getByTestId('book-layout-root');
     expect(root).toHaveAttribute('data-current-page', '2');
     expect(root).toHaveAttribute('data-total-pages', '5');
   });
@@ -195,25 +195,25 @@ describe('BookLayout', () => {
     render(
       <BookLayout
         ref={(el) => { refValue = el; }}
-        data-testid="root"
+        data-testid="book-layout-root"
         totalPages={3}
         renderPage={defaultRender}
       />,
     );
-    expect(refValue).toBe(screen.getByTestId('root'));
+    expect(refValue).toBe(screen.getByTestId('book-layout-root'));
   });
 
   it('passes through HTML attributes', () => {
     render(
       <BookLayout
-        data-testid="root"
+        data-testid="book-layout-root"
         id="my-book"
         aria-label="Book"
         totalPages={3}
         renderPage={defaultRender}
       />,
     );
-    const el = screen.getByTestId('root');
+    const el = screen.getByTestId('book-layout-root');
     expect(el).toHaveAttribute('id', 'my-book');
     expect(el).toHaveAttribute('aria-label', 'Book');
   });
@@ -224,38 +224,38 @@ describe('BookLayout', () => {
     it('applies classNames.root', () => {
       render(
         <BookLayout
-          data-testid="root"
+          data-testid="book-layout-root"
           classNames={{ root: 'slot-root' }}
           totalPages={3}
           renderPage={defaultRender}
         />,
       );
-      expect(screen.getByTestId('root')).toHaveClass('slot-root');
+      expect(screen.getByTestId('book-layout-root')).toHaveClass('slot-root');
     });
 
     it('applies styles.root', () => {
       render(
         <BookLayout
-          data-testid="root"
+          data-testid="book-layout-root"
           styles={{ root: { opacity: '0.9' } }}
           totalPages={3}
           renderPage={defaultRender}
         />,
       );
-      expect(screen.getByTestId('root')).toHaveStyle({ opacity: '0.9' });
+      expect(screen.getByTestId('book-layout-root')).toHaveStyle({ opacity: '0.9' });
     });
 
     it('merges className + classNames.root', () => {
       render(
         <BookLayout
-          data-testid="root"
+          data-testid="book-layout-root"
           className="outer"
           classNames={{ root: 'inner' }}
           totalPages={3}
           renderPage={defaultRender}
         />,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('book-layout-root');
       expect(el).toHaveClass('outer');
       expect(el).toHaveClass('inner');
     });
@@ -263,14 +263,14 @@ describe('BookLayout', () => {
     it('merges style + styles.root', () => {
       render(
         <BookLayout
-          data-testid="root"
+          data-testid="book-layout-root"
           style={{ margin: 4 }}
           styles={{ root: { padding: 8 } }}
           totalPages={3}
           renderPage={defaultRender}
         />,
       );
-      const el = screen.getByTestId('root');
+      const el = screen.getByTestId('book-layout-root');
       expect(el).toHaveStyle({ margin: '4px', padding: '8px' });
     });
 
@@ -308,6 +308,50 @@ describe('BookLayout', () => {
       );
       const indicator = container.querySelector('[data-book-indicator]') as HTMLElement;
       expect(indicator).toHaveStyle({ fontSize: '18px' });
+    });
+
+    it('applies styles.page', () => {
+      render(
+        <BookLayout
+          styles={{ page: { padding: '20px' } }}
+          totalPages={3}
+          renderPage={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('book-layout-page')).toHaveStyle({ padding: '20px' });
+    });
+
+    it('applies styles.controls', () => {
+      render(
+        <BookLayout
+          styles={{ controls: { fontSize: '14px' } }}
+          totalPages={3}
+          renderPage={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('book-layout-controls')).toHaveStyle({ fontSize: '14px' });
+    });
+
+    it('applies styles.prevButton', () => {
+      render(
+        <BookLayout
+          styles={{ prevButton: { opacity: '0.5' } }}
+          totalPages={3}
+          renderPage={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('book-layout-prev-button')).toHaveStyle({ opacity: '0.5' });
+    });
+
+    it('applies styles.nextButton', () => {
+      render(
+        <BookLayout
+          styles={{ nextButton: { fontWeight: '700' } }}
+          totalPages={3}
+          renderPage={defaultRender}
+        />,
+      );
+      expect(screen.getByTestId('book-layout-next-button')).toHaveStyle({ fontWeight: '700' });
     });
   });
 

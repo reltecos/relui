@@ -62,7 +62,7 @@ export const AllSizes: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <div key={size}>
-          <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+          <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
             {size}
           </span>
           <Breadcrumb items={simpleItems} size={size} />
@@ -78,13 +78,13 @@ export const Collapsed: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           maxItems=4, varsayilan (1 bas + ... + 1 son)
         </span>
         <Breadcrumb items={longItems} maxItems={4} />
       </div>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           maxItems=4, itemsBeforeCollapse=2, itemsAfterCollapse=2
         </span>
         <Breadcrumb
@@ -95,7 +95,7 @@ export const Collapsed: Story = {
         />
       </div>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           maxItems=3, itemsBeforeCollapse=1, itemsAfterCollapse=2
         </span>
         <Breadcrumb
@@ -115,25 +115,25 @@ export const CustomSeparator: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           Separator: &gt;
         </span>
         <Breadcrumb items={simpleItems} separator=">" />
       </div>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           Separator: →
         </span>
         <Breadcrumb items={simpleItems} separator="→" />
       </div>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           Separator: |
         </span>
         <Breadcrumb items={simpleItems} separator="|" />
       </div>
       <div>
-        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: '#999', marginBottom: '4px', display: 'block' }}>
+        <span style={{ fontFamily: 'sans-serif', fontSize: '12px', color: 'var(--rel-color-text-muted, #999)', marginBottom: '4px', display: 'block' }}>
           Separator: custom SVG
         </span>
         <Breadcrumb

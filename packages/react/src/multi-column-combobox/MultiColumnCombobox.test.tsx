@@ -303,6 +303,23 @@ describe('MultiColumnCombobox', () => {
       fireEvent.change(input, { target: { value: 'zzzz' } });
       expect(screen.getByText('Sonuç bulunamadı').classList.contains('custom-noresult')).toBe(true);
     });
+
+    // ── Slot API: styles ──
+
+    it('styles.row row elemana padding eklenir', () => {
+      renderDefault({ styles: { row: { padding: '12px' } } });
+      fireEvent.focus(screen.getByRole('combobox'));
+      const row = document.getElementById('mccb-row-0');
+      expect(row).toBeTruthy();
+      expect(row as HTMLElement).toHaveStyle({ padding: '12px' });
+    });
+
+    it('styles.headerCell headerCell elemana fontWeight eklenir', () => {
+      renderDefault({ styles: { headerCell: { fontWeight: 'bold' } } });
+      fireEvent.focus(screen.getByRole('combobox'));
+      const headers = screen.getAllByRole('columnheader');
+      expect(headers[0]).toHaveStyle({ fontWeight: 'bold' });
+    });
   });
 });
 

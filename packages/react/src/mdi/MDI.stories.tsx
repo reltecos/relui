@@ -23,10 +23,10 @@ type Story = StoryObj<typeof MDI>;
 const windowContent = (id: string, title: string) => (
   <div style={{ padding: 16 }}>
     <h3 style={{ margin: '0 0 8px', fontSize: 14 }}>{title}</h3>
-    <p style={{ color: '#64748b', fontSize: 13, margin: 0 }}>
+    <p style={{ color: 'var(--rel-color-text-muted, #64748b)', fontSize: 13, margin: 0 }}>
       Bu pencere {id} ID'sine sahip.
     </p>
-    <div style={{ marginTop: 12, padding: 12, background: '#f8fafc', borderRadius: 6, fontSize: 12 }}>
+    <div style={{ marginTop: 12, padding: 12, background: 'var(--rel-color-bg-subtle, #f8fafc)', borderRadius: 6, fontSize: 12 }}>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
     </div>
   </div>
@@ -103,12 +103,12 @@ export const CustomSlotStyles: Story = {
         ]}
         classNames={{ root: 'custom-mdi' }}
         styles={{
-          root: { background: '#0f172a' },
+          root: { background: 'var(--rel-color-bg-inverse, #0f172a)' },
           window: { borderRadius: 12 },
-          titleBar: { background: '#4f46e5' },
-          title: { color: '#fff' },
-          content: { padding: 16, background: '#f8fafc' },
-          taskbar: { background: '#1e293b' },
+          titleBar: { background: 'var(--rel-color-primary, #4f46e5)' },
+          title: { color: 'var(--rel-color-text-inverse, #fff)' },
+          content: { padding: 16, background: 'var(--rel-color-bg-subtle, #f8fafc)' },
+          taskbar: { background: 'var(--rel-color-bg-inverse, #1e293b)' },
           taskbarItem: { borderRadius: 6 },
         }}
         renderWindow={windowContent}
@@ -124,17 +124,17 @@ export const Compound: Story = {
         <MDI.Window id="doc1" title="Document 1">
           <div style={{ padding: 16 }}>
             <h3 style={{ margin: '0 0 8px', fontSize: 14 }}>Document 1</h3>
-            <p style={{ color: '#64748b', fontSize: 13 }}>Compound API ile olusturuldu.</p>
+            <p style={{ color: 'var(--rel-color-text-muted, #64748b)', fontSize: 13 }}>Compound API ile olusturuldu.</p>
           </div>
         </MDI.Window>
         <MDI.Window id="doc2" title="Document 2">
           <div style={{ padding: 16 }}>
             <h3 style={{ margin: '0 0 8px', fontSize: 14 }}>Document 2</h3>
-            <p style={{ color: '#64748b', fontSize: 13 }}>Ikinci pencere.</p>
+            <p style={{ color: 'var(--rel-color-text-muted, #64748b)', fontSize: 13 }}>Ikinci pencere.</p>
           </div>
         </MDI.Window>
         <MDI.Toolbar>
-          <span style={{ fontSize: 12, padding: '0 8px', color: '#64748b' }}>MDI Toolbar</span>
+          <span style={{ fontSize: 12, padding: '0 8px', color: 'var(--rel-color-text-muted, #64748b)' }}>MDI Toolbar</span>
         </MDI.Toolbar>
       </MDI>
     </div>

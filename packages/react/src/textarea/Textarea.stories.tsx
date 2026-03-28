@@ -207,7 +207,7 @@ export const CustomSlotStyles: Story = {
       <Textarea
         placeholder="classNames + styles ile customize"
         classNames={{ root: 'my-textarea' }}
-        styles={{ root: { borderColor: 'orange', fontStyle: 'italic' } }}
+        styles={{ root: { borderColor: 'var(--rel-color-warning, #f59e0b)', fontStyle: 'italic' } }}
       />
       <Textarea
         placeholder="className + classNames merge"

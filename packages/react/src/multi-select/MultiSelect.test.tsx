@@ -409,6 +409,25 @@ describe('MultiSelect', () => {
     expect(tag).toBeInTheDocument();
     expect(removeBtn).toBeInTheDocument();
   });
+
+  // ── Slot API: styles ──────────────────────────────────────────────
+
+  it('styles.listbox listbox elemana uygulanir', () => {
+    renderMultiSelect({ styles: { listbox: { padding: '8px' } } });
+    fireEvent.click(getTrigger());
+
+    expect(screen.getByRole('listbox')).toHaveStyle({ padding: '8px' });
+  });
+
+  it('styles.option option elemana uygulanir', () => {
+    renderMultiSelect({ styles: { option: { fontSize: '14px' } } });
+    fireEvent.click(getTrigger());
+
+    const options = screen.getAllByRole('option');
+    for (const opt of options) {
+      expect(opt).toHaveStyle({ fontSize: '14px' });
+    }
+  });
 });
 
 // ── Compound API ──
@@ -478,5 +497,19 @@ describe('MultiSelect (Compound)', () => {
     fireEvent.click(trigger);
     fireEvent.click(screen.getByText('ABD'));
     expect(onValueChange).toHaveBeenCalledWith(['us']);
+  });
+});
+
+// ── Slot API: styles ──
+
+describe('MultiSelect (Slot Styles)', () => {
+  it('styles.root root elemana eklenir', () => {
+    render(<MultiSelect options={basicOptions} styles={{ root: { padding: '20px' } }} aria-label="Test" />);
+    expect(screen.getByTestId('multiselect-root')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.trigger trigger elemana eklenir', () => {
+    render(<MultiSelect options={basicOptions} styles={{ trigger: { fontSize: '18px' } }} aria-label="Test" />);
+    expect(screen.getByTestId('multiselect-trigger')).toHaveStyle({ fontSize: '18px' });
   });
 });

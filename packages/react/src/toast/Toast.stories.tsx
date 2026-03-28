@@ -50,7 +50,7 @@ function ToastDemo({ position = 'top-right' as ToastPosition }) {
             style={{
               padding: '8px 16px',
               borderRadius: 6,
-              border: '1px solid #ddd',
+              border: '1px solid var(--rel-color-border, #ddd)',
               cursor: 'pointer',
               textTransform: 'capitalize',
             }}
@@ -60,7 +60,7 @@ function ToastDemo({ position = 'top-right' as ToastPosition }) {
         ))}
         <button
           onClick={() => add({ message: 'Basligi olmayan bildirim.', closable: false })}
-          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-border, #ddd)', cursor: 'pointer' }}
         >
           Basligi yok
         </button>
@@ -69,8 +69,8 @@ function ToastDemo({ position = 'top-right' as ToastPosition }) {
           style={{
             padding: '8px 16px',
             borderRadius: 6,
-            border: '1px solid #e11d48',
-            color: '#e11d48',
+            border: '1px solid var(--rel-color-error, #e11d48)',
+            color: 'var(--rel-color-error, #e11d48)',
             cursor: 'pointer',
           }}
         >
@@ -147,7 +147,7 @@ function PositionButton({ position }: { position: ToastPosition }) {
             message: `${position} toast`,
           })
         }
-        style={{ padding: '8px 12px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+        style={{ padding: '8px 12px', borderRadius: 6, border: '1px solid var(--rel-color-border, #ddd)', cursor: 'pointer' }}
       >
         {position}
       </button>
@@ -181,7 +181,7 @@ function CustomStyledDemo() {
             message: 'Slot API ile ozellestirilmis toast.',
           })
         }
-        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+        style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid var(--rel-color-border, #ddd)', cursor: 'pointer' }}
       >
         Toast Ekle
       </button>
@@ -215,7 +215,7 @@ function CompoundDemo() {
     <div style={{ padding: 32, fontFamily: 'system-ui, sans-serif' }}>
       <h3>Toast Compound API</h3>
       <Toast position="top-right">
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '12px 16px', backgroundColor: '#eff6ff', borderLeft: '4px solid #3b82f6', borderRadius: 8, maxWidth: 380, minWidth: 280 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '12px 16px', backgroundColor: 'var(--rel-color-bg-subtle, #eff6ff)', borderLeft: '4px solid var(--rel-color-primary, #3b82f6)', borderRadius: 8, maxWidth: 380, minWidth: 280 }}>
           <Toast.Icon><span style={{ fontSize: 18 }}>&#x2139;</span></Toast.Icon>
           <div style={{ flex: 1 }}>
             <Toast.Title>Bilgi</Toast.Title>

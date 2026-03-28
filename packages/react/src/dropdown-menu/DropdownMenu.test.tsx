@@ -256,6 +256,25 @@ describe('DropdownMenu', () => {
     expect(screen.getByTestId('dropdown-menu')).toHaveStyle({ padding: '16px' });
   });
 
+  // ── Slot API: styles ──
+
+  it('styles.menu menu elemana fontSize eklenir', () => {
+    render(
+      <TestDropdownMenu styles={{ menu: { fontSize: '14px' } }} />,
+    );
+    fireEvent.click(screen.getByText('Islemler'));
+    expect(screen.getByTestId('dropdown-menu')).toHaveStyle({ fontSize: '14px' });
+  });
+
+  it('styles.item item elemana letterSpacing eklenir', () => {
+    render(
+      <TestDropdownMenu styles={{ item: { letterSpacing: '1px' } }} />,
+    );
+    fireEvent.click(screen.getByText('Islemler'));
+    const items = screen.getAllByTestId('dropdown-menu-item');
+    expect(items[0]).toHaveStyle({ letterSpacing: '1px' });
+  });
+
   // ── Trigger onClick korunur ──
 
   it('trigger orijinal onClick korunur', () => {

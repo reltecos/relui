@@ -82,10 +82,10 @@ export const StripedAnimated: Story = {
 export const CustomColor: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 300 }}>
-      <Progress value={80} color="#e11d48" label="Kirmizi" showValue />
-      <Progress value={60} color="#16a34a" label="Yesil" showValue />
-      <Progress value={40} color="#f59e0b" label="Sari" showValue />
-      <Progress value={90} color="#7c3aed" label="Mor" showValue />
+      <Progress value={80} color="var(--rel-color-error, #e11d48)" label="Kirmizi" showValue />
+      <Progress value={60} color="var(--rel-color-success, #16a34a)" label="Yesil" showValue />
+      <Progress value={40} color="var(--rel-color-warning, #f59e0b)" label="Sari" showValue />
+      <Progress value={90} color="var(--rel-color-accent, #7c3aed)" label="Mor" showValue />
     </div>
   ),
 };
@@ -172,10 +172,10 @@ export const CompoundCustomSlotStyles: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 300 }}>
       <Progress
         value={80}
-        color="#e11d48"
+        color="var(--rel-color-error, #e11d48)"
         styles={{
           label: { fontSize: '14px', fontWeight: 600 },
-          value: { color: '#e11d48' },
+          value: { color: 'var(--rel-color-error, #e11d48)' },
         }}
       >
         <Progress.Label>Kritik Seviye</Progress.Label>

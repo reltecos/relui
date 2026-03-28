@@ -437,6 +437,7 @@ const TooltipBase = forwardRef<HTMLDivElement, TooltipComponentProps>(
             if (typeof orig === 'function') orig(e);
           },
           'aria-describedby': ctx.open ? tooltipId : undefined,
+          'data-testid': 'tooltip-trigger',
         })
       : effectiveTrigger;
 
@@ -456,7 +457,7 @@ const TooltipBase = forwardRef<HTMLDivElement, TooltipComponentProps>(
     };
 
     // ── Render ──
-    const anchor = <span ref={anchorRef} style={{ display: 'none' }} data-testid="tooltip-anchor" />;
+    const anchor = <span ref={anchorRef} style={{ display: 'none' }} data-testid="tooltip-root" />;
 
     const contentElement = ctx.open && portalTarget ? createPortal(
       <div

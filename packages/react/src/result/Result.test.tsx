@@ -224,6 +224,28 @@ describe('Result', () => {
     expect(screen.getByTestId('result-action').className).toContain('my-action');
   });
 
+  it('styles.extra extra elemana eklenir', () => {
+    render(
+      <Result
+        title="Basarili"
+        extra={<span>Detay</span>}
+        styles={{ extra: { padding: '20px' } }}
+      />
+    );
+    expect(screen.getByTestId('result-extra')).toHaveStyle({ padding: '20px' });
+  });
+
+  it('styles.action action elemana eklenir', () => {
+    render(
+      <Result
+        title="Basarili"
+        action={<button>Devam</button>}
+        styles={{ action: { fontSize: '18px' } }}
+      />
+    );
+    expect(screen.getByTestId('result-action')).toHaveStyle({ fontSize: '18px' });
+  });
+
   // ── ReactNode title ───────────────────────────────
   it('title ReactNode olarak calisir', () => {
     render(

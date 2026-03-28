@@ -108,7 +108,7 @@ export const CustomSlotStyles: Story = {
       <Label
         required
         classNames={{ root: 'my-label' }}
-        styles={{ requiredIndicator: { color: 'orange', fontSize: '1.2em' } }}
+        styles={{ requiredIndicator: { color: 'var(--rel-color-warning, #f59e0b)', fontSize: '1.2em' } }}
       >
         Ozel stil
       </Label>

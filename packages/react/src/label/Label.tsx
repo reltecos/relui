@@ -177,7 +177,7 @@ const LabelBase = forwardRef<HTMLLabelElement, LabelComponentProps>(function Lab
       >
         {children}
         {required && (
-          <span className={indicatorSlot.className} style={indicatorSlot.style} aria-hidden="true">
+          <span className={indicatorSlot.className} style={indicatorSlot.style} aria-hidden="true" data-testid="label-requiredindicator">
             *
           </span>
         )}

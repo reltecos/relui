@@ -170,6 +170,7 @@ const StickyBase = forwardRef<HTMLDivElement, StickyComponentProps>(
               ...sentinelSlot.style,
             }}
             aria-hidden="true"
+            data-testid="sticky-sentinel"
           />
         )}
         <div
@@ -179,6 +180,7 @@ const StickyBase = forwardRef<HTMLDivElement, StickyComponentProps>(
           style={rootSlot.style}
           data-stuck={isStuck || undefined}
           data-position={position}
+          data-testid="sticky-root"
         >
           {children}
         </div>
@@ -194,6 +196,7 @@ const StickyBase = forwardRef<HTMLDivElement, StickyComponentProps>(
               ...sentinelSlot.style,
             }}
             aria-hidden="true"
+            data-testid="sticky-sentinel"
           />
         )}
       </StickyContext.Provider>

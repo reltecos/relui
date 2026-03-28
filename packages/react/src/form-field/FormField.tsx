@@ -157,6 +157,7 @@ export const FormField = forwardRef<HTMLDivElement, FormFieldComponentProps>(
           data-disabled={disabled ? '' : undefined}
           data-invalid={isInvalid ? '' : undefined}
           data-required={required ? '' : undefined}
+          data-testid="form-field-root"
         >
           {/* Label */}
           {label && (
@@ -176,14 +177,14 @@ export const FormField = forwardRef<HTMLDivElement, FormFieldComponentProps>(
 
           {/* Helper text */}
           {hasHelperText && !hasErrorMessage && (
-            <p id={ids.helperId} className={helperSlot.className} style={helperSlot.style}>
+            <p id={ids.helperId} className={helperSlot.className} style={helperSlot.style} data-testid="form-field-helpertext">
               {helperText}
             </p>
           )}
 
           {/* Error message */}
           {hasErrorMessage && (
-            <p id={ids.errorId} className={errorSlot.className} style={errorSlot.style} role="alert">
+            <p id={ids.errorId} className={errorSlot.className} style={errorSlot.style} role="alert" data-testid="form-field-errormessage">
               {errorMessage}
             </p>
           )}

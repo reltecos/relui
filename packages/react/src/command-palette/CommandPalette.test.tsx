@@ -375,6 +375,30 @@ describe('CommandPalette slot API', () => {
     const overlay = screen.getByTestId('cp-overlay');
     expect(overlay.style.opacity).toBe('0.8');
   });
+
+  // ── Slot API: styles ──
+
+  it('styles.root root elemana padding eklenir', () => {
+    render(
+      <OpenCommandPalette
+        items={basicItems}
+        styles={{ root: { padding: '24px' } }}
+      />,
+    );
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveStyle({ padding: '24px' });
+  });
+
+  it('styles.input input elemana letterSpacing eklenir', () => {
+    render(
+      <OpenCommandPalette
+        items={basicItems}
+        styles={{ input: { letterSpacing: '2px' } }}
+      />,
+    );
+    const input = screen.getByTestId('cp-input');
+    expect(input).toHaveStyle({ letterSpacing: '2px' });
+  });
 });
 
 // ── Filtreleme ───────────────────────────────────────────────
