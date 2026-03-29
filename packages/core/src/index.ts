@@ -894,3 +894,51 @@ export type {
   AccordionConfig,
   AccordionAPI,
 } from './accordion';
+
+// ── DigitalGauge ────────────────────────────────────────
+export { createDigitalGauge } from './digital-gauge';
+export type {
+  DigitalGaugeEvent,
+  DigitalGaugeContext,
+  DigitalGaugeConfig,
+  DigitalGaugeAPI,
+} from './digital-gauge';
+
+// ── LiveTile ────────────────────────────────────────────
+export { createLiveTile } from './live-tile';
+export type {
+  LiveTileEvent,
+  LiveTileAnimationType,
+  LiveTileDirection,
+  LiveTileContext,
+  LiveTileConfig,
+  LiveTileAPI,
+} from './live-tile';
+
+// ── QRCode ──────────────────────────────────────────────
+export { generateQRCode } from './qrcode';
+export type {
+  ErrorCorrectionLevel,
+  QRModule,
+  QRMatrix,
+  QRCodeConfig,
+  QRCodeResult,
+} from './qrcode';
+
+// ── Carousel ────────────────────────────────────────────
+export { createCarousel } from './carousel';
+export type {
+  CarouselEvent,
+  CarouselContext,
+  CarouselConfig,
+  CarouselAPI,
+} from './carousel';
+
+// ── Clock ───────────────────────────────────────────────
+export { createClock } from './clock';
+export type {
+  ClockEvent,
+  ClockContext,
+  ClockConfig,
+  ClockAPI,
+} from './clock';

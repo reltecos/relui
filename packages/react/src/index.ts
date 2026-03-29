@@ -357,3 +357,31 @@ export { Stat, type StatComponentProps, type StatSlot, type StatSize, type StatT
 
 // ── StatGroup ───────────────────────────────────────────
 export { StatGroup, type StatGroupComponentProps, type StatGroupSlot, type StatGroupDirection, type StatDef, type StatGroupStatProps } from './stat-group';
+
+// ── DigitalGauge ────────────────────────────────────────
+export { DigitalGauge, type DigitalGaugeComponentProps, type DigitalGaugeSlot, type DigitalGaugeSize, type DigitalGaugeDisplayProps, type DigitalGaugeLabelProps, type DigitalGaugeUnitProps, type DigitalGaugeMinMaxProps } from './digital-gauge';
+export { useDigitalGauge, type UseDigitalGaugeProps, type UseDigitalGaugeReturn } from './digital-gauge';
+
+// ── LiveTile ────────────────────────────────────────────
+export { LiveTile, type LiveTileComponentProps, type LiveTileSlot, type LiveTileSize, type LiveTileFaceProps, type LiveTileIndicatorProps } from './live-tile';
+export { useLiveTile, type UseLiveTileProps, type UseLiveTileReturn } from './live-tile';
+
+// ── NumberFormatter ─────────────────────────────────────
+export { NumberFormatter, type NumberFormatterComponentProps, type NumberFormatterSlot, type NumberFormatStyle, type NumberFormatNotation, type NumberFormatterValueProps, type NumberFormatterPrefixProps, type NumberFormatterSuffixProps } from './number-formatter';
+
+// ── DateFormatter ───────────────────────────────────────
+export { DateFormatter, type DateFormatterComponentProps, type DateFormatterSlot, type DateFormatDateStyle, type DateFormatTimeStyle, type DateInput, type DateFormatterValueProps, type DateFormatterPrefixProps, type DateFormatterSuffixProps } from './date-formatter';
+
+// ── Watermark ──────────────────────────────────────────
+export { Watermark, type WatermarkComponentProps, type WatermarkSlot, type WatermarkSize, type WatermarkContentProps, type WatermarkOverlayProps } from './watermark';
+
+// ── QRCode ─────────────────────────────────────────────
+export { QRCode, type QRCodeComponentProps, type QRCodeSlot, type QRCodeSize, type QRCodeSvgProps, type QRCodeLabelProps } from './qrcode';
+
+// ── Carousel ────────────────────────────────────────────
+export { Carousel, type CarouselComponentProps, type CarouselSlot, type CarouselViewportProps, type CarouselSlideProps, type CarouselPrevButtonProps, type CarouselNextButtonProps, type CarouselIndicatorsProps } from './carousel';
+export { useCarousel, type UseCarouselProps, type UseCarouselReturn } from './carousel';
+
+// ── Clock ───────────────────────────────────────────────
+export { Clock, type ClockComponentProps, type ClockSlot, type ClockMode, type ClockSize, type ClockFaceProps, type ClockDigitalProps, type ClockPeriodProps } from './clock';
+export { useClock, type UseClockProps, type UseClockReturn } from './clock';
