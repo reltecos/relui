@@ -49,4 +49,6 @@ export {
   XCircleIcon,
   FileXIcon,
   MessageSquareIcon,
+  CalendarIcon,
+  ClockIcon,
 } from './icons';

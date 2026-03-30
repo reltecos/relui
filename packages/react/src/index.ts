@@ -385,3 +385,35 @@ export { useCarousel, type UseCarouselProps, type UseCarouselReturn } from './ca
 // ── Clock ───────────────────────────────────────────────
 export { Clock, type ClockComponentProps, type ClockSlot, type ClockMode, type ClockSize, type ClockFaceProps, type ClockDigitalProps, type ClockPeriodProps } from './clock';
 export { useClock, type UseClockProps, type UseClockReturn } from './clock';
+
+// ── ColorPicker ─────────────────────────────────────────
+export { ColorPicker, type ColorPickerComponentProps, type ColorPickerSlot, type ColorPickerSize, type ColorPickerSpectrumProps, type ColorPickerHueSliderProps, type ColorPickerAlphaSliderProps, type ColorPickerInputProps, type ColorPickerSwatchProps, type ColorPickerPresetsProps } from './color-picker';
+export { useColorPicker, type UseColorPickerProps, type UseColorPickerReturn } from './color-picker';
+
+// ── Autocomplete ────────────────────────────────────────
+export { Autocomplete, type AutocompleteComponentProps, type AutocompleteSlot, type AutocompleteSize, type AutocompleteInputProps, type AutocompleteListProps, type AutocompleteOptionProps, type AutocompleteNoResultProps } from './autocomplete';
+export { useAutocomplete, type UseAutocompleteProps, type UseAutocompleteReturn } from './autocomplete';
+
+// ── DatePicker ──────────────────────────────────────────
+export { DatePicker, type DatePickerComponentProps, type DatePickerSlot, type DatePickerInputProps, type DatePickerCalendarProps, type DatePickerNavigationProps } from './date-picker';
+export { useDatePicker, type UseDatePickerProps, type UseDatePickerReturn } from './date-picker';
+
+// ── DateRangePicker ─────────────────────────────────────
+export { DateRangePicker, type DateRangePickerComponentProps, type DateRangePickerSlot, type DateRangePickerStartInputProps, type DateRangePickerEndInputProps, type DateRangePickerCalendarProps, type DateRangePickerPresetsProps } from './date-range-picker';
+export { useDateRangePicker, type UseDateRangePickerProps, type UseDateRangePickerReturn } from './date-range-picker';
+
+// ── TimePicker ──────────────────────────────────────────
+export { TimePicker, type TimePickerComponentProps, type TimePickerSlot, type TimePickerInputProps, type TimePickerHourColumnProps, type TimePickerMinuteColumnProps, type TimePickerSecondColumnProps, type TimePickerPeriodProps } from './time-picker';
+export { useTimePicker, type UseTimePickerProps, type UseTimePickerReturn } from './time-picker';
+
+// ── VirtualList ─────────────────────────────────────────
+export { VirtualList, type VirtualListComponentProps, type VirtualListSlot, type VirtualListItemDef, type VirtualListItemProps } from './virtual-list';
+export { useVirtualList, type UseVirtualListProps, type UseVirtualListReturn } from './virtual-list';
+
+// ── Tree ────────────────────────────────────────────────
+export { Tree, type TreeComponentProps, type TreeSlot, type TreeSize, type TreeNodeProps } from './tree';
+export { useTree, getAllDescendantIds, getAllBranchIds, buildTreeStructureMap, getVisibleNodeIds, type UseTreeProps, type UseTreeReturn } from './tree';
+
+// ── DataGrid ────────────────────────────────────────────
+export { DataGrid, type DataGridComponentProps, type DataGridSlot, type DataGridToolbarProps, type DataGridHeaderProps, type DataGridBodyProps, type DataGridFooterProps, type DataGridPaginationProps, type DataGridColumnChooserProps, type DataGridExportButtonProps, type DataGridRowProps, type DataGridCellProps } from './data-grid';
+export { useDataGrid, type UseDataGridProps, type UseDataGridReturn, type DataGridRow } from './data-grid';

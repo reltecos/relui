@@ -30,3 +30,5 @@ export { AlertTriangleIcon } from './AlertTriangleIcon';
 export { XCircleIcon } from './XCircleIcon';
 export { FileXIcon } from './FileXIcon';
 export { MessageSquareIcon } from './MessageSquareIcon';
+export { CalendarIcon } from './CalendarIcon';
+export { ClockIcon } from './ClockIcon';

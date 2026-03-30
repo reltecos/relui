@@ -942,3 +942,102 @@ export type {
   ClockConfig,
   ClockAPI,
 } from './clock';
+
+// ── ColorPicker ─────────────────────────────────────────
+export {
+  createColorPicker,
+  hexToRgb,
+  rgbToHex,
+  rgbToHsl,
+  hslToRgb,
+  rgbToHsv,
+  hsvToRgb,
+} from './color-picker';
+export type {
+  RgbColor,
+  HslColor,
+  HsvColor,
+  ColorPickerEvent,
+  ColorPickerContext,
+  ColorPickerConfig,
+  ColorPickerAPI,
+} from './color-picker';
+
+// ── Autocomplete ────────────────────────────────────────
+export { createAutocomplete, defaultFilterFn } from './autocomplete';
+export type {
+  AutocompleteOption,
+  AutocompleteFilterFn,
+  AutocompleteEvent,
+  AutocompleteContext,
+  AutocompleteConfig,
+  AutocompleteAPI,
+} from './autocomplete';
+
+// ── DataGrid ────────────────────────────────────────────
+export { createDataGrid } from './data-grid';
+export type {
+  DataGridEvent,
+  DataGridContext,
+  DataGridConfig,
+  DataGridAPI,
+  ColumnDef,
+  ColumnAlign,
+  ColumnPin,
+  SortState,
+  SortDirection,
+  FilterState,
+  FilterOperator,
+  EditingCell,
+} from './data-grid';
+
+// ── DatePicker ──────────────────────────────────────────
+export { createDatePicker } from './date-picker';
+export type {
+  DatePickerEvent,
+  DatePickerContext,
+  DatePickerConfig,
+  DatePickerAPI,
+} from './date-picker';
+
+// ── DateRangePicker ─────────────────────────────────────
+export { createDateRangePicker } from './date-range-picker';
+export type {
+  DateRangePickerEvent,
+  DateRangePickerContext,
+  DateRangePickerConfig,
+  DateRangePickerAPI,
+  DateRangePreset,
+  SelectingField,
+} from './date-range-picker';
+
+// ── TimePicker ──────────────────────────────────────────
+export { createTimePicker } from './time-picker';
+export type {
+  TimePickerEvent,
+  TimePickerContext,
+  TimePickerConfig,
+  TimePickerAPI,
+} from './time-picker';
+
+// ── VirtualList ─────────────────────────────────────────
+export { createVirtualList } from './virtual-list';
+export type {
+  VirtualListEvent,
+  VirtualListRange,
+  VirtualListContext,
+  VirtualListConfig,
+  VirtualListAPI,
+} from './virtual-list';
+
+// ── Tree ────────────────────────────────────────────────
+export { createTree } from './tree';
+export type {
+  TreeNodeDef,
+  TreeSelectionMode,
+  TreeStructureMap,
+  TreeEvent,
+  TreeContext,
+  TreeConfig,
+  TreeAPI,
+} from './tree';
