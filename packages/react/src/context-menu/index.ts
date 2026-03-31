@@ -6,5 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { ContextMenu } from './ContextMenu';
-export type { ContextMenuComponentProps, ContextMenuSlot } from './ContextMenu';
+export {
+  ContextMenu,
+  type ContextMenuComponentProps,
+  type ContextMenuSlot,
+  type ContextMenuTriggerProps,
+  type ContextMenuMenuProps,
+  type ContextMenuItemProps,
+  type ContextMenuSeparatorProps,
+  type ContextMenuSubmenuProps,
+} from './ContextMenu';

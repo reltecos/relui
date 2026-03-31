@@ -51,4 +51,6 @@ export {
   MessageSquareIcon,
   CalendarIcon,
   ClockIcon,
+  UploadIcon,
+  StarIcon,
 } from './icons';

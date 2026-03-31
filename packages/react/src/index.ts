@@ -317,7 +317,7 @@ export { Popover, type PopoverComponentProps, type PopoverSlot, type PopoverTrig
 export { Tooltip, type TooltipComponentProps, type TooltipSlot, type TooltipTriggerProps, type TooltipContentProps } from './tooltip';
 
 // ── ContextMenu ─────────────────────────────────────────
-export { ContextMenu, type ContextMenuComponentProps, type ContextMenuSlot } from './context-menu';
+export { ContextMenu, type ContextMenuComponentProps, type ContextMenuSlot, type ContextMenuTriggerProps, type ContextMenuMenuProps, type ContextMenuItemProps, type ContextMenuSeparatorProps, type ContextMenuSubmenuProps } from './context-menu';
 
 // ── DropdownMenu ────────────────────────────────────────
 export { DropdownMenu, useDropdownMenuContext, type DropdownMenuComponentProps, type DropdownMenuSlot, type DropdownMenuItemProps, type DropdownMenuSeparatorProps, type DropdownMenuGroupProps } from './dropdown-menu';
@@ -417,3 +417,45 @@ export { useTree, getAllDescendantIds, getAllBranchIds, buildTreeStructureMap, g
 // ── DataGrid ────────────────────────────────────────────
 export { DataGrid, type DataGridComponentProps, type DataGridSlot, type DataGridToolbarProps, type DataGridHeaderProps, type DataGridBodyProps, type DataGridFooterProps, type DataGridPaginationProps, type DataGridColumnChooserProps, type DataGridExportButtonProps, type DataGridRowProps, type DataGridCellProps } from './data-grid';
 export { useDataGrid, type UseDataGridProps, type UseDataGridReturn, type DataGridRow } from './data-grid';
+
+// ── TransferList ────────────────────────────────────────
+export { TransferList, type TransferListComponentProps, type TransferListSlot, type TransferListSourceListProps, type TransferListTargetListProps, type TransferListActionsProps } from './transfer-list';
+export { useTransferList, type UseTransferListProps, type UseTransferListReturn } from './transfer-list';
+
+// ── TreeGrid ────────────────────────────────────────────
+export { TreeGrid, type TreeGridComponentProps, type TreeGridSlot, type TreeGridHeaderProps, type TreeGridBodyProps, type TreeGridRowProps, type TreeGridCellProps } from './tree-grid';
+export { useTreeGrid, type UseTreeGridProps, type UseTreeGridReturn } from './tree-grid';
+
+// ── PivotTable ──────────────────────────────────────────
+export { PivotTable, type PivotTableComponentProps, type PivotTableSlot, type PivotTableFieldChooserProps, type PivotTableGridProps } from './pivot-table';
+export { usePivotTable, type UsePivotTableProps, type UsePivotTableReturn } from './pivot-table';
+
+// ── Rating ───────────────────────────────────────────────
+export { Rating, type RatingComponentProps, type RatingSlot, type RatingSize, type RatingStarProps, type RatingLabelProps } from './rating';
+export { useRating, type UseRatingProps, type UseRatingReturn } from './rating';
+
+// ── PinInput ─────────────────────────────────────────────
+export { PinInput, type PinInputComponentProps, type PinInputSlot, type PinInputSize, type PinInputFieldProps } from './pin-input';
+export { usePinInput, type UsePinInputProps, type UsePinInputReturn } from './pin-input';
+
+// ── Stepper ─────────────────────────────────────────────
+export { Stepper, type StepperComponentProps, type StepperSlot, type StepperOrientation, type StepperStepDef, type StepperStepProps, type StepperIndicatorProps, type StepperTitleProps, type StepperDescriptionProps, type StepperConnectorProps } from './stepper';
+export { useStepper, type UseStepperProps, type UseStepperReturn } from './stepper';
+
+// ── FileDrop ─────────────────────────────────────────────
+export { FileDrop, formatFileSize, type FileDropComponentProps, type FileDropSlot, type FileDropZoneProps, type FileDropFileListProps, type FileDropFileItemProps, type FileDropProgressBarProps } from './file-drop';
+export { useFileDrop, processNativeFiles, type UseFileDropProps, type UseFileDropReturn } from './file-drop';
+
+// ── CodeBlock ───────────────────────────────────────────
+export { CodeBlock, type CodeBlockComponentProps, type CodeBlockSlot, type CodeBlockHeaderProps, type CodeBlockCopyButtonProps, type CodeBlockLineProps, type CodeBlockLineNumberProps, type CodeBlockContentProps } from './code-block';
+
+// ── BarcodeGenerator ────────────────────────────────────
+export { BarcodeGenerator, type BarcodeGeneratorComponentProps, type BarcodeGeneratorSlot, type BarcodeGeneratorSvgProps, type BarcodeGeneratorLabelProps, type BarcodeGeneratorValueProps } from './barcode-generator';
+
+// ── Calendar ────────────────────────────────────────────
+export { Calendar, type CalendarComponentProps, type CalendarSlot, type CalendarHeaderProps, type CalendarGridProps, type CalendarEventProps } from './calendar';
+export { useCalendar, type UseCalendarProps, type UseCalendarReturn } from './calendar';
+
+// ── KanbanBoard ─────────────────────────────────────────
+export { KanbanBoard, type KanbanBoardComponentProps, type KanbanBoardSlot, type KanbanBoardColumnProps, type KanbanBoardCardProps, type KanbanBoardHeaderProps, type KanbanBoardSwimlaneProps, type KanbanBoardAddButtonProps } from './kanban-board';
+export { useKanbanBoard, type UseKanbanBoardProps, type UseKanbanBoardReturn } from './kanban-board';

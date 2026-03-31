@@ -274,3 +274,157 @@ describe('ContextMenu', () => {
     expect(ref).toHaveBeenCalled();
   });
 });
+
+// ── Compound API ──
+
+describe('ContextMenu (Compound)', () => {
+  it('compound: trigger render edilir', () => {
+    render(
+      <ContextMenu>
+        <ContextMenu.Trigger>
+          <div data-testid="cmp-trigger">Sag tikla</div>
+        </ContextMenu.Trigger>
+        <ContextMenu.Menu>
+          <ContextMenu.Item id="cut" label="Kes" />
+        </ContextMenu.Menu>
+      </ContextMenu>,
+    );
+    expect(screen.getByTestId('cmp-trigger')).toBeInTheDocument();
+  });
+
+  it('compound: sag tik ile menu acilir', () => {
+    render(
+      <ContextMenu>
+        <ContextMenu.Trigger>
+          <div data-testid="cmp-trigger">Sag tikla</div>
+        </ContextMenu.Trigger>
+        <ContextMenu.Menu>
+          <ContextMenu.Item id="cut" label="Kes" />
+        </ContextMenu.Menu>
+      </ContextMenu>,
+    );
+    fireEvent.contextMenu(screen.getByTestId('cmp-trigger'));
+    expect(screen.getByTestId('context-menu')).toBeInTheDocument();
+  });
+
+  it('compound: item render edilir', () => {
+    render(
+      <ContextMenu>
+        <ContextMenu.Trigger>
+          <div data-testid="cmp-trigger">Sag tikla</div>
+        </ContextMenu.Trigger>
+        <ContextMenu.Menu>
+          <ContextMenu.Item id="cut" label="Kes" shortcut="Ctrl+X" />
+          <ContextMenu.Item id="copy" label="Kopyala" />
+        </ContextMenu.Menu>
+      </ContextMenu>,
+    );
+    fireEvent.contextMenu(screen.getByTestId('cmp-trigger'));
+    expect(screen.getByText('Kes')).toBeInTheDocument();
+    expect(screen.getByText('Kopyala')).toBeInTheDocument();
+  });
+
+  it('compound: separator render edilir', () => {
+    render(
+      <ContextMenu>
+        <ContextMenu.Trigger>
+          <div data-testid="cmp-trigger">Sag tikla</div>
+        </ContextMenu.Trigger>
+        <ContextMenu.Menu>
+          <ContextMenu.Item id="cut" label="Kes" />
+          <ContextMenu.Separator />
+          <ContextMenu.Item id="copy" label="Kopyala" />
+        </ContextMenu.Menu>
+      </ContextMenu>,
+    );
+    fireEvent.contextMenu(screen.getByTestId('cmp-trigger'));
+    expect(screen.getByTestId('context-menu-separator')).toBeInTheDocument();
+  });
+
+  it('compound: item secilince onSelect cagirilir', () => {
+    const onSelect = vi.fn();
+    render(
+      <ContextMenu onSelect={onSelect}>
+        <ContextMenu.Trigger>
+          <div data-testid="cmp-trigger">Sag tikla</div>
+        </ContextMenu.Trigger>
+        <ContextMenu.Menu>
+          <ContextMenu.Item id="cut" label="Kes" />
+        </ContextMenu.Menu>
+      </ContextMenu>,
+    );
+    fireEvent.contextMenu(screen.getByTestId('cmp-trigger'));
+    fireEvent.click(screen.getByText('Kes'));
+    expect(onSelect).toHaveBeenCalledWith('cut');
+  });
+
+  it('compound: submenu render edilir', () => {
+    render(
+      <ContextMenu>
+        <ContextMenu.Trigger>
+          <div data-testid="cmp-trigger">Sag tikla</div>
+        </ContextMenu.Trigger>
+        <ContextMenu.Menu>
+          <ContextMenu.Submenu id="more" label="Daha fazla">
+            <ContextMenu.Item id="sub1" label="Alt oge 1" />
+          </ContextMenu.Submenu>
+        </ContextMenu.Menu>
+      </ContextMenu>,
+    );
+    fireEvent.contextMenu(screen.getByTestId('cmp-trigger'));
+    expect(screen.getByText('Daha fazla')).toBeInTheDocument();
+  });
+
+  it('compound: submenu hover ile acilir', () => {
+    render(
+      <ContextMenu>
+        <ContextMenu.Trigger>
+          <div data-testid="cmp-trigger">Sag tikla</div>
+        </ContextMenu.Trigger>
+        <ContextMenu.Menu>
+          <ContextMenu.Submenu id="more" label="Daha fazla">
+            <ContextMenu.Item id="sub1" label="Alt oge 1" />
+          </ContextMenu.Submenu>
+        </ContextMenu.Menu>
+      </ContextMenu>,
+    );
+    fireEvent.contextMenu(screen.getByTestId('cmp-trigger'));
+    fireEvent.mouseEnter(screen.getByText('Daha fazla'));
+    expect(screen.getByTestId('context-menu-submenu')).toBeInTheDocument();
+    expect(screen.getByText('Alt oge 1')).toBeInTheDocument();
+  });
+
+  it('compound: classNames.item compound item a eklenir', () => {
+    render(
+      <ContextMenu classNames={{ item: 'cmp-item' }}>
+        <ContextMenu.Trigger>
+          <div data-testid="cmp-trigger">Sag tikla</div>
+        </ContextMenu.Trigger>
+        <ContextMenu.Menu>
+          <ContextMenu.Item id="cut" label="Kes" />
+        </ContextMenu.Menu>
+      </ContextMenu>,
+    );
+    fireEvent.contextMenu(screen.getByTestId('cmp-trigger'));
+    expect(screen.getByTestId('context-menu-item').className).toContain('cmp-item');
+  });
+
+  it('compound: styles.item compound item a eklenir', () => {
+    render(
+      <ContextMenu styles={{ item: { letterSpacing: '2px' } }}>
+        <ContextMenu.Trigger>
+          <div data-testid="cmp-trigger">Sag tikla</div>
+        </ContextMenu.Trigger>
+        <ContextMenu.Menu>
+          <ContextMenu.Item id="cut" label="Kes" />
+        </ContextMenu.Menu>
+      </ContextMenu>,
+    );
+    fireEvent.contextMenu(screen.getByTestId('cmp-trigger'));
+    expect(screen.getByTestId('context-menu-item')).toHaveStyle({ letterSpacing: '2px' });
+  });
+
+  it('ContextMenu.Item context disinda hata firlatir', () => {
+    expect(() => render(<ContextMenu.Item id="test" label="Test" />)).toThrow();
+  });
+});

@@ -1041,3 +1041,121 @@ export type {
   TreeConfig,
   TreeAPI,
 } from './tree';
+
+// ── TransferList ────────────────────────────────────────
+export { createTransferList } from './transfer-list';
+export type {
+  TransferItemDef,
+  TransferListEvent,
+  TransferListContext,
+  TransferListConfig,
+  TransferListAPI,
+} from './transfer-list';
+
+// ── TreeGrid ────────────────────────────────────────────
+export { createTreeGrid } from './tree-grid';
+export type {
+  TreeGridSortDirection,
+  TreeGridSortState,
+  TreeGridColumnAlign,
+  TreeGridColumnDef,
+  TreeGridRowDef,
+  TreeGridEvent,
+  TreeGridContext,
+  TreeGridConfig,
+  TreeGridAPI,
+} from './tree-grid';
+
+// ── PivotTable ──────────────────────────────────────────
+export { createPivotTable, computePivot } from './pivot-table';
+export type {
+  PivotField,
+  PivotAggregateType,
+  PivotValueField,
+  PivotPlacement,
+  PivotResult,
+  PivotTableEvent,
+  PivotTableContext,
+  PivotTableConfig,
+  PivotTableAPI,
+} from './pivot-table';
+
+// ── CodeBlock ────────────────────────────────────────────
+export { highlightCode } from './code-block';
+export type {
+  CodeLanguage,
+  TokenType,
+  CodeToken,
+  CodeLine,
+  HighlightResult,
+} from './code-block';
+
+// ── Rating ───────────────────────────────────────────
+export { createRating } from './rating';
+export type {
+  RatingEvent,
+  RatingContext,
+  RatingConfig,
+  RatingAPI,
+} from './rating';
+
+// ── PinInput ─────────────────────────────────────────
+export { createPinInput } from './pin-input';
+export type {
+  PinInputType,
+  PinInputEvent,
+  PinInputContext,
+  PinInputConfig,
+  PinInputAPI,
+} from './pin-input';
+
+// ── Stepper ─────────────────────────────────────────
+export { createStepper } from './stepper';
+export type {
+  StepStatus,
+  StepInfo,
+  StepperEvent,
+  StepperContext,
+  StepperConfig,
+  StepperAPI,
+} from './stepper';
+
+// ── FileDrop ─────────────────────────────────────────
+export { createFileDrop } from './file-drop';
+export type {
+  FileDropStatus,
+  FileDropItem,
+  FileDropEvent,
+  FileDropContext,
+  FileDropConfig,
+  FileDropAPI,
+} from './file-drop';
+
+// ── Barcode ──────────────────────────────────────────────
+export { encodeBarcode } from './barcode';
+export type { BarcodeFormat, BarcodeResult } from './barcode';
+
+// ── Calendar ─────────────────────────────────────────────
+export { createCalendar, getMonthDays, getWeekdayNames } from './calendar';
+export type {
+  CalendarView,
+  CalendarEventDef,
+  CalendarDay,
+  CalendarContext,
+  CalendarEvent,
+  CalendarConfig,
+  CalendarAPI,
+} from './calendar';
+
+// ── Kanban ───────────────────────────────────────────────
+export { createKanban } from './kanban';
+export type {
+  KanbanCard,
+  KanbanColumn,
+  KanbanSwimlane,
+  KanbanDragState,
+  KanbanContext,
+  KanbanEvent,
+  KanbanConfig,
+  KanbanAPI,
+} from './kanban';

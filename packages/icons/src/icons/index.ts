@@ -32,3 +32,5 @@ export { FileXIcon } from './FileXIcon';
 export { MessageSquareIcon } from './MessageSquareIcon';
 export { CalendarIcon } from './CalendarIcon';
 export { ClockIcon } from './ClockIcon';
+export { UploadIcon } from './UploadIcon';
+export { StarIcon } from './StarIcon';

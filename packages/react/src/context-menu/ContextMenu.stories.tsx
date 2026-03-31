@@ -100,6 +100,28 @@ export const WithSubmenu: Story = {
   ),
 };
 
+// ── Compound ──────────────────────────────────────
+
+export const Compound: Story = {
+  render: () => (
+    <ContextMenu onSelect={(id) => alert(`Secilen: ${id}`)}>
+      <ContextMenu.Trigger>
+        <div style={triggerStyle}>Sag tikla — Compound API</div>
+      </ContextMenu.Trigger>
+      <ContextMenu.Menu>
+        <ContextMenu.Item id="cut" label="Kes" shortcut="Ctrl+X" icon={<ScissorsIcon size={14} />} />
+        <ContextMenu.Item id="copy" label="Kopyala" shortcut="Ctrl+C" icon={<CopyIcon size={14} />} />
+        <ContextMenu.Item id="paste" label="Yapistir" shortcut="Ctrl+V" icon={<ClipboardIcon size={14} />} />
+        <ContextMenu.Separator />
+        <ContextMenu.Submenu id="export" label="Disari Aktar">
+          <ContextMenu.Item id="export-pdf" label="PDF olarak" />
+          <ContextMenu.Item id="export-png" label="PNG olarak" />
+        </ContextMenu.Submenu>
+      </ContextMenu.Menu>
+    </ContextMenu>
+  ),
+};
+
 // ── CustomSlotStyles ────────────────────────────────
 
 export const CustomSlotStyles: Story = {
