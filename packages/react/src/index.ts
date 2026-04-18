@@ -430,6 +430,14 @@ export { useTreeGrid, type UseTreeGridProps, type UseTreeGridReturn } from './tr
 export { PivotTable, type PivotTableComponentProps, type PivotTableSlot, type PivotTableFieldChooserProps, type PivotTableGridProps } from './pivot-table';
 export { usePivotTable, type UsePivotTableProps, type UsePivotTableReturn } from './pivot-table';
 
+// ── PropertyGrid ────────────────────────────────────────
+export { PropertyGrid, type PropertyGridComponentProps, type PropertyGridSlot, type PropertyGridCategoryProps, type PropertyGridPropertyProps, type PropertyGridEditorProps } from './property-grid';
+export { usePropertyGrid, type UsePropertyGridProps, type UsePropertyGridReturn } from './property-grid';
+
+// ── Spreadsheet ─────────────────────────────────────────
+export { Spreadsheet, type SpreadsheetComponentProps, type SpreadsheetSlot, type SpreadsheetToolbarProps, type SpreadsheetFormulaBarProps, type SpreadsheetGridProps, type SpreadsheetSheetTabsProps } from './spreadsheet';
+export { useSpreadsheet, type UseSpreadsheetProps, type UseSpreadsheetReturn } from './spreadsheet';
+
 // ── Rating ───────────────────────────────────────────────
 export { Rating, type RatingComponentProps, type RatingSlot, type RatingSize, type RatingStarProps, type RatingLabelProps } from './rating';
 export { useRating, type UseRatingProps, type UseRatingReturn } from './rating';
@@ -459,3 +467,37 @@ export { useCalendar, type UseCalendarProps, type UseCalendarReturn } from './ca
 // ── KanbanBoard ─────────────────────────────────────────
 export { KanbanBoard, type KanbanBoardComponentProps, type KanbanBoardSlot, type KanbanBoardColumnProps, type KanbanBoardCardProps, type KanbanBoardHeaderProps, type KanbanBoardSwimlaneProps, type KanbanBoardAddButtonProps } from './kanban-board';
 export { useKanbanBoard, type UseKanbanBoardProps, type UseKanbanBoardReturn } from './kanban-board';
+
+// ── Highlight ───────────────────────────────────────────
+export { Highlight, type HighlightComponentProps, type HighlightSlot, type HighlightMarkProps, type HighlightTextProps } from './highlight';
+
+// ── DiffViewer ──────────────────────────────────────────
+export { DiffViewer, type DiffViewerComponentProps, type DiffViewerSlot, type DiffViewerMode, type DiffViewerSideProps, type DiffViewerLineProps, type DiffViewerGutterProps } from './diff-viewer';
+
+// ── Chat ────────────────────────────────────────────────
+export { Chat, type ChatComponentProps, type ChatSlot, type ChatMessageListProps, type ChatMessageProps, type ChatBubbleProps, type ChatInputProps, type ChatTypingIndicatorProps, type ChatDateSeparatorProps } from './chat';
+export { useChat, type UseChatProps, type UseChatReturn } from './chat';
+
+// ── GanttChart ──────────────────────────────────────────
+export { GanttChart, type GanttChartComponentProps, type GanttChartSlot, type GanttChartHeaderProps, type GanttChartTaskListProps, type GanttChartTimelineProps, type GanttChartTaskProps, type GanttChartMilestoneProps } from './gantt-chart';
+export { useGanttChart, type UseGanttChartProps, type UseGanttChartReturn } from './gantt-chart';
+
+// ── Mention ─────────────────────────────────────────────
+export { Mention, type MentionComponentProps, type MentionSlot, type MentionInputProps, type MentionListProps, type MentionItemProps } from './mention';
+export { useMention, type UseMentionProps, type UseMentionReturn } from './mention';
+
+// ── FilterBuilder ───────────────────────────────────────
+export { FilterBuilder, type FilterBuilderComponentProps, type FilterBuilderSlot, type FilterBuilderGroupProps, type FilterBuilderRuleProps, type FilterBuilderAddButtonProps } from './filter-builder';
+export { useFilterBuilder, type UseFilterBuilderProps, type UseFilterBuilderReturn } from './filter-builder';
+
+// ── JSONEditor ──────────────────────────────────────────
+export { JSONEditor, type JsonEditorComponentProps, type JsonEditorSlot, type JsonEditorToolbarProps, type JsonEditorTreeProps, type JsonEditorTextProps, type JsonEditorNodeProps } from './json-editor';
+export { useJsonEditor, type UseJsonEditorProps, type UseJsonEditorReturn } from './json-editor';
+
+// ── MarkdownEditor ──────────────────────────────────────
+export { MarkdownEditor, type MarkdownEditorComponentProps, type MarkdownEditorSlot, type MarkdownEditorToolbarProps, type MarkdownEditorEditorProps, type MarkdownEditorPreviewProps } from './markdown-editor';
+export { useMarkdownEditor, type UseMarkdownEditorProps, type UseMarkdownEditorReturn } from './markdown-editor';
+
+// ── RichTextEditor ──────────────────────────────────────
+export { RichTextEditor, type RichTextEditorComponentProps, type RichTextEditorSlot, type RichTextEditorToolbarProps, type RichTextEditorContentProps, type RichTextEditorToolbarButtonProps } from './rich-text-editor';
+export { useRichTextEditor, type UseRichTextEditorProps, type UseRichTextEditorReturn } from './rich-text-editor';

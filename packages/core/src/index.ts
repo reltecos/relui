@@ -1080,6 +1080,33 @@ export type {
   PivotTableAPI,
 } from './pivot-table';
 
+// ── PropertyGrid ────────────────────────────────────────
+export { createPropertyGrid } from './property-grid';
+export type {
+  PropertyType,
+  PropertyDef,
+  PropertyGridEvent,
+  PropertyGridContext,
+  PropertyGridConfig,
+  PropertyGridAPI,
+} from './property-grid';
+
+// ── Spreadsheet ─────────────────────────────────────────
+export { createSpreadsheet } from './spreadsheet';
+export { evaluateFormula, parseRef, toRef } from './spreadsheet';
+export type {
+  CellType,
+  CellValue,
+  CellAddress,
+  CellData,
+  CellSelection,
+  SheetData,
+  SpreadsheetEvent,
+  SpreadsheetContext,
+  SpreadsheetConfig,
+  SpreadsheetAPI,
+} from './spreadsheet';
+
 // ── CodeBlock ────────────────────────────────────────────
 export { highlightCode } from './code-block';
 export type {
@@ -1159,3 +1186,114 @@ export type {
   KanbanConfig,
   KanbanAPI,
 } from './kanban';
+
+// ── Highlight ────────────────────────────────────────────
+export { highlightText } from './highlight';
+export type {
+  HighlightSegmentType,
+  HighlightSegment,
+  HighlightResult as HighlightTextResult,
+} from './highlight';
+
+// ── Chat ────────────────────────────────────────────────
+export { createChat } from './chat';
+export type {
+  ChatMessageStatus,
+  ChatMessageDirection,
+  ChatReaction,
+  ChatMessage,
+  ChatDateGroup,
+  ChatEvent,
+  ChatContext,
+  ChatConfig,
+  ChatAPI,
+} from './chat';
+
+// ── GanttChart ──────────────────────────────────────────
+export { createGanttChart, calculateCriticalPath, daysBetween, addDays } from './gantt-chart';
+export type {
+  GanttTask,
+  GanttDependency,
+  GanttZoomLevel,
+  GanttChartEvent,
+  GanttChartContext,
+  GanttChartConfig,
+  GanttChartAPI,
+} from './gantt-chart';
+
+// ── DiffViewer ───────────────────────────────────────────
+export { computeDiff } from './diff-viewer';
+export type { DiffLineType, DiffLine, DiffResult } from './diff-viewer';
+
+// ── JSONEditor ───────────────────────────────────────────
+export {
+  createJsonEditor,
+  jsonToTree,
+  treeToJson,
+  detectType,
+  parseJsonSafe,
+  resetJsonNodeIdCounter,
+} from './json-editor';
+export type {
+  JsonNode,
+  JsonNodeType,
+  JsonEditorMode,
+  JsonEditorEvent,
+  JsonEditorContext,
+  JsonEditorConfig,
+  JsonEditorAPI,
+} from './json-editor';
+
+// ── MarkdownEditor ───────────────────────────────────────
+export { createMarkdownEditor, parseMarkdown, insertFormat } from './markdown-editor';
+export type {
+  MarkdownEditorMode,
+  MarkdownFormat,
+  MarkdownEditorEvent,
+  MarkdownEditorContext,
+  MarkdownEditorConfig,
+  MarkdownEditorAPI,
+} from './markdown-editor';
+
+// ── RichTextEditor ───────────────────────────────────────
+export {
+  createRichTextEditor,
+  blocksToHtml,
+  htmlToBlocks,
+  resetBlockIdCounter,
+} from './rich-text-editor';
+export type {
+  RichTextBlock,
+  RichTextBlockType,
+  RichTextInline,
+  InlineFormat,
+  ActiveFormats,
+  RichTextEditorEvent,
+  RichTextEditorContext,
+  RichTextEditorConfig,
+  RichTextEditorAPI,
+} from './rich-text-editor';
+
+// ── Mention ──────────────────────────────────────────────
+export { createMention } from './mention';
+export type {
+  MentionItem,
+  MentionContext,
+  MentionEvent,
+  MentionConfig,
+  MentionAPI,
+} from './mention';
+
+// ── FilterBuilder ────────────────────────────────────────
+export { createFilterBuilder, isFilterGroup } from './filter-builder';
+export type {
+  FilterBuilderOperator,
+  FilterCombinator,
+  FilterField,
+  FilterRule,
+  FilterGroup,
+  FilterBuilderContext,
+  FilterBuilderEvent,
+  FilterBuilderConfig,
+  FilterBuilderAPI,
+} from './filter-builder';
