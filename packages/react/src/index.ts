@@ -438,6 +438,22 @@ export { usePropertyGrid, type UsePropertyGridProps, type UsePropertyGridReturn 
 export { Spreadsheet, type SpreadsheetComponentProps, type SpreadsheetSlot, type SpreadsheetToolbarProps, type SpreadsheetFormulaBarProps, type SpreadsheetGridProps, type SpreadsheetSheetTabsProps } from './spreadsheet';
 export { useSpreadsheet, type UseSpreadsheetProps, type UseSpreadsheetReturn } from './spreadsheet';
 
+// ── SignaturePad ────────────────────────────────────────
+export { SignaturePad, type SignaturePadComponentProps, type SignaturePadSlot, type SignaturePadCanvasProps, type SignaturePadControlsProps } from './signature-pad';
+export { useSignaturePad, type UseSignaturePadProps, type UseSignaturePadReturn } from './signature-pad';
+
+// ── ImageCropper ────────────────────────────────────────
+export { ImageCropper, type ImageCropperComponentProps, type ImageCropperSlot, type ImageCropperPreviewProps, type ImageCropperControlsProps } from './image-cropper';
+export { useImageCropper, type UseImageCropperProps, type UseImageCropperReturn } from './image-cropper';
+
+// ── DragDrop ────────────────────────────────────────────
+export { DragDrop, type DragDropComponentProps, type DragDropSlot, type DragDropDraggableProps, type DragDropDroppableProps, type DragDropOverlayProps } from './drag-drop';
+export { useDragDrop, type UseDragDropProps, type UseDragDropReturn } from './drag-drop';
+
+// ── Sortable ────────────────────────────────────────────
+export { Sortable, type SortableComponentProps, type SortableSlot, type SortableItemProps, type SortablePlaceholderProps } from './sortable';
+export { useSortable, type UseSortableProps, type UseSortableReturn } from './sortable';
+
 // ── Rating ───────────────────────────────────────────────
 export { Rating, type RatingComponentProps, type RatingSlot, type RatingSize, type RatingStarProps, type RatingLabelProps } from './rating';
 export { useRating, type UseRatingProps, type UseRatingReturn } from './rating';
@@ -490,6 +506,26 @@ export { useMention, type UseMentionProps, type UseMentionReturn } from './menti
 export { FilterBuilder, type FilterBuilderComponentProps, type FilterBuilderSlot, type FilterBuilderGroupProps, type FilterBuilderRuleProps, type FilterBuilderAddButtonProps } from './filter-builder';
 export { useFilterBuilder, type UseFilterBuilderProps, type UseFilterBuilderReturn } from './filter-builder';
 
+// ── TimeSpanEditor ──────────────────────────────────────
+export { TimeSpanEditor, type TimeSpanEditorComponentProps, type TimeSpanEditorSlot, type TimeSpanEditorFieldProps, type TimeSpanEditorIncrementButtonProps, type TimeSpanEditorDecrementButtonProps } from './time-span-editor';
+export { useTimeSpanEditor, type UseTimeSpanEditorProps, type UseTimeSpanEditorReturn } from './time-span-editor';
+
+// ── Calculator ──────────────────────────────────────────
+export { Calculator, type CalculatorComponentProps, type CalculatorSlot, type CalculatorDisplayProps, type CalculatorKeypadProps, type CalculatorKeyProps, type CalculatorHistoryProps } from './calculator';
+export { useCalculator, type UseCalculatorProps, type UseCalculatorReturn } from './calculator';
+
+// ── Lookup ──────────────────────────────────────────────
+export { Lookup, type LookupComponentProps, type LookupSlot, type LookupInputProps, type LookupListProps, type LookupItemProps } from './lookup';
+export { useLookup, type UseLookupProps, type UseLookupReturn } from './lookup';
+
+// ── FontPicker ──────────────────────────────────────────
+export { FontPicker, type FontPickerComponentProps, type FontPickerSlot, type FontPickerFamilySelectProps, type FontPickerSizeInputProps, type FontPickerStyleToggleProps, type FontPickerPreviewProps } from './font-picker';
+export { useFontPicker, type UseFontPickerProps, type UseFontPickerReturn } from './font-picker';
+
+// ── EmojiPicker ─────────────────────────────────────────
+export { EmojiPicker, type EmojiPickerComponentProps, type EmojiPickerSlot, type EmojiPickerSearchProps, type EmojiPickerCategoriesProps, type EmojiPickerGridProps, type EmojiPickerSkinToneSelectorProps } from './emoji-picker';
+export { useEmojiPicker, type UseEmojiPickerProps, type UseEmojiPickerReturn } from './emoji-picker';
+
 // ── JSONEditor ──────────────────────────────────────────
 export { JSONEditor, type JsonEditorComponentProps, type JsonEditorSlot, type JsonEditorToolbarProps, type JsonEditorTreeProps, type JsonEditorTextProps, type JsonEditorNodeProps } from './json-editor';
 export { useJsonEditor, type UseJsonEditorProps, type UseJsonEditorReturn } from './json-editor';
@@ -501,3 +537,35 @@ export { useMarkdownEditor, type UseMarkdownEditorProps, type UseMarkdownEditorR
 // ── RichTextEditor ──────────────────────────────────────
 export { RichTextEditor, type RichTextEditorComponentProps, type RichTextEditorSlot, type RichTextEditorToolbarProps, type RichTextEditorContentProps, type RichTextEditorToolbarButtonProps } from './rich-text-editor';
 export { useRichTextEditor, type UseRichTextEditorProps, type UseRichTextEditorReturn } from './rich-text-editor';
+
+// ── Sparkline ───────────────────────────────────────────
+export { Sparkline, type SparklineComponentProps, type SparklineSlot, type SparklineDisplayMode, type SparklineLineProps, type SparklineAreaProps, type SparklineBarProps, type SparklinePointProps } from './sparkline';
+export { useSparkline, type UseSparklineProps, type UseSparklineReturn } from './sparkline';
+
+// ── CodeEditor ──────────────────────────────────────────
+export { CodeEditor, type CodeEditorComponentProps, type CodeEditorSlot, type CodeEditorToolbarProps, type CodeEditorGutterProps, type CodeEditorContentProps, type CodeEditorFindPanelProps } from './code-editor';
+export { useCodeEditor, type UseCodeEditorProps, type UseCodeEditorReturn } from './code-editor';
+
+// ── NodeEditor ──────────────────────────────────────────
+export { NodeEditor, type NodeEditorComponentProps, type NodeEditorSlot, type NodeEditorToolbarProps, type NodeEditorCanvasProps, type NodeEditorMinimapProps, type NodeEditorNodeProps } from './node-editor';
+export { useNodeEditor, type UseNodeEditorProps, type UseNodeEditorReturn } from './node-editor';
+
+// ── Gauge ───────────────────────────────────────────────
+export { Gauge, type GaugeComponentProps, type GaugeSlot, type GaugeArcProps, type GaugeNeedleProps, type GaugeValueProps, type GaugeLabelProps } from './gauge';
+export { useGauge, type UseGaugeProps, type UseGaugeReturn } from './gauge';
+
+// ── PieChart ────────────────────────────────────────────
+export { PieChart, type PieChartComponentProps, type PieChartSlot, type PieChartSliceProps, type PieChartLabelProps, type PieChartLegendProps } from './pie-chart';
+export { usePieChart, type UsePieChartProps, type UsePieChartReturn } from './pie-chart';
+
+// ── LineChart ───────────────────────────────────────────
+export { LineChart, type LineChartComponentProps, type LineChartSlot, type LineChartGridProps, type LineChartXAxisProps, type LineChartYAxisProps, type LineChartSeriesProps, type LineChartLegendProps } from './line-chart';
+export { useLineChart, type UseLineChartProps, type UseLineChartReturn } from './line-chart';
+
+// ── BarChart ────────────────────────────────────────────
+export { BarChart, type BarChartComponentProps, type BarChartSlot, type BarChartBarProps, type BarChartGridProps, type BarChartXAxisProps, type BarChartYAxisProps, type BarChartLegendProps } from './bar-chart';
+export { useBarChart, type UseBarChartProps, type UseBarChartReturn } from './bar-chart';
+
+// ── Heatmap ─────────────────────────────────────────────
+export { Heatmap, type HeatmapComponentProps, type HeatmapSlot, type HeatmapGridProps, type HeatmapXAxisProps, type HeatmapYAxisProps, type HeatmapLegendProps } from './heatmap';
+export { useHeatmap, type UseHeatmapProps, type UseHeatmapReturn } from './heatmap';

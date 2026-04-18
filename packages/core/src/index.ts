@@ -1107,6 +1107,22 @@ export type {
   SpreadsheetAPI,
 } from './spreadsheet';
 
+// ── SignaturePad ────────────────────────────────────────
+export { createSignaturePad } from './signature-pad';
+export type { SignaturePoint, SignaturePath, SignaturePadEvent, SignaturePadContext, SignaturePadConfig, SignaturePadAPI } from './signature-pad';
+
+// ── ImageCropper ────────────────────────────────────────
+export { createImageCropper } from './image-cropper';
+export type { CropAspectRatio, CropArea, ImageCropperEvent, ImageCropperContext, ImageCropperConfig, ImageCropperAPI } from './image-cropper';
+
+// ── DragDrop ────────────────────────────────────────────
+export { createDragDrop } from './drag-drop';
+export type { DragItem, DropTarget as DragDropTarget, DragPosition, DragDropEvent, DragDropContext, DragDropConfig, DragDropAPI } from './drag-drop';
+
+// ── Sortable ────────────────────────────────────────────
+export { createSortable } from './sortable';
+export type { SortableItemDef, SortableDirection, SortableEvent, SortableContext, SortableConfig, SortableAPI } from './sortable';
+
 // ── CodeBlock ────────────────────────────────────────────
 export { highlightCode } from './code-block';
 export type {
@@ -1297,3 +1313,173 @@ export type {
   FilterBuilderConfig,
   FilterBuilderAPI,
 } from './filter-builder';
+
+// ── TimeSpan ─────────────────────────────────────────────
+export { createTimeSpan } from './time-span';
+export type {
+  TimeSpanField,
+  TimeSpanContext,
+  TimeSpanEvent,
+  TimeSpanConfig,
+  TimeSpanAPI,
+} from './time-span';
+
+// ── CodeEditor ───────────────────────────────────────────
+export { createCodeEditor } from './code-editor';
+export type {
+  CursorPosition,
+  Selection,
+  BracketMatch,
+  FindMatch,
+  CodeEditorEvent,
+  CodeEditorContext,
+  CodeEditorConfig,
+  CodeEditorAPI,
+} from './code-editor';
+
+// ── NodeEditor ───────────────────────────────────────────
+export { createNodeEditor, resetNodeEditorIdCounter } from './node-editor';
+export type {
+  PortDirection,
+  NodePort,
+  GraphNode,
+  GraphEdge,
+  GraphGroup,
+  NodeEditorEvent,
+  NodeEditorContext,
+  NodeEditorConfig,
+  NodeEditorAPI,
+} from './node-editor';
+
+// ── Chart Utils ─────────────────────────────────────────
+export {
+  linearScale,
+  linearScaleInvert,
+  bandScale,
+  getBandWidth,
+  niceNum,
+  generateTicks,
+  formatTickValue,
+  CHART_COLORS,
+  getChartColor,
+  interpolateColor,
+  heatmapColorScale,
+  polarToCartesian,
+  describeArc,
+  describePieSlice,
+  degToRad,
+  pointsToSvgPath,
+  pointsToAreaPath,
+} from './chart-utils';
+export type { BandScaleResult } from './chart-utils';
+
+// ── Sparkline ───────────────────────────────────────────
+export { createSparkline } from './sparkline';
+export type {
+  SparklineMode,
+  SparklinePoint,
+  SparklineBar,
+  SparklineEvent,
+  SparklineContext,
+  SparklineConfig,
+  SparklineAPI,
+} from './sparkline';
+
+// ── Calculator ───────────────────────────────────────────
+export { createCalculator } from './calculator';
+export type {
+  CalculatorContext,
+  CalculatorEvent,
+  CalculatorConfig,
+  CalculatorAPI,
+} from './calculator';
+
+// ── Lookup ───────────────────────────────────────────────
+export { createLookup } from './lookup';
+export type {
+  LookupItem,
+  LookupContext,
+  LookupEvent,
+  LookupConfig,
+  LookupAPI,
+} from './lookup';
+
+// ── Gauge ───────────────────────────────────────────────
+export { createGauge } from './gauge';
+export type {
+  GaugeSegment,
+  GaugeArcData,
+  GaugeEvent,
+  GaugeContext,
+  GaugeConfig,
+  GaugeAPI,
+} from './gauge';
+
+// ── PieChart ────────────────────────────────────────────
+export { createPieChart } from './pie-chart';
+export type {
+  PieSliceDef,
+  PieArc,
+  PieChartEvent,
+  PieChartContext,
+  PieChartConfig,
+  PieChartAPI,
+} from './pie-chart';
+
+// ── LineChart ───────────────────────────────────────────
+export { createLineChart } from './line-chart';
+export type {
+  LineDataPoint,
+  LineSeries,
+  LineComputedSeries,
+  ChartMargin,
+  LineChartEvent,
+  LineChartContext,
+  LineChartConfig,
+  LineChartAPI,
+} from './line-chart';
+
+// ── BarChart ────────────────────────────────────────────
+export { createBarChart } from './bar-chart';
+export type {
+  BarSeries,
+  ComputedBar,
+  BarChartMode,
+  BarChartOrientation,
+  BarChartEvent,
+  BarChartContext,
+  BarChartConfig,
+  BarChartAPI,
+} from './bar-chart';
+
+// ── Heatmap ─────────────────────────────────────────────
+export { createHeatmap } from './heatmap';
+export type {
+  HeatmapCell,
+  HeatmapEvent,
+  HeatmapContext,
+  HeatmapConfig,
+  HeatmapAPI,
+} from './heatmap';
+
+// ── FontPicker ───────────────────────────────────────────
+export { createFontPicker } from './font-picker';
+export type {
+  FontConfig,
+  FontPickerContext,
+  FontPickerEvent,
+  FontPickerMachineConfig,
+  FontPickerAPI,
+} from './font-picker';
+
+// ── EmojiPicker ──────────────────────────────────────────
+export { createEmojiPicker, EMOJI_DATA, SKIN_TONE_MODIFIERS, CATEGORY_LABELS } from './emoji-picker';
+export type {
+  EmojiCategory,
+  SkinTone,
+  EmojiItem,
+  EmojiPickerContext,
+  EmojiPickerEvent,
+  EmojiPickerConfig,
+  EmojiPickerAPI,
+} from './emoji-picker';
