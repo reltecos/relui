@@ -6,11 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { roseGrayLight, roseLight as roseLightPalette, greenLight, amberLight, redLight, white } from '../primitives/colors';
+import { roseGrayLight, roseLight, greenLight, amberLight, redLight, white } from '../primitives/colors';
 import type { ThemeDefinition } from './types';
 
 /** Rose Light — pembe accent, yumusak modern aydinlik tema. */
-export const roseLight: ThemeDefinition = {
+export const roseLightTheme: ThemeDefinition = {
   name: 'rose',
   mode: 'light',
   colors: {
@@ -27,14 +27,14 @@ export const roseLight: ThemeDefinition = {
     fgInverse: white,
     borderDefault: roseGrayLight[6],
     borderHover: roseGrayLight[7],
-    borderFocus: roseLightPalette[9],
+    borderFocus: roseLight[9],
     borderSubtle: roseGrayLight[4],
-    accentDefault: roseLightPalette[9],
-    accentHover: roseLightPalette[10],
-    accentActive: roseLightPalette[8],
+    accentDefault: roseLight[9],
+    accentHover: roseLight[10],
+    accentActive: roseLight[8],
     accentFg: white,
-    accentSubtle: roseLightPalette[3],
-    accentSubtleFg: roseLightPalette[11],
+    accentSubtle: roseLight[3],
+    accentSubtleFg: roseLight[11],
     destructiveDefault: redLight[9],
     destructiveHover: redLight[10],
     destructiveFg: white,
@@ -50,14 +50,14 @@ export const roseLight: ThemeDefinition = {
     warningFg: roseGrayLight[12],
     warningSubtle: amberLight[3],
     warningSubtleFg: amberLight[11],
-    infoDefault: roseLightPalette[9],
-    infoHover: roseLightPalette[10],
+    infoDefault: roseLight[9],
+    infoHover: roseLight[10],
     infoFg: white,
-    infoSubtle: roseLightPalette[3],
-    infoSubtleFg: roseLightPalette[11],
+    infoSubtle: roseLight[3],
+    infoSubtleFg: roseLight[11],
     inputBg: white,
     inputBorder: roseGrayLight[6],
-    inputBorderFocus: roseLightPalette[9],
+    inputBorderFocus: roseLight[9],
     inputPlaceholder: roseGrayLight[9],
     surfaceRaised: white,
     surfaceOverlay: white,

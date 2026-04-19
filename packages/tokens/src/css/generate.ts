@@ -36,10 +36,82 @@ function toKebab(str: string): string {
  * Semantic renk token'larından CSS variable string üret.
  * Generate CSS variable declarations from semantic color tokens.
  */
+/**
+ * Bileşenlerin kullandığı eski CSS variable isimlerini
+ * semantic token'lara bağlayan alias haritası.
+ */
+const COLOR_ALIASES: Record<string, keyof SemanticColors> = {
+  // text → fg
+  'text': 'fgDefault',
+  'text-secondary': 'fgMuted',
+  'text-muted': 'fgMuted',
+  'text-tertiary': 'fgDisabled',
+  'text-disabled': 'fgDisabled',
+  'text-inverse': 'fgInverse',
+  'text-inverse-muted': 'fgInverse',
+  'text-primary': 'accentDefault',
+  // bg
+  'bg': 'bgDefault',
+  'bg-hover': 'bgComponentHover',
+  'bg-active': 'bgComponentActive',
+  'bg-muted': 'bgSubtle',
+  'bg-secondary': 'bgSubtle',
+  'bg-inverse': 'fgDefault',
+  'bg-translucent': 'bgOverlay',
+  // border
+  'border': 'borderDefault',
+  'border-subtle': 'borderSubtle',
+  // primary → accent
+  'primary': 'accentDefault',
+  'primary-hover': 'accentHover',
+  'primary-dark': 'accentActive',
+  'primary-light': 'accentSubtle',
+  'primary-subtle': 'accentSubtle',
+  'primary-subtle-hover': 'accentHover',
+  'primary-alpha': 'accentSubtle',
+  // secondary
+  'secondary': 'bgComponent',
+  'secondary-hover': 'bgComponentHover',
+  // danger → destructive
+  'danger': 'destructiveDefault',
+  'danger-hover': 'destructiveHover',
+  'danger-light': 'destructiveSubtle',
+  // error → destructive
+  'error': 'destructiveDefault',
+  'error-hover': 'destructiveHover',
+  'error-subtle': 'destructiveSubtle',
+  // success
+  'success': 'successDefault',
+  'success-light': 'successSubtle',
+  'success-subtle': 'successSubtle',
+  // warning
+  'warning': 'warningDefault',
+  'warning-light': 'warningSubtle',
+  'warning-subtle': 'warningSubtle',
+  // info
+  'info': 'infoDefault',
+  'info-hover': 'infoHover',
+  'info-light': 'infoSubtle',
+  'info-subtle': 'infoSubtle',
+  // overlay
+  'overlay': 'bgOverlay',
+  'overlay-light': 'bgOverlay',
+  // tooltip
+  'tooltip-bg': 'surfaceOverlay',
+  'tooltip-text': 'fgInverse',
+  // white
+  'white': 'fgInverse',
+};
+
 function colorVarsFromTheme(colors: SemanticColors): string {
   const lines: string[] = [];
+  // Semantic tokens (yeni isimler)
   for (const [key, value] of Object.entries(colors)) {
     lines.push(`  ${PREFIX}-color-${toKebab(key)}: ${value};`);
+  }
+  // Alias tokens (bileşenlerin kullandığı eski isimler)
+  for (const [alias, semanticKey] of Object.entries(COLOR_ALIASES)) {
+    lines.push(`  ${PREFIX}-color-${alias}: ${colors[semanticKey]};`);
   }
   return lines.join('\n');
 }

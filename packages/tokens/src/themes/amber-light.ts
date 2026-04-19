@@ -10,7 +10,7 @@ import { amberGrayLight, goldLight, greenLight, amberLight, redLight, white } fr
 import type { ThemeDefinition } from './types';
 
 /** Amber Light — altin/gold accent, sicak luks aydinlik tema. */
-export const amberLight: ThemeDefinition = {
+export const amberLightTheme: ThemeDefinition = {
   name: 'amber',
   mode: 'light',
   colors: {

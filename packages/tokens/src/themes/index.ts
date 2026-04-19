@@ -20,9 +20,9 @@ export { sunriseLight } from './sunrise-light';
 export { slateDark } from './slate-dark';
 export { slateLight } from './slate-light';
 export { roseDark } from './rose-dark';
-export { roseLight } from './rose-light';
+export { roseLightTheme } from './rose-light';
 export { amberDark } from './amber-dark';
-export { amberLight } from './amber-light';
+export { amberLightTheme } from './amber-light';
 
 import { defaultDark } from './default-dark';
 import { defaultLight } from './default-light';
@@ -37,9 +37,9 @@ import { sunriseLight } from './sunrise-light';
 import { slateDark } from './slate-dark';
 import { slateLight } from './slate-light';
 import { roseDark } from './rose-dark';
-import { roseLight } from './rose-light';
+import { roseLightTheme } from './rose-light';
 import { amberDark } from './amber-dark';
-import { amberLight } from './amber-light';
+import { amberLightTheme } from './amber-light';
 import type { ThemeDefinition, ThemeVariant } from './types';
 
 /**
@@ -60,7 +60,7 @@ export const themes: Record<ThemeVariant, ThemeDefinition> = {
   'slate-dark': slateDark,
   'slate-light': slateLight,
   'rose-dark': roseDark,
-  'rose-light': roseLight,
+  'rose-light': roseLightTheme,
   'amber-dark': amberDark,
-  'amber-light': amberLight,
+  'amber-light': amberLightTheme,
 };

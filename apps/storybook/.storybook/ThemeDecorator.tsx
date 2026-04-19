@@ -19,7 +19,13 @@ export const ThemeDecorator: Decorator = (Story, context) => {
   const tokenCSS = useMemo(() => generateCSS(themes), []);
 
   return (
-    <div data-theme={themeVariant} style={{ padding: '1rem' }}>
+    <div data-theme={themeVariant} style={{
+      padding: '1rem',
+      backgroundColor: 'var(--rel-color-bg-app)',
+      color: 'var(--rel-color-fg-default)',
+      minHeight: '100vh',
+      transition: 'background-color 0.2s, color 0.2s',
+    }}>
       <style>{tokenCSS}</style>
       <Story />
     </div>

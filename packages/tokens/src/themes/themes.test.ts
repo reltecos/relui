@@ -43,8 +43,8 @@ describe('Theme definitions', () => {
     }
   });
 
-  it('6 tema varyantı olmalı / should have exactly 6 theme variants', () => {
-    expect(Object.keys(themes)).toHaveLength(6);
+  it('16 tema varyantı olmalı / should have exactly 16 theme variants', () => {
+    expect(Object.keys(themes)).toHaveLength(16);
   });
 
   for (const variant of ALL_VARIANTS) {
