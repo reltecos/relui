@@ -569,3 +569,99 @@ export { useBarChart, type UseBarChartProps, type UseBarChartReturn } from './ba
 // ── Heatmap ─────────────────────────────────────────────
 export { Heatmap, type HeatmapComponentProps, type HeatmapSlot, type HeatmapGridProps, type HeatmapXAxisProps, type HeatmapYAxisProps, type HeatmapLegendProps } from './heatmap';
 export { useHeatmap, type UseHeatmapProps, type UseHeatmapReturn } from './heatmap';
+
+// ── WorkspaceManager ────────────────────────────────────
+export { WorkspaceManager, type WorkspaceManagerComponentProps, type WorkspaceManagerSlot, type WorkspaceManagerToolbarProps, type WorkspaceManagerPresetListProps, type WorkspaceManagerActionsProps } from './workspace-manager';
+export { useWorkspaceManager, type UseWorkspaceManagerProps, type UseWorkspaceManagerReturn } from './workspace-manager';
+
+// ── RadarChart ──────────────────────────────────────────
+export { RadarChart, type RadarChartComponentProps, type RadarChartSlot, type RadarChartGridProps, type RadarChartSeriesProps, type RadarChartLegendProps } from './radar-chart';
+export { useRadarChart, type UseRadarChartProps, type UseRadarChartReturn } from './radar-chart';
+
+// ── FunnelChart ─────────────────────────────────────────
+export { FunnelChart, type FunnelChartComponentProps, type FunnelChartSlot, type FunnelChartLayerProps, type FunnelChartLabelProps, type FunnelChartLegendProps } from './funnel-chart';
+export { useFunnelChart, type UseFunnelChartProps, type UseFunnelChartReturn } from './funnel-chart';
+
+// ── TreemapChart ────────────────────────────────────────
+export { TreemapChart, type TreemapChartComponentProps, type TreemapChartSlot, type TreemapChartCellProps, type TreemapChartLabelProps, type TreemapChartLegendProps } from './treemap-chart';
+export { useTreemapChart, type UseTreemapChartProps, type UseTreemapChartReturn } from './treemap-chart';
+
+// ── SunburstChart ───────────────────────────────────────
+export { SunburstChart, type SunburstChartComponentProps, type SunburstChartSlot, type SunburstChartArcProps, type SunburstChartLabelProps, type SunburstChartLegendProps } from './sunburst-chart';
+export { useSunburstChart, type UseSunburstChartProps, type UseSunburstChartReturn } from './sunburst-chart';
+
+// ── SankeyDiagram ───────────────────────────────────────
+export { SankeyDiagram, type SankeyDiagramComponentProps, type SankeyDiagramSlot, type SankeyDiagramNodeProps, type SankeyDiagramLinkProps, type SankeyDiagramLabelProps, type SankeyDiagramLegendProps } from './sankey-diagram';
+export { useSankeyDiagram, type UseSankeyDiagramProps, type UseSankeyDiagramReturn } from './sankey-diagram';
+
+// ── StockChart ──────────────────────────────────────────
+export { StockChart, type StockChartComponentProps, type StockChartSlot, type StockChartCandleProps, type StockChartVolumeProps, type StockChartAxisProps, type StockChartLegendProps } from './stock-chart';
+export { useStockChart, type UseStockChartProps, type UseStockChartReturn } from './stock-chart';
+
+// ── BulletChart ─────────────────────────────────────────
+export { BulletChart, type BulletChartComponentProps, type BulletChartSlot, type BulletChartBarsProps } from './bullet-chart';
+export { useBulletChart, type UseBulletChartProps, type UseBulletChartReturn } from './bullet-chart';
+
+// ── WaterfallChart ──────────────────────────────────────
+export { WaterfallChart, type WaterfallChartComponentProps, type WaterfallChartSlot, type WaterfallChartBarsProps, type WaterfallChartAxisProps } from './waterfall-chart';
+export { useWaterfallChart, type UseWaterfallChartProps, type UseWaterfallChartReturn } from './waterfall-chart';
+
+// ── BoxPlotChart ────────────────────────────────────────
+export { BoxPlotChart, type BoxPlotChartComponentProps, type BoxPlotChartSlot, type BoxPlotChartBoxesProps, type BoxPlotChartAxisProps } from './box-plot-chart';
+export { useBoxPlotChart, type UseBoxPlotChartProps, type UseBoxPlotChartReturn } from './box-plot-chart';
+
+// ── PyramidChart ────────────────────────────────────────
+export { PyramidChart, type PyramidChartComponentProps, type PyramidChartSlot, type PyramidChartSegmentsProps, type PyramidChartLabelsProps } from './pyramid-chart';
+export { usePyramidChart, type UsePyramidChartProps, type UsePyramidChartReturn } from './pyramid-chart';
+
+// ── Image ───────────────────────────────────────────────
+export { Image, type ImageComponentProps, type ImageSlot, type ImageImgProps, type ImagePlaceholderProps, type ImageFallbackProps } from './image';
+export { useImage, type UseImageProps, type UseImageReturn } from './image';
+
+// ── ImageGallery ────────────────────────────────────────
+export { ImageGallery, type ImageGalleryComponentProps, type ImageGallerySlot, type ImageGalleryGridProps, type ImageGalleryLightboxProps, type ImageGalleryThumbnailsProps } from './image-gallery';
+export { useImageGallery, type UseImageGalleryProps, type UseImageGalleryReturn } from './image-gallery';
+
+// ── VideoPlayer ─────────────────────────────────────────
+export { VideoPlayer, type VideoPlayerComponentProps, type VideoPlayerSlot, type VideoPlayerControlsProps, type VideoPlayerSeekBarProps } from './video-player';
+export { useVideoPlayer, type UseVideoPlayerProps, type UseVideoPlayerReturn } from './video-player';
+
+// ── AudioPlayer ─────────────────────────────────────────
+export { AudioPlayer, type AudioPlayerComponentProps, type AudioPlayerSlot, type AudioPlayerControlsProps, type AudioPlayerTrackInfoProps, type AudioPlayerPlaylistProps } from './audio-player';
+export { useAudioPlayer, type UseAudioPlayerProps, type UseAudioPlayerReturn } from './audio-player';
+
+// ── PDFViewer ───────────────────────────────────────────
+export { PDFViewer, type PDFViewerComponentProps, type PDFViewerSlot, type PDFViewerToolbarProps, type PDFViewerPageDisplayProps } from './pdf-viewer';
+export { usePDFViewer, type UsePDFViewerProps, type UsePDFViewerReturn } from './pdf-viewer';
+
+// ── ImageEditor ─────────────────────────────────────────
+export { ImageEditor, type ImageEditorComponentProps, type ImageEditorSlot, type ImageEditorToolbarProps, type ImageEditorCanvasProps, type ImageEditorFilterPanelProps } from './image-editor';
+export { useImageEditor, type UseImageEditorProps, type UseImageEditorReturn } from './image-editor';
+
+// ── FormEngine ──────────────────────────────────────────
+export { FormEngine, type FormEngineComponentProps, type FormEngineSlot, type FormEngineFieldProps, type FormEngineSubmitButtonProps } from './form-engine';
+export { useFormEngine, type UseFormEngineProps, type UseFormEngineReturn } from './form-engine';
+
+// ── FormDesigner ────────────────────────────────────────
+export { FormDesigner, type FormDesignerComponentProps, type FormDesignerSlot, type FormDesignerPaletteProps, type FormDesignerCanvasProps, type FormDesignerFieldConfigProps } from './form-designer';
+export { useFormDesigner, type UseFormDesignerProps, type UseFormDesignerReturn } from './form-designer';
+
+// ── LottieAnimation ─────────────────────────────────────
+export { LottieAnimation, type LottieAnimationComponentProps, type LottieAnimationSlot, type LottieAnimationCanvasProps, type LottieAnimationControlsProps } from './lottie-animation';
+export { useLottieAnimation, type UseLottieAnimationProps, type UseLottieAnimationReturn } from './lottie-animation';
+
+// ── WebcamCapture ───────────────────────────────────────
+export { WebcamCapture, type WebcamCaptureComponentProps, type WebcamCaptureSlot, type WebcamCaptureVideoProps, type WebcamCaptureControlsProps, type WebcamCapturePreviewProps } from './webcam-capture';
+export { useWebcamCapture, type UseWebcamCaptureProps, type UseWebcamCaptureReturn } from './webcam-capture';
+
+// ── OrgChart ────────────────────────────────────────────
+export { OrgChart, type OrgChartComponentProps, type OrgChartSlot, type OrgChartToolbarProps, type OrgChartCanvasProps } from './org-chart';
+export { useOrgChart, type UseOrgChartProps, type UseOrgChartReturn } from './org-chart';
+
+// ── FlowChart ───────────────────────────────────────────
+export { FlowChart, type FlowChartComponentProps, type FlowChartSlot, type FlowChartToolbarProps, type FlowChartCanvasProps, type FlowChartMinimapProps } from './flow-chart';
+export { useFlowChart, type UseFlowChartProps, type UseFlowChartReturn } from './flow-chart';
+
+// ── Canvas2D ────────────────────────────────────────────
+export { Canvas2D, type Canvas2DComponentProps, type Canvas2DSlot, type Canvas2DSurfaceProps, type Canvas2DToolbarProps, type Canvas2DLayerPanelProps } from './canvas2d';
+export { useCanvas2D, type UseCanvas2DProps, type UseCanvas2DReturn } from './canvas2d';

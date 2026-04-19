@@ -1483,3 +1483,116 @@ export type {
   EmojiPickerConfig,
   EmojiPickerAPI,
 } from './emoji-picker';
+
+// ── RadarChart ───────────────────────────────────────────
+export { createRadarChart } from './radar-chart';
+export type {
+  RadarAxis,
+  RadarSeries,
+  RadarPoint,
+  RadarSeriesData,
+  RadarGridLine,
+  RadarAxisLine,
+  RadarChartContext,
+  RadarChartEvent,
+  RadarChartConfig,
+  RadarChartAPI,
+} from './radar-chart';
+
+// ── FunnelChart ──────────────────────────────────────────
+export { createFunnelChart } from './funnel-chart';
+export type { FunnelLayer, FunnelLayerData, FunnelChartContext, FunnelChartEvent, FunnelChartConfig, FunnelChartAPI } from './funnel-chart';
+
+// ── TreemapChart ─────────────────────────────────────────
+export { createTreemapChart } from './treemap-chart';
+export type { TreemapNode, TreemapCell, TreemapChartContext, TreemapChartEvent, TreemapChartConfig, TreemapChartAPI } from './treemap-chart';
+
+// ── SunburstChart ────────────────────────────────────────
+export { createSunburstChart } from './sunburst-chart';
+export type { SunburstNode, SunburstArc, SunburstChartContext, SunburstChartEvent, SunburstChartConfig, SunburstChartAPI } from './sunburst-chart';
+
+// ── Sankey ───────────────────────────────────────────────
+export { createSankey } from './sankey';
+export type { SankeyNodeDef, SankeyLinkDef, SankeyNodeData, SankeyLinkData, SankeyContext, SankeyEvent, SankeyConfig, SankeyAPI } from './sankey';
+
+// ── StockChart ───────────────────────────────────────────
+export { createStockChart } from './stock-chart';
+export type { StockDataPoint, CandleData, StockChartContext, StockChartEvent, StockChartConfig, StockChartAPI } from './stock-chart';
+
+// ── WorkspaceManager ─────────────────────────────────────
+export { createWorkspaceManager, resetWorkspaceIdCounter } from './workspace-manager';
+export type {
+  WorkspacePreset,
+  WorkspaceManagerEvent,
+  WorkspaceManagerContext,
+  WorkspaceManagerConfig,
+  WorkspaceManagerAPI,
+} from './workspace-manager';
+
+// ── BulletChart ─────────────────────────────────────────
+export { createBulletChart } from './bullet-chart';
+export type { BulletRange, BulletDataPoint, BulletChartEvent, BulletChartContext, BulletChartConfig, BulletChartAPI } from './bullet-chart';
+
+// ── WaterfallChart ──────────────────────────────────────
+export { createWaterfallChart } from './waterfall-chart';
+export type { WaterfallType, WaterfallDataPoint, ComputedWaterfallBar, WaterfallChartEvent, WaterfallChartContext, WaterfallChartConfig, WaterfallChartAPI } from './waterfall-chart';
+
+// ── BoxPlotChart ────────────────────────────────────────
+export { createBoxPlotChart } from './box-plot-chart';
+export type { BoxPlotData, BoxPlotChartEvent, BoxPlotChartContext, BoxPlotChartConfig, BoxPlotChartAPI } from './box-plot-chart';
+
+// ── PyramidChart ────────────────────────────────────────
+export { createPyramidChart } from './pyramid-chart';
+export type { PyramidSegment, ComputedPyramidSegment, PyramidChartEvent, PyramidChartContext, PyramidChartConfig, PyramidChartAPI } from './pyramid-chart';
+
+// ── Image ───────────────────────────────────────────────
+export { createImage } from './image';
+export type { ImageLoadState, ImageEvent, ImageContext, ImageConfig, ImageAPI } from './image';
+
+// ── ImageGallery ────────────────────────────────────────
+export { createImageGallery } from './image-gallery';
+export type { GalleryImageDef, ImageGalleryEvent, ImageGalleryContext, ImageGalleryConfig, ImageGalleryAPI } from './image-gallery';
+
+// ── VideoPlayer ─────────────────────────────────────────
+export { createVideoPlayer } from './video-player';
+export type { PlaybackSpeed, VideoPlayerEvent, VideoPlayerContext, VideoPlayerConfig, VideoPlayerAPI } from './video-player';
+
+// ── AudioPlayer ─────────────────────────────────────────
+export { createAudioPlayer } from './audio-player';
+export type { AudioTrack, AudioPlayerEvent, AudioPlayerContext, AudioPlayerConfig, AudioPlayerAPI } from './audio-player';
+
+// ── PDFViewer ───────────────────────────────────────────
+export { createPDFViewer } from './pdf-viewer';
+export type { PDFZoomMode, PDFViewerEvent, PDFViewerContext, PDFViewerConfig, PDFViewerAPI } from './pdf-viewer';
+
+// ── ImageEditor ─────────────────────────────────────────
+export { createImageEditor } from './image-editor';
+export type { ImageFilter, CropRect, AnnotationType, AnnotationItem, ImageEditorEvent, ImageEditorState, ImageEditorContext, ImageEditorConfig, ImageEditorAPI } from './image-editor';
+
+// ── FormEngine ──────────────────────────────────────────
+export { createFormEngine } from './form-engine';
+export type { FormFieldType, FormFieldOption, FormFieldDef, ValidationError as FormValidationError, FormEngineEvent, FormEngineContext, FormEngineConfig, FormEngineAPI } from './form-engine';
+
+// ── FormDesigner ────────────────────────────────────────
+export { createFormDesigner, resetDesignerIdCounter } from './form-designer';
+export type { DesignerField, FormDesignerEvent, FormDesignerContext, FormDesignerConfig, FormDesignerAPI } from './form-designer';
+
+// ── LottieAnimation ──────────────────────────────────────
+export { createLottieAnimation, interpolateKeyframes } from './lottie-animation';
+export type { LottieKeyframe, LottieLayer, LottieData, LottieAnimationEvent, LottieAnimationContext, LottieAnimationConfig, LottieAnimationAPI } from './lottie-animation';
+
+// ── WebcamCapture ────────────────────────────────────────
+export { createWebcamCapture } from './webcam-capture';
+export type { WebcamState, FacingMode, WebcamCaptureEvent, WebcamCaptureContext, WebcamCaptureConfig, WebcamCaptureAPI } from './webcam-capture';
+
+// ── OrgChart ─────────────────────────────────────────────
+export { createOrgChart, computeOrgLayout } from './org-chart';
+export type { OrgNode, OrgNodeLayout, OrgChartOrientation, OrgChartEvent, OrgChartContext, OrgChartConfig, OrgChartAPI } from './org-chart';
+
+// ── FlowChart ────────────────────────────────────────────
+export { createFlowChart, autoLayoutNodes, resetFlowChartIdCounter } from './flow-chart';
+export type { FlowNodeType, FlowNode, FlowEdge, FlowChartEvent, FlowChartContext, FlowChartConfig, FlowChartAPI } from './flow-chart';
+
+// ── Canvas2D ─────────────────────────────────────────────
+export { createCanvas2D } from './canvas2d';
+export type { CanvasShapeType, CanvasShape, Canvas2DEvent, Canvas2DContext, Canvas2DConfig, Canvas2DAPI } from './canvas2d';
