@@ -153,7 +153,7 @@ export interface ThemeDefinition {
 }
 
 /** Mevcut tema isimleri / Available theme names */
-export type ThemeName = 'default' | 'ocean' | 'forest';
+export type ThemeName = 'default' | 'ocean' | 'forest' | 'midnight' | 'sunrise' | 'slate' | 'rose' | 'amber';
 
 /** Tema varyantı / Theme variant */
 export type ThemeVariant = `${ThemeName}-dark` | `${ThemeName}-light`;
